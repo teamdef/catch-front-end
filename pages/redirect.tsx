@@ -5,6 +5,7 @@ import { NextPageContext } from 'next';
 import { kakaoLoginApi } from 'pages/api/test';
 import Router from 'next/router';
 
+// 카카오 로그인 리다이렉트용. 
 interface Tokens {
   access_token?: string;
   token_type?: string;
@@ -19,8 +20,9 @@ interface Props {
 }
 const redirect: NextPageWithLayout = ({ tokens, status }: Props) => {
   useEffect(() => {
+    
     if (status === 200) {
-      Router.push('/test/main');
+      Router.push('/home');
     }
   }, []);
   return <div>wait ... redirect...</div>;
@@ -34,6 +36,7 @@ redirect.getLayout = function getLayout(page: ReactElement) {
 redirect.getInitialProps = async (context: NextPageContext) => {
   const code = context.query.code as string; // 타입 단언
   const res = await kakaoLoginApi(code);
+  console.log(res.data)
   return { tokens: res.data, status: res.status };
 };
 
