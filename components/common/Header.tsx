@@ -12,6 +12,11 @@ const Header = () => {
   );
 };
 
+const DropDownMyMenu = () => {
+  return <></>;
+};
+
+// header 
 const HeaderContentWrapper = styled.div`
   display: flex;
   padding: 0.5rem 1rem 0.5rem 1rem;
@@ -32,5 +37,10 @@ const Logo = styled.div`
 `;
 const UserName = styled.div` 
     font-size:18px;
+`
+
+// drop down my menu
+const MenuContainer = styled.div` 
+  
 `
 export default Header;
