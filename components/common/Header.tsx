@@ -4,6 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import { MdLogout, MdOutlineHistory } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
+import { IoMdArrowDropdown } from 'react-icons/io';
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
 // ref를 props로 전달하기 위해 forwardRef 사용
@@ -19,7 +20,7 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
           <div className="user-nickname">
             <strong>전하영 </strong>님
           </div>
-          <div className="user-code">usercode 01023456789</div>
+          <div className="user-code">usercode 01...</div>
         </ProfileOtherContainer>
       </UserInfoContainer>
       <MyMenuContainer>
@@ -99,7 +100,7 @@ const Header = () => {
       <HeaderContentWrapper ref={headerRef}>
         <HeaderContent>
           <Logo>CatchMe</Logo>
-          <UserName onClick={menuHandler}>전하영 님</UserName>
+          <UserName onClick={menuHandler}>전하영 님<IoMdArrowDropdown/></UserName>
         </HeaderContent>
       </HeaderContentWrapper>
       <DropDownMyMenu className={menuOpen && 'active'} ref={menuRef} />
@@ -116,13 +117,15 @@ const HeaderContentWrapper = styled.div`
   display: flex;
   padding: 0.5rem 1rem 0.5rem 1rem;
   width: 100%;
-  height: 60px;
-  background-color: white;
+  height: 220px;
+  background-color: #9437ff;
+  color: #fff;
   border-bottom: solid 1px #d6d6d6;
 `;
 const HeaderContent = styled.div`
   display: flex;
   width: 100%;
+  height: 50px;
   justify-content: space-between;
   align-items: center;
 `;
@@ -131,36 +134,38 @@ const Logo = styled.div`
   font-weight: bold;
 `;
 const UserName = styled.div`
+  position:relative;
+  display: flex;
   font-size: 18px;
+  align-items: center;
+  & svg {
+    margin-left: 10px;
+    font-size: 2rem;
+    
+  }
 `;
 
 // drop down my menu
-const GrowDown = keyframes` 
-    0% {
-        transform: scaleY(0)
-    }
-    80% {
-        transform: scaleY(1.1)
-    }
-    100% {
-        transform: scaleY(1)
-    }
-`;
+
 const DropDownMenuContainer = styled.div`
+  position: absolute;
+  display:inline-block;
   border: solid 1px #eee;
   color: rgb(59, 59, 59);
   padding: 1rem;
   max-width: 15rem;
-  animation: ${GrowDown} 0.3s ease-in-out forwards;
+  opacity: 0;
   transform-origin: top center;
-  position: absolute;
+  border-radius: 20px;
   background-color: white;
   top: 59px;
   right: 0;
+  visibility: hidden;
   z-index: 99;
-  display:none;
+  transition: opacity .5s;
   &.active{
-    display:inline-block;
+    visibility: visible;
+    opacity: 1;
   }
 `;
 const ContentContainer = styled.div`
@@ -192,7 +197,7 @@ const ProfileOtherContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 1rem;
+  padding-left: 1.5rem;
   .user-nickname {
   }
   .user-code {

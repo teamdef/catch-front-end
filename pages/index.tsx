@@ -30,7 +30,8 @@ const Page: NextPageWithLayout = () => {
               <strong>나만의 퀴즈</strong>를 만들어보세요!
             </SubTitle>
             <KakaoLoginBtn onClick={goKakaoLogin}>
-              <img src={'/assets/img/kakao_login_medium_wide.png'} />
+              <img src={'/assets/img/kakao_icon.png'} />
+              <span>카카오로 시작하기</span>
             </KakaoLoginBtn>
           </MainContainer>
         </Wrapper>
@@ -83,10 +84,27 @@ const SubTitle = styled.div`
   }
 `;
 const KakaoLoginBtn = styled.button`
-  background: none;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
+  border-radius: 30px;
+  height: 50px;
+  background-color: #FBE54D;
   border: none;
   &:hover {
     cursor: pointer;
+  }
+  & img {
+    position: relative;
+    width: 18px;
+    height: 17px;
+    margin-right: 20px;
+  }
+  & span {
+    font-weight: bold;
+    color: #391C1C;
   }
 `;
 
