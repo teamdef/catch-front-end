@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import { MdLogout, MdOutlineHistory } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
-import { IoMdArrowDropdown } from 'react-icons/io';
+import { HiChevronDown } from 'react-icons/hi';
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
 // ref를 props로 전달하기 위해 forwardRef 사용
@@ -48,19 +48,11 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
               </a>
             </Link>
           </li>
-          <li style={{ color: 'lightgrey' }}>
-            <Link href="#">
-              <a>
-                <MdLogout />
-                로그아웃
-              </a>
-            </Link>
-          </li>
           <li style={{ color: 'red' }}>
             <Link href="#">
               <a>
                 <MdLogout />
-                회원탈퇴
+                로그아웃
               </a>
             </Link>
           </li>
@@ -100,7 +92,16 @@ const Header = () => {
       <HeaderContentWrapper ref={headerRef}>
         <HeaderContent>
           <Logo>CatchMe</Logo>
-          <UserName onClick={menuHandler}>전하영 님<IoMdArrowDropdown/></UserName>
+          <UserName>
+            전하영 님
+            <HiChevronDown 
+              onClick={menuHandler}
+              style={{ 
+                transition: 'transform .3s',
+                transform: menuOpen ? 'rotate(-180deg)': '' 
+              }}
+            />
+          </UserName>
         </HeaderContent>
       </HeaderContentWrapper>
       <DropDownMyMenu className={menuOpen && 'active'} ref={menuRef} />
@@ -117,10 +118,9 @@ const HeaderContentWrapper = styled.div`
   display: flex;
   padding: 0.5rem 1rem 0.5rem 1rem;
   width: 100%;
-  height: 220px;
+  height: 30vh;
   background-color: #9437ff;
   color: #fff;
-  border-bottom: solid 1px #d6d6d6;
 `;
 const HeaderContent = styled.div`
   display: flex;
@@ -169,14 +169,13 @@ const DropDownMenuContainer = styled.div`
   }
 `;
 const ContentContainer = styled.div`
-  padding-top: 1rem;
+border-bottom: solid 1px #eee;
+display: flex;
+&:first-child {
   padding-bottom: 1rem;
-  border-bottom: solid 1px #eee;
-  display: flex;
-  &:first-child {
-    padding-top: 0;
-  }
-  &:last-child {
+}
+&:last-child {
+    padding-top: 1rem;
     border: none;
   }
 `;
@@ -197,7 +196,7 @@ const ProfileOtherContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 1.5rem;
+  padding-left: 1rem;
   .user-nickname {
   }
   .user-code {
