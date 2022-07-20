@@ -2,7 +2,7 @@
 
 import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
-import { MdLogout, MdOutlineHistory } from 'react-icons/md';
+import { MdLogout, MdOutlineHistory, MdMenu } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
@@ -99,7 +99,7 @@ const Header = () => {
       <HeaderContentWrapper ref={headerRef}>
         <HeaderContent>
           <Logo>CatchMe</Logo>
-          <UserName onClick={menuHandler}>전하영 님</UserName>
+          <UserName onClick={menuHandler}>전하영 님<MdMenu size={20} /></UserName>
         </HeaderContent>
       </HeaderContentWrapper>
       <DropDownMyMenu className={menuOpen && 'active'} ref={menuRef} />
@@ -117,8 +117,8 @@ const HeaderContentWrapper = styled.div`
   padding: 0.5rem 1rem 0.5rem 1rem;
   width: 100%;
   height: 60px;
-  background-color: white;
-  border-bottom: solid 1px #d6d6d6;
+  color:white;
+  background-color: #9437ff;
 `;
 const HeaderContent = styled.div`
   display: flex;
@@ -131,7 +131,13 @@ const Logo = styled.div`
   font-weight: bold;
 `;
 const UserName = styled.div`
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  & *:last-child {
+    margin-left: 0.5rem;
+  }
 `;
 
 // drop down my menu
@@ -155,7 +161,7 @@ const DropDownMenuContainer = styled.div`
   transform-origin: top center;
   position: absolute;
   background-color: white;
-  top: 59px;
+  top: 60px;
   right: 0;
   z-index: 99;
   display:none;
