@@ -5,13 +5,23 @@ import { Button } from 'components/common';
 import styled from "styled-components"
 const Home: NextPageWithLayout = () => {
   return (
-    <Background>
-      <div>생성한 퀴즈가 없어여!</div>
-      <Button bgColor="#9437FF" fontColor="white" width="10rem" height="3rem">
-        새로 만들기
-      </Button>
-    </Background>
-  );
+    <div style={{
+      backgroundColor:'#ccc',
+      height: '70vh'
+    }}>
+      <div style={{
+        position:'absolute',
+        left: '50%',
+        transform:'translate(-50%,-35%)',
+        borderRadius:'30px',
+        width: '75%',
+        height: '40%',
+        backgroundColor: '#fff'
+      }}>
+
+      </div>
+    </div>
+    );
 };
 
 const Background = styled.div`
@@ -24,5 +34,4 @@ Home.getLayout = function getLayout(page: ReactElement) {
     </AppLayout>
   );
 };
-
 export default Home;
