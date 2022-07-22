@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { MdLogout, MdOutlineHistory, MdMenu } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
 import { HiChevronDown } from 'react-icons/hi';
+import { TiArrowSortedDown } from 'react-icons/ti';
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
 // ref를 props로 전달하기 위해 forwardRef 사용
@@ -64,51 +65,46 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
 
 // main component
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const menuHandler = () => {
-    setMenuOpen(!menuOpen);
-  };
-
   // 메뉴바 바깥의 요소를 클릭 했을 때 메뉴 닫기
   const menuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-   useEffect(() => {
-     const handleClickOutside = (e: MouseEvent): void =>{
-       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-         if (!headerRef.current?.contains(e.target as Node)) { // 헤더와 메뉴를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
-           setMenuOpen(false);
-         }
-       }
-     }
-     document.addEventListener('mousedown', handleClickOutside);
-     // 컴포넌트가 unmount 되었을 때 액션
-     return () => {
-       document.removeEventListener('mousedown', handleClickOutside);
-     };
-   }, [menuRef]);
-  
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent): void => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        if (!headerRef.current?.contains(e.target as Node)) {
+          // 헤더와 메뉴를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
+          // details를 찾아서 open 클래스를 제거. open 클래스가 제거되면 메뉴가 닫힘
+          const dropdown: HTMLDetailsElement = document.getElementById('details-menu') as HTMLDetailsElement;
+          dropdown.removeAttribute('open');
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    // 컴포넌트가 unmount 되었을 때 액션
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
+
   return (
     <Wrapper>
       <HeaderContentWrapper ref={headerRef}>
         <HeaderContent>
           <Logo>CatchMe</Logo>
-          <UserName>
-            전하영 님
-            <HiChevronDown 
-              onClick={menuHandler}
-              style={{ 
-                transition: 'transform .3s',
-                transform: menuOpen ? 'rotate(-180deg)': '' 
-              }}
-            />
-          </UserName>
+          <UserProfileMenuContainer id="details-menu">
+            <summary>
+              <div id="image-wrapper">
+                <img src={'/assets/img/user_default.png'} />
+              </div>
+              <TiArrowSortedDown id="arrow" />
+            </summary>
+            <DropDownMyMenu ref={menuRef} id="dropdown" />
+          </UserProfileMenuContainer>
         </HeaderContent>
       </HeaderContentWrapper>
-      <DropDownMyMenu className={menuOpen && 'active'} ref={menuRef} />
     </Wrapper>
   );
 };
-
 
 const Wrapper = styled.div`
   position: relative;
@@ -116,9 +112,9 @@ const Wrapper = styled.div`
 // header
 const HeaderContentWrapper = styled.div`
   display: flex;
-  padding: 0.5rem 1rem 0.5rem 1rem;
+  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
   width: 100%;
-  height: 30vh;
+  height: 60px;
   background-color: #9437ff;
   color: #fff;
 `;
@@ -133,48 +129,77 @@ const Logo = styled.div`
   font-size: 20px;
   font-weight: bold;
 `;
-const UserName = styled.div`
-  position:relative;
-  display: flex;
-  font-size: 18px;
-  align-items: center;
-  & svg {
-    margin-left: 10px;
-    font-size: 2rem;
-    
+
+const UserProfileMenuContainer = styled.details`
+
+  summary {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+  #image-wrapper {
+    width: 2rem;
+    height: 2rem;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+  &[open] {
+    #arrow {
+      transition: transform 0.3s;
+      transform: rotate(-180deg);
+    }
+  }
+  &:not([open]) {
+    #arrow {
+      transition: transform 0.3s;
+    }
   }
 `;
 
 // drop down my menu
 
 const DropDownMenuContainer = styled.div`
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   position: absolute;
-  display:inline-block;
+  display: inline-block;
   border: solid 1px #eee;
   color: rgb(59, 59, 59);
   padding: 1rem;
   max-width: 15rem;
-  opacity: 0;
   transform-origin: top center;
-  border-radius: 20px;
+  border-radius: 6px;
   background-color: white;
   top: 60px;
-  right: 0;
-  visibility: hidden;
+  right: 1.5rem;
   z-index: 99;
-  transition: opacity .5s;
-  &.active{
-    visibility: visible;
-    opacity: 1;
+  &:after {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 81%;
+    width: 16px;
+    height: 16px;
+    border-top: solid 1px #eee;
+    border-right: solid 1px #eee;
+    transform: rotate(-45deg);
+    z-index: 100;
+    background-color: white;
   }
 `;
 const ContentContainer = styled.div`
-border-bottom: solid 1px #eee;
-display: flex;
-&:first-child {
-  padding-bottom: 1rem;
-}
-&:last-child {
+  border-bottom: solid 1px #eee;
+  display: flex;
+  &:first-child {
+    padding-bottom: 1rem;
+  }
+  &:last-child {
     padding-top: 1rem;
     border: none;
   }
