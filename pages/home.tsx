@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import { ReactElement} from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Card,Button } from 'components/common';

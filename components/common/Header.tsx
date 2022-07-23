@@ -4,24 +4,34 @@ import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import { MdLogout, MdOutlineHistory, MdMenu } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
-import { HiChevronDown } from 'react-icons/hi';
+import {  } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import React, { useEffect, useRef, forwardRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutAction } from 'store/user';
+import { RootState } from 'store';
 
 // ref를 props로 전달하기 위해 forwardRef 사용
 // inner component
 const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
+  const dispatch = useDispatch();
+  const { userId, userNickname, userProfileImage } = useSelector((state: RootState) => state.user);
+  
+  const Logout = () => {
+    dispatch(logoutAction());
+  }
+  
   return (
     <DropDownMenuContainer {...props} ref={ref}>
       <UserInfoContainer>
         <ProfileImageContainer>
-          <img src={'/assets/img/user_default.png'} />
+          <img src={userProfileImage} />
         </ProfileImageContainer>
         <ProfileOtherContainer>
           <div className="user-nickname">
-            <strong>전하영 </strong>님
+            <strong>{userNickname} </strong>님
           </div>
-          <div className="user-code">usercode 01...</div>
+          <div className="user-code">usercode {userId}</div>
         </ProfileOtherContainer>
       </UserInfoContainer>
       <MyMenuContainer>
@@ -49,7 +59,7 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
               </a>
             </Link>
           </li>
-          <li style={{ color: 'red' }}>
+          <li style={{ color: 'red' }} onClick={Logout}>
             <Link href="#">
               <a>
                 <MdLogout />
@@ -65,6 +75,7 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
 
 // main component
 const Header = () => {
+  const { userProfileImage } = useSelector((state: RootState) => state.user);
   // 메뉴바 바깥의 요소를 클릭 했을 때 메뉴 닫기
   const menuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -94,7 +105,7 @@ const Header = () => {
           <UserProfileMenuContainer id="details-menu">
             <summary>
               <div id="image-wrapper">
-                <img src={'/assets/img/user_default.png'} />
+                <img src={userProfileImage} />
               </div>
               <TiArrowSortedDown id="arrow" />
             </summary>
