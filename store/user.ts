@@ -33,14 +33,13 @@ const userSlice = createSlice({
       state.userNickname = userNickname;
     },
     logoutAction: (state: UserTypes) => {
+      Router.push('/'); // 로그인 화면으로 이동
+      deleteToken(); // 헤더와 쿠키에서 토큰 제거
       state.isLoggedin = false;
       state.userId = '';
       state.userProfileImage = '';
       state.userNickname = '';
-      deleteToken(); // 헤더와 쿠키에서 토큰 제거
-      Router.push('/'); // 로그인 화면으로 이동
-
-    },
+    }
   },
 });
 

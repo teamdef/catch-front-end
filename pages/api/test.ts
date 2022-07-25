@@ -8,9 +8,4 @@ const kakaoLoginApi = async (code: string): Promise<AxiosResponse> => {
   return res;
 };
 
-const UserProfileApi = async (token: string): Promise<AxiosResponse> => {
-  const res: AxiosResponse = await axios.get(`/token/${token}`);
-  return res;
-}
-
 export { kakaoLoginApi };

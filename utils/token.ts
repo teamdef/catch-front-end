@@ -32,7 +32,9 @@ const deleteToken = ()=> {
     const delete_time = new Date();
     delete_time.setDate(Date.now() - 1); // 현재 이전의 날짜로 만료일자를 설정하면 쿠키가 바로 만료된다.
 
-    cookies.remove('access_token');
+  cookies.remove('access_token');
+  
 }
 
-export { saveToken, deleteToken };
+
+export { saveToken, deleteToken};

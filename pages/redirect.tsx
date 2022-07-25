@@ -7,6 +7,7 @@ import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'store/user';
 import { saveToken } from 'utils/token';
+import { Loading } from 'components/common';
 
 // 카카오 로그인 리다이렉트용.
 interface Tokens {
@@ -23,7 +24,7 @@ interface Props {
 }
 const redirect: NextPageWithLayout = ({ data, status }: Props) => {
   const dispatch = useDispatch();
-  const saveUser = async() => {
+  const saveUser = async () => {
     // nullish 체크를 통해 에러가 아닌 undefined를 표시하도록 함.
     const userId: string = data?.id;
     const userNickname: string = data?.kakao_account?.profile?.nickname;
@@ -31,14 +32,20 @@ const redirect: NextPageWithLayout = ({ data, status }: Props) => {
     const accessToken: string = data?.access_token;
     dispatch(loginAction({ userId, userProfileImage, userNickname })); // 개인정보를 redux에 저장
     await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
-  }
+  };
   useEffect(() => {
-    if (status === 200) {
-      saveUser();
-      Router.push('/home');
+    if (typeof window !== 'undefined') {
+      if (status === 200) {
+        saveUser();
+        Router.push('/home');
+      }
     }
   }, []);
-  return <div>wait ... redirect...</div>;
+  return (
+    <div>
+      <Loading />
+    </div>
+  );
 };
 
 redirect.getLayout = function getLayout(page: ReactElement) {
