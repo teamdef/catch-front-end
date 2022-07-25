@@ -4,12 +4,13 @@ interface CardProps {
   width?: string;
   height?: string;
   radius?: string;
+  bgColor?: string;
   children?: React.ReactNode;
 }
 
-const Card = ({ width = '100%', height = 'auto', radius = '4px', children, ...rest }: CardProps) => {
+const Card = ({ width = '100%', height = 'auto', radius = '4px', bgColor = 'white',children, ...rest }: CardProps) => {
   return (
-    <Wrapper {...rest} width={width} height={height} radius={radius}>
+    <Wrapper {...rest} width={width} height={height} radius={radius} bgColor={bgColor}>
       {children}
     </Wrapper>
   );
@@ -19,11 +20,12 @@ interface CardStyleProps {
   width?: string;
   height?: string;
   radius?: string;
+  bgColor?: string;
 }
 const Wrapper = styled.div<CardStyleProps>`
   display: flex;
   position: relative;
-  background-color: white;
+  background-color: ${(props) => props.bgColor};
   border-radius: ${(props) => props.radius};
   width: ${(props) => props.width};
   height: ${(props) => props.height};

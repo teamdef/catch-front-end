@@ -24,11 +24,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (isLoggedin) Router.push('/home');
-    }
-    // if (isLoggedin) Router.push('/home');
-    
+    if (isLoggedin) Router.push('/home');
   }, [isLoggedin]);
   
   return (

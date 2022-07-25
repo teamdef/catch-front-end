@@ -1,6 +1,6 @@
 import { combineReducers, Store, CombinedState, AnyAction } from 'redux';
-import { configureStore, EnhancedStore, ThunkAction } from '@reduxjs/toolkit';
-import { MakeStore, Context, createWrapper, HYDRATE } from 'next-redux-wrapper';
+import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
+import { MakeStore, createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import userReducer from 'store/user';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
@@ -8,7 +8,6 @@ import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 // https://devsner.tistory.com/143 참고
 // https://velog.io/@junho0956/redux-toolkit-%EC%B4%88%EA%B8%B0%EC%84%A4%EC%A0%95-with-NextJS-hydration
-
 
 const createNoopStorage = () => {
   return {
@@ -60,20 +59,8 @@ export const store = configureStore({
       },
     }),
 });
-/*
-const setupStore = (context: Context): EnhancedStore => store;
-
-const makeStore: MakeStore<EnhancedStore> = (context: Context) => setupStore(context);
-
-export const persistor = persistStore(store);
-export const wrapper = createWrapper<Store>(makeStore);
-export type RootState = ReturnType<typeof rootReducer>;
-*/
 
 const makeStore: MakeStore<EnhancedStore> = () => store;
-
 export const persistor = persistStore(store);
-
+export const wrapper = createWrapper<Store>(makeStore, { debug: process.env.NODE_ENV !== 'production' });
 export type RootState = ReturnType<typeof rootReducer>;
-export const wrapper = createWrapper<Store>(makeStore, { debug: true });
-//  process.env.NODE_ENV !== 'production'

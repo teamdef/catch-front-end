@@ -9,15 +9,6 @@ import { loginAction } from 'store/user';
 import { saveToken } from 'utils/token';
 import { Loading } from 'components/common';
 
-// 카카오 로그인 리다이렉트용.
-interface Tokens {
-  access_token?: string;
-  token_type?: string;
-  refresh_token?: string;
-  expires_in?: number;
-  scope?: string;
-  refresh_token_expries_in?: number;
-}
 interface Props {
   data?: any;
   status?: number;
@@ -34,11 +25,9 @@ const redirect: NextPageWithLayout = ({ data, status }: Props) => {
     await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
   };
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (status === 200) {
-        saveUser();
-        Router.push('/home');
-      }
+    if (status === 200) {
+      saveUser();
+      Router.push('/home');
     }
   }, []);
   return (
