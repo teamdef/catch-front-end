@@ -81,7 +81,7 @@ const MenuCustomCard = styled(Card)`
 const PopularQuizList = styled.div`
   padding: 1rem;
   #title {
-    padding: 0.5rem;
+    padding: 1rem 0.5rem 1rem 0.5rem;
     color: white;
     font-size: 18px;
   }
@@ -142,7 +142,7 @@ const ImageCard = styled.div<ImageCardProps>`
 
 const MyQuizList = styled.div`
   #title {
-    padding: 0.5rem;
+    padding: 1rem 0.5rem 1rem 0.5rem ;
     color: white;
     font-size: 18px;
   }
