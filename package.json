@@ -9,13 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.7",
+    "@react-native-community/async-storage": "^1.12.1",
+    "@reduxjs/toolkit": "^1.8.3",
+    "@types/next-redux-wrapper": "^3.0.0",
+    "@types/react-cookies": "^0.1.0",
+    "@types/react-redux": "^7.1.24",
     "axios": "^0.27.2",
     "eslint-plugin-import": "^2.26.0",
     "next": "12.2.0",
+    "next-redux-wrapper": "^7.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
-    "styled-components": "^5.3.5"
+    "react-redux": "^8.0.2",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-persist": "^6.0.0",
+    "styled-components": "^5.3.5",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@types/node": "18.0.0",
