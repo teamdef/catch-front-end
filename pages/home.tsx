@@ -5,7 +5,9 @@ import { Card } from 'components/common';
 import styled from 'styled-components';
 import { HiOutlinePlus } from 'react-icons/hi';
 import { RiHeart3Fill } from 'react-icons/ri';
+import {useRouter} from 'next/router'
 const Home: NextPageWithLayout = () => {
+  const router = useRouter();
   return (
     <>
       <Background>
@@ -53,6 +55,11 @@ const Home: NextPageWithLayout = () => {
             </CustomCard>
           </QuizCardContainer>
         </MyQuizList>
+        <button
+          onClick={() => {
+            router.push('/quiz/start');
+          }}
+        >퀴즈만들기 임시</button>
       </Background>
     </>
   );

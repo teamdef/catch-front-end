@@ -7,6 +7,7 @@ interface ButtonProps {
   height?: string;
   fontSize?: string;
   children?: React.ReactNode;
+  [x: string]: any; // ...rest 처리 부분 
 }
 const Button = ({
   bgColor = '#d6d6d6',
