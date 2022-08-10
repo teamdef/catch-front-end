@@ -1,21 +1,33 @@
 import { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card } from 'components/common';
+import { Card , Navbar } from 'components/common';
 import styled from 'styled-components';
-import { HiOutlinePlus } from 'react-icons/hi';
 import { RiHeart3Fill } from 'react-icons/ri';
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router';
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
   return (
     <>
       <Background>
-        <QuickMenu>
-          <MenuCustomCard bgColor={'#e4ccff'}>메뉴1</MenuCustomCard>
-          <MenuCustomCard bgColor={'#cfd8dc'}>메뉴2</MenuCustomCard>
-          <MenuCustomCard bgColor={'#fffde3'}>메뉴3</MenuCustomCard>
-        </QuickMenu>
+        <MyQuizList>
+          <QuizCardContainer>
+            <CustomCard>
+              <CreateCard>
+                <span>생성된 퀴즈가 없어요 !</span>
+                <button
+                  id="create-btn"
+                  onClick={() => {
+                    router.push('/quiz/start');
+                  }}
+                >
+                  새로 만들기
+                </button>
+              </CreateCard>
+            </CustomCard>
+          </QuizCardContainer>
+        </MyQuizList>
+
         <PopularQuizList>
           <div id="title">인기 문제집 (❁´◡`❁)</div>
           <ImageCardContainer>
@@ -47,57 +59,31 @@ const Home: NextPageWithLayout = () => {
             </ImageCard>
           </ImageCardContainer>
         </PopularQuizList>
-        <MyQuizList>
-          <div id="title">문제집 목록</div>
-          <QuizCardContainer>
-            <CustomCard>
-              <HiOutlinePlus size={30} color="white" />
-            </CustomCard>
-          </QuizCardContainer>
-        </MyQuizList>
-        <button
-          onClick={() => {
-            router.push('/quiz/start');
-          }}
-        >퀴즈만들기 임시</button>
+        <Navbar></Navbar>
       </Background>
     </>
   );
 };
 
 const Background = styled.div`
-  height: calc(100vh - 60px);
-  background: linear-gradient(180deg, rgba(148, 55, 255, 1) 0%, rgba(148, 55, 255, 1) 50%, rgba(193, 101, 221, 1) 100%);
+  padding-top: 3rem;
+  height: calc(100vh - 116px);
   position: relative;
-`;
-
-const QuickMenu = styled.div`
-  display: flex;
-  padding: 1rem;
-  width: 100%;
-`;
-const MenuCustomCard = styled(Card)`
-  margin-right: 0.5rem;
-  height: 5rem;
-  border-radius: 12px;
-  &:last-child {
-    margin: 0;
-  }
 `;
 
 const PopularQuizList = styled.div`
   padding: 1rem;
   #title {
     padding: 1rem 0.5rem 1rem 0.5rem;
-    color: white;
+    color: #000;
+    font-weight: bold;
     font-size: 18px;
   }
 `;
 const ImageCardContainer = styled.div`
   display: flex;
   width: inherit;
-  flex-wrap:nowrap;
-  
+  flex-wrap: nowrap;
 `;
 interface ImageCardProps {
   url?: string;
@@ -107,24 +93,24 @@ const ImageCard = styled.div<ImageCardProps>`
   #like {
     display: flex;
     align-items: center;
-    justify-content:right;
+    justify-content: right;
   }
-  #card-title{
-    font-size:20px;
-    font-size:bold;
+  #card-title {
+    font-size: 20px;
+    font-size: bold;
   }
-  #card-sub-title{
-    font-size:12px;
+  #card-sub-title {
+    font-size: 12px;
   }
 
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  color:white;
-  width:240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  width: 240px;
   height: 10rem;
   border-radius: 12px;
-  padding:1rem;
+  padding: 1rem;
   background: linear-gradient(
       to bottom,
       rgba(20, 20, 20, 0) 10%,
@@ -146,14 +132,12 @@ const ImageCard = styled.div<ImageCardProps>`
   }
 `;
 
-
 const MyQuizList = styled.div`
   #title {
-    padding: 1rem 0.5rem 1rem 0.5rem ;
+    padding: 1rem 0.5rem 1rem 0.5rem;
     color: white;
     font-size: 18px;
   }
-  padding: 1rem;
 `;
 const QuizCardContainer = styled.div`
   display: flex;
@@ -162,13 +146,30 @@ const QuizCardContainer = styled.div`
 `;
 
 const CustomCard = styled(Card)`
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #fff;
   border-radius: 30px;
-  height: 10rem;
+  height: 20rem;
+`;
+const CreateCard = styled.div`
+text-align: center;
+span {
+  color: #777;
+}
+  button {
+    margin: 50px 0;
+    padding: 10px 20px;
+    background-color: #ff4d57;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+  }
 `;
 Home.getLayout = function getLayout(page: ReactElement) {
   return (
