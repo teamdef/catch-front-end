@@ -10,66 +10,50 @@ import { RootState } from 'store';
 import { IoDice } from 'react-icons/io5';
 import data from 'data/question.json';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+import { MdClose } from 'react-icons/md';
+import { AiOutlinePlus } from 'react-icons/ai';
 
+interface ThumbnailObjectType {
+  imgURL: string;
+  imgName: string;
+}
 const Page: NextPageWithLayout = () => {
   const { problems } = useSelector((state: RootState) => state.quiz);
   const dispatch = useDispatch();
   const [problemCount, setProblemCount] = useState<number>(0); // 0부터 문제 개수 카운트. 9까지
-  type choice = 'img' | 'text'; // 리터럴 타입
   const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>('');
-  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<choice>('text'); // 텍스트 타입이 기본
+  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
 
-  const [choices, setChoices] = useState<any[]>([]); // 임시 any , 텍스트 객관식 답안 리스트
-  const [choicesThumbnail, setChoicesThumbnail] = useState<string[]>([]); // 이미지 객관식 답안 썸네일 리스트
+  const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
 
-  const [choiceText, , choiceTextClear, choiceTextHandler] = useInput<string>(''); // 텍스트 객관식 input 관리
+  const [choicesImgThumbnail, setChoicesImgThumbnail] = useState<ThumbnailObjectType[]>([]); // 이미지 객관식 답안 썸네일 리스트 base64 url , image name
+  const [choicesImgFile, setChoicesImgFile] = useState<File[]>([]); // 이미지 객관식 답안 파일 리스트 blob object
+
+  const [correctIndex, setCorrectIndex] = useState<number>(0); // 정답 인덱스. 객관식 보기 배열 내에서 정답인 요소의 인덱스를 저장함.
+
+  const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
     setProblemTitle(randomTitle);
   };
-  const choiceAdd = () => {
-    if (choiceText === '') {
+  const addTextChoice = () => {
+    if (textChoice === '') {
       alert('값을 입력하세요');
       return;
     }
-    setChoices([...choices, choiceText]);
-    choiceTextClear(); // 초기화
+    setChoicesText([...choicesText, textChoice]);
+    textChoiceClear(); // 초기화
   };
-  const choiceDelete = (index: number) => {
-    let temp = [...choices];
+  const deleteTextChoice = (index: number) => {
+    let temp = [...choicesText];
     temp.splice(index, 1);
-    setChoices(temp);
-  };
-  const prevProblemLoad = () => {
-    setProblemCount(problemCount - 1);
-  };
-  const saveProblem = () => {
-    if (choices.length < 2) {
-      alert('객관식 보기 답안을 2개 이상 작성해주세요.');
-      return;
-    }
-    if (problemTitle === '') {
-      alert('문제 제목을 작성해주세요.');
-      return;
-    }
-    let temp = [...problems];
-    temp[problemCount] = { problemTitle, choiceType, choices };
-    dispatch(saveProblemsAction({ problems: temp }));
-    setProblemCount(problemCount + 1);
-    resetProblem();
-  };
-
-  const resetProblem = () => {
-    problemTitleClear(); // 문제 제목 초기화
-    choiceTextClear(); // 답안 입력란 초기화
-    choiceTypeClear(); // 문제 유형 초기화
-    setChoices([]); // 문제 답안 목록 초기화
+    setChoicesText(temp);
   };
 
   // 이미지 압축을 위한 옵션
   const options = {
     maxSizeMB: 1, // 원본 이미지 최대 용량
-    maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 100px로 설정
+    maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
     //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
@@ -78,8 +62,8 @@ const Page: NextPageWithLayout = () => {
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
 
-    let thumbnailList: string[] = [];
-    let compressedImgList: File[] = [];
+    let _compressedImgList: File[] = [];
+    let _thumbnailImgList: ThumbnailObjectType[] = [];
 
     if (files && files[0]) {
       // 이미지가 있을 경우
@@ -90,117 +74,228 @@ const Page: NextPageWithLayout = () => {
       for (let i = 0; i < files.length; i++) {
         try {
           // 이미지 압축 과정
-          const compressedImg = (await imageCompression(files[i], options)) as File;
-          compressedImgList.push(compressedImg);
+          const _compressed = (await imageCompression(files[i], options)) as File;
+          _compressedImgList.push(_compressed);
 
+          console.log(_compressed);
           // resize된 이미지의 url을 생성 및 저장
-          const compressedImgUrl = await imageCompression.getDataUrlFromFile(compressedImg);
-          thumbnailList.push(compressedImgUrl);
+          const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
+          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _compressed.name };
+
+          _thumbnailImgList.push(_thumbnail);
         } catch (e) {
           console.log(e);
         }
       }
-      setChoicesThumbnail(thumbnailList);
-      console.log(compressedImgList);
+
+      console.log(_compressedImgList);
+      setChoicesImgFile(_compressedImgList);
+      setChoicesImgThumbnail(_thumbnailImgList);
     }
   };
 
+  const makeFileFromThumbnail = async (thumbnailList: ThumbnailObjectType[]) => {
+    const _temp: File[] = []; // base64 encoded string 에서 File Blob Object 으로 변환
+    for (let i = 0; i < thumbnailList.length; i++) {
+      try {
+        const _thumbnail = await imageCompression.getFilefromDataUrl(thumbnailList[i].imgURL, thumbnailList[i].imgName);
+        console.log(_thumbnail);
+        _temp.push(_thumbnail);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    setChoicesImgFile(_temp);
+  };
+
+  const deleteImgChoice = (index: number) => {
+    let thumbnail_temp = [...choicesImgThumbnail];
+    thumbnail_temp.splice(index, 1);
+    let file_temp = [...choicesImgFile];
+    file_temp.splice(index, 1);
+    console.log(thumbnail_temp, file_temp);
+    setChoicesImgThumbnail(thumbnail_temp);
+    setChoicesImgFile(file_temp);
+  };
+
+  const prevProblemLoad = () => {
+    setProblemCount(problemCount - 1);
+  };
+  const saveProblem = () => {
+    if (problemTitle === '') {
+      alert('문제 제목을 작성해주세요.');
+      return;
+    }
+    if (choiceType === 'text') {
+      if (choicesText.length < 2) {
+        alert('객관식 보기 답안을 2개 이상 작성해주세요.');
+        return;
+      }
+    } else if (choiceType === 'img') {
+      if (choicesImgFile.length < 2) {
+        alert('이미지 보기 답안을 2개 이상 추가해주세요.');
+        return;
+      }
+    }
+    let temp = [...problems];
+    temp[problemCount] = {
+      problemTitle,
+      choiceType,
+      choices: choiceType === 'text' ? choicesText : choicesImgThumbnail,
+    };
+    dispatch(saveProblemsAction({ problems: temp }));
+    setProblemCount(problemCount + 1); // 다음 문제 생성용
+  };
+
+  const resetProblem = () => {
+    problemTitleClear(); // 문제 제목 초기화
+    textChoiceClear(); // 답안 입력란 초기화
+    choiceTypeClear(); // 문제 유형 초기화
+    setChoicesText([]); // 문제 답안 목록 초기화
+    setChoicesImgFile([]); // 문제 이미지 답안 목록 초기화
+    setChoicesImgThumbnail([]); // 문제 이미지 썸네일 목록 초기화
+    setCorrectIndex(0); // 정답 인덱스 초기화
+  };
+
   useEffect(() => {
+    resetProblem(); // 입력란 및 기존 데이터 모두 초기화
     if (problems.length !== 0 && !!problems[problemCount]) {
       console.log(problems[problemCount]);
+
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
-      setChoices(problems[problemCount].choices);
+
+      const choices = problems[problemCount].choices; // img의 경우 base64 썸네일이 들어있음.
+      if (problems[problemCount].choiceType === 'text') {
+        setChoicesText(choices);
+      } else {
+        setChoicesImgThumbnail(choices);
+        makeFileFromThumbnail(choices);
+      }
     }
   }, [problemCount]);
+
   return (
     <Wrapper>
-      <div>
-        <strong>
-          {problemCount + 1}/{problems.length + 1}
-        </strong>
-      </div>
-      <strong>문제 제목</strong>
-      <div>
+      <ProblemCountContainer>
+        <strong>{problemCount + 1}/</strong>
+        <span>{problems.length}</span>
+      </ProblemCountContainer>
+      <CircleShortcutContainer>
+        {problems.map((item, index) => {
+          return (
+            <CircleShortcutButton
+              active={problemCount === index}
+              key={index}
+              onClick={() => {
+                setProblemCount(index);
+              }}
+            ></CircleShortcutButton>
+          );
+        })}
+      </CircleShortcutContainer>
+      <ProblemTitleBubble>
         <input type="text" value={problemTitle} onChange={problemTitleHandler} placeholder="문제 제목을 입력하세요" />
-        <button onClick={randomProblemTitle}>
-          <IoDice size={20} />
-        </button>
-      </div>
-      <strong>문제 유형</strong>
-      <div>
+      </ProblemTitleBubble>
+      <button onClick={randomProblemTitle}>
+        <IoDice size={20} />
+      </button>
+      <ChoiceTypeRadioContainer>
         <input
           type="radio"
           name="choice"
-          id="choice_text"
+          id="text_choice"
           value="text"
           onChange={choiceTypeHandler}
           checked={choiceType === 'text'}
         />
-        <label htmlFor="choice_text">텍스트</label>
+        <label htmlFor="text_choice">텍스트</label>
         <input
           type="radio"
           name="choice"
-          id="choice_img"
+          id="img_choice"
           value="img"
           onChange={choiceTypeHandler}
           checked={choiceType === 'img'}
         />
-        <label htmlFor="choice_img">이미지</label>
-      </div>
+        <label htmlFor="img_choice">이미지</label>
+      </ChoiceTypeRadioContainer>
       {choiceType === 'text' && (
-        <>
-          <strong>객관식 답안 작성</strong>
+        <TextChoicesContainer>
           <div>
-            <div>
-              <ul>
-                {choices.map((item, index) => {
-                  return (
-                    <li key={index}>
-                      {item}
-                      <Button
-                        onClick={() => {
-                          choiceDelete(index);
-                        }}
-                      >
-                        삭제
-                      </Button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            {choices.length < 4 && (
-              <div>
-                <input
-                  id="input-text"
-                  type="text"
-                  placeholder="답안 작성"
-                  value={choiceText}
-                  onChange={choiceTextHandler}
-                />
-                <Button onClick={choiceAdd}>추가</Button>
+            <ul>
+              {choicesText.map((item, index) => {
+                return (
+                  <TextBubble
+                    key={index}
+                    onClick={() => {
+                      setCorrectIndex(index);
+                    }}
+                    correct={correctIndex === index}
+                  >
+                    {item}
+                    <Button
+                      onClick={() => {
+                        deleteTextChoice(index);
+                      }}
+                    >
+                      <MdClose size={20} />
+                    </Button>
+                  </TextBubble>
+                );
+              })}
+            </ul>
+            {choicesText.length < 4 && (
+              <div id="input-bubble">
+                <TextInputBubble>
+                  <input
+                    id="input-text"
+                    type="text"
+                    placeholder="답안 작성"
+                    autoComplete="off"
+                    value={textChoice}
+                    onChange={textChoiceHandler}
+                  />
+                  <Button onClick={addTextChoice}>
+                    <AiOutlinePlus size={20} />
+                  </Button>
+                </TextInputBubble>
               </div>
             )}
           </div>
-        </>
+        </TextChoicesContainer>
       )}
       {choiceType === 'img' && (
-        <>
-          <strong>이미지 답안 작성</strong>
-          <div>
-            <input type="file" accept="image/*" multiple onChange={onImgChange} />
-            <ImageChoicesContainer>
-              {choicesThumbnail.map((item, index) => {
-                return (
-                  <ImageWrapper>
-                    <img alt="미리보기" src={item} />
-                  </ImageWrapper>
-                );
-              })}
-            </ImageChoicesContainer>
-          </div>
-        </>
+        <div>
+          <ImageInputContainer>
+            <input type="file" accept="image/*" multiple onChange={onImgChange} id="select-image" name="select-image" />
+            <label htmlFor="select-image">이미지 추가</label> <span>{choicesImgFile.length}개 선택됨</span>
+          </ImageInputContainer>
+
+          <ImageChoicesContainer>
+            {choicesImgThumbnail.map((item, index) => {
+              return (
+                <ImageWrapper
+                  key={index}
+                  onClick={() => {
+                    setCorrectIndex(index);
+                  }}
+                  correct={index === correctIndex}
+                >
+                  <img alt="미리보기" src={item.imgURL} />
+                  <button
+                    id="delete-btn"
+                    onClick={() => {
+                      deleteImgChoice(index);
+                    }}
+                  >
+                    <MdClose />
+                  </button>
+                </ImageWrapper>
+              );
+            })}
+          </ImageChoicesContainer>
+        </div>
       )}
 
       {problemCount !== 0 && <Button onClick={prevProblemLoad}>이전 문제 수정</Button>}
@@ -215,28 +310,197 @@ Page.getLayout = function getLayout(page: ReactElement) {
 
 // 기능 가시성을 위한 임시 디자인
 const Wrapper = styled.div`
-  strong {
-    font-size: 20px;
-  }
   & > div {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
 `;
 
+const ProblemCountContainer = styled.div`
+  font-size: 26px;
+  strong {
+    color: #ff4d57;
+    font-weight: bold;
+  }
+  font-weight: bold;
+  color: rgb(59, 59, 59);
+  text-align:center;
+`;
 const ImageChoicesContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
 `;
-const ImageWrapper = styled.div`
+
+interface CorrectProps {
+  correct?: boolean;
+}
+const ImageWrapper = styled.div<CorrectProps>`
   width: 100%;
   height: 200px;
   padding: 1rem;
+  position: relative;
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 1rem;
+    border: ${({ correct }) => (correct ? 'solid 2px red' : 'none')};
+  }
+  #delete-btn {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: solid 1px #d6d6d6;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 50%;
+    font-size: 20px;
+    color: rgb(59, 59, 59);
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: lightgrey;
+    }
+  }
+`;
+const ImageInputContainer = styled.div`
+  input {
+    display: none;
+  }
+  label {
+    background-color: grey;
+    color: rgb(59, 59, 59);
+    width: 100px;
+    height: 30px;
+    padding: 0.5rem;
+  }
+`;
+
+interface CircleShortcutButtonProps {
+  active?: boolean;
+}
+
+const CircleShortcutContainer = styled.div` 
+  display:flex;
+  justify-content:center;
+`
+const CircleShortcutButton = styled.button<CircleShortcutButtonProps>`
+  border: none;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  margin:4px;
+  background-color: ${({ active }) => (active ? '#FF4D57' : '#d9d9d9')};
+`;
+
+const TextChoicesContainer = styled.div`
+  ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+  }
+  #input-bubble {
+    display: flex;
+    justify-content: right;
+  }
+`;
+const TextBubble = styled.li<CorrectProps>`
+  width:70%;
+  border-radius: 30px 0px 30px 30px;
+  background-color: ${({ correct }) => (correct ? '#FF4D57' : '#ffa5aa')};
+  list-style-type: none;
+  margin: 0.5rem;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+  }
+`;
+const TextInputBubble = styled.div`
+  width: 70%;
+  border-radius: 30px 0px 30px 30px;
+  border: solid 1px #ffa5aa;
+  margin: 0.5rem;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  input {
+    color: #ffa5aa;
+    border: none;
+    font-weight: bold;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: #ffa5aa;
+    }
+  }
+  button {
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffa5aa;
+    font-weight: bold;
+  }
+`;
+const ChoiceTypeRadioContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  input[type='radio'] {
+    display: none;
+  }
+  label {
+    margin: 0 1rem 0 1rem;
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    cursor: pointer;
+    color: #ff4d57;
+    border-radius: 30px;
+    border: solid 1px #ff4d57;
+  }
+  input[type='radio']:checked + label {
+    background-color: #ff4d57;
+    color: white;
+    font-weight: bold;
+    transition: ease-in-out 0.2s;
+    box-shadow: 0 0 0.875rem 0 rgba(33, 37, 41, 0.05);
+  }
+`;
+
+const ProblemTitleBubble = styled.div`
+display:flex;
+  width: 80%;
+  border-radius: 0px 30px 30px 30px;
+  margin: 0.5rem;
+  padding: 1rem 1.5rem 1rem 1.5rem;
+  background-color: #eee;
+  input {
+    background-color: transparent;
+    color: #999999;
+    border:none;
+    border-bottom:solid 1px #99999930;
+    font-weight: bold;
+    padding:0.5rem;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: #99999970;
+    }
   }
 `;
 export default Page;

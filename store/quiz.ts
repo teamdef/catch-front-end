@@ -2,7 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // ChoiceImageTypes - 이미지 타입 객관식 답안
 interface ChoiceImageTypes {
-  choiceImageBlob: any; //  최적화 시킨 이미지 파일
+  choiceImageFileUrl: string; //  최적화 시킨 이미지 파일 url 
+  choiceImageFilename: string; // 최적화 시킨 이미지 파일 이름.
+  // 위 두 정보를 합쳐서 객체로 변환해야 함. 
 }
 // ChoiceTextType - 텍스트 타입 객관식 답안
 interface ChoiceTextTypes {
@@ -11,8 +13,8 @@ interface ChoiceTextTypes {
 // ProblemType - 문제 정보
 interface ProblemTypes {
   problemTitle: string; // 문제 제목
-  correctId: string; // 정답 번호
-  choiceType: string; // 이미지형 문제 , 텍스트형 문제
+  correctIndex: string; // 정답 번호
+  choiceType: 'img' | 'text'; // 이미지형 문제 , 텍스트형 문제
   choices: (ChoiceTextTypes | ChoiceImageTypes)[]; // 객관식 답안 배열
 }
 // ProblemSetType - 문제집 정보
