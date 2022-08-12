@@ -7,7 +7,9 @@ import { RiHeart3Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
-import "swiper/css";
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
@@ -18,6 +20,8 @@ const Home: NextPageWithLayout = () => {
           <Swiper
             spaceBetween={0}
             slidesPerView={1}
+            pagination={true}
+            modules={[Pagination]}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
           >
@@ -95,7 +99,6 @@ const Background = styled.div`
   padding-top: 3rem;
   padding-bottom: 80px;
   position: relative;
-  
 `;
 
 const PopularQuizList = styled.div`
@@ -165,8 +168,18 @@ const MyQuizList = styled.div`
     color: white;
     font-size: 18px;
   }
-  .swiper-slide {
-    padding-bottom: 10px;
+  .swiper-wrapper {
+    padding-bottom: 25px;
+  }
+  .swiper-pagination {
+    position: relative;
+    .swiper-pagination-bullet {
+      width: 10px;
+      height: 10px;
+    }
+    .swiper-pagination-bullet-active {
+      background-color: #ff4d57;
+    }
   }
 `;
 const CustomCard = styled(Card)`

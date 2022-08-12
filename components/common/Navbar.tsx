@@ -29,7 +29,7 @@ const Wrapper = styled.div`
   background-color: #fff;
   max-width: 500px;
   width: 100%;
-  height: 80px;
+  height: 70px;
   box-shadow: 0px 0px 5px 0px #ddd;
   nav {
     position: relative;
