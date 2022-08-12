@@ -10,7 +10,6 @@ const Page: NextPageWithLayout = () => {
   const goKakaoLogin = () => {
     Router.push(KAKAO_AUTH_URL);
   };
-  // 임시 디자인 입니다! 피그마 보고 여차저차 따라했어유 ...
   return (
     <div>
       <Head>

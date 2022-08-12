@@ -1,31 +1,57 @@
 import { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card , Navbar } from 'components/common';
+import { Card, Navbar } from 'components/common';
 import styled from 'styled-components';
 import { RiHeart3Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
+// Import Swiper
+import { Swiper, SwiperSlide } from 'swiper/react';
+import "swiper/css";
+
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
   return (
     <>
       <Background>
         <MyQuizList>
-          <QuizCardContainer>
-            <CustomCard>
-              <CreateCard>
-                <span>생성된 퀴즈가 없어요 !</span>
-                <button
-                  id="create-btn"
-                  onClick={() => {
-                    router.push('/quiz/start');
-                  }}
-                >
-                  새로 만들기
-                </button>
-              </CreateCard>
-            </CustomCard>
-          </QuizCardContainer>
+          <Swiper
+            spaceBetween={0}
+            slidesPerView={1}
+            onSlideChange={() => console.log('slide change')}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            <SwiperSlide>
+              <CustomCard>
+                <CreateCard>
+                  <span>생성된 퀴즈가 없어요 !</span>
+                  <button
+                    id="create-btn"
+                    onClick={() => {
+                      router.push('/quiz/start');
+                    }}
+                  >
+                    새로 만들기
+                  </button>
+                </CreateCard>
+              </CustomCard>
+            </SwiperSlide>
+            <SwiperSlide>
+              <CustomCard>
+                <CreateCard>
+                  <span>생성된 퀴즈가 없어요 !</span>
+                  <button
+                    id="create-btn"
+                    onClick={() => {
+                      router.push('/quiz/start');
+                    }}
+                  >
+                    새로 만들기
+                  </button>
+                </CreateCard>
+              </CustomCard>
+            </SwiperSlide>
+          </Swiper>
         </MyQuizList>
 
         <PopularQuizList>
@@ -67,8 +93,9 @@ const Home: NextPageWithLayout = () => {
 
 const Background = styled.div`
   padding-top: 3rem;
-  height: calc(100vh - 116px);
+  padding-bottom: 80px;
   position: relative;
+  
 `;
 
 const PopularQuizList = styled.div`
@@ -138,14 +165,12 @@ const MyQuizList = styled.div`
     color: white;
     font-size: 18px;
   }
+  .swiper-slide {
+    padding-bottom: 10px;
+  }
 `;
-const QuizCardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const CustomCard = styled(Card)`
+  margin: 0 auto;
   width: 70%;
   display: flex;
   flex-direction: column;
@@ -156,10 +181,12 @@ const CustomCard = styled(Card)`
   height: 20rem;
 `;
 const CreateCard = styled.div`
-text-align: center;
-span {
-  color: #777;
-}
+  text-align: center;
+  span {
+    position: relative;
+    display: block;
+    color: #777;
+  }
   button {
     margin: 50px 0;
     padding: 10px 20px;
