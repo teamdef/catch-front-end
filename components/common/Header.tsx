@@ -4,28 +4,32 @@ import styled, { keyframes } from 'styled-components';
 import Link from 'next/link';
 import { MdLogout, MdOutlineHistory, MdMenu } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
-import {  } from 'react-icons/hi';
+import {} from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import React, { useEffect, useRef, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from 'store/user';
 import { RootState } from 'store';
 
+// Header 및 DropDownMyMenu 내 유저 프로필 이미지가 존재하지 않을 시 대체 이미지 출력 
+const userImgError = (e:any) => {
+    e.target.src = '/assets/img/user.png';
+  };
 // ref를 props로 전달하기 위해 forwardRef 사용
 // inner component
 const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
   const dispatch = useDispatch();
   const { userId, userNickname, userProfileImage } = useSelector((state: RootState) => state.user);
-  
+
   const Logout = () => {
     dispatch(logoutAction());
-  }
-  
+  };
+
   return (
     <DropDownMenuContainer {...props} ref={ref}>
       <UserInfoContainer>
         <ProfileImageContainer>
-          <img src={userProfileImage} />
+          <img src={userProfileImage} onError={userImgError} />
         </ProfileImageContainer>
         <ProfileOtherContainer>
           <div className="user-nickname">
@@ -96,18 +100,20 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuRef]);
+  
 
   return (
     <Wrapper>
       <HeaderContentWrapper ref={headerRef}>
         <HeaderContent>
-          <Logo>CatchMe</Logo>
+          <Logo>캐치캐치</Logo>
           <UserProfileMenuContainer id="details-menu">
             <summary>
               <div id="image-wrapper">
-                <img src={userProfileImage} />
+                {/* 이미지 없을 시 대체 이미지 보이기 */}
+                <img src={userProfileImage} onError={userImgError} />
               </div>
-              <TiArrowSortedDown id="arrow" />
+              <TiArrowSortedDown id="arrow" size="24" color="555" />
             </summary>
             <DropDownMyMenu ref={menuRef} id="dropdown" />
           </UserProfileMenuContainer>
@@ -119,30 +125,30 @@ const Header = () => {
 
 const Wrapper = styled.div`
   position: relative;
+  background-color: #fff;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 `;
 // header
 const HeaderContentWrapper = styled.div`
   display: flex;
   padding: 0.5rem 1.5rem 0.5rem 1.5rem;
   width: 100%;
-  height: 60px;
-  background-color: #9437ff;
-  color: #fff;
 `;
 const HeaderContent = styled.div`
   display: flex;
   width: 100%;
-  height: 50px;
+  height: 100px;
   justify-content: space-between;
   align-items: center;
 `;
 const Logo = styled.div`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-family: 'RixInooAriDuriR';
+  color: #ff4d57;
 `;
 
 const UserProfileMenuContainer = styled.details`
-
   summary {
     display: flex;
     align-items: center;
@@ -154,6 +160,7 @@ const UserProfileMenuContainer = styled.details`
   #image-wrapper {
     width: 2rem;
     height: 2rem;
+    margin-right: 10px;
     img {
       width: 100%;
       height: 100%;
@@ -187,14 +194,14 @@ const DropDownMenuContainer = styled.div`
   transform-origin: top center;
   border-radius: 6px;
   background-color: white;
-  top: 60px;
-  right: 1.5rem;
+  top: 100px;
+  right: 0;
   z-index: 99;
   &:after {
     content: '';
     position: absolute;
     top: -9px;
-    left: 81%;
+    right: 26px;
     width: 16px;
     height: 16px;
     border-top: solid 1px #eee;
@@ -224,6 +231,7 @@ const ProfileImageContainer = styled.div`
   img {
     width: 100%;
     height: 100%;
+    padding: 20%;
     border-radius: 50%;
     object-fit: cover;
   }

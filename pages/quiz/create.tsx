@@ -137,6 +137,17 @@ const Page: NextPageWithLayout = () => {
         return;
       }
     }
+    if (choiceType === 'text') {
+      if (choicesText.length < 2) {
+        alert('객관식 보기 답안을 2개 이상 작성해주세요.');
+        return;
+      }
+    } else if (choiceType === 'img') {
+      if (choicesImgFile.length < 2) {
+        alert('이미지 보기 답안을 2개 이상 추가해주세요.');
+        return;
+      }
+    }
     let temp = [...problems];
     temp[problemCount] = {
       problemTitle,

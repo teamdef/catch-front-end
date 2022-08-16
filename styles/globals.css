@@ -12,8 +12,9 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+  background-color: #FFF6F7;
 
+}
 a {
   color: inherit;
   text-decoration: none;
@@ -28,4 +29,10 @@ body, h1, h2, h3, h4, h5, h6, input, textarea, select {
 }
 img {
   vertical-align: middle;
+}
+@font-face {
+  font-family: 'RixInooAriDuriR';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
