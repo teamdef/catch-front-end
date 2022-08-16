@@ -7,8 +7,7 @@ import { Button } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveProblemsAction } from 'store/quiz';
 import { RootState } from 'store';
-import {BiPlusCircle,BiMinusCircle} from 'react-icons/bi';
-import { IoDice } from 'react-icons/io5';
+import { IoIosClose, IoIosAdd, IoIosArrowForward } from 'react-icons/io';
 import data from 'data/question.json';
 
 const Page: NextPageWithLayout = () => {
@@ -76,74 +75,74 @@ const Page: NextPageWithLayout = () => {
       setChoices(problems[problemCount].choices);
     }
   }, [problemCount]);
+  // 정답 선택 및 미선택시 return 구현 예정
   return (
     <Wrapper>
-      <header className="quiz-title">
-        <div id="quiz-count">
-          <em id="current">{problemCount + 1}</em>
-          {' / '}
-          <em id="total">{problems.length + 1}</em>
-        </div>
-        Q.
-        <input
-          id="input-title"
-          type="text"
-          value={problemTitle}
-          onChange={problemTitleHandler}
-          placeholder="질문 입력.."
-        />
-        <button id="random" onClick={randomProblemTitle}>
-          <IoDice size={30} color={'#7a7a7a'} />
-        </button>
-      </header>
-      <div className="quiz-main">
-        <div id="type">
-          <input
-            className="choice-type"
-            type="radio"
-            name="choice"
-            id="choice-text"
-            value="text"
-            onChange={choiceTypeHandler}
-            checked={choiceType === 'text'}
-          />
-          <label htmlFor="choice-text">텍스트</label>
-          <input
-            className="choice-type"
-            type="radio"
-            name="choice"
-            id="choice-img"
-            value="img"
-            onChange={choiceTypeHandler}
-            checked={choiceType === 'img'}
-          />
-          <label htmlFor="choice-img">이미지</label>
-        </div>
-        <div>
-          <div>
-            <ul>
-              {choices.map((item, index) => {
-                return (
-                  <li key={index} className="choice-item">
-                      <strong>{`${index + 1}.`}</strong>
-                      {item}
-                    <BiMinusCircle size="30" color="red"
+      <div className="template">
+        <header className="quiz-title">
+          <div id="quiz-count"> 
+            <em id="current"> {problemCount + 1}</em>
+            {' / '}
+            <em id="total">10</em>
+          </div>
+          <div className="input-area">
+            <input
+              id="input-title"
+              spellCheck={false}
+              type="text"
+              value={problemTitle}
+              onChange={problemTitleHandler}
+              placeholder="질문 입력.."
+            />
+          </div>
+          <button id="random" onClick={randomProblemTitle}>
+            <img src="/assets/img/casino.png"></img>
+          </button>
+        </header>
+        <div className="quiz-main">
+          <div id="type">
+            <input
+              className="choice-type"
+              type="radio"
+              name="choice"
+              id="choice-text"
+              value="text"
+              onChange={choiceTypeHandler}
+              checked={choiceType === 'text'}
+            />
+            <label htmlFor="choice-text">텍스트</label>
+            <input
+              className="choice-type"
+              type="radio"
+              name="choice"
+              id="choice-img"
+              value="img"
+              onChange={choiceTypeHandler}
+              checked={choiceType === 'img'}
+            />
+            <label htmlFor="choice-img">이미지</label>
+          </div>
+          <div className="answer-area">
+            {choices.map((item, index) => {
+              return (
+                <div className="answer-item" key={index}>
+                  <input id={`answer${index}`} name="answer" type="radio" className="answer"/>
+                  <label htmlFor={`answer${index}`}>
+                    {item}
+                    <IoIosClose
+                      size="30"
+                      color="#fff"
                       onClick={() => {
                         choiceDelete(index);
                       }}
-                    >
-                    </BiMinusCircle>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          {choices.length < 4 && (
-            <div>
-              <div className="input-area">
-                <BiPlusCircle onClick={choiceAdd}
-                size="30" color="blue">
-                </BiPlusCircle>
+                    ></IoIosClose>
+                  </label>
+                </div>
+              );
+            })}
+            {choices.length < 4 && (
+              <div className="input-answer">
+                <IoIosAdd onClick={choiceAdd} size="30" color="#ff4d57"></IoIosAdd>
                 <input
                   id="input-text"
                   type="text"
@@ -152,37 +151,62 @@ const Page: NextPageWithLayout = () => {
                   onChange={choiceTextHandler}
                 />
               </div>
-              <p className={`${warning ? 'active' : ''}`}>항목을 입력하세요 !</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+        {problemCount !== 0 && (
+          <Button className="footer-btn prev" onClick={prevProblemLoad} fontSize="1.2rem" width={'50%'} height={'60px'}>
+            <span>이전 문제 수정</span>
+          </Button>
+        )}
+        {problemCount < 9 && (
+          <Button className="footer-btn next" onClick={saveProblem} fontSize="1.2rem" width={'50%'} height={'60px'}>
+            <span>
+              <IoIosArrowForward />
+              다음 문제
+            </span>
+          </Button>
+        )}
       </div>
-      <footer className="footer">
-        {problemCount !== 0 && <Button onClick={prevProblemLoad}>이전 문제 수정</Button>}
-        {problemCount < 9 && <Button onClick={saveProblem}>저장하고 다음으로</Button>}
-      </footer>
     </Wrapper>
   );
 };
 
 // 기능 가시성을 위한 임시 디자인
 const Wrapper = styled.div`
-  height: 100vh;
+  position: relative;
+  padding: 15% 5%;
+  height: 100%;
+  .template {
+    position:relative;
+    border-radius: 30px;
+    background-color: #fff;
+    height: 100%;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: block;
+      width: 40px;
+      height: 3px;
+      background-color: #ccc;
+    }
+  }
   .quiz-title {
     position: relative;
-    padding-top: 5%;
+    padding: 10% 0;
     display: block;
-    text-align: center;
-    height: 30%;
-    background-color: #ffde6d;
     border-bottom-left-radius: 30%;
     border-bottom-right-radius: 30%;
     font-weight: bold;
     #quiz-count {
       text-decoration: none;
       font-size: 2rem;
+      text-align: center;
       margin-bottom: 5%;
-      color: #999;
+      color: #ff4d57;
       em {
         font-style: normal;
         font-weight: bold;
@@ -190,37 +214,52 @@ const Wrapper = styled.div`
       #current {
         color: #000;
       }
-      #total {
-        color: #fff;
-      }
+    }
+    .input-area {
+      position: relative;
+      display: inline-block;
+      background-color: #eee;
+      border-radius: 20px;
+      border-top-left-radius: 0;
+      padding: 20px 30px;
+      width: 75%;
+      margin-left: 20px;
     }
     #input-title {
       position: relative;
       display: block;
-      margin: 0 auto;
       background-color: transparent;
       border: none;
-      width: 70%;
-      padding: 10px 0;
-      font-size: 1.2rem;
-      text-align: center;
+      width: 100%;
+      border-bottom: 1px solid #ccc;
+      font-size: 1rem;
+      color: #555;
+      &::placeholder {
+        color: #aaa;
+      }
     }
     #random {
-      margin: 0 auto;
       margin-top: 3%;
+      margin-left: 5%;
       position: relative;
       padding: 0;
       background-color: transparent;
+      width: 30px;
+      height: 30px;
       border: none;
       color: #7a7a7a;
-      display: block;
+      display: inline-block;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .quiz-main {
-    margin-top: 10%;
+    margin-top: 5%;
     text-align: center;
     #type {
-      >* {
+      > * {
         margin: 0 10px;
       }
       position: relative;
@@ -228,62 +267,93 @@ const Wrapper = styled.div`
       align-items: center;
       justify-content: center;
       .choice-type {
-        width: 30px;
-        height: 30px;
+        display: none;
       }
       label {
-        font-size: 1.5rem;
+        padding: 5px 20px;
+        color: #ff4d57;
+        border: 1px solid #ff4d57;
+        border-radius: 30px;
+        font-size: 1.2rem;
+      }
+      .choice-type[type='radio']:checked + label {
+        color: #fff;
+        background-color: #ff4d57;
       }
     }
-    .input-area {
-      position:relative;
+    .input-answer {
+      position: relative;
       display: block;
-      margin: 0 auto;
-      background-color: #dabbfe;
       border: 0;
       font-size: 16px;
       max-width: 300px;
-      width: 70%;
-      padding: 15px 30px;
+      width: 80%;
+      padding: 4% 0;
       border-radius: 20px;
+      border-top-right-radius: 0;
+      border: 1px solid #ff4d57;
       #input-text {
-        width: 100%;
         background: none;
         border: none;
+        &::placeholder {
+          color: #ff4d57;
+        }
       }
       svg {
         position: absolute;
         background: none;
         top: 50%;
         transform: translateY(-50%);
-        left: -40px;
+        right: 10px;
         font-size: 1rem;
       }
     }
-    
-    ul {
-      padding: 0;
+
+    .answer-area {
+      position: relative;
+      padding: 0 5%;
+      display: flex;
+      align-items: end;
+      flex-direction: column;
       margin-top: 10%;
-      .choice-item {
+      .answer-item {
         position: relative;
-        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+        width: 100%;
         margin-bottom: 20px;
-        max-width: 300px;
-        width: 70%;
-        padding: 15px 30px;
-        border-radius: 20px;
-        background-color: #ffde6d;
-        list-style: none;
-        strong {
-          position: absolute;
-          left: 30px;
+        .answer {
+          display: block;
+          margin-right: 10px;
+          width: 25px;
+          height: 25px;
+          &[type='radio'] + label {
+            position: relative;
+            display: inline-block;
+            width: 80%;
+            padding: 4% 0;
+            border-radius: 20px;
+            background-color: #ff4d57;
+            border-top-right-radius: 0;
+            color: #fff;
+          }
+          &[type='radio']:checked + label {
+            background-color: #4aaf4e;
+          }
+        }
+        input[type='radio'] {
+          appearance: none;
+        }
+        input[type='radio']:checked {
+          background: url('/assets/img/check.png') no-repeat center;
         }
         svg {
           position: absolute;
           background: none;
           top: 50%;
           transform: translateY(-50%);
-          left: -40px;
+          right: 10px;
           font-size: 1rem;
         }
       }
@@ -301,15 +371,24 @@ const Wrapper = styled.div`
       }
     }
   }
-  .footer {
+
+  .footer-btn {
     position: fixed;
+    bottom: 4%;
     left: 50%;
     transform: translateX(-50%);
-    bottom: 5%;
-    display: block;
-    button {
-      background-color: #ffde6d;
-      padding: 15px 30px;
+    width: 60%;
+    color: #fff;
+    background-color: #ff4d57;
+    span {
+      padding-right: 10%;
+    }
+    svg {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+      display: block;
     }
   }
 `;

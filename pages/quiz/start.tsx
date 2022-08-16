@@ -123,6 +123,7 @@ const Wrapper = styled.div`
     color: #fff;
     font-size: 1rem;
     height: 50px;
+    text-align: center;
     &:focus {
       outline: none;
     }
@@ -173,7 +174,6 @@ const Wrapper = styled.div`
       right: 10%;
       transform: translateY(-50%);
       display: block;
-
     }
   }
 `;
