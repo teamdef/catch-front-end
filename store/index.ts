@@ -3,6 +3,7 @@ import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import { MakeStore, createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import userReducer from 'store/user';
+import quizReducer from 'store/quiz';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 
@@ -31,6 +32,7 @@ const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
     default: {
       const combinedReducer = combineReducers({
         user: userReducer,
+        quiz: quizReducer,
       });
       return combinedReducer(state, action);
     }
