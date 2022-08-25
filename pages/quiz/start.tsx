@@ -1,18 +1,16 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { Button } from 'components/common';
 import useInput from 'hooks/useInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { useDispatch } from 'react-redux';
 import { saveProblemSetTitleAction } from 'store/quiz';
 import Router from 'next/router';
 import { BsCheck } from 'react-icons/bs';
 import { IoIosArrowForward } from 'react-icons/io';
 
 const Page: NextPageWithLayout = () => {
-  const { userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const [setTitle, , , setTitleHandler] = useInput<string>('');
 
@@ -20,7 +18,7 @@ const Page: NextPageWithLayout = () => {
     if (setTitle == '') {
       return;
     }
-    dispatch(saveProblemSetTitleAction({ userId, setTitle })); // 제목 저장
+    dispatch(saveProblemSetTitleAction({ setTitle })); // 제목 저장
     Router.push('/quiz/create');
   };
   return (

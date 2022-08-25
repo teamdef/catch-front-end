@@ -16,6 +16,6 @@
     "incremental": true,
     "baseUrl": "./", // import경로를 상대경로에서 절대경로로 사용
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./types/**/*.d.ts",],
   "exclude": ["node_modules"]
 }
