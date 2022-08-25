@@ -70,6 +70,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   color: #000;
+  background-color: white;
   #warning {
     position: absolute;
     left: 50%;
@@ -110,7 +111,7 @@ const Wrapper = styled.div`
       height: 100%;
     }
   }
-  input {
+  input{
     position: relative;
     border: 0;
     border-bottom: 2px solid #fff;
@@ -129,6 +130,9 @@ const Wrapper = styled.div`
       font-size: 1.5rem;
       opacity: 0.5;
       color: #fff;
+    }
+    &::-webkit-search-cancel-button {
+      /* 이 부분을 custom  하여 clear 버튼을 꾸밀 수 있음... 쉽진 않네  */
     }
   }
   .notice {
@@ -168,7 +172,7 @@ const Wrapper = styled.div`
     }
     svg {
       position: absolute;
-      top:50%;
+      top: 50%;
       right: 10%;
       transform: translateY(-50%);
       display: block;

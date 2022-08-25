@@ -206,7 +206,7 @@ const Page: NextPageWithLayout = () => {
     let _problems = problems.map((problem: ProblemTypes) => {
       if (problem.choiceType === 'img') {
         let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-        let _choices: ChoiceImageTypes[] = [];
+        let _choices: File[] = [];
         problem.choices.forEach(async (img) => {
           try {
             const _temp = img as ChoiceImageTypes;
