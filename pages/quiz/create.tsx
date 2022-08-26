@@ -1,9 +1,9 @@
-import { ReactElement, ChangeEvent, useState, useEffect, useMemo } from 'react';
+import { ReactElement, ChangeEvent,KeyboardEvent, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import useInput from 'hooks/useInput';
-import { Button } from 'components/common';
+import { Button, CompressLoading } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveProblemsAction } from 'store/quiz';
 import { RootState } from 'store';
@@ -19,6 +19,8 @@ interface ThumbnailObjectType {
   imgName: string;
 }
 const Page: NextPageWithLayout = () => {
+
+  const [loading, setLoading] = useState(false);
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
   const { userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
@@ -46,6 +48,11 @@ const Page: NextPageWithLayout = () => {
     setChoicesText([...choicesText, textChoice]);
     textChoiceClear(); // 초기화
   };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === "Enter") addTextChoice();
+  };
+  
   const deleteTextChoice = (index: number) => {
     let temp = [...choicesText];
     temp.splice(index, 1);
@@ -82,13 +89,15 @@ const Page: NextPageWithLayout = () => {
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
     const _URL = window.URL || window.webkitURL;
-
+    // 이미지가 있을 경우
     if (files && files[0]) {
-      // 이미지가 있을 경우
-      if (files.length > 4) {
+      // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하 
+
+      if (files.length + choicesImgFile.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
+      setLoading(true); // 로딩중 활성화
 
       let _choicesImgThumbnail: ThumbnailObjectType[] = [];
       let _choicesImgFile: File[] = [];
@@ -98,10 +107,9 @@ const Page: NextPageWithLayout = () => {
         // The first iteration uses an already resolved Promise
         // so, it will immediately continue.
 
-        await promise; // 이전 작업이 종료될때 까지 대기 
+        await promise; // 이전 작업이 종료될때 까지 대기
         await loadImage(_URL.createObjectURL(file)).then(async (img) => {
           let _imgFile;
-          console.log(img.width, img.height);
 
           // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
 
@@ -125,8 +133,9 @@ const Page: NextPageWithLayout = () => {
         });
       }, Promise.resolve());
 
-      setChoicesImgFile(_choicesImgFile);
-      setChoicesImgThumbnail(_choicesImgThumbnail);
+      setChoicesImgFile([...choicesImgFile, ..._choicesImgFile]);
+      setChoicesImgThumbnail([...choicesImgThumbnail,..._choicesImgThumbnail]);
+      setLoading(false); // 로딩중 해제
     }
   };
 
@@ -148,13 +157,14 @@ const Page: NextPageWithLayout = () => {
     thumbnail_temp.splice(index, 1);
     let file_temp = [...choicesImgFile];
     file_temp.splice(index, 1);
-    console.log(thumbnail_temp, file_temp);
     setChoicesImgThumbnail(thumbnail_temp);
     setChoicesImgFile(file_temp);
   };
 
   const createNewProblem = () => {
+    saveProblem(); // 현재 문제 저장 
     setProblemCount(problems.length); // 다음 문제 생성용
+
   };
   const saveProblem = () => {
     if (problemTitle === '') {
@@ -230,8 +240,6 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     resetProblem(); // 입력란 및 기존 데이터 모두 초기화
     if (problems.length !== 0 && !!problems[problemCount]) {
-      console.log(problems[problemCount]);
-
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
 
@@ -244,6 +252,28 @@ const Page: NextPageWithLayout = () => {
       }
     }
   }, [problemCount]);
+
+  useEffect(() => {
+    // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화 
+    if (choiceType === "text") {
+      if (correctIndex > choicesText.length-1) {
+        setCorrectIndex(0);
+      }
+    }
+    if (choiceType === "img") {
+      if (correctIndex > choicesImgFile.length-1) {
+        setCorrectIndex(0);
+      }
+    } 
+  }, [correctIndex, choicesText, choicesImgFile])
+  
+  useEffect(() => {
+    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장 
+    if (problemTitle !== "" && choicesText.length > 1 && choicesImgFile.length > 1) {
+       saveProblem();
+    }
+   
+  },[problemTitle,correctIndex,choicesText,choicesImgFile])
 
   return (
     <Wrapper>
@@ -335,6 +365,7 @@ const Page: NextPageWithLayout = () => {
                         autoComplete="off"
                         value={textChoice}
                         onChange={textChoiceHandler}
+                        onKeyDown={onKeyDown}
                       />
                       <Button onClick={addTextChoice}>
                         <AiOutlinePlus size={20} />
