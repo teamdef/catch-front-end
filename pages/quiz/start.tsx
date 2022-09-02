@@ -72,6 +72,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   color: #000;
+  background-color: #fff;
   #warning {
     position: absolute;
     left: 50%;

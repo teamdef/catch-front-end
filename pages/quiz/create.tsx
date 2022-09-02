@@ -8,9 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveProblemsAction } from 'store/quiz';
 import { RootState } from 'store';
 import { IoDice } from 'react-icons/io5';
+import { IoIosArrowForward } from 'react-icons/io'
 import data from 'data/question.json';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { MdClose, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { MdClose, MdDelete,MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
 
 interface ThumbnailObjectType {
@@ -182,7 +183,7 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     resetProblem(); // 입력란 및 기존 데이터 모두 초기화
-    if (problems.length !== 0 && !!problems[problemCount]) {
+    if (problems.length == 0 && !!problems[problemCount]) {
       console.log(problems[problemCount]);
 
       setChoiceType(problems[problemCount].choiceType);
@@ -203,8 +204,8 @@ const Page: NextPageWithLayout = () => {
       <div id="inner-wrapper">
         <>
           <ProblemCountContainer>
-            <strong>{problemCount + 1}/</strong>
-            <span>{problems.length}</span>
+            <span>{problems.length} / </span>
+            <strong>{problemCount + 1}</strong>
           </ProblemCountContainer>
           <CircleShortcutContainer>
             {problems.map((item, index) => {
@@ -346,19 +347,17 @@ const Page: NextPageWithLayout = () => {
             </ImgChoicesContainer>
           )}
           <ButtonContainer>
-            <Button onClick={saveProblem} height="50px" fontColor="#999999">
-              저장하기
-            </Button>
+
+            {problems.length < 1 && <Button onClick={deleteProblem} width="50px" height="50px" fontSize="1rem">
+              <MdDelete size="20" color="#777"/>
+            </Button>}
             {problems.length < 9 && (
-              <Button onClick={createNewProblem} height="50px" bgColor="#ff4d57" fontColor="white">
-                새로만들기
+              <Button onClick={createNewProblem} width="150px" height="50px" bgColor="#ff4d57" fontColor="white" fontSize="1rem">
+                <span style={{ marginLeft: "20px", marginRight:"5px"}}>다음 문제</span><IoIosArrowForward size="30"/>
               </Button>
             )}
-            {problems.length > 1 && <Button onClick={deleteProblem} height="50px">
-              문제 삭제
-            </Button>}
-            {problems.length > 1 && <Button onClick={publicationProblems} height="50px">
-              문제집 완성하기
+            {problems.length < 1 && <Button onClick={publicationProblems} width="50px" height="50px" fontSize=".8rem" bgColor="#4aaf4e" fontColor="white">
+              <span>생성</span>
             </Button>}
           </ButtonContainer>
         </>
@@ -377,6 +376,7 @@ const Wrapper = styled.div`
   background-color: #fff6f7;
   height: 100vh;
   padding: 1rem;
+  padding-bottom: 10%;
   #inner-wrapper {
     background-color: white;
     height: 100%;
@@ -396,15 +396,12 @@ const ButtonContainer = styled.div`
   position: absolute;
   bottom: 20px;
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   & button {
     margin: 0.5rem;
-    width: 150px;
     @media (max-height: 750px) {
-      width:100px;
-      font-size:12px;
     }
   }
 `;
@@ -544,6 +541,7 @@ const ImgChoiceBubble = styled.div`
   }
 `;
 const TextBubble = styled.li<CorrectProps>`
+cursor: pointer;
   width: 70%;
   padding: 1rem 1.5rem 1rem 1.5rem;
   @media (max-height: 750px) {
@@ -552,7 +550,7 @@ const TextBubble = styled.li<CorrectProps>`
     font-size:14px;
   }
   border-radius: 30px 0px 30px 30px;
-  background-color: ${({ correct }) => (correct ? '#FF4D57' : '#ffa5aa')};
+  background-color: ${({ correct }) => (correct ? '#4aaf4e' : '#ffa5aa')};
   list-style-type: none;
   margin: 0.5rem;
   color: white;

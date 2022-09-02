@@ -12,7 +12,7 @@ interface ButtonProps {
 const Button = ({
   bgColor = '#d6d6d6',
   fontColor = 'rgb(59,59,59)',
-  fontSize = '16px',
+  fontSize = '10px',
   width,
   height,
   children,
@@ -39,7 +39,6 @@ const CustomButton = styled.button<ColorProps>`
   height: ${(props) => props.height};
   font-size: ${(props) => props.fontSize};
   border: none;
-  padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 2rem;
   font-weight: bold;
   display:flex;
