@@ -1,9 +1,9 @@
-import { ReactElement, ChangeEvent,KeyboardEvent, useState, useEffect, useMemo } from 'react';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import useInput from 'hooks/useInput';
-import { Button, CompressLoading } from 'components/common';
+import { Button, Loading } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveProblemsAction } from 'store/quiz';
 import { RootState } from 'store';
@@ -13,20 +13,28 @@ import imageCompression from 'browser-image-compression'; // 이미지 최적화
 import { MdClose } from 'react-icons/md';
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
 import { imageTestApi } from 'pages/api/test';
+import Router from 'next/router';
 
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
 }
+
+
 const Page: NextPageWithLayout = () => {
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
+
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
+
   const { userId } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-  const [problemCount, setProblemCount] = useState<number>(0); // 0부터 문제 개수 카운트. 9까지
-  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>('');
+
+  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
+  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
+
   const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
+  const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
 
   const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
 
@@ -35,11 +43,12 @@ const Page: NextPageWithLayout = () => {
 
   const [correctIndex, setCorrectIndex] = useState<number>(0); // 정답 인덱스. 객관식 보기 배열 내에서 정답인 요소의 인덱스를 저장함.
 
-  const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
+  // 주사위 버튼 누르면 실행되는 함수 
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
     setProblemTitle(randomTitle);
   };
+
   const addTextChoice = () => {
     if (textChoice === '') {
       alert('값을 입력하세요');
@@ -50,9 +59,9 @@ const Page: NextPageWithLayout = () => {
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") addTextChoice();
+    if (e.key === 'Enter') addTextChoice();
   };
-  
+
   const deleteTextChoice = (index: number) => {
     let temp = [...choicesText];
     temp.splice(index, 1);
@@ -74,7 +83,7 @@ const Page: NextPageWithLayout = () => {
     return text;
   };
 
-  // 이미지 로더. 이미지의 가로세로 크기를 구하기 위함 
+  // 이미지 로더. 이미지의 가로세로 크기를 구하기 위함 File Object to Image Object
   const loadImage = (url: string): Promise<HTMLImageElement> => {
     return new Promise((resolve) => {
       const _img = new Image();
@@ -91,17 +100,17 @@ const Page: NextPageWithLayout = () => {
     const _URL = window.URL || window.webkitURL;
     // 이미지가 있을 경우
     if (files && files[0]) {
-      // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하 
+      // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
 
       if (files.length + choicesImgFile.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
-      setLoading(true); // 로딩중 활성화
 
       let _choicesImgThumbnail: ThumbnailObjectType[] = [];
       let _choicesImgFile: File[] = [];
 
+      // PromiseAll 로 개선하기
       await Array.from(files).reduce(async (promise, file) => {
         // This line will wait for the last async function to finish.
         // The first iteration uses an already resolved Promise
@@ -110,15 +119,19 @@ const Page: NextPageWithLayout = () => {
         await promise; // 이전 작업이 종료될때 까지 대기
         await loadImage(_URL.createObjectURL(file)).then(async (img) => {
           let _imgFile;
-
+          let timestamp = new Date().toISOString().substring(0, 10);
           // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
 
           if (img.width < 300 || img.height < 300) {
-            _imgFile = new File([file], randomString(20), { type: file.type }); // 원본 이미지 대입
+            _imgFile = new File([file], `${timestamp}_${randomString(20)}.${file.type.split('/')[1]}`, {
+              type: file.type,
+            }); // 원본 이미지 대입
           } else {
             // 이미지 압축 과정
             const _compressed = (await imageCompression(file, options)) as File;
-            _imgFile = _compressed; // 압축 이미지 대입
+            _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
+              type: _compressed.type,
+            }); // 압축 이미지 대입
           }
 
           // 이미지 파일 객체저장
@@ -126,7 +139,7 @@ const Page: NextPageWithLayout = () => {
 
           // resize된 , 또는 압축되지 않은 이미지 파일의 썸네일 url을 생성함.
           const _imgURL = await imageCompression.getDataUrlFromFile(_imgFile);
-          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: randomString(20) };
+          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _imgFile.name };
 
           // 이미지 파일 url 저장
           _choicesImgThumbnail.push(_thumbnail);
@@ -134,8 +147,7 @@ const Page: NextPageWithLayout = () => {
       }, Promise.resolve());
 
       setChoicesImgFile([...choicesImgFile, ..._choicesImgFile]);
-      setChoicesImgThumbnail([...choicesImgThumbnail,..._choicesImgThumbnail]);
-      setLoading(false); // 로딩중 해제
+      setChoicesImgThumbnail([...choicesImgThumbnail, ..._choicesImgThumbnail]);
     }
   };
 
@@ -162,9 +174,8 @@ const Page: NextPageWithLayout = () => {
   };
 
   const createNewProblem = () => {
-    saveProblem(); // 현재 문제 저장 
+    saveProblem(); // 현재 문제 저장
     setProblemCount(problems.length); // 다음 문제 생성용
-
   };
   const saveProblem = () => {
     if (problemTitle === '') {
@@ -211,8 +222,9 @@ const Page: NextPageWithLayout = () => {
   };
 
   const publicationProblems = () => {
+    setLoading(true);
     const tempUserId = 1234;
-    // url 형태의 이미지를 다시 blob 객체로 변환. 
+    // url 형태의 이미지를 다시 blob 객체로 변환.
     let _problems = problems.map((problem: ProblemTypes) => {
       if (problem.choiceType === 'img') {
         let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
@@ -233,8 +245,12 @@ const Page: NextPageWithLayout = () => {
       }
     });
     Promise.all(_problems).then((res) => {
-      imageTestApi(res, tempUserId, setTitle);
-    })
+      imageTestApi(res, tempUserId, setTitle).then((res) => {
+        console.log(res);
+        setLoading(false);
+        Router.push('/quiz/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+      });
+    });
   };
 
   useEffect(() => {
@@ -242,6 +258,7 @@ const Page: NextPageWithLayout = () => {
     if (problems.length !== 0 && !!problems[problemCount]) {
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
+      setCorrectIndex(problems[problemCount].correctIndex);
 
       const choices = problems[problemCount].choices; // img의 경우 base64 썸네일이 들어있음.
       if (problems[problemCount].choiceType === 'text') {
@@ -254,29 +271,31 @@ const Page: NextPageWithLayout = () => {
   }, [problemCount]);
 
   useEffect(() => {
-    // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화 
-    if (choiceType === "text") {
-      if (correctIndex > choicesText.length-1) {
+    // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
+    if (choiceType === 'text') {
+      if (correctIndex > choicesText.length - 1) {
         setCorrectIndex(0);
       }
     }
-    if (choiceType === "img") {
-      if (correctIndex > choicesImgFile.length-1) {
+    if (choiceType === 'img') {
+      if (correctIndex > choicesImgFile.length - 1) {
         setCorrectIndex(0);
       }
-    } 
-  }, [correctIndex, choicesText, choicesImgFile])
-  
+    }
+  }, [correctIndex, choicesText, choicesImgFile]);
+
   useEffect(() => {
-    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장 
-    if (problemTitle !== "" && choicesText.length > 1 && choicesImgFile.length > 1) {
-       saveProblem();
+    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장
+    if (problemTitle !== '') {
+      if ((choiceType === 'text' && choicesText.length > 1) || (choiceType === 'img' && choicesImgFile.length > 1)) {
+        saveProblem();
+      }
     }
-   
-  },[problemTitle,correctIndex,choicesText,choicesImgFile])
+  }, [problemTitle, correctIndex, choicesText, choicesImgFile]);
 
   return (
     <Wrapper>
+      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
       <div id="inner-wrapper">
         <>
           <ProblemCountContainer>
@@ -448,7 +467,6 @@ const Page: NextPageWithLayout = () => {
     </Wrapper>
   );
 };
-
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };

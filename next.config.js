@@ -4,11 +4,6 @@ const nextConfig = {
   async redirects() { // 라우터 직접 접근을 막는 용도
     return [
       {
-        source: '/quiz/create',
-        destination: '/quiz/start',
-        permanent: true,
-      },
-      {
         source: '/404',
         destination: '/',
         permanent: true,
