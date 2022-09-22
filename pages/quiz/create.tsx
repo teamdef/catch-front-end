@@ -1,28 +1,40 @@
-import { ReactElement, ChangeEvent, useState, useEffect, useMemo } from 'react';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import useInput from 'hooks/useInput';
-import { Button } from 'components/common';
+import { Button, Loading } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveProblemsAction } from 'store/quiz';
 import { RootState } from 'store';
 import { IoDice } from 'react-icons/io5';
 import data from 'data/question.json';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { MdClose, MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
+import { imageTestApi } from 'pages/api/test';
+import Router from 'next/router';
 
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
 }
+
+
 const Page: NextPageWithLayout = () => {
-  const { problems } = useSelector((state: RootState) => state.quiz);
   const dispatch = useDispatch();
-  const [problemCount, setProblemCount] = useState<number>(0); // 0부터 문제 개수 카운트. 9까지
-  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>('');
+
+  const [loading, setLoading] = useState(false);
+
+  const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
+
+  const { userId } = useSelector((state: RootState) => state.user);
+
+  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
+  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
+
   const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
+  const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
 
   const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
 
@@ -31,11 +43,12 @@ const Page: NextPageWithLayout = () => {
 
   const [correctIndex, setCorrectIndex] = useState<number>(0); // 정답 인덱스. 객관식 보기 배열 내에서 정답인 요소의 인덱스를 저장함.
 
-  const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
+  // 주사위 버튼 누르면 실행되는 함수 
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
     setProblemTitle(randomTitle);
   };
+
   const addTextChoice = () => {
     if (textChoice === '') {
       alert('값을 입력하세요');
@@ -44,6 +57,11 @@ const Page: NextPageWithLayout = () => {
     setChoicesText([...choicesText, textChoice]);
     textChoiceClear(); // 초기화
   };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter') addTextChoice();
+  };
+
   const deleteTextChoice = (index: number) => {
     let temp = [...choicesText];
     temp.splice(index, 1);
@@ -58,39 +76,78 @@ const Page: NextPageWithLayout = () => {
     fileType: 'images/*', // 파일 타입
   };
 
+  const randomString = (len: number): string => {
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
+    for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+  };
+
+  // 이미지 로더. 이미지의 가로세로 크기를 구하기 위함 File Object to Image Object
+  const loadImage = (url: string): Promise<HTMLImageElement> => {
+    return new Promise((resolve) => {
+      const _img = new Image();
+      _img.src = url;
+      _img.addEventListener('load', () => {
+        resolve(_img);
+      });
+    });
+  };
+
   // 이미지 onChange 이벤트 처리 함수
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
-
-    let _compressedImgList: File[] = [];
-    let _thumbnailImgList: ThumbnailObjectType[] = [];
-
+    const _URL = window.URL || window.webkitURL;
+    // 이미지가 있을 경우
     if (files && files[0]) {
-      // 이미지가 있을 경우
-      if (files.length > 4) {
+      // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
+
+      if (files.length + choicesImgFile.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
-      for (let i = 0; i < files.length; i++) {
-        try {
-          // 이미지 압축 과정
-          const _compressed = (await imageCompression(files[i], options)) as File;
-          _compressedImgList.push(_compressed);
 
-          console.log(_compressed);
-          // resize된 이미지의 url을 생성 및 저장
-          const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
-          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _compressed.name };
+      let _choicesImgThumbnail: ThumbnailObjectType[] = [];
+      let _choicesImgFile: File[] = [];
 
-          _thumbnailImgList.push(_thumbnail);
-        } catch (e) {
-          console.log(e);
-        }
-      }
+      // PromiseAll 로 개선하기
+      await Array.from(files).reduce(async (promise, file) => {
+        // This line will wait for the last async function to finish.
+        // The first iteration uses an already resolved Promise
+        // so, it will immediately continue.
 
-      console.log(_compressedImgList);
-      setChoicesImgFile(_compressedImgList);
-      setChoicesImgThumbnail(_thumbnailImgList);
+        await promise; // 이전 작업이 종료될때 까지 대기
+        await loadImage(_URL.createObjectURL(file)).then(async (img) => {
+          let _imgFile;
+          let timestamp = new Date().toISOString().substring(0, 10);
+          // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
+
+          if (img.width < 300 || img.height < 300) {
+            _imgFile = new File([file], `${timestamp}_${randomString(20)}.${file.type.split('/')[1]}`, {
+              type: file.type,
+            }); // 원본 이미지 대입
+          } else {
+            // 이미지 압축 과정
+            const _compressed = (await imageCompression(file, options)) as File;
+            _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
+              type: _compressed.type,
+            }); // 압축 이미지 대입
+          }
+
+          // 이미지 파일 객체저장
+          _choicesImgFile.push(_imgFile);
+
+          // resize된 , 또는 압축되지 않은 이미지 파일의 썸네일 url을 생성함.
+          const _imgURL = await imageCompression.getDataUrlFromFile(_imgFile);
+          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _imgFile.name };
+
+          // 이미지 파일 url 저장
+          _choicesImgThumbnail.push(_thumbnail);
+        });
+      }, Promise.resolve());
+
+      setChoicesImgFile([...choicesImgFile, ..._choicesImgFile]);
+      setChoicesImgThumbnail([...choicesImgThumbnail, ..._choicesImgThumbnail]);
     }
   };
 
@@ -99,7 +156,6 @@ const Page: NextPageWithLayout = () => {
     for (let i = 0; i < thumbnailList.length; i++) {
       try {
         const _thumbnail = await imageCompression.getFilefromDataUrl(thumbnailList[i].imgURL, thumbnailList[i].imgName);
-        console.log(_thumbnail);
         _temp.push(_thumbnail);
       } catch (e) {
         console.log(e);
@@ -113,12 +169,12 @@ const Page: NextPageWithLayout = () => {
     thumbnail_temp.splice(index, 1);
     let file_temp = [...choicesImgFile];
     file_temp.splice(index, 1);
-    console.log(thumbnail_temp, file_temp);
     setChoicesImgThumbnail(thumbnail_temp);
     setChoicesImgFile(file_temp);
   };
 
   const createNewProblem = () => {
+    saveProblem(); // 현재 문제 저장
     setProblemCount(problems.length); // 다음 문제 생성용
   };
   const saveProblem = () => {
@@ -137,22 +193,12 @@ const Page: NextPageWithLayout = () => {
         return;
       }
     }
-    if (choiceType === 'text') {
-      if (choicesText.length < 2) {
-        alert('객관식 보기 답안을 2개 이상 작성해주세요.');
-        return;
-      }
-    } else if (choiceType === 'img') {
-      if (choicesImgFile.length < 2) {
-        alert('이미지 보기 답안을 2개 이상 추가해주세요.');
-        return;
-      }
-    }
+
     let temp = [...problems];
     temp[problemCount] = {
       problemTitle,
       choiceType,
-      choices: choiceType === 'text' ? choicesText : choicesImgThumbnail, // 썸네일 말고 파일로 바꿔서 넣어야 함 .
+      choices: choiceType === 'text' ? choicesText : choicesImgThumbnail,
       correctIndex,
     };
     dispatch(saveProblemsAction({ problems: temp }));
@@ -161,10 +207,9 @@ const Page: NextPageWithLayout = () => {
   const deleteProblem = () => {
     let temp = [...problems];
     temp.splice(problemCount, 1);
-    console.log(problemCount,temp)
     dispatch(saveProblemsAction({ problems: temp }));
-    setProblemCount(problemCount-1)
-  }
+    setProblemCount(problemCount - 1);
+  };
 
   const resetProblem = () => {
     problemTitleClear(); // 문제 제목 초기화
@@ -177,16 +222,43 @@ const Page: NextPageWithLayout = () => {
   };
 
   const publicationProblems = () => {
-    console.log(problems);
-  }
+    setLoading(true);
+    const tempUserId = 1234;
+    // url 형태의 이미지를 다시 blob 객체로 변환.
+    let _problems = problems.map((problem: ProblemTypes) => {
+      if (problem.choiceType === 'img') {
+        let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
+        let _choices: File[] = [];
+        problem.choices.forEach(async (img) => {
+          try {
+            const _temp = img as ChoiceImageTypes;
+            const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
+            _choices.push(_file);
+          } catch (e) {
+            console.log(e);
+          }
+        });
+        _problem.choices = _choices;
+        return _problem;
+      } else {
+        return problem;
+      }
+    });
+    Promise.all(_problems).then((res) => {
+      imageTestApi(res, tempUserId, setTitle).then((res) => {
+        console.log(res);
+        setLoading(false);
+        Router.push('/quiz/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+      });
+    });
+  };
 
   useEffect(() => {
     resetProblem(); // 입력란 및 기존 데이터 모두 초기화
     if (problems.length !== 0 && !!problems[problemCount]) {
-      console.log(problems[problemCount]);
-
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
+      setCorrectIndex(problems[problemCount].correctIndex);
 
       const choices = problems[problemCount].choices; // img의 경우 base64 썸네일이 들어있음.
       if (problems[problemCount].choiceType === 'text') {
@@ -198,8 +270,32 @@ const Page: NextPageWithLayout = () => {
     }
   }, [problemCount]);
 
+  useEffect(() => {
+    // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
+    if (choiceType === 'text') {
+      if (correctIndex > choicesText.length - 1) {
+        setCorrectIndex(0);
+      }
+    }
+    if (choiceType === 'img') {
+      if (correctIndex > choicesImgFile.length - 1) {
+        setCorrectIndex(0);
+      }
+    }
+  }, [correctIndex, choicesText, choicesImgFile]);
+
+  useEffect(() => {
+    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장
+    if (problemTitle !== '') {
+      if ((choiceType === 'text' && choicesText.length > 1) || (choiceType === 'img' && choicesImgFile.length > 1)) {
+        saveProblem();
+      }
+    }
+  }, [problemTitle, correctIndex, choicesText, choicesImgFile]);
+
   return (
     <Wrapper>
+      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
       <div id="inner-wrapper">
         <>
           <ProblemCountContainer>
@@ -288,6 +384,7 @@ const Page: NextPageWithLayout = () => {
                         autoComplete="off"
                         value={textChoice}
                         onChange={textChoiceHandler}
+                        onKeyDown={onKeyDown}
                       />
                       <Button onClick={addTextChoice}>
                         <AiOutlinePlus size={20} />
@@ -354,19 +451,22 @@ const Page: NextPageWithLayout = () => {
                 새로만들기
               </Button>
             )}
-            {problems.length > 1 && <Button onClick={deleteProblem} height="50px">
-              문제 삭제
-            </Button>}
-            {problems.length > 1 && <Button onClick={publicationProblems} height="50px">
-              문제집 완성하기
-            </Button>}
+            {problems.length > 1 && (
+              <Button onClick={deleteProblem} height="50px">
+                문제 삭제
+              </Button>
+            )}
+            {problems.length > 1 && (
+              <Button onClick={publicationProblems} height="50px">
+                문제집 완성하기
+              </Button>
+            )}
           </ButtonContainer>
         </>
       </div>
     </Wrapper>
   );
 };
-
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
@@ -403,14 +503,14 @@ const ButtonContainer = styled.div`
     margin: 0.5rem;
     width: 150px;
     @media (max-height: 750px) {
-      width:100px;
-      font-size:12px;
+      width: 100px;
+      font-size: 12px;
     }
   }
 `;
 const ProblemCountContainer = styled.div`
   font-size: 20px;
-  padding-top:20px;
+  padding-top: 20px;
   strong {
     color: #ff4d57;
     font-weight: bold;
@@ -473,8 +573,8 @@ const ImageInputContainer = styled.div`
     display: flex;
     align-items: center;
     color: #ffa5aa;
-    &:hover{
-      cursor:pointer;
+    &:hover {
+      cursor: pointer;
     }
   }
 `;
@@ -486,7 +586,7 @@ interface CircleShortcutButtonProps {
 const CircleShortcutContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: 1rem 0 1rem 0 ;
+  padding: 1rem 0 1rem 0;
 `;
 const CircleShortcut = styled.div<CircleShortcutButtonProps>`
   border: none;
@@ -497,8 +597,8 @@ const CircleShortcut = styled.div<CircleShortcutButtonProps>`
   height: 10px;
   margin: 4px;
   background-color: ${({ active }) => (active ? '#FF4D57' : '#d9d9d9')};
-  &:hover{
-    cursor:pointer;
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -549,7 +649,7 @@ const TextBubble = styled.li<CorrectProps>`
   @media (max-height: 750px) {
     width: 80%;
     padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-    font-size:14px;
+    font-size: 14px;
   }
   border-radius: 30px 0px 30px 30px;
   background-color: ${({ correct }) => (correct ? '#FF4D57' : '#ffa5aa')};
@@ -606,7 +706,7 @@ const TextInputBubble = styled.div`
   }
 `;
 const ChoiceTypeRadioContainer = styled.div`
-padding:1.5rem 0 1.5rem 0;
+  padding: 1.5rem 0 1.5rem 0;
   display: flex;
   justify-content: center;
   input[type='radio'] {
@@ -645,7 +745,7 @@ const ProblemTitleBubble = styled.div`
   padding: 1rem 1.5rem 1rem 1.5rem;
   background-color: #eee;
   input {
-    width:100%;
+    width: 100%;
     background-color: transparent;
     color: #999999;
     border: none;

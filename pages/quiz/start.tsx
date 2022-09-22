@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
@@ -6,34 +6,29 @@ import { Button } from 'components/common';
 import useInput from 'hooks/useInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { saveProblemSetTitleAction } from 'store/quiz';
+import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
 import Router from 'next/router';
 import { BsCheck } from 'react-icons/bs';
 import { IoIosArrowForward } from 'react-icons/io';
 
 const Page: NextPageWithLayout = () => {
-  const { userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  const [setTitle, , , setTitleHandler] = useInput<string>('');
+  const [title, , , titleHandler] = useInput<string>('');
+  const { setTitle } = useSelector((state: RootState) => state.quiz);
 
-  const saveTitle = () => {
-    if (setTitle == '') {
-      return;
-    }
-    dispatch(saveProblemSetTitleAction({ userId, setTitle })); // 제목 저장
+  const newStart = () => {
+    dispatch(saveProblemSetTitleAction({ setTitle: title })); // 제목 저장
+    dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
     Router.push('/quiz/create');
   };
+  const keepGoing = () => {
+    Router.push('/quiz/create');
+  }
   return (
     <Wrapper>
       <div id="title">
         <span>참여자들에게 어떤 제목으로 보여줄까요?</span>
-        <input
-          type="text"
-          placeholder="제목을 입력해주세요!"
-          value={setTitle}
-          onChange={setTitleHandler}
-          maxLength={30}
-        />
+        <input type="text" placeholder="제목을 입력해주세요!" value={title} onChange={titleHandler} maxLength={30} />
       </div>
       <ul className="notice">
         <li>
@@ -53,10 +48,16 @@ const Page: NextPageWithLayout = () => {
           참여자들에게 보여지는 제목인 만큼 유해한 단어는 지양해주세요!
         </li>
       </ul>
-      <Button fontSize="1.2rem" width={'60%'} height={'50px'} onClick={saveTitle} className={setTitle != '' ? 'active' : ''}>
-        <span>시작하기</span>
-        <IoIosArrowForward />
-      </Button>
+      <ButtonContainer>
+        <Button width={'60%'} height={'60px'} onClick={newStart} disabled={title === ''}>
+          <span>새롭게 시작하기</span>
+          <IoIosArrowForward />
+        </Button>
+        <Button width={'60%'} height={'60px'} onClick={keepGoing} className="active" disabled={setTitle === ''}>
+          <span>이어서 만들기</span>
+          <IoIosArrowForward />
+        </Button>
+      </ButtonContainer>
     </Wrapper>
   );
 };
@@ -72,6 +73,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 100vh;
   color: #000;
+  background-color: white;
   #warning {
     position: absolute;
     left: 50%;
@@ -132,6 +134,9 @@ const Wrapper = styled.div`
       opacity: 0.5;
       color: #fff;
     }
+    &::-webkit-search-cancel-button {
+      /* 이 부분을 custom  하여 clear 버튼을 꾸밀 수 있음... 쉽진 않네  */
+    }
   }
   .notice {
     padding: 0 10%;
@@ -153,24 +158,33 @@ const Wrapper = styled.div`
       }
     }
   }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  @media (max-width: 400px), (max-height:850px) {
+    flex-direction: row;
+  }
   button {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10%;
-    width: 60%;
-    margin: 0 auto;
-    color: #999;
+    margin: 0.5rem;
+    position: relative;
+    width: 50%;
     span {
       padding-right: 10%;
     }
-    &.active {
-      background-color: #ff4d57;
-      color: #fff;
+    background-color: #ff4d57;
+    color: #fff;
+    &:disabled,
+    &[disabled] {
+      color: #999;
+      background-color: lightgrey;
     }
+
     svg {
       position: absolute;
-      top:50%;
+      top: 50%;
       right: 10%;
       transform: translateY(-50%);
       display: block;
