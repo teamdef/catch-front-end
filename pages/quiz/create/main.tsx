@@ -20,20 +20,19 @@ interface ThumbnailObjectType {
   imgName: string;
 }
 
-
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
-
   const { userId } = useSelector((state: RootState) => state.user);
+
+  const [loading, setLoading] = useState(false);
 
   const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
   const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
 
   const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
+
   const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
 
   const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
@@ -43,7 +42,7 @@ const Page: NextPageWithLayout = () => {
 
   const [correctIndex, setCorrectIndex] = useState<number>(0); // 정답 인덱스. 객관식 보기 배열 내에서 정답인 요소의 인덱스를 저장함.
 
-  // 주사위 버튼 누르면 실행되는 함수 
+  // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
     setProblemTitle(randomTitle);
@@ -58,7 +57,7 @@ const Page: NextPageWithLayout = () => {
     textChoiceClear(); // 초기화
   };
 
-  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>): void => {
     if (e.key === 'Enter') addTextChoice();
   };
 
@@ -177,6 +176,7 @@ const Page: NextPageWithLayout = () => {
     saveProblem(); // 현재 문제 저장
     setProblemCount(problems.length); // 다음 문제 생성용
   };
+
   const saveProblem = () => {
     if (problemTitle === '') {
       alert('문제 제목을 작성해주세요.');
@@ -248,7 +248,7 @@ const Page: NextPageWithLayout = () => {
       imageTestApi(res, tempUserId, setTitle).then((res) => {
         console.log(res);
         setLoading(false);
-        Router.push('/quiz/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+        Router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
       });
     });
   };

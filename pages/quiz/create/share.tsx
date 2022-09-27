@@ -25,13 +25,13 @@ const Page: NextPageWithLayout = () => {
         <div>{setTitle}</div>
         <p>
           {shareLink}
-            <button
-              onClick={() => {
-                handleCopyClipBoard(shareLink);
-              }}
-            >
-              <MdContentCopy />
-            </button>
+          <button
+            onClick={() => {
+              handleCopyClipBoard(shareLink);
+            }}
+          >
+            <MdContentCopy />
+          </button>
         </p>
 
         <button>퀴즈 링크 공유</button>
