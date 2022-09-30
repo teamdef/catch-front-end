@@ -1,20 +1,19 @@
 import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout, SmartphoneLayout } from 'components/layout';
-import useInput from 'hooks/useInput';
-import { Button, Loading } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveProblemsAction } from 'store/quiz';
+import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
 import { RootState } from 'store';
-import { IoDice } from 'react-icons/io5';
-import data from 'data/question.json';
+import { useRouter } from 'next/router';
+import data from 'data/question.json'; // 문제 더미 데이터
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { MdClose, MdCheck } from 'react-icons/md';
-import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
-import { imageTestApi } from 'pages/api/test';
-import Router from 'next/router';
-import ModalFrame from 'components/modal/ModalFrame';
+import { MdClose, MdCheck } from 'react-icons/md'; // 아이콘
+import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai'; // 아이콘
+import { imageTestApi } from 'pages/api/test'; // 이미지 업로드 테스트 api
+import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
+import { Button, Loading } from 'components/common';
+import useInput from 'hooks/useInput';
+import { AppLayout, SmartphoneLayout } from 'components/layout';
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
@@ -22,13 +21,13 @@ interface ThumbnailObjectType {
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
   const { userId } = useSelector((state: RootState) => state.user);
 
-  const [loading, setLoading] = useState(false);
-  const [제작중없음, set제작중없음] = useState(false); // 홈화면으로 돌아갑니다 모달
-  const [제작중있음, set제작중있음] = useState(false); // 이어하시겠습니까 모달
+  const [loading, setLoading] = useState<boolean>(false);
+  const [제작중없음, set제작중없음] = useState<boolean>(false); // 홈화면으로 돌아갑니다 모달
+  const [제작중있음, set제작중있음] = useState<boolean>(false); // 이어하시겠습니까 모달
 
   const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
   const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
@@ -46,8 +45,12 @@ const Page: NextPageWithLayout = () => {
 
   // 메인화면으로
   const goHome = () => {
-    Router.push('/home');
+    router.push('/home');
   };
+  const goQuizCreate = () => {
+    resetProblemSet();
+    router.replace('/quiz/create')
+  }
   // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
@@ -217,7 +220,8 @@ const Page: NextPageWithLayout = () => {
     setProblemCount(problemCount - 1);
   };
 
-  const resetProblem = () => {
+  // 현재 작성중인 문제 화면 데이터 초기화
+  const resetCurrentProblem = () => {
     problemTitleClear(); // 문제 제목 초기화
     textChoiceClear(); // 답안 입력란 초기화
     choiceTypeClear(); // 문제 유형 초기화
@@ -226,7 +230,11 @@ const Page: NextPageWithLayout = () => {
     setChoicesImgThumbnail([]); // 문제 이미지 썸네일 목록 초기화
     setCorrectIndex(0); // 정답 인덱스 초기화
   };
-
+  // redux store 자체를 초기화
+  const resetProblemSet = () => {
+    dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
+    dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
+  };
   const publicationProblems = () => {
     setLoading(true);
     const tempUserId = 1234;
@@ -254,23 +262,28 @@ const Page: NextPageWithLayout = () => {
       imageTestApi(res, tempUserId, setTitle).then((res) => {
         console.log(res);
         setLoading(false);
-        Router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+        router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
       });
     });
   };
-  const openModal = useCallback(() => {
-    dispatch(
-      setCloseAction({
-        closeAction: () => {
-          console.log('우와~');
-        },
-      }),
-    );
-    dispatch(modalOpenAction());
+
+  // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
+  useEffect(() => {
+    const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
+    const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
+    if (!prevPath || prevPath !== '/quiz/create') {
+      // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
+      if (problems.length !== 0) {
+        // 제작 중이던 문제가 있을 경우
+        set제작중있음(true);
+      } else {
+        set제작중없음(true);
+      }
+    }
   }, []);
 
   useEffect(() => {
-    resetProblem(); // 입력란 및 기존 데이터 모두 초기화
+    resetCurrentProblem(); // 입력란 및 기존 데이터 모두 초기화
     if (problems.length !== 0 && !!problems[problemCount]) {
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
@@ -491,7 +504,7 @@ const Page: NextPageWithLayout = () => {
         <ModalFrame
           handleClose={() => set제작중없음(false)}
           handleYes={() => {
-            Router.push('/quiz/create');
+            router.push('/quiz/create');
           }}
           isOpen={제작중없음}
         >
@@ -505,19 +518,15 @@ const Page: NextPageWithLayout = () => {
       {제작중있음 && (
         <ModalFrame
           handleClose={() => set제작중있음(false)}
-          handleNo={() => {
-            alert('버리기');
-          }}
-          handleYes={() => {
-            alert('이어서');
-          }}
+          handleNo={goQuizCreate}
+          handleYes={() => {}}
           isOpen={제작중있음}
-          noTitle={'버리기'}
+          noTitle={'새롭게'}
           yesTitle={'이어서'}
         >
           <Modal2>
             <div>
-              제작하던 <strong>팡머가 좋아하는 것들</strong>
+              제작하던 <strong>{setTitle}</strong>
               <br />
               문제집이 있습니다.
             </div>
@@ -540,10 +549,10 @@ const Modal2 = styled.div`
   strong {
     color: #ff4d57;
   }
-  #last-modified{
-    margin-top:10px;
-    font-size:12px;
-    color:#999;
+  #last-modified {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999;
   }
 `;
 // 기능 가시성을 위한 임시 디자인

@@ -24,6 +24,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
 
+  // Next.js에서는 document.referrer을 사용할 수 없다
+  // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.
+  // https://velog.io/@deli-ght/Next.js%EC%97%90%EC%84%9C-document.referrer%EA%B0%80-%EC%9E%91%EB%8F%99%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%9C%A0
+  const storePathValues = () => {
+    const storage = globalThis?.sessionStorage;
+    if (!storage) return;
+    // Set the previous path as the value of the current path.
+    const prevPath = storage.getItem('currentPath');
+    prevPath && storage.setItem('prevPath', prevPath);
+    // Set the current path value by looking at the browser's location object.
+    storage.setItem('currentPath', globalThis.location.pathname);
+  };
+
+  useEffect(() => storePathValues, [router.asPath]);
+
   useEffect(() => {
     if (isLoggedin) {
       const now_router = router.pathname;
@@ -59,3 +74,24 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
 };
 
 export default wrapper.withRedux(MyApp);
+
+// // _app.js
+// import { useRouter } from "next/router";
+// import { useEffect } from "react";
+
+// export default function App(props) {
+//   const router = useRouter();
+
+//   useEffect(() => storePathValues, [router.asPath]);
+
+//   function storePathValues() {
+//     const storage = globalThis?.sessionStorage;
+//     if (!storage) return;
+//     // Set the previous path as the value of the current path.
+//     const prevPath = storage.getItem("currentPath");
+//     storage.setItem("prevPath", prevPath);
+//     // Set the current path value by looking at the browser's location object.
+//     storage.setItem("currentPath", globalThis.location.pathname);
+//   }
+// }
+

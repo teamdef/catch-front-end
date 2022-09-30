@@ -32,7 +32,6 @@ function ModalFrame({
   yesTitle?: string;
   noTitle?: string;
 }) {
-  useOnEscapeClick(handleClose);
   const nodeRef = useRef(null);
   const onClickNo = () => {
     handleNo && handleNo();
