@@ -8,7 +8,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import axios from 'utils/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
-import { GetServerSidePropsCallback } from 'next-redux-wrapper';
 // NextPageWithLayout으로 Page의 타입을 지정하면,
 // getLayout 속성함수를 사용할 수 있게된다. (사용해도 되고 안해도 되고 )
 export type NextPageWithLayout = NextPage & {
@@ -29,7 +28,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (isLoggedin) {
       const now_router = router.pathname;
       if (now_router === '/home') router.push('/home'); // 현재 라우터가 home 이라면 home으로
-      else router.push(now_router); // 현재 라우터가 home이 아니라면 기존에 있더 라우터로 
+      else router.push(now_router); // 현재 라우터가 home이 아니라면 기존에 있더 라우터로
     }
   }, [isLoggedin]);
 
@@ -58,6 +57,5 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
 
   return { pageProps };
 };
-
 
 export default wrapper.withRedux(MyApp);

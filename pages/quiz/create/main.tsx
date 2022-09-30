@@ -1,4 +1,4 @@
-import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useMemo } from 'react';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, SmartphoneLayout } from 'components/layout';
@@ -14,7 +14,7 @@ import { MdClose, MdCheck } from 'react-icons/md';
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
 import { imageTestApi } from 'pages/api/test';
 import Router from 'next/router';
-
+import ModalFrame from 'components/modal/ModalFrame';
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
@@ -27,6 +27,8 @@ const Page: NextPageWithLayout = () => {
   const { userId } = useSelector((state: RootState) => state.user);
 
   const [loading, setLoading] = useState(false);
+  const [제작중없음, set제작중없음] = useState(false); // 홈화면으로 돌아갑니다 모달
+  const [제작중있음, set제작중있음] = useState(false); // 이어하시겠습니까 모달
 
   const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
   const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
@@ -44,8 +46,8 @@ const Page: NextPageWithLayout = () => {
 
   // 메인화면으로
   const goHome = () => {
-    Router.push('/home')
-  }
+    Router.push('/home');
+  };
   // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
@@ -256,6 +258,16 @@ const Page: NextPageWithLayout = () => {
       });
     });
   };
+  const openModal = useCallback(() => {
+    dispatch(
+      setCloseAction({
+        closeAction: () => {
+          console.log('우와~');
+        },
+      }),
+    );
+    dispatch(modalOpenAction());
+  }, []);
 
   useEffect(() => {
     resetProblem(); // 입력란 및 기존 데이터 모두 초기화
@@ -298,178 +310,222 @@ const Page: NextPageWithLayout = () => {
   }, [problemTitle, correctIndex, choicesText, choicesImgFile]);
 
   return (
-    <Wrapper>
-      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
-      <div id="inner-wrapper">
-        <Header>
-          <div id="logo" onClick={goHome}>
-            캐치캐치
-          </div>
-          <div id="title">{setTitle}</div>
-        </Header>
-        <ProblemCountContainer>
-          <strong>{problemCount + 1}/</strong>
-          <span>{problems.length}</span>
-        </ProblemCountContainer>
-        <CircleShortcutContainer>
-          {problems.map((item, index) => {
-            return (
-              <CircleShortcut
-                active={problemCount === index}
-                key={index}
-                onClick={() => {
-                  setProblemCount(index);
-                }}
-              ></CircleShortcut>
-            );
-          })}
-        </CircleShortcutContainer>
-        <ProblemTitleContainer>
-          <ProblemTitleBubble>
-            <input
-              type="text"
-              value={problemTitle}
-              onChange={problemTitleHandler}
-              placeholder="문제 제목을 입력하세요"
-            />
-          </ProblemTitleBubble>
-          <button onClick={randomProblemTitle}>
-            <img src={'/assets/img/dice2.png'} onClick={randomProblemTitle} />
-          </button>
-        </ProblemTitleContainer>
+    <>
+      <Wrapper>
+        {loading && <Loading ment={'문제집 저장중 입니다!'} />}
+        <div id="inner-wrapper">
+          <Header>
+            <div id="logo" onClick={goHome}>
+              캐치캐치
+            </div>
+            <div id="title">{setTitle}</div>
+          </Header>
+          <ProblemCountContainer>
+            <strong>{problemCount + 1}/</strong>
+            <span>{problems.length}</span>
+          </ProblemCountContainer>
+          <CircleShortcutContainer>
+            {problems.map((item, index) => {
+              return (
+                <CircleShortcut
+                  active={problemCount === index}
+                  key={index}
+                  onClick={() => {
+                    setProblemCount(index);
+                  }}
+                ></CircleShortcut>
+              );
+            })}
+          </CircleShortcutContainer>
+          <ProblemTitleContainer>
+            <ProblemTitleBubble>
+              <input
+                type="text"
+                value={problemTitle}
+                onChange={problemTitleHandler}
+                placeholder="문제 제목을 입력하세요"
+              />
+            </ProblemTitleBubble>
+            <button onClick={randomProblemTitle}>
+              <img src={'/assets/img/dice2.png'} onClick={randomProblemTitle} />
+            </button>
+          </ProblemTitleContainer>
 
-        <ChoiceTypeRadioContainer>
-          <input
-            type="radio"
-            name="choice"
-            id="text_choice"
-            value="text"
-            onChange={choiceTypeHandler}
-            checked={choiceType === 'text'}
-          />
-          <label htmlFor="text_choice">텍스트</label>
-          <input
-            type="radio"
-            name="choice"
-            id="img_choice"
-            value="img"
-            onChange={choiceTypeHandler}
-            checked={choiceType === 'img'}
-          />
-          <label htmlFor="img_choice">이미지</label>
-        </ChoiceTypeRadioContainer>
-        <Explain>정답 요소를 클릭해주세요!</Explain>
-        {choiceType === 'text' && (
-          <TextChoicesContainer>
-            <div>
-              <ul>
-                {choicesText.map((item, index) => {
-                  return (
-                    <TextBubbleWrapper>
-                      {correctIndex === index && <MdCheck size={20} color={'#AAD775'} />}
-                      <TextBubble
+          <ChoiceTypeRadioContainer>
+            <input
+              type="radio"
+              name="choice"
+              id="text_choice"
+              value="text"
+              onChange={choiceTypeHandler}
+              checked={choiceType === 'text'}
+            />
+            <label htmlFor="text_choice">텍스트</label>
+            <input
+              type="radio"
+              name="choice"
+              id="img_choice"
+              value="img"
+              onChange={choiceTypeHandler}
+              checked={choiceType === 'img'}
+            />
+            <label htmlFor="img_choice">이미지</label>
+          </ChoiceTypeRadioContainer>
+          <Explain>정답 요소를 클릭해주세요!</Explain>
+          {choiceType === 'text' && (
+            <TextChoicesContainer>
+              <div>
+                <ul>
+                  {choicesText.map((item, index) => {
+                    return (
+                      <TextBubbleWrapper>
+                        {correctIndex === index && <MdCheck size={20} color={'#AAD775'} />}
+                        <TextBubble
+                          key={index}
+                          onClick={() => {
+                            setCorrectIndex(index);
+                          }}
+                          correct={correctIndex === index}
+                        >
+                          {item}
+                          <Button
+                            onClick={() => {
+                              deleteTextChoice(index);
+                            }}
+                          >
+                            <MdClose size={20} />
+                          </Button>
+                        </TextBubble>
+                      </TextBubbleWrapper>
+                    );
+                  })}
+                </ul>
+                {choicesText.length < 4 && (
+                  <div id="input-bubble">
+                    <TextInputBubble>
+                      <input
+                        id="input-text"
+                        type="text"
+                        placeholder="답안 작성"
+                        autoComplete="off"
+                        value={textChoice}
+                        onChange={textChoiceHandler}
+                        onKeyDown={onKeyDown}
+                      />
+                      <Button onClick={addTextChoice}>
+                        <AiOutlinePlus size={20} />
+                      </Button>
+                    </TextInputBubble>
+                  </div>
+                )}
+              </div>
+            </TextChoicesContainer>
+          )}
+          {choiceType === 'img' && (
+            <ImgChoicesContainer>
+              <ImgBubble>
+                <ImageChoicesContainer>
+                  {choicesImgThumbnail.length < 4 && (
+                    <ImgChoiceBubble>
+                      <ImageInputContainer>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={onImgChange}
+                          id="select-image"
+                          name="select-image"
+                        />
+                        <label htmlFor="select-image">
+                          <AiFillCamera size={30} />
+                          <span>이미지추가</span>
+                        </label>
+                      </ImageInputContainer>
+                    </ImgChoiceBubble>
+                  )}
+
+                  {choicesImgThumbnail.map((item, index) => {
+                    return (
+                      <ImageWrapper
                         key={index}
                         onClick={() => {
                           setCorrectIndex(index);
                         }}
-                        correct={correctIndex === index}
+                        correct={index === correctIndex}
                       >
-                        {item}
-                        <Button
+                        <img alt="미리보기" src={item.imgURL} />
+                        <button
+                          id="delete-btn"
                           onClick={() => {
-                            deleteTextChoice(index);
+                            deleteImgChoice(index);
                           }}
                         >
-                          <MdClose size={20} />
-                        </Button>
-                      </TextBubble>
-                    </TextBubbleWrapper>
-                  );
-                })}
-              </ul>
-              {choicesText.length < 4 && (
-                <div id="input-bubble">
-                  <TextInputBubble>
-                    <input
-                      id="input-text"
-                      type="text"
-                      placeholder="답안 작성"
-                      autoComplete="off"
-                      value={textChoice}
-                      onChange={textChoiceHandler}
-                      onKeyDown={onKeyDown}
-                    />
-                    <Button onClick={addTextChoice}>
-                      <AiOutlinePlus size={20} />
-                    </Button>
-                  </TextInputBubble>
-                </div>
-              )}
+                          <MdClose />
+                        </button>
+                      </ImageWrapper>
+                    );
+                  })}
+                </ImageChoicesContainer>
+              </ImgBubble>
+            </ImgChoicesContainer>
+          )}
+          <ButtonContainer>
+            <Button onClick={createNewProblem} disabled={problems.length >= 9}>
+              문제 추가
+            </Button>
+            <Button id="delete" onClick={deleteProblem} disabled={problems.length <= 1}>
+              문제 삭제
+            </Button>
+            <Button id="save" onClick={saveProblem}>
+              문제 저장
+            </Button>
+            <Button id="done" onClick={publicationProblems} disabled={problems.length <= 1}>
+              완성 하기
+            </Button>
+            <Button onClick={() => set제작중없음(true)}>제작중없음</Button>
+            <Button onClick={() => set제작중있음(true)}>제작중있음</Button>
+          </ButtonContainer>
+        </div>
+      </Wrapper>
+      {제작중없음 && (
+        <ModalFrame
+          handleClose={() => set제작중없음(false)}
+          handleYes={() => {
+            Router.push('/quiz/create');
+          }}
+          isOpen={제작중없음}
+        >
+          <div>
+            제작중인 퀴즈가 없어
+            <br />
+            홈화면으로 돌아갑니다.
+          </div>
+        </ModalFrame>
+      )}
+      {제작중있음 && (
+        <ModalFrame
+          handleClose={() => set제작중있음(false)}
+          handleNo={() => {
+            alert('버리기');
+          }}
+          handleYes={() => {
+            alert('이어서');
+          }}
+          isOpen={제작중있음}
+          noTitle={'버리기'}
+          yesTitle={'이어서'}
+        >
+          <Modal2>
+            <div>
+              제작하던 <strong>팡머가 좋아하는 것들</strong>
+              <br />
+              문제집이 있습니다.
             </div>
-          </TextChoicesContainer>
-        )}
-        {choiceType === 'img' && (
-          <ImgChoicesContainer>
-            <ImgBubble>
-              <ImageChoicesContainer>
-                {choicesImgThumbnail.length < 4 && (
-                  <ImgChoiceBubble>
-                    <ImageInputContainer>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={onImgChange}
-                        id="select-image"
-                        name="select-image"
-                      />
-                      <label htmlFor="select-image">
-                        <AiFillCamera size={30} />
-                        <span>이미지추가</span>
-                      </label>
-                    </ImageInputContainer>
-                  </ImgChoiceBubble>
-                )}
-
-                {choicesImgThumbnail.map((item, index) => {
-                  return (
-                    <ImageWrapper
-                      key={index}
-                      onClick={() => {
-                        setCorrectIndex(index);
-                      }}
-                      correct={index === correctIndex}
-                    >
-                      <img alt="미리보기" src={item.imgURL} />
-                      <button
-                        id="delete-btn"
-                        onClick={() => {
-                          deleteImgChoice(index);
-                        }}
-                      >
-                        <MdClose />
-                      </button>
-                    </ImageWrapper>
-                  );
-                })}
-              </ImageChoicesContainer>
-            </ImgBubble>
-          </ImgChoicesContainer>
-        )}
-        <ButtonContainer>
-          <Button onClick={createNewProblem} disabled={problems.length >= 9}>
-            문제 추가
-          </Button>
-          <Button id='delete' onClick={deleteProblem} disabled={problems.length <= 1}>
-            문제 삭제
-          </Button>
-          <Button id='save' onClick={saveProblem}>문제 저장</Button>
-          <Button id='done' onClick={publicationProblems} disabled={problems.length <= 1}>
-            완성 하기
-          </Button>
-        </ButtonContainer>
-      </div>
-    </Wrapper>
+            <div id="last-modified">마지막 수정일 2022-09-20 17:21:30</div>
+          </Modal2>
+        </ModalFrame>
+      )}
+    </>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
@@ -479,7 +535,17 @@ Page.getLayout = function getLayout(page: ReactElement) {
     </AppLayout>
   );
 };
-
+// 임시 변수명, 제작중있음 모달
+const Modal2 = styled.div`
+  strong {
+    color: #ff4d57;
+  }
+  #last-modified{
+    margin-top:10px;
+    font-size:12px;
+    color:#999;
+  }
+`;
 // 기능 가시성을 위한 임시 디자인
 const Wrapper = styled.div`
   height: 100%;
@@ -502,9 +568,9 @@ const Header = styled.div`
       color: lightgrey;
     }
   }
-  #title{
-    color:#888;
-    text-align:center;
+  #title {
+    color: #888;
+    text-align: center;
   }
 `;
 const ButtonContainer = styled.div`
@@ -691,6 +757,9 @@ const ImgBubble = styled.div`
 const ImgChoiceBubble = styled.div`
   width: 100%;
   height: 150px;
+  @media (max-width: 400px) {
+    height: 120px;
+  }
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -702,12 +771,11 @@ const ImgChoiceBubble = styled.div`
 `;
 
 const TextBubbleWrapper = styled.li`
-  width:100%;
+  width: 100%;
   list-style-type: none;
-  display:flex;
-  justify-content:right;
-  align-items:center;
-
+  display: flex;
+  justify-content: right;
+  align-items: center;
 `;
 const TextBubble = styled.li<CorrectProps>`
   width: 70%;
