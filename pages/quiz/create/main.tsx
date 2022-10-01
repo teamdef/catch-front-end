@@ -1,4 +1,4 @@
-import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback } from 'react';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback,MouseEvent } from 'react';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌
 import { Button, Loading } from 'components/common';
 import useInput from 'hooks/useInput';
 import { AppLayout, SmartphoneLayout } from 'components/layout';
+
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
@@ -29,12 +30,14 @@ const Page: NextPageWithLayout = () => {
   const [제작중없음, set제작중없음] = useState<boolean>(false); // 홈화면으로 돌아갑니다 모달
   const [제작중있음, set제작중있음] = useState<boolean>(false); // 이어하시겠습니까 모달
 
-  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
-  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
+  const [tempSetTitle, setTempSetTitle, , tempSetTitleHandler] = useInput<string>(''); // 문제집 제목 변경 전용 input 핸들러
+  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목 input 핸들러
 
-  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
+  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본 input 핸들러
 
   const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
+
+  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
 
   const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
 
@@ -49,8 +52,9 @@ const Page: NextPageWithLayout = () => {
   };
   const goQuizCreate = () => {
     resetProblemSet();
-    router.replace('/quiz/create')
-  }
+    router.replace('/quiz/create');
+  };
+
   // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
@@ -102,6 +106,10 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
+  // 동일 파일이 재업로드 되지 않는 오류 해결을 위한 함수
+  const onImgClick = (e: any) => {
+    e.target.value = null;
+  };
   // 이미지 onChange 이벤트 처리 함수
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
@@ -181,27 +189,23 @@ const Page: NextPageWithLayout = () => {
     setChoicesImgFile(file_temp);
   };
 
-  const createNewProblem = () => {
-    saveProblem(); // 현재 문제 저장
-    setProblemCount(problems.length); // 다음 문제 생성용
-  };
-
+  // 문제 저장. 조건 검사는 하지 않음
   const saveProblem = () => {
-    if (problemTitle === '') {
-      alert('문제 제목을 작성해주세요.');
-      return;
-    }
-    if (choiceType === 'text') {
-      if (choicesText.length < 2) {
-        alert('객관식 보기 답안을 2개 이상 작성해주세요.');
-        return;
-      }
-    } else if (choiceType === 'img') {
-      if (choicesImgFile.length < 2) {
-        alert('이미지 보기 답안을 2개 이상 추가해주세요.');
-        return;
-      }
-    }
+    // if (problemTitle === '') {
+    //   alert('문제 제목을 작성해주세요.');
+    //   return;
+    // }
+    // if (choiceType === 'text') {
+    //   if (choicesText.length < 2) {
+    //     alert('객관식 보기 답안을 2개 이상 작성해주세요.');
+    //     return;
+    //   }
+    // } else if (choiceType === 'img') {
+    //   if (choicesImgFile.length < 2) {
+    //     alert('이미지 보기 답안을 2개 이상 추가해주세요.');
+    //     return;
+    //   }
+    // }
 
     let temp = [...problems];
     temp[problemCount] = {
@@ -213,11 +217,34 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveProblemsAction({ problems: temp }));
   };
 
+  // 문제 추가
+  const createProblem = () => {
+    saveProblem(); // 현재 문제 저장
+    let temp = [...problems];
+    temp.push({
+      problemTitle: '',
+      choiceType: 'text',
+      choices: [],
+      correctIndex: 0,
+    });
+    dispatch(saveProblemsAction({ problems: temp })); // 문제 초기값 (빈 문제) 추가
+    setProblemCount(problems.length); // problemCount 를 현재 문제로 이동
+  };
+
+  // 문제 삭제
   const deleteProblem = () => {
+    if (problems.length === 1 && problemCount === 0) {
+      return; // 문제가 1개 남았을 때 맨 앞 문제는 삭제하지 못하도록 함. 에러 방지
+    }
     let temp = [...problems];
     temp.splice(problemCount, 1);
     dispatch(saveProblemsAction({ problems: temp }));
-    setProblemCount(problemCount - 1);
+    if (problems.length === problemCount + 1) {
+      // 마지막 문제를 삭제 할 경우
+      setProblemCount(problemCount - 1);
+    } else {
+      setProblemCount(problemCount);
+    }
   };
 
   // 현재 작성중인 문제 화면 데이터 초기화
@@ -230,45 +257,69 @@ const Page: NextPageWithLayout = () => {
     setChoicesImgThumbnail([]); // 문제 이미지 썸네일 목록 초기화
     setCorrectIndex(0); // 정답 인덱스 초기화
   };
+
   // redux store 자체를 초기화
   const resetProblemSet = () => {
     dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
     dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
   };
-  const publicationProblems = () => {
-    setLoading(true);
-    const tempUserId = 1234;
-    // url 형태의 이미지를 다시 blob 객체로 변환.
-    let _problems = problems.map((problem: ProblemTypes) => {
-      if (problem.choiceType === 'img') {
-        let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-        let _choices: File[] = [];
-        problem.choices.forEach(async (img) => {
-          try {
-            const _temp = img as ChoiceImageTypes;
-            const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
-            _choices.push(_file);
-          } catch (e) {
-            console.log(e);
-          }
-        });
-        _problem.choices = _choices;
-        return _problem;
-      } else {
-        return problem;
-      }
-    });
-    Promise.all(_problems).then((res) => {
-      imageTestApi(res, tempUserId, setTitle).then((res) => {
-        console.log(res);
-        setLoading(false);
-        router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+
+  // 문제 저장 조건 체크 함수
+  const checkProblemSet = (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      let status: boolean = true;
+      problems.forEach((problem: ProblemTypes) => {
+        if (problem.problemTitle === '') {
+          status = false;
+        }
+        if (problem.choices.length < 2) {
+          status = false;
+        }
       });
+      resolve(status);
     });
+  };
+  // 문제집 생성하기 ( 서버에 저장하기 )
+  const publicationProblems = async () => {
+    // 문제 저장 조건 체크
+    if (await checkProblemSet()) {
+      setLoading(true);
+      const tempUserId = 1234;
+      // url 형태의 이미지를 다시 blob 객체로 변환.
+      let _problems = problems.map((problem: ProblemTypes) => {
+        if (problem.choiceType === 'img') {
+          let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
+          let _choices: File[] = [];
+          problem.choices.forEach(async (img) => {
+            try {
+              const _temp = img as ChoiceImageTypes;
+              const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
+              _choices.push(_file);
+            } catch (e) {
+              console.log(e);
+            }
+          });
+          _problem.choices = _choices;
+          return _problem;
+        } else {
+          return problem;
+        }
+      });
+      Promise.all(_problems).then((res) => {
+        imageTestApi(res, tempUserId, setTitle).then((res) => {
+          console.log(res);
+          setLoading(false);
+          router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+        });
+      });
+    } else {
+      alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+    }
   };
 
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
+    console.log("초기");
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
     if (!prevPath || prevPath !== '/quiz/create') {
@@ -280,10 +331,25 @@ const Page: NextPageWithLayout = () => {
         set제작중없음(true);
       }
     }
+    if (prevPath === '/quiz/create') {
+      // /quiz/create 를 통해 넘어왔을 경우
+      if (problems.length === 0) {
+        // 초기 상태일 경우
+        createProblem(); // 새롭게 문제 1개 추가
+      }
+    }
+    // 문제집 타이틀 값 세팅하기  
+    setTempSetTitle(setTitle);
   }, []);
 
+  // problemCount가 바뀔 경우, 구슬 클릭
   useEffect(() => {
+    console.log('카운트');
+    if (problemCount < 0 || problemCount > 9) {
+      return; // 비정상 접근
+    }
     resetCurrentProblem(); // 입력란 및 기존 데이터 모두 초기화
+
     if (problems.length !== 0 && !!problems[problemCount]) {
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
@@ -300,6 +366,7 @@ const Page: NextPageWithLayout = () => {
   }, [problemCount]);
 
   useEffect(() => {
+    console.log('답안변경');
     // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
     if (choiceType === 'text') {
       if (correctIndex > choicesText.length - 1) {
@@ -314,13 +381,15 @@ const Page: NextPageWithLayout = () => {
   }, [correctIndex, choicesText, choicesImgFile]);
 
   useEffect(() => {
-    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장
-    if (problemTitle !== '') {
-      if ((choiceType === 'text' && choicesText.length > 1) || (choiceType === 'img' && choicesImgFile.length > 1)) {
-        saveProblem();
-      }
-    }
-  }, [problemTitle, correctIndex, choicesText, choicesImgFile]);
+    console.log('자동저장');
+    // 자동 저장
+    saveProblem();
+  }, [problemTitle, choiceType, correctIndex, choicesText, choicesImgFile]);
+
+  useEffect(() => {
+    console.log('문제저장');
+      dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
+  }, [tempSetTitle]);
 
   return (
     <>
@@ -331,14 +400,16 @@ const Page: NextPageWithLayout = () => {
             <div id="logo" onClick={goHome}>
               캐치캐치
             </div>
-            <div id="title">{setTitle}</div>
+            <div id="input-wrapper">
+              <input type="text" value={tempSetTitle} onChange={tempSetTitleHandler} />
+            </div>
           </Header>
           <ProblemCountContainer>
             <strong>{problemCount + 1}/</strong>
             <span>{problems.length}</span>
           </ProblemCountContainer>
           <CircleShortcutContainer>
-            {problems.map((item, index) => {
+            {problems.map((item: ProblemTypes, index: number) => {
               return (
                 <CircleShortcut
                   active={problemCount === index}
@@ -445,6 +516,7 @@ const Page: NextPageWithLayout = () => {
                           type="file"
                           accept="image/*"
                           multiple
+                          onClick={onImgClick}
                           onChange={onImgChange}
                           id="select-image"
                           name="select-image"
@@ -483,20 +555,18 @@ const Page: NextPageWithLayout = () => {
             </ImgChoicesContainer>
           )}
           <ButtonContainer>
-            <Button onClick={createNewProblem} disabled={problems.length >= 9}>
+            <Button onClick={createProblem} disabled={problems.length > 9}>
               문제 추가
             </Button>
-            <Button id="delete" onClick={deleteProblem} disabled={problems.length <= 1}>
+            <Button id="delete" onClick={deleteProblem} disabled={problems.length < 2}>
               문제 삭제
             </Button>
             <Button id="save" onClick={saveProblem}>
               문제 저장
             </Button>
-            <Button id="done" onClick={publicationProblems} disabled={problems.length <= 1}>
+            <Button id="done" onClick={publicationProblems} disabled={problems.length < 2}>
               완성 하기
             </Button>
-            <Button onClick={() => set제작중없음(true)}>제작중없음</Button>
-            <Button onClick={() => set제작중있음(true)}>제작중있음</Button>
           </ButtonContainer>
         </div>
       </Wrapper>
@@ -511,7 +581,7 @@ const Page: NextPageWithLayout = () => {
           <div>
             제작중인 퀴즈가 없어
             <br />
-            홈화면으로 돌아갑니다.
+            시작 화면으로 돌아갑니다.
           </div>
         </ModalFrame>
       )}
@@ -530,13 +600,13 @@ const Page: NextPageWithLayout = () => {
               <br />
               문제집이 있습니다.
             </div>
-            <div id="last-modified">마지막 수정일 2022-09-20 17:21:30</div>
+            <div id="last-modified">이어서 제작 하시겠습니까?</div>
           </Modal2>
         </ModalFrame>
       )}
     </>
   );
-};
+};;
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout>
@@ -566,6 +636,7 @@ const Wrapper = styled.div`
   }
 `;
 
+
 const Header = styled.div`
   padding: 1.5rem;
   #logo {
@@ -577,9 +648,19 @@ const Header = styled.div`
       color: lightgrey;
     }
   }
-  #title {
+  #input-wrapper {
     color: #888;
-    text-align: center;
+    display:flex;
+    justify-content:center;
+    input{
+      text-align:center;
+      border:none;
+      border-bottom:solid 1px #eee;
+      padding-bottom:0.5rem;
+      &:focus{
+        outline:none;
+      }
+    }
   }
 `;
 const ButtonContainer = styled.div`

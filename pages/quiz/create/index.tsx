@@ -108,7 +108,7 @@ const Page: NextPageWithLayout = () => {
             Router.push('/quiz/create/main');
           }}
           isOpen={modal}
-          handleNo={()=>{}}
+          handleNo={() => {}}
           noTitle={'새롭게'}
           yesTitle={'이어서'}
         >
@@ -118,7 +118,7 @@ const Page: NextPageWithLayout = () => {
               <br />
               퀴즈가 있습니다.
             </div>
-            <div id="last-modified">마지막 수정일 2022-09-20 17:21:30</div>
+            <div id="last-modified">이어서 제작 하시겠습니까?</div>
           </Modal>
         </ModalFrame>
       )}
