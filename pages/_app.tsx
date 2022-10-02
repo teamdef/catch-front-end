@@ -2,8 +2,8 @@ import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import type { AppProps, AppContext } from 'next/app';
 import type { NextPage } from 'next';
-import { Provider, useSelector } from 'react-redux';
-import { store, wrapper, persistor } from 'store';
+import { useSelector } from 'react-redux';
+import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 import axios from 'utils/customAxios';
 import { RootState } from 'store';
@@ -37,7 +37,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
-  useEffect(() => storePathValues, [router.asPath]);
+    // 카카오 sdk 초기화 
+    useEffect(() => {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+    }, []);
+  
+    useEffect(() => storePathValues, [router.asPath]);
 
   useEffect(() => {
     if (isLoggedin) {
@@ -94,4 +99,3 @@ export default wrapper.withRedux(MyApp);
 //     storage.setItem("currentPath", globalThis.location.pathname);
 //   }
 // }
-
