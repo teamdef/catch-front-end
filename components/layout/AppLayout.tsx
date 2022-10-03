@@ -18,5 +18,6 @@ const FixedWidth = styled.div`
   max-width:500px;
   width: 100%;
   height: 100vh;
+  background-color:#fff;
 `;
 export default AppLayout;
