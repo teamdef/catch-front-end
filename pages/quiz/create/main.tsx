@@ -282,40 +282,41 @@ const Page: NextPageWithLayout = () => {
   // 문제집 생성하기 ( 서버에 저장하기 )
   const publicationProblems = async () => {
     // 문제 저장 조건 체크
-    if (await checkProblemSet()) {
-      setLoading(true);
-      const tempUserId = 1234;
-      // url 형태의 이미지를 다시 blob 객체로 변환.
-      let _problems = problems.map((problem: ProblemTypes) => {
-        if (problem.choiceType === 'img') {
-          let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-          let _choices: File[] = [];
-          problem.choices.forEach(async (img) => {
-            try {
-              const _temp = img as ChoiceImageTypes;
-              const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
-              _choices.push(_file);
-            } catch (e) {
-              console.log(e);
-            }
-          });
-          _problem.choices = _choices;
-          return _problem;
-        } else {
-          return problem;
-        }
-      });
-      Promise.all(_problems).then((res) => {
-        imageTestApi(res, tempUserId, setTitle).then((res) => {
-          console.log(res);
-          setLoading(false);
-          router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
-        });
-      });
-    } else {
-      alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
-    }
-  };
+    // if (await checkProblemSet()) {
+    //   setLoading(true);
+    //   const tempUserId = 1234;
+    //   // url 형태의 이미지를 다시 blob 객체로 변환.
+    //   let _problems = problems.map((problem: ProblemTypes) => {
+    //     if (problem.choiceType === 'img') {
+    //       let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
+    //       let _choices: File[] = [];
+    //       problem.choices.forEach(async (img) => {
+    //         try {
+    //           const _temp = img as ChoiceImageTypes;
+    //           const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
+    //           _choices.push(_file);
+    //         } catch (e) {
+    //           console.log(e);
+    //         }
+    //       });
+    //       _problem.choices = _choices;
+    //       return _problem;
+    //     } else {
+    //       return problem;
+    //     }
+    //   });
+    //   Promise.all(_problems).then((res) => {
+    //     imageTestApi(res, tempUserId, setTitle).then((res) => {
+    //       console.log(res);
+    //       setLoading(false);
+    //       router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+    //     });
+    //   });
+    // } else {
+    //   alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+    // }
+    router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+  };;
 
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {

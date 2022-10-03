@@ -91,7 +91,7 @@ const Page: NextPageWithLayout = () => {
             <span>직접 만든 퀴즈를 공유해보세요!</span>
           </div>
           <div id="share-wrapper">
-            <SNSShare />
+            <SNSShare title={setTitle} url={'home'} />
           </div>
         </ShareContainer>
         <HomeButton onClick={goHome}>

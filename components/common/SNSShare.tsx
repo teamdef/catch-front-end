@@ -1,8 +1,17 @@
 import styled from 'styled-components';
 import { HiLink } from 'react-icons/hi';
 
-const SNSShare = () => {
-  const shareLink = 'home';
+interface shareProps {
+  quiz_thumb?: string;
+  title: string;
+  url: string;
+}
+const SNSShare = ({
+  quiz_thumb = 'https://t1.daumcdn.net/cfile/tistory/2403BA485896A5C829',
+  title,
+  url,
+}: shareProps) => {
+  
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -12,8 +21,12 @@ const SNSShare = () => {
     }
   };
 
-  const goFacebook = () => {};
-  const goInstagram = () => {};
+  const goFacebook = () => {
+    window.open('http://www.facebook.com/sharer.php?u=http://192.168.0.19:3000');
+  };
+  const goInstagram = () => {
+    alert('준비중 입니다!');
+  };
   const goKakaoTalk = () => {
     window.Kakao.Link.sendScrap({
       requestUrl: 'http://localhost:3000/', // 요청 페이지 url 카카오 developer 에 등록된 도메인
@@ -21,9 +34,9 @@ const SNSShare = () => {
       templateArgs: {
         PROFILE_IMG: 'https://i.stack.imgur.com/l60Hf.png', // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
         NICKNAME: '멍어지', // 퀴즈 제작자 닉네임 ${NICKNAME}
-        QUIZ_THUMB: 'https://t1.daumcdn.net/cfile/tistory/2403BA485896A5C829', // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
-        TITLE: '하영이 좋아하는 프랜차이즈 브랜드 맞추기', // 퀴즈 제목 텍스트 ${TITLE}
-        ROUTE: shareLink, // 퀴즈 공유 링크
+        QUIZ_THUMB: quiz_thumb, // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
+        TITLE: title, // 퀴즈 제목 텍스트 ${TITLE}
+        ROUTE: url, // 퀴즈 공유 링크
       },
     });
   };
@@ -39,7 +52,7 @@ const SNSShare = () => {
       <button
         className="share-btn"
         onClick={() => {
-          handleCopyClipBoard(shareLink);
+          handleCopyClipBoard(`http://localhost:3000/${url}`);
         }}
       >
         <HiLink size={20} />
