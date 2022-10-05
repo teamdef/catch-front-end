@@ -35,8 +35,7 @@ const SideBar = ({ profileImg, closeSideBar }: SideBarProps) => {
     const handleClickOutside = (e: MouseEvent): void => {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
         if (!sidebarRef.current?.contains(e.target as Node)) {
-          // 헤더와 메뉴를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
-          // details를 찾아서 open 클래스를 제거. open 클래스가 제거되면 메뉴가 닫힘
+          // 사이드바를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
           close();
         }
       }
@@ -76,7 +75,7 @@ const SideBar = ({ profileImg, closeSideBar }: SideBarProps) => {
         <hr />
         <MenuList>
           <li>
-            <Link href="/home" passHref>
+            <Link href="/notice" passHref>
               <a>
                 <AiOutlineNotification />
                 공지사항
@@ -245,6 +244,9 @@ const MenuList = styled.ul`
   li {
     margin-bottom: 1.5rem;
     font-size: 20px;
+    @media (max-width:500px){
+      font-size:1rem;
+    }
     img {
       width: 18px;
       height: 17px;

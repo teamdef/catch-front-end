@@ -75,7 +75,7 @@ const Wrapper = styled.div`
 const OptionWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   display:flex;
 
 `;
