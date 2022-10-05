@@ -6,15 +6,16 @@ import { MdLogout, MdOutlineHistory, MdMenu } from 'react-icons/md';
 import { RiKakaoTalkFill, RiQuestionLine } from 'react-icons/ri';
 import {} from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import React, { useEffect, useRef, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutAction } from 'store/user';
 import { RootState } from 'store';
+import { SideBar } from 'components/common';
 
-// Header 및 DropDownMyMenu 내 유저 프로필 이미지가 존재하지 않을 시 대체 이미지 출력 
-const userImgError = (e:any) => {
-    e.target.src = '/assets/img/user.png';
-  };
+// Header 및 DropDownMyMenu 내 유저 프로필 이미지가 존재하지 않을 시 대체 이미지 출력
+const userImgError = (e: any) => {
+  e.target.src = '/assets/img/user.png';
+};
 // ref를 props로 전달하기 위해 forwardRef 사용
 // inner component
 const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
@@ -80,6 +81,16 @@ const DropDownMyMenu = forwardRef<HTMLDivElement, any>((props, ref) => {
 // main component
 const Header = () => {
   const { userProfileImage } = useSelector((state: RootState) => state.user);
+  const tempProfileImg =
+    'https://yt3.ggpht.com/Wz_McnxaW8rF695zl22kcIg2QrbQuQleD4Gmw9JG30B5PUSShd6cJ8JBBFvCA6IkX3zj0717jQ=s900-c-k-c0x00ffffff-no-rj';
+  const [sideBarOpen, setSideBarOpen] = useState(false);
+
+  const openSideBar = () => {
+    setSideBarOpen(true);
+  };
+  const closeSideBar = () => {
+    setSideBarOpen(false);
+  };
   // 메뉴바 바깥의 요소를 클릭 했을 때 메뉴 닫기
   const menuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -89,8 +100,8 @@ const Header = () => {
         if (!headerRef.current?.contains(e.target as Node)) {
           // 헤더와 메뉴를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
           // details를 찾아서 open 클래스를 제거. open 클래스가 제거되면 메뉴가 닫힘
-          const dropdown: HTMLDetailsElement = document.getElementById('details-menu') as HTMLDetailsElement;
-          dropdown.removeAttribute('open');
+          const sidebar: HTMLDetailsElement = document.getElementById('side-bar') as HTMLDetailsElement;
+          sidebar.removeAttribute('open');
         }
       }
     };
@@ -100,26 +111,22 @@ const Header = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [menuRef]);
-  
 
   return (
-    <Wrapper>
-      <HeaderContentWrapper ref={headerRef}>
-        <HeaderContent>
-          <Logo>캐치캐치</Logo>
-          <UserProfileMenuContainer id="details-menu">
-            <summary>
-              <div id="image-wrapper">
-                {/* 이미지 없을 시 대체 이미지 보이기 */}
-                <img src={userProfileImage} onError={userImgError} />
-              </div>
-              <TiArrowSortedDown id="arrow" size="24" color="555" />
-            </summary>
-            <DropDownMyMenu ref={menuRef} id="dropdown" />
-          </UserProfileMenuContainer>
-        </HeaderContent>
-      </HeaderContentWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <HeaderContentWrapper ref={headerRef}>
+          <HeaderContent>
+            <Logo>캐치캐치</Logo>
+            <UserProfile onClick={openSideBar}>
+              {/* 이미지 없을 시 대체 이미지 보이기 */}
+              <img src={tempProfileImg} onError={userImgError} />
+            </UserProfile>
+          </HeaderContent>
+        </HeaderContentWrapper>
+      </Wrapper>
+      {sideBarOpen && <SideBar profileImg={tempProfileImg} closeSideBar={closeSideBar} sideBarOpen={sideBarOpen} />}
+    </>
   );
 };
 
@@ -128,6 +135,10 @@ const Wrapper = styled.div`
   background-color: #fff;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
+  position: sticky;
+  top: 0px;
+  z-index:10;
+  
 `;
 // header
 const HeaderContentWrapper = styled.div`
@@ -148,36 +159,15 @@ const Logo = styled.div`
   color: #ff4d57;
 `;
 
-const UserProfileMenuContainer = styled.details`
-  summary {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    &::-webkit-details-marker {
-      display: none;
-    }
-  }
-  #image-wrapper {
-    width: 2rem;
-    height: 2rem;
-    margin-right: 10px;
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-  }
-  &[open] {
-    #arrow {
-      transition: transform 0.3s;
-      transform: rotate(-180deg);
-    }
-  }
-  &:not([open]) {
-    #arrow {
-      transition: transform 0.3s;
-    }
+const UserProfile = styled.div`
+  width: 2rem;
+  height: 2rem;
+  margin-right: 10px;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
   }
 `;
 

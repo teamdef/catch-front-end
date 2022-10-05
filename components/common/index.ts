@@ -4,4 +4,6 @@ export { default as Card } from './Card';
 export { default as QuizCard } from './QuizCard'
 export { default as Navbar } from './Navbar';
 export { default as Loading } from './Loading'
-export { default as Title } from './Title';
+export { default as Title } from './Title'; 
+export { default as SideBar } from './SideBar'
+

@@ -3,11 +3,11 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title } from 'components/common';
+import { SideBar } from 'components/common';
 const Page: NextPageWithLayout = () => {
   return (
     <div>
-      404 notfound
+      <SideBar></SideBar>
     </div>
   );
 };

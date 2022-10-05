@@ -3,7 +3,6 @@ import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Card, QuizCard } from 'components/common';
 import styled from 'styled-components';
-import { RiHeart3Fill } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -98,20 +97,6 @@ const Home: NextPageWithLayout = () => {
               quizPlay={19}
               quizRoute="/home"
             />
-            {/* <ImageCard
-              url={
-                'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-              }
-            >
-              <div id="like">
-                <RiHeart3Fill />
-                <div id="count">12</div>
-              </div>
-              <div>
-                <div id="card-title">Do You Know Me?</div>
-                <div id="card-sub-title">당신의 친구들은 당신에 대해서 얼마나 알고 있을까요?</div>
-              </div>
-            </ImageCard> */}
           </ImageCardContainer>
         </RecentQuizList>
       </Background>
@@ -123,7 +108,6 @@ const Background = styled.div`
   padding-top: 3rem;
   position: relative;
   background-color: #fff6f7;
-  height: 100%;
 `;
 
 const RecentQuizList = styled.div`
