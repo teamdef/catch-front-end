@@ -53,7 +53,7 @@ const QuizCardWrapper = styled.div`
   &:hover {
     transform: scale(1.025);
   }
-  width: 90%;
+  width: 100%;
   #quiz-contents-container {
     padding: 1rem;
     #profile-row {

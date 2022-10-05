@@ -3,11 +3,10 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { SideBar } from 'components/common';
 const Page: NextPageWithLayout = () => {
   return (
     <div>
-      <SideBar></SideBar>
+      notfound
     </div>
   );
 };

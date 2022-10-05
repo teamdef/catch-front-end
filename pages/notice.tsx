@@ -4,7 +4,6 @@ import { AppLayout } from 'components/layout';
 import { Title } from 'components/common';
 import styled, { css } from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { useEffect } from 'react';
 import notice from 'data/notice.json';
 
 const Page: NextPageWithLayout = () => {

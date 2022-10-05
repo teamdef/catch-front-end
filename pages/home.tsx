@@ -137,54 +137,13 @@ const ImageCardContainer = styled.div`
   width: inherit;
   flex-wrap: nowrap;
   align-items:center;
+  width:95%;
+  margin:0 auto;
 `;
 interface ImageCardProps {
   url?: string;
 }
 
-const ImageCard = styled.div<ImageCardProps>`
-  #like {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-  }
-  #card-title {
-    font-size: 20px;
-    font-size: bold;
-  }
-  #card-sub-title {
-    font-size: 12px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: white;
-  width: 100%;
-  height: 10rem;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(
-      to bottom,
-      rgba(20, 20, 20, 0) 10%,
-      rgba(20, 20, 20, 0.25) 25%,
-      rgba(20, 20, 20, 0.5) 50%,
-      rgba(20, 20, 20, 0.75) 75%,
-      rgba(20, 20, 20, 1) 100%
-    ),
-    url(${(props) => props.url});
-  margin-right: 0.5rem;
-  background-size: cover;
-  background-repeat: no-repeat;
-  &:last-child {
-    margin: 0;
-  }
-  transition: all 0.1s ease-in-out;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
 
 const MyQuizList = styled.div`
   #title {
@@ -212,6 +171,10 @@ const CustomCard = styled(Card)`
   border-radius: 30px;
   margin: 0 auto;
   width: 90%;
+  @media (max-width: 400px) {
+    width: 95%;
+    height: 15rem;
+  }
   display: flex;
 `;
 const CreateCard = styled(CustomCard)`
