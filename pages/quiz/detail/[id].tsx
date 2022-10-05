@@ -7,7 +7,7 @@ import {AiOutlineDelete} from 'react-icons/ai'
 const Page: NextPageWithLayout = () => {
   return (
     <>
-      <Title backRoute="/home" title="문제집 상세보기" subTitle="문제집 상세 정보와 참여자 순위를 확인해보세요 👀" />
+      <Title backRoute="/home" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
       <Wrapper>
         <SectionBlock>
           <div id="section-title">팡머가 좋아하는 것들</div>

@@ -12,7 +12,7 @@ const Title = ({ backRoute, title, subTitle }: TitleProps) => {
       <div id="back-btn-wrapper">
         <Link href={backRoute} passHref>
           <a>
-            <IoIosArrowBack size={30} />
+            <IoIosArrowBack size={30} color={'#595959'}/>
           </a>
         </Link>
       </div>
@@ -34,12 +34,12 @@ const Wrapper = styled.div`
     }
   }
   #title-container {
-    width:85%;
-    margin:0 auto;
+    width: 85%;
+    margin: 0 auto;
     #main-title {
       font-size: 24px;
       font-weight: bold;
-      color: #3b3b3b;
+      color: #595959;
       margin-bottom: 0.5rem;
     }
     #sub-title {
