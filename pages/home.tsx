@@ -3,7 +3,6 @@ import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Card, QuizCard } from 'components/common';
 import styled from 'styled-components';
-import { RiHeart3Fill } from 'react-icons/ri';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -21,11 +20,9 @@ const Home: NextPageWithLayout = () => {
         <MyQuizList>
           <Swiper
             spaceBetween={0}
-            slidesPerView={1}
-            pagination={true}
+            pagination={{ clickable: true }}
             modules={[Pagination]}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            loop={true}
           >
             <SwiperSlide>
               <MyQuizCard
@@ -98,20 +95,6 @@ const Home: NextPageWithLayout = () => {
               quizPlay={19}
               quizRoute="/home"
             />
-            {/* <ImageCard
-              url={
-                'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-              }
-            >
-              <div id="like">
-                <RiHeart3Fill />
-                <div id="count">12</div>
-              </div>
-              <div>
-                <div id="card-title">Do You Know Me?</div>
-                <div id="card-sub-title">당신의 친구들은 당신에 대해서 얼마나 알고 있을까요?</div>
-              </div>
-            </ImageCard> */}
           </ImageCardContainer>
         </RecentQuizList>
       </Background>
@@ -123,7 +106,6 @@ const Background = styled.div`
   padding-top: 3rem;
   position: relative;
   background-color: #fff6f7;
-  height: 100%;
 `;
 
 const RecentQuizList = styled.div`
@@ -131,7 +113,7 @@ const RecentQuizList = styled.div`
   background-color: #fff;
   #title {
     padding: 1rem 0.5rem 2rem 0.5rem;
-    color: #000;
+    color: #595959;
     font-weight: bold;
     font-size: 18px;
     display: flex;
@@ -153,54 +135,13 @@ const ImageCardContainer = styled.div`
   width: inherit;
   flex-wrap: nowrap;
   align-items:center;
+  width:95%;
+  margin:0 auto;
 `;
 interface ImageCardProps {
   url?: string;
 }
 
-const ImageCard = styled.div<ImageCardProps>`
-  #like {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-  }
-  #card-title {
-    font-size: 20px;
-    font-size: bold;
-  }
-  #card-sub-title {
-    font-size: 12px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: white;
-  width: 100%;
-  height: 10rem;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  background: linear-gradient(
-      to bottom,
-      rgba(20, 20, 20, 0) 10%,
-      rgba(20, 20, 20, 0.25) 25%,
-      rgba(20, 20, 20, 0.5) 50%,
-      rgba(20, 20, 20, 0.75) 75%,
-      rgba(20, 20, 20, 1) 100%
-    ),
-    url(${(props) => props.url});
-  margin-right: 0.5rem;
-  background-size: cover;
-  background-repeat: no-repeat;
-  &:last-child {
-    margin: 0;
-  }
-  transition: all 0.1s ease-in-out;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
 
 const MyQuizList = styled.div`
   #title {
@@ -214,8 +155,20 @@ const MyQuizList = styled.div`
   .swiper-pagination {
     position: relative;
     .swiper-pagination-bullet {
-      width: 10px;
-      height: 10px;
+      width: 1rem;
+      height: 1rem;
+      &:last-child {
+        background-color: #ffa5aa;
+        position: relative;
+        &:after {
+          content: '+';
+          color: #fff;
+          font-size: 17px;
+          position: absolute;
+          top: -5px;
+          right: 3px;
+        }
+      }
     }
     .swiper-pagination-bullet-active {
       background-color: #ff4d57;
@@ -228,6 +181,10 @@ const CustomCard = styled(Card)`
   border-radius: 30px;
   margin: 0 auto;
   width: 90%;
+  @media (max-width: 400px) {
+    width: 95%;
+    height: 15rem;
+  }
   display: flex;
 `;
 const CreateCard = styled(CustomCard)`

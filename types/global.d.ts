@@ -20,3 +20,10 @@ interface ProblemSetTypes {
   setTitle: string; // 문제집 제목
   problems: ProblemTypes[]; // 문제 배열
 }
+
+// 공지사항 타입
+interface NoticeTypes {
+  title: string;
+  content: string;
+  uploadDate: string;
+}

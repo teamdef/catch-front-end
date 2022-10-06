@@ -1,24 +1,39 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, ChangeEvent } from 'react';
+import { useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
+import { AppLayout, HeaderLayout } from 'components/layout';
 import { Title, QuizCard } from 'components/common';
 import styled from 'styled-components';
-import {MdOutlineSearch} from 'react-icons/md'
+import { MdOutlineSearch } from 'react-icons/md';
+import { FaSortUp, FaSortDown } from 'react-icons/fa';
 const Page: NextPageWithLayout = () => {
+  const [dateSort, setDateSort] = useState<boolean>(true); // true 최신순, false 오래된순
+
+  const dateSortHandler = () => {
+    setDateSort(!dateSort);
+  };
   return (
     <>
-      <Title backRoute="/home" title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
+      <Title title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
       <Wrapper>
         <OptionWrapper>
-          <SortSelect name="sort" id="sort">
-            <option value="desc" selected>
-              최신순
-            </option>
-            <option value="asc">오래된순</option>
-          </SortSelect>
+          <SortButton onClick={dateSortHandler}>
+            {dateSort ? (
+              <div>
+                <FaSortUp />
+                최신순
+              </div>
+            ) : (
+              <div>
+                <FaSortDown />
+                오래된순
+              </div>
+            )}
+          </SortButton>
+
           <SearchBar>
             <MdOutlineSearch size={20} />
-            <input type="text" placeholder='문제집 명, 출제자 명 ...'/>
+            <input type="text" placeholder="문제집 명, 출제자 명 ..." />
           </SearchBar>
         </OptionWrapper>
         <ListWrapper>
@@ -63,21 +78,41 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 const Wrapper = styled.div`
-  width: 95%;
-  margin: 0 auto;
-  margin-bottom:5rem;
-`;
-
-const OptionWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
-  margin-top: 1rem;
-  display:flex;
+  margin-bottom: 5rem;
+`;
 
+const SortButton = styled.div`
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px #d6d6d6;
+  border-radius: 25px;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  font-size: 14px;
+  @media (max-width: 400px) {
+    font-size: 12px;
+    width: 130px;
+  }
+  svg {
+    margin-right: 4px;
+  }
+`;
+const OptionWrapper = styled.div`
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  display: flex;
+  width:95%;
 `;
 const ListWrapper = styled.div`
   display: flex;
@@ -86,26 +121,19 @@ const ListWrapper = styled.div`
   margin-top: 1.5rem;
 `;
 
-const SortSelect = styled.select`
-  outline: none;
-  border: solid 1px #d6d6d6;
-  padding: 0.25rem 0.75rem 0.25rem 0.75rem;
-  border-radius: 25px;
-  color: #888;
-`;
-
 const SearchBar = styled.div`
   display: flex;
   align-items: center;
   background-color: #f1f1f1;
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 25px;
-  width:100%;
-  margin-left:0.5rem;
+  margin-left: 0.5rem;
+  width: 100%;
   svg {
     color: #888;
   }
   input {
+    width: 100%;
     color: #595959;
     &::placeholder {
       color: #acacac;
@@ -113,7 +141,7 @@ const SearchBar = styled.div`
     border: none;
     background-color: transparent;
     outline: none;
-    margin-left: 0.75rem;
+    margin-left: 0.25rem;
   }
 `;
 export default Page;

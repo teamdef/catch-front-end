@@ -2,20 +2,22 @@ import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
 interface TitleProps {
-  backRoute: string;
+  backRoute?: string;
   title: string;
   subTitle: string;
 }
 const Title = ({ backRoute, title, subTitle }: TitleProps) => {
   return (
     <Wrapper>
-      <div id="back-btn-wrapper">
-        <Link href={backRoute} passHref>
-          <a>
-            <IoIosArrowBack size={30} color={'#595959'}/>
-          </a>
-        </Link>
-      </div>
+      {backRoute && (
+        <div id="back-btn-wrapper">
+          <Link href={backRoute} passHref>
+            <a>
+              <IoIosArrowBack size={30} color={'#595959'} />
+            </a>
+          </Link>
+        </div>
+      )}
       <div id="title-container">
         <div id="main-title">{title}</div>
         <div id="sub-title">{subTitle}</div>
