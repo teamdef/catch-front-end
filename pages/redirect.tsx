@@ -27,7 +27,7 @@ const redirect: NextPageWithLayout = ({ data, status }: Props) => {
   useEffect(() => {
     if (status === 200) {
       saveUser();
-      Router.push('/home');
+      Router.replace('/home'); // 뒤로가기를 통해 로그인 redirection 페이지로 재접근 하는 것을 방지
     }
   }, []);
   return (

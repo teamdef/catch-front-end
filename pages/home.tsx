@@ -47,9 +47,9 @@ const Home: NextPageWithLayout = () => {
                 <span>퀴즈를 만들어 볼까요 ? ✨</span>
                 <button
                   id="create-btn"
-                  onClick={() => {
-                    router.push('/quiz/start');
-                  }}
+                    onClick={() => {
+                      router.push('/quiz/create');
+                    }}
                 >
                   새로 만들기
                 </button>
