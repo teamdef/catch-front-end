@@ -1,40 +1,43 @@
-import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useMemo } from 'react';
-import styled from 'styled-components';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback,MouseEvent } from 'react';
+import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import useInput from 'hooks/useInput';
-import { Button, Loading } from 'components/common';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveProblemsAction } from 'store/quiz';
+import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
 import { RootState } from 'store';
-import { IoDice } from 'react-icons/io5';
-import data from 'data/question.json';
+import { useRouter } from 'next/router';
+import data from 'data/question.json'; // 문제 더미 데이터
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { MdClose } from 'react-icons/md';
-import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai';
-import { imageTestApi } from 'pages/api/test';
-import Router from 'next/router';
+import { MdClose, MdCheck } from 'react-icons/md'; // 아이콘
+import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai'; // 아이콘
+import { imageTestApi } from 'pages/api/test'; // 이미지 업로드 테스트 api
+import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
+import { Button, Loading } from 'components/common';
+import useInput from 'hooks/useInput';
+import { AppLayout, SmartphoneLayout } from 'components/layout';
 
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
 }
 
-
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
-
-  const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
-
   const { userId } = useSelector((state: RootState) => state.user);
 
-  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
-  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목
+  const [loading, setLoading] = useState<boolean>(false);
+  const [제작중없음, set제작중없음] = useState<boolean>(false); // 홈화면으로 돌아갑니다 모달
+  const [제작중있음, set제작중있음] = useState<boolean>(false); // 이어하시겠습니까 모달
 
-  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본
+  const [tempSetTitle, setTempSetTitle, , tempSetTitleHandler] = useInput<string>(''); // 문제집 제목 변경 전용 input 핸들러
+  const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목 input 핸들러
+
+  const [choiceType, setChoiceType, choiceTypeClear, choiceTypeHandler] = useInput<'img' | 'text'>('text'); // 텍스트 타입이 기본 input 핸들러
+
   const [textChoice, , textChoiceClear, textChoiceHandler] = useInput<string>(''); // 텍스트 객관식 input 핸들러
+
+  const [problemCount, setProblemCount] = useState<number>(0); // 현재 문제 번호
 
   const [choicesText, setChoicesText] = useState<string[]>([]); // 텍스트 객관식 답안 리스트
 
@@ -43,7 +46,16 @@ const Page: NextPageWithLayout = () => {
 
   const [correctIndex, setCorrectIndex] = useState<number>(0); // 정답 인덱스. 객관식 보기 배열 내에서 정답인 요소의 인덱스를 저장함.
 
-  // 주사위 버튼 누르면 실행되는 함수 
+  // 메인화면으로
+  const goHome = () => {
+    router.push('/home');
+  };
+  const goQuizCreate = () => {
+    resetProblemSet();
+    router.replace('/quiz/create');
+  };
+
+  // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = () => {
     const randomTitle = data.questions[Math.floor(Math.random() * data.questions.length)];
     setProblemTitle(randomTitle);
@@ -58,7 +70,7 @@ const Page: NextPageWithLayout = () => {
     textChoiceClear(); // 초기화
   };
 
-  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>): void => {
     if (e.key === 'Enter') addTextChoice();
   };
 
@@ -94,6 +106,10 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
+  // 동일 파일이 재업로드 되지 않는 오류 해결을 위한 함수
+  const onImgClick = (e: any) => {
+    e.target.value = null;
+  };
   // 이미지 onChange 이벤트 처리 함수
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
@@ -173,26 +189,23 @@ const Page: NextPageWithLayout = () => {
     setChoicesImgFile(file_temp);
   };
 
-  const createNewProblem = () => {
-    saveProblem(); // 현재 문제 저장
-    setProblemCount(problems.length); // 다음 문제 생성용
-  };
+  // 문제 저장. 조건 검사는 하지 않음
   const saveProblem = () => {
-    if (problemTitle === '') {
-      alert('문제 제목을 작성해주세요.');
-      return;
-    }
-    if (choiceType === 'text') {
-      if (choicesText.length < 2) {
-        alert('객관식 보기 답안을 2개 이상 작성해주세요.');
-        return;
-      }
-    } else if (choiceType === 'img') {
-      if (choicesImgFile.length < 2) {
-        alert('이미지 보기 답안을 2개 이상 추가해주세요.');
-        return;
-      }
-    }
+    // if (problemTitle === '') {
+    //   alert('문제 제목을 작성해주세요.');
+    //   return;
+    // }
+    // if (choiceType === 'text') {
+    //   if (choicesText.length < 2) {
+    //     alert('객관식 보기 답안을 2개 이상 작성해주세요.');
+    //     return;
+    //   }
+    // } else if (choiceType === 'img') {
+    //   if (choicesImgFile.length < 2) {
+    //     alert('이미지 보기 답안을 2개 이상 추가해주세요.');
+    //     return;
+    //   }
+    // }
 
     let temp = [...problems];
     temp[problemCount] = {
@@ -204,14 +217,38 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveProblemsAction({ problems: temp }));
   };
 
+  // 문제 추가
+  const createProblem = () => {
+    saveProblem(); // 현재 문제 저장
+    let temp = [...problems];
+    temp.push({
+      problemTitle: '',
+      choiceType: 'text',
+      choices: [],
+      correctIndex: 0,
+    });
+    dispatch(saveProblemsAction({ problems: temp })); // 문제 초기값 (빈 문제) 추가
+    setProblemCount(problems.length); // problemCount 를 현재 문제로 이동
+  };
+
+  // 문제 삭제
   const deleteProblem = () => {
+    if (problems.length === 1 && problemCount === 0) {
+      return; // 문제가 1개 남았을 때 맨 앞 문제는 삭제하지 못하도록 함. 에러 방지
+    }
     let temp = [...problems];
     temp.splice(problemCount, 1);
     dispatch(saveProblemsAction({ problems: temp }));
-    setProblemCount(problemCount - 1);
+    if (problems.length === problemCount + 1) {
+      // 마지막 문제를 삭제 할 경우
+      setProblemCount(problemCount - 1);
+    } else {
+      setProblemCount(problemCount);
+    }
   };
 
-  const resetProblem = () => {
+  // 현재 작성중인 문제 화면 데이터 초기화
+  const resetCurrentProblem = () => {
     problemTitleClear(); // 문제 제목 초기화
     textChoiceClear(); // 답안 입력란 초기화
     choiceTypeClear(); // 문제 유형 초기화
@@ -221,40 +258,99 @@ const Page: NextPageWithLayout = () => {
     setCorrectIndex(0); // 정답 인덱스 초기화
   };
 
-  const publicationProblems = () => {
-    setLoading(true);
-    const tempUserId = 1234;
-    // url 형태의 이미지를 다시 blob 객체로 변환.
-    let _problems = problems.map((problem: ProblemTypes) => {
-      if (problem.choiceType === 'img') {
-        let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-        let _choices: File[] = [];
-        problem.choices.forEach(async (img) => {
-          try {
-            const _temp = img as ChoiceImageTypes;
-            const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
-            _choices.push(_file);
-          } catch (e) {
-            console.log(e);
-          }
-        });
-        _problem.choices = _choices;
-        return _problem;
-      } else {
-        return problem;
-      }
-    });
-    Promise.all(_problems).then((res) => {
-      imageTestApi(res, tempUserId, setTitle).then((res) => {
-        console.log(res);
-        setLoading(false);
-        Router.push('/quiz/share'); // 문제집 생성 완료 및 공유 화면으로 이동
-      });
-    });
+  // redux store 자체를 초기화
+  const resetProblemSet = () => {
+    dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
+    dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
   };
 
+  // 문제 저장 조건 체크 함수
+  const checkProblemSet = (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      let status: boolean = true;
+      problems.forEach((problem: ProblemTypes) => {
+        if (problem.problemTitle === '') {
+          status = false;
+        }
+        if (problem.choices.length < 2) {
+          status = false;
+        }
+      });
+      resolve(status);
+    });
+  };
+  // 문제집 생성하기 ( 서버에 저장하기 )
+  const publicationProblems = async () => {
+    // 문제 저장 조건 체크
+    // if (await checkProblemSet()) {
+    //   setLoading(true);
+    //   const tempUserId = 1234;
+    //   // url 형태의 이미지를 다시 blob 객체로 변환.
+    //   let _problems = problems.map((problem: ProblemTypes) => {
+    //     if (problem.choiceType === 'img') {
+    //       let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
+    //       let _choices: File[] = [];
+    //       problem.choices.forEach(async (img) => {
+    //         try {
+    //           const _temp = img as ChoiceImageTypes;
+    //           const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
+    //           _choices.push(_file);
+    //         } catch (e) {
+    //           console.log(e);
+    //         }
+    //       });
+    //       _problem.choices = _choices;
+    //       return _problem;
+    //     } else {
+    //       return problem;
+    //     }
+    //   });
+    //   Promise.all(_problems).then((res) => {
+    //     imageTestApi(res, tempUserId, setTitle).then((res) => {
+    //       console.log(res);
+    //       setLoading(false);
+    //       router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+    //     });
+    //   });
+    // } else {
+    //   alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+    // }
+    router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
+  };;
+
+  // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
-    resetProblem(); // 입력란 및 기존 데이터 모두 초기화
+    console.log("초기");
+    const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
+    const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
+    if (!prevPath || prevPath !== '/quiz/create') {
+      // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
+      if (problems.length !== 0) {
+        // 제작 중이던 문제가 있을 경우
+        set제작중있음(true);
+      } else {
+        set제작중없음(true);
+      }
+    }
+    if (prevPath === '/quiz/create') {
+      // /quiz/create 를 통해 넘어왔을 경우
+      if (problems.length === 0) {
+        // 초기 상태일 경우
+        createProblem(); // 새롭게 문제 1개 추가
+      }
+    }
+    // 문제집 타이틀 값 세팅하기  
+    setTempSetTitle(setTitle);
+  }, []);
+
+  // problemCount가 바뀔 경우, 구슬 클릭
+  useEffect(() => {
+    console.log('카운트');
+    if (problemCount < 0 || problemCount > 9) {
+      return; // 비정상 접근
+    }
+    resetCurrentProblem(); // 입력란 및 기존 데이터 모두 초기화
+
     if (problems.length !== 0 && !!problems[problemCount]) {
       setChoiceType(problems[problemCount].choiceType);
       setProblemTitle(problems[problemCount].problemTitle);
@@ -271,6 +367,7 @@ const Page: NextPageWithLayout = () => {
   }, [problemCount]);
 
   useEffect(() => {
+    console.log('답안변경');
     // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
     if (choiceType === 'text') {
       if (correctIndex > choicesText.length - 1) {
@@ -285,25 +382,35 @@ const Page: NextPageWithLayout = () => {
   }, [correctIndex, choicesText, choicesImgFile]);
 
   useEffect(() => {
-    // 문제 제목, 객관식 보기 답안이 문제 저장 조건을 만족한다면 자동 저장
-    if (problemTitle !== '') {
-      if ((choiceType === 'text' && choicesText.length > 1) || (choiceType === 'img' && choicesImgFile.length > 1)) {
-        saveProblem();
-      }
-    }
-  }, [problemTitle, correctIndex, choicesText, choicesImgFile]);
+    console.log('자동저장');
+    // 자동 저장
+    saveProblem();
+  }, [problemTitle, choiceType, correctIndex, choicesText, choicesImgFile]);
+
+  useEffect(() => {
+    console.log('문제저장');
+      dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
+  }, [tempSetTitle]);
 
   return (
-    <Wrapper>
-      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
-      <div id="inner-wrapper">
-        <>
+    <>
+      <Wrapper>
+        {loading && <Loading ment={'문제집 저장중 입니다!'} />}
+        <div id="inner-wrapper">
+          <Header>
+            <div id="logo" onClick={goHome}>
+              캐치캐치
+            </div>
+            <div id="input-wrapper">
+              <input type="text" value={tempSetTitle} onChange={tempSetTitleHandler} />
+            </div>
+          </Header>
           <ProblemCountContainer>
             <strong>{problemCount + 1}/</strong>
             <span>{problems.length}</span>
           </ProblemCountContainer>
           <CircleShortcutContainer>
-            {problems.map((item, index) => {
+            {problems.map((item: ProblemTypes, index: number) => {
               return (
                 <CircleShortcut
                   active={problemCount === index}
@@ -325,7 +432,7 @@ const Page: NextPageWithLayout = () => {
               />
             </ProblemTitleBubble>
             <button onClick={randomProblemTitle}>
-              <IoDice size={30} onClick={randomProblemTitle} />
+              <img src={'/assets/img/dice2.png'} onClick={randomProblemTitle} />
             </button>
           </ProblemTitleContainer>
 
@@ -349,28 +456,32 @@ const Page: NextPageWithLayout = () => {
             />
             <label htmlFor="img_choice">이미지</label>
           </ChoiceTypeRadioContainer>
+          <Explain>정답 요소를 클릭해주세요!</Explain>
           {choiceType === 'text' && (
             <TextChoicesContainer>
               <div>
                 <ul>
                   {choicesText.map((item, index) => {
                     return (
-                      <TextBubble
-                        key={index}
-                        onClick={() => {
-                          setCorrectIndex(index);
-                        }}
-                        correct={correctIndex === index}
-                      >
-                        {item}
-                        <Button
+                      <TextBubbleWrapper>
+                        {correctIndex === index && <MdCheck size={20} color={'#AAD775'} />}
+                        <TextBubble
+                          key={index}
                           onClick={() => {
-                            deleteTextChoice(index);
+                            setCorrectIndex(index);
                           }}
+                          correct={correctIndex === index}
                         >
-                          <MdClose size={20} />
-                        </Button>
-                      </TextBubble>
+                          {item}
+                          <Button
+                            onClick={() => {
+                              deleteTextChoice(index);
+                            }}
+                          >
+                            <MdClose size={20} />
+                          </Button>
+                        </TextBubble>
+                      </TextBubbleWrapper>
                     );
                   })}
                 </ul>
@@ -397,125 +508,225 @@ const Page: NextPageWithLayout = () => {
           )}
           {choiceType === 'img' && (
             <ImgChoicesContainer>
-              <ImgChoiceBubble>
-                <ImageInputContainer>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={onImgChange}
-                    id="select-image"
-                    name="select-image"
-                  />
-                  <label htmlFor="select-image">
-                    <AiFillCamera size={30} />
-                    <span>이미지추가 {choicesImgFile.length}/4</span>
-                  </label>
-                </ImageInputContainer>
-              </ImgChoiceBubble>
-              {choicesImgFile.length !== 0 && (
-                <ImgBubble>
-                  <ImageChoicesContainer>
-                    {choicesImgThumbnail.map((item, index) => {
-                      return (
-                        <ImageWrapper
-                          key={index}
+              <ImgBubble>
+                <ImageChoicesContainer>
+                  {choicesImgThumbnail.length < 4 && (
+                    <ImgChoiceBubble>
+                      <ImageInputContainer>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onClick={onImgClick}
+                          onChange={onImgChange}
+                          id="select-image"
+                          name="select-image"
+                        />
+                        <label htmlFor="select-image">
+                          <AiFillCamera size={30} />
+                          <span>이미지추가</span>
+                        </label>
+                      </ImageInputContainer>
+                    </ImgChoiceBubble>
+                  )}
+
+                  {choicesImgThumbnail.map((item, index) => {
+                    return (
+                      <ImageWrapper
+                        key={index}
+                        onClick={() => {
+                          setCorrectIndex(index);
+                        }}
+                        correct={index === correctIndex}
+                      >
+                        <img alt="미리보기" src={item.imgURL} />
+                        <button
+                          id="delete-btn"
                           onClick={() => {
-                            setCorrectIndex(index);
+                            deleteImgChoice(index);
                           }}
-                          correct={index === correctIndex}
                         >
-                          <img alt="미리보기" src={item.imgURL} />
-                          <button
-                            id="delete-btn"
-                            onClick={() => {
-                              deleteImgChoice(index);
-                            }}
-                          >
-                            <MdClose />
-                          </button>
-                        </ImageWrapper>
-                      );
-                    })}
-                  </ImageChoicesContainer>
-                </ImgBubble>
-              )}
+                          <MdClose />
+                        </button>
+                      </ImageWrapper>
+                    );
+                  })}
+                </ImageChoicesContainer>
+              </ImgBubble>
             </ImgChoicesContainer>
           )}
           <ButtonContainer>
-            <Button onClick={saveProblem} height="50px" fontColor="#999999">
-              저장하기
+            <Button onClick={createProblem} disabled={problems.length > 9}>
+              문제 추가
             </Button>
-            {problems.length < 9 && (
-              <Button onClick={createNewProblem} height="50px" bgColor="#ff4d57" fontColor="white">
-                새로만들기
-              </Button>
-            )}
-            {problems.length > 1 && (
-              <Button onClick={deleteProblem} height="50px">
-                문제 삭제
-              </Button>
-            )}
-            {problems.length > 1 && (
-              <Button onClick={publicationProblems} height="50px">
-                문제집 완성하기
-              </Button>
-            )}
+            <Button id="delete" onClick={deleteProblem} disabled={problems.length < 2}>
+              문제 삭제
+            </Button>
+            <Button id="save" onClick={saveProblem}>
+              문제 저장
+            </Button>
+            <Button id="done" onClick={publicationProblems} disabled={problems.length < 2}>
+              완성 하기
+            </Button>
           </ButtonContainer>
-        </>
-      </div>
-    </Wrapper>
+        </div>
+      </Wrapper>
+      {제작중없음 && (
+        <ModalFrame
+          handleClose={() => set제작중없음(false)}
+          handleYes={() => {
+            router.push('/quiz/create');
+          }}
+          isOpen={제작중없음}
+        >
+          <div>
+            제작중인 퀴즈가 없어
+            <br />
+            시작 화면으로 돌아갑니다.
+          </div>
+        </ModalFrame>
+      )}
+      {제작중있음 && (
+        <ModalFrame
+          handleClose={() => set제작중있음(false)}
+          handleNo={goQuizCreate}
+          handleYes={() => {}}
+          isOpen={제작중있음}
+          noTitle={'새롭게'}
+          yesTitle={'이어서'}
+        >
+          <Modal2>
+            <div>
+              제작하던 <strong>{setTitle}</strong>
+              <br />
+              문제집이 있습니다.
+            </div>
+            <div id="last-modified">이어서 제작 하시겠습니까?</div>
+          </Modal2>
+        </ModalFrame>
+      )}
+    </>
+  );
+};;
+Page.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AppLayout>
+      <SmartphoneLayout>{page}</SmartphoneLayout>
+    </AppLayout>
   );
 };
-Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
-};
-
+// 임시 변수명, 제작중있음 모달
+const Modal2 = styled.div`
+  strong {
+    color: #ff4d57;
+  }
+  #last-modified {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999;
+  }
+`;
 // 기능 가시성을 위한 임시 디자인
 const Wrapper = styled.div`
-  position: relative;
-  background-color: #fff6f7;
-  height: 100vh;
-  padding: 1rem;
+  height: 100%;
   #inner-wrapper {
-    background-color: white;
-    height: 100%;
-    border-radius: 30px;
-    padding: 1rem;
-    overflow-y: scroll;
-    & {
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
+    margin-bottom: 55px;
+    @media (max-width: 400px) {
+      margin-bottom: 100px;
     }
-    &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera*/
+  }
+`;
+
+
+const Header = styled.div`
+  padding: 1.5rem;
+  #logo {
+    color: #ff4d57;
+    font-family: 'RixInooAriDuriR';
+    font-size: 1.5rem;
+    &:hover {
+      cursor: pointer;
+      color: lightgrey;
+    }
+  }
+  #input-wrapper {
+    color: #888;
+    display:flex;
+    justify-content:center;
+    input{
+      text-align:center;
+      border:none;
+      border-bottom:solid 1px #eee;
+      padding-bottom:0.5rem;
+      &:focus{
+        outline:none;
+      }
     }
   }
 `;
 const ButtonContainer = styled.div`
+  width: 80%;
   position: absolute;
-  bottom: 20px;
+  bottom: 35px;
   left: 50%;
   transform: translate(-50%, 0%);
-  display: flex;
-  justify-content: center;
-  & button {
-    margin: 0.5rem;
-    width: 150px;
-    @media (max-height: 750px) {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  @media (max-width: 400px) {
+    gap: 5px;
+  }
+  /* justify-content: center; */
+
+  & #done {
+    border: solid 2px #ff4d57;
+    box-shadow: 0 0.6em #ff4d57;
+    color: #ff4d57;
+  }
+  & #save {
+    border: solid 2px #aad775;
+    box-shadow: 0 0.6em #aad775;
+    color: #aad775;
+  }
+  & #delete {
+    border: solid 2px #c5c5b9;
+    box-shadow: 0 0.6em #c5c5b9;
+    color: #c5c5b9;
+  }
+  button {
+    @media (max-width: 400px) {
+      height: 50px;
+    }
+    font-size: 12px;
+    word-break: keep-all;
+    background-color: #fff;
+    border: solid 2px #ffa5aa;
+    box-shadow: 0 0.6em #ffa5aa;
+    color: #ffa5aa;
+    /* @media (max-height: 750px) {
       width: 100px;
       font-size: 12px;
+    } */
+    &:disabled {
+      cursor: not-allowed;
+      border: none;
+      color: #7c7c7c;
+      background-color: #ececec;
+      border: solid 2px lightgrey;
+      box-shadow: 0 0.6em lightgrey;
     }
+    &:focus {
+      outline: none;
+    }
+    /* box-shadow: 3px 3px; */
   }
 `;
 const ProblemCountContainer = styled.div`
-  font-size: 20px;
-  padding-top: 20px;
+  font-size: 14px;
   strong {
     color: #ff4d57;
     font-weight: bold;
   }
-  font-weight: bold;
   color: rgb(59, 59, 59);
   text-align: center;
 `;
@@ -524,6 +735,10 @@ const ImageChoicesContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
+  @media (max-width: 400px) {
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+  }
 `;
 
 interface CorrectProps {
@@ -532,6 +747,9 @@ interface CorrectProps {
 const ImageWrapper = styled.div<CorrectProps>`
   width: 100%;
   height: 150px;
+  @media (max-width: 400px) {
+    height: 120px;
+  }
   position: relative;
   img {
     width: 100%;
@@ -563,14 +781,12 @@ const ImageWrapper = styled.div<CorrectProps>`
 const ImageInputContainer = styled.div`
   display: flex;
   align-items: center;
-  & * {
-    margin-right: 0.5rem;
-  }
   input {
     display: none;
   }
   label {
     display: flex;
+    flex-direction: column;
     align-items: center;
     color: #ffa5aa;
     &:hover {
@@ -586,7 +802,7 @@ interface CircleShortcutButtonProps {
 const CircleShortcutContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: 1rem 0 1rem 0;
+  padding: 0.5rem 0 1rem 0;
 `;
 const CircleShortcut = styled.div<CircleShortcutButtonProps>`
   border: none;
@@ -630,30 +846,37 @@ const ImgBubble = styled.div`
   width: 95%;
 `;
 const ImgChoiceBubble = styled.div`
-  border-radius: 30px 0px 30px 30px;
-  background-color: white;
-  border: solid 1px #ffa5aa;
-  margin: 0.5rem;
-  padding: 1rem 2rem 1rem 2rem;
-  span {
-    color: #ffa5aa;
+  width: 100%;
+  height: 150px;
+  @media (max-width: 400px) {
+    height: 120px;
   }
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff6f7;
   @media (max-height: 750px) {
     font-size: 14px;
-    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
   }
+`;
+
+const TextBubbleWrapper = styled.li`
+  width: 100%;
+  list-style-type: none;
+  display: flex;
+  justify-content: right;
+  align-items: center;
 `;
 const TextBubble = styled.li<CorrectProps>`
   width: 70%;
-  padding: 1rem 1.5rem 1rem 1.5rem;
-  @media (max-height: 750px) {
+  @media (max-width: 400px) {
     width: 80%;
-    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-    font-size: 14px;
   }
-  border-radius: 30px 0px 30px 30px;
-  background-color: ${({ correct }) => (correct ? '#FF4D57' : '#ffa5aa')};
-  list-style-type: none;
+  font-size: 14px;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
+  border-radius: 25px 0px 25px 25px;
+  background-color: ${({ correct }) => (correct ? '#AAD775' : '#ffa5aa')};
   margin: 0.5rem;
   color: white;
   display: flex;
@@ -671,18 +894,17 @@ const TextBubble = styled.li<CorrectProps>`
 `;
 const TextInputBubble = styled.div`
   width: 70%;
-  border-radius: 30px 0px 30px 30px;
+  @media (max-width: 400px) {
+    width: 80%;
+  }
+  border-radius: 25px 0px 25px 25px;
   border: solid 1px #ffa5aa;
   margin: 0.5rem;
-  padding: 1rem 1.5rem 1rem 1.5rem;
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media (max-height: 750px) {
-    width: 80%;
-    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-    font-size: 14px;
-  }
+
   input {
     width: inherit;
     color: #ffa5aa;
@@ -707,6 +929,9 @@ const TextInputBubble = styled.div`
 `;
 const ChoiceTypeRadioContainer = styled.div`
   padding: 1.5rem 0 1.5rem 0;
+  @media (max-width: 400px) {
+    padding: 0.5rem 0 0.5rem 0;
+  }
   display: flex;
   justify-content: center;
   input[type='radio'] {
@@ -716,17 +941,24 @@ const ChoiceTypeRadioContainer = styled.div`
     margin: 0 0.5rem 0 0.5rem;
     padding: 0.25rem 1.25rem 0.25rem 1.25rem;
     cursor: pointer;
-    color: #ff4d57;
+    color: #ffa5aa;
     border-radius: 30px;
-    border: solid 1px #ff4d57;
+    border: solid 1px #ffa5aa;
   }
   input[type='radio']:checked + label {
-    background-color: #ff4d57;
+    background-color: #ffa5aa;
     color: white;
     font-weight: bold;
     transition: ease-in-out 0.2s;
     box-shadow: 0 0 0.875rem 0 rgba(33, 37, 41, 0.05);
   }
+`;
+
+const bounce = keyframes` 
+  0% {transform: translatey(0px);}
+  5% {transform: translatey(-10px);}
+  10% {transform: translatey(0px);}
+  100% {transform: translatey(0px);}
 `;
 
 const ProblemTitleContainer = styled.div`
@@ -735,6 +967,14 @@ const ProblemTitleContainer = styled.div`
     background-color: white;
     border: none;
     color: #ff4d57;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    &:hover {
+      cursor: pointer;
+      animation: ${bounce} 2s linear 0.1s infinite;
+    }
   }
 `;
 const ProblemTitleBubble = styled.div`
@@ -744,6 +984,11 @@ const ProblemTitleBubble = styled.div`
   margin: 0.5rem;
   padding: 1rem 1.5rem 1rem 1.5rem;
   background-color: #eee;
+  @media (max-width: 400px) {
+    margin: 0.5 0.25 0.5 0.25rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    border-radius: 0px 25px 25px 25px;
+  }
   input {
     width: 100%;
     background-color: transparent;
@@ -758,6 +1003,19 @@ const ProblemTitleBubble = styled.div`
       color: #99999970;
     }
   }
+`;
+
+const Explain = styled.div`
+  font-size: 14px;
+  color: #999;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  @media (max-width: 400px) {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  text-align: center;
 `;
 
 export default Page;

@@ -32,7 +32,7 @@ const Home: NextPageWithLayout = () => {
                   <button
                     id="create-btn"
                     onClick={() => {
-                      router.push('/quiz/start');
+                      router.push('/quiz/create');
                     }}
                   >
                     새로 만들기
@@ -47,7 +47,7 @@ const Home: NextPageWithLayout = () => {
                   <button
                     id="create-btn"
                     onClick={() => {
-                      router.push('/quiz/start');
+                      router.push('/quiz/create');
                     }}
                   >
                     새로 만들기
@@ -89,7 +89,6 @@ const Home: NextPageWithLayout = () => {
             </ImageCard>
           </ImageCardContainer>
         </PopularQuizList>
-        <Navbar></Navbar>
       </Background>
     </>
   );
