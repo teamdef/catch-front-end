@@ -179,7 +179,8 @@ const Wrapper = styled.div`
     font-size: 14px;
   }
   hr {
-    border: solid 1px #f1f1f1;
+    border:none;
+    border-top: solid 1px #f1f1f1;
   }
 `;
 

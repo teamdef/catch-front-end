@@ -27,7 +27,6 @@ const Header = () => {
   };
 
   const handleScroll = useCallback(() => {
-    let _positionY: number = window.scrollY;
     window.scrollY > 200 ? setResizeHeader(true) : setResizeHeader(false);
   }, [window.scrollY]);
 
@@ -87,6 +86,9 @@ const Logo = styled.div`
   font-size: 1.5rem;
   font-family: 'RixInooAriDuriR';
   color: #ff4d57;
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 const UserProfile = styled.div`

@@ -20,11 +20,9 @@ const Home: NextPageWithLayout = () => {
         <MyQuizList>
           <Swiper
             spaceBetween={0}
-            slidesPerView={1}
-            pagination={true}
+            pagination={{ clickable: true }}
             modules={[Pagination]}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
+            loop={true}
           >
             <SwiperSlide>
               <MyQuizCard
@@ -115,7 +113,7 @@ const RecentQuizList = styled.div`
   background-color: #fff;
   #title {
     padding: 1rem 0.5rem 2rem 0.5rem;
-    color: #000;
+    color: #595959;
     font-weight: bold;
     font-size: 18px;
     display: flex;
@@ -157,8 +155,20 @@ const MyQuizList = styled.div`
   .swiper-pagination {
     position: relative;
     .swiper-pagination-bullet {
-      width: 10px;
-      height: 10px;
+      width: 1rem;
+      height: 1rem;
+      &:last-child {
+        background-color: #ffa5aa;
+        position: relative;
+        &:after {
+          content: '+';
+          color: #fff;
+          font-size: 17px;
+          position: absolute;
+          top: -5px;
+          right: 3px;
+        }
+      }
     }
     .swiper-pagination-bullet-active {
       background-color: #ff4d57;
