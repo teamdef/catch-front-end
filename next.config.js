@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false, // 렌더링 2회 방지
+  trailingSlash: true, // 빌드 시 폴더 구조 그대로 생성하도록
   async redirects() {
     // 라우터 직접 접근을 막는 용도
     return [

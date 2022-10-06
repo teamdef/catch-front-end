@@ -78,7 +78,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
           </div>
           <Profile>
             <div id="profile-img">
-              <img src={profileImg || '/assets/img/user_default.png'} />
+              <img src={profileImg ||'/assets/img/user_default.png'} />
             </div>
             <div id="profile-info-container">
               {isLoggedin ? (
@@ -102,7 +102,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
               공지사항
             </li>
             <li>
-              <img src="/assets/img/kakao_icon.png" />
+              <img src={"/assets/img/kakao_icon.png"} />
               카카오톡 오픈채팅 문의
             </li>
             {isLoggedin && (

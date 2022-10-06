@@ -69,7 +69,7 @@ const Page: NextPageWithLayout = () => {
       <div>
         <i>{index + 1 == 1 ? '🥇' : index + 1 == 2 ? '🥈' : index + 1 == 3 ? '🥉' : index + 1}</i>
         <strong>{item.nickname}</strong>
-        <em>{item.score}p</em>
+        <em>{item.score}점</em>
       </div>
     </li>
   ));
@@ -78,21 +78,24 @@ const Page: NextPageWithLayout = () => {
     <Container>
       <ScoreArea>
         <h1>
-          <strong>{new_user}</strong> 님의 점수는..
+          <strong>{new_user}</strong> 님
         </h1>
         <ProgressArea>
           <CircularProgressbar
+            strokeWidth={10}
             value={new_user_score}
-            text={`${new_user_score}p`}
+            text={`${new_user_score}`}
             maxValue={10}
             styles={buildStyles({
-              textSize: '1.2rem',
+              textSize: '1.5rem',
               pathTransitionDuration: 0.5,
               trailColor: '#eee',
               backgroundColor: '#fff',
             })}
           />
         </ProgressArea>
+        <p>총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요</p>
+        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">정답 보기</Button>
       </ScoreArea>
 
       <RankingArea>
@@ -106,7 +109,7 @@ const Page: NextPageWithLayout = () => {
               <div>
                 <i>{new_user_rank}</i>
                 <strong>{new_user}</strong>
-                <em>{new_user_score}p</em>
+                <em>{new_user_score}점</em>
               </div>
             </li>
           </ul>
@@ -134,19 +137,20 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background-color: #fff;
-  padding-top: 15%;
+  padding-top: 10%;
 `;
 const ButtonArea = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  margin-top: 10%;
+  margin: 10% 0;
   padding: 0 10%;
   justify-content: space-between;
 `;
 const ScoreArea = styled.div`
   position: relative;
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   > h1 {
@@ -161,12 +165,22 @@ const ScoreArea = styled.div`
       color: #ff4d57;
     }
   }
+  > p {
+    color: #888;
+    margin: 5% 0;
+    span {
+      color: #ff4d57;
+    }
+  }
+  button {
+    border: 2px solid #ff4d57;
+  }
 `;
 const ProgressArea = styled.div`
   position: relative;
   display: block;
-  width: 160px;
-  height: 160px;
+  width: 125px;
+  height: 125px;
   .CircularProgressbar-path {
     stroke: #ff4d57;
   }
@@ -181,7 +195,7 @@ const RankingArea = styled.div`
   align-items: center;
   width: 100%;
   > h2 {
-    margin-top: 10%;
+    margin-top: 5%;
     font-weight: normal;
     color: #888;
     font-size: 1rem;
@@ -257,8 +271,8 @@ const RankingArea = styled.div`
       &.active {
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         background-size: 300% 300%;
-        background-image: linear-gradient(-45deg, #ff4d57 0%, #ff4d57 40%, #fff 50%, #ff4d57 60%, #ff4d57 100%);
-        animation: AnimateBG 2s ease infinite;
+        background-image: linear-gradient(-45deg, #ff4d57 0%, #ff4d57 10%, #fff 20%, #ff4d57 30%, #ff4d57 100%);
+        animation: AnimateBG 2s cubic-bezier(1, 0, 0.2, .2) infinite;
         strong {
           font-weight: 500;
         }

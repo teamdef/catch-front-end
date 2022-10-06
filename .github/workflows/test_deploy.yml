@@ -1,0 +1,43 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+
+      - name: Install and Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.4.0
+      - run: git config --global user.email ${{ secrets.PRIVATE_EMAIL }}
+      - run: git config --global user.name "hayoungzzzzz"
+      - run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/undefined-catchme/front-end
+      - run: rm -rf node_modules/.cache # node_modules 캐시 제거
+      - run: rm -rf node_modules # node_modules 제거
+      - run: yarn install # 필요한 라이브러리 설치
+      - run: npx next build # next.js 프로젝트 빌드
+      - run: npx next export # next.js 프로젝트를 static html앱으로 컴파일 한 out/ 폴더를 생성해 줌
+      - run: touch out/.nojekyll # github page의 jekyll 처리과정 에서 .next와 같은 파일을 특수 리소스로 간주하고 최종 사이트에 복사하지 않는 것을 방지
+      
+      - run: git add -f out/ # out/ 디렉토리는 .gitignore에 등록되어 있으므로 -f 옵션을 이용해 무시하도록 함
+      - run: git commit -m "Deploy Next.js to gh-pages" # 생성한 브런치에 out/ 디렉토리가 포함된 내용을 커밋한다
+      - run: git push origin --delete gh-pages
+      - run: git subtree push --prefix out origin gh-pages # 해당 커밋을 사용해 /out 디렉토리 만으로 로컬의 gh-pages 브랜치에 새로운 커밋을 만든다. github 저장소 gh-pages브랜치에 push
+        env:
+          CI: true
+          DEPLOY_TARGET: gh-pages
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@3.7.1 # github action marketplace 에서 사용할 템플릿을 가져옴
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # 배포될 브랜치
+          FOLDER: out # 이 폴더에 있는 파일을 배포

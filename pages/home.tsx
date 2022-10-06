@@ -34,7 +34,7 @@ const Home: NextPageWithLayout = () => {
     <>
       <Background>
         <MyQuizList>
-          <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={true}>
+          <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
             {isLoggedin && (
               <SwiperSlide>
                 <MyQuizCard
