@@ -6,7 +6,12 @@ import {useEffect} from 'react'
 import { AppLayout } from 'components/layout';
 import Router from 'next/router';
 const Page: NextPageWithLayout = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+
+  const redirectUri =
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
+      : process.env.NEXT_PUBLIC_DEPLOY_KAKAO_REDIRECT_URI;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${redirectUri}&response_type=code`;
 
   const goKakaoLogin = () => {
     Router.push(KAKAO_AUTH_URL);
