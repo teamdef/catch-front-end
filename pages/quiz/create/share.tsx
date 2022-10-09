@@ -1,38 +1,40 @@
-import { ReactElement, useState, ChangeEvent } from 'react';
-import Router from 'next/router';
+import { ReactElement, useState, ChangeEvent, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { SNSShare } from 'components/common';
-import { RootState } from 'store';
-import { useSelector } from 'react-redux';
 import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
 import { HiOutlineShare } from 'react-icons/hi';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+import { ThumbnailChangeApi } from 'pages/api/test';
 
 const Page: NextPageWithLayout = () => {
-  const { setTitle, problems } = useSelector((state: RootState) => state.quiz);
-  const [thumbnailURL, setThumbnailURL] = useState<string>(
-    'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-  );
+  const router = useRouter();
+  const { probSetTitle, probSetCount, returnSetId, returnThumb } = router?.query;
+  const [thumbnailURL, setThumbnailURL] = useState<string>('');
 
   const goHome = () => {
-    Router.push('/home');
+    router.push('/home');
   };
 
-  const uploadImg = (): Promise<number> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(200);
-      }, 1000);
-    });
+  const randomString = (len: number): string => {
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
+    for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
   };
+
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
     // 이미지가 있을 경우
     if (files && files[0]) {
       const _compressed = (await imageCompression(files[0], options)) as File;
-      if ((await uploadImg()) === 200) {
+      const timestamp = new Date().toISOString().substring(0, 10);
+      const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
+        type: _compressed.type,
+      }); // 압축 이미지 대입
+      if ((await ThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
       }
@@ -45,15 +47,19 @@ const Page: NextPageWithLayout = () => {
     //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
-
+  
+  useEffect(() => {
+    if (!router.isReady) return;
+    setThumbnailURL(router?.query?.returnThumb as string);
+  }, [router.isReady]);
   return (
     <Wrapper>
       <div id="inner-wrapper">
         <Complete>퀴즈 완성 !!!</Complete>
         <QuizInfoContainer>
-          <div id="top">{setTitle}</div>
+          <div id="top">{probSetTitle}</div>
           <div id="bottom">
-            총<strong>{problems.length}</strong>문제
+            총<strong>{probSetCount}</strong>문제
           </div>
         </QuizInfoContainer>
         <ThumbnailSettingContainer>
@@ -91,7 +97,7 @@ const Page: NextPageWithLayout = () => {
             <span>직접 만든 퀴즈를 공유해보세요!</span>
           </div>
           <div id="share-wrapper">
-            <SNSShare title={setTitle} url={'home'} />
+            <SNSShare quiz_thumb={thumbnailURL} title={probSetTitle as string} url={returnSetId as string} />
           </div>
         </ShareContainer>
         <HomeButton onClick={goHome}>
@@ -146,7 +152,6 @@ const bounce = keyframes`
   10% {transform: translatey(0px);}
   100% {transform: translatey(0px);}
 `;
-
 
 const Complete = styled.div`
   color: #ff4d57;

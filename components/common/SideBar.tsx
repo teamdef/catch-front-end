@@ -1,28 +1,49 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { MdOutlineSettings } from 'react-icons/md';
-import Link from 'next/link';
 import { AiOutlineNotification, AiOutlineLogout, AiOutlineClose } from 'react-icons/ai';
 import { HiOutlineEmojiSad } from 'react-icons/hi';
 import { useEffect, useRef, useState } from 'react';
+import { RootState } from 'store';
+import { useSelector, useDispatch } from 'react-redux';
+import { kakaoLeaveApi } from 'pages/api/test';
+import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
+import { logoutAction } from 'store/user';
+import Router from 'next/router';
 
 interface SideBarProps {
-  profileImg: string;
   closeSideBar: () => void;
   sideBarOpen: boolean;
 }
-const SideBar = ({ profileImg, closeSideBar }: SideBarProps) => {
+const SideBar = ({ closeSideBar }: SideBarProps) => {
+  const dispatch = useDispatch();
   const sidebarRef = useRef<HTMLDivElement>(null);
-
+  const modalRef = useRef<HTMLDivElement>(null);
+  const { isLoggedin, profileImg, nickName, kakaoUid } = useSelector((state: RootState) => state.user);
   const [animation, setAnimation] = useState('openAnimation');
-  const login = true;
-
+  const [leaveModalOpen, setLeaveModalOpen] = useState<boolean>(false);
   const close = () => {
     setAnimation('closeAnimation');
     setTimeout(() => {
       closeSideBar();
     }, 490);
   };
-
+  const goNotice = () => {
+    Router.push('/notice');
+  };
+  const goLogin = () => {
+    Router.push('/');
+  };
+  const seviceLeave = () => {
+    kakaoLeaveApi().then((res) => {
+      if (res.status === 200) {
+        alert(res.data.message);
+        dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+      }
+    });
+  };
+  const logout = () => {
+    dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+  };
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
     body.style.overflowY = 'hidden';
@@ -31,11 +52,12 @@ const SideBar = ({ profileImg, closeSideBar }: SideBarProps) => {
       body.style.overflowY = 'auto';
     };
   }, []);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent): void => {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
-        if (!sidebarRef.current?.contains(e.target as Node)) {
-          // 사이드바를 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
+        if (!modalRef.current?.contains(e.target as Node)) {
+          // 모달을 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
           close();
         }
       }
@@ -48,71 +70,86 @@ const SideBar = ({ profileImg, closeSideBar }: SideBarProps) => {
   }, [sidebarRef]);
 
   return (
-    <Background>
-      <Wrapper id="side-bar" ref={sidebarRef} className={animation}>
-        <div id="greeting">
-          <strong>환영</strong>해요!
-        </div>
-        <Profile>
-          <div id="profile-img">
-            <img src={profileImg} />
+    <>
+      <Background>
+        <Wrapper id="side-bar" ref={sidebarRef} className={animation}>
+          <div id="greeting">
+            <strong>환영</strong>해요!
           </div>
-          <div id="profile-info-container">
-            {login ? (
-              <>
-                <div id="user-nickname">
-                  전하영 님<MdOutlineSettings size={16} />
+          <Profile>
+            <div id="profile-img">
+              <img src={profileImg || '/assets/img/user_default.png'} />
+            </div>
+            <div id="profile-info-container">
+              {isLoggedin ? (
+                <>
+                  <div id="user-nickname">
+                    {nickName} 님<MdOutlineSettings size={16} />
+                  </div>
+                  <div id="user-code"># {kakaoUid}</div>
+                </>
+              ) : (
+                <div id="signup" onClick={goLogin}>
+                  <strong>로그인</strong>이 필요합니다!
                 </div>
-                <div id="user-code"># 123456789</div>
+              )}
+            </div>
+          </Profile>
+          <hr />
+          <MenuList>
+            <li onClick={goNotice}>
+              <AiOutlineNotification />
+              공지사항
+            </li>
+            <li>
+              <img src="/assets/img/kakao_icon.png" />
+              카카오톡 오픈채팅 문의
+            </li>
+            {isLoggedin && (
+              <>
+                <li id="out" onClick={logout}>
+                  <AiOutlineLogout />
+                  로그아웃
+                </li>
+                <li
+                  id="out"
+                  onClick={() => {
+                    setLeaveModalOpen(true);
+                  }}
+                >
+                  <HiOutlineEmojiSad />
+                  회원탈퇴
+                </li>
               </>
-            ) : (
-              <div id="signup">
-                <strong>로그인</strong>이 필요합니다!
-              </div>
             )}
-          </div>
-        </Profile>
-        <hr />
-        <MenuList>
-          <li>
-            <Link href="/notice" passHref>
-              <a>
-                <AiOutlineNotification />
-                공지사항
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/home" passHref>
-              <a>
-                <img src="/assets/img/kakao_icon.png" />
-                카카오톡 오픈채팅 문의
-              </a>
-            </Link>
-          </li>
-          {login && <li id="out">
-            <Link href="/home" passHref>
-              <a>
-                <AiOutlineLogout />
-                로그아웃
-              </a>
-            </Link>
-          </li>}
-          {login && <li id="out">
-            <Link href="/home" passHref>
-              <a>
-                <HiOutlineEmojiSad />
-                회원탈퇴
-              </a>
-            </Link>
-          </li>}
-        </MenuList>
-        <div id="bottom-info">최신버전 0.1.0</div>
-        <CloseButton onClick={close}>
-          <AiOutlineClose size={24} />
-        </CloseButton>
-      </Wrapper>
-    </Background>
+          </MenuList>
+          <div id="bottom-info">최신버전 0.1.0</div>
+          <CloseButton onClick={close}>
+            <AiOutlineClose size={24} />
+          </CloseButton>
+        </Wrapper>
+        {leaveModalOpen && (
+          <ModalFrame
+            ref={modalRef}
+            handleClose={() => setLeaveModalOpen(false)}
+            handleNo={() => {}}
+            handleYes={seviceLeave}
+            isOpen={leaveModalOpen}
+            noTitle={'취소'}
+            yesTitle={'탈퇴'}
+          >
+            <Modal2>
+              <div>
+                <strong>탈퇴하시겠습니까? 😥</strong>
+                <br />
+                지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
+              </div>
+              <div id="last-modified">진행하시겠습니까? ㅜㅜㅜ</div>
+            </Modal2>
+          </ModalFrame>
+        )}
+      </Background>
+    </>
   );
 };
 
@@ -179,7 +216,7 @@ const Wrapper = styled.div`
     font-size: 14px;
   }
   hr {
-    border:none;
+    border: none;
     border-top: solid 1px #f1f1f1;
   }
 `;
@@ -228,6 +265,9 @@ const Profile = styled.div`
       margin-top: 4px;
     }
     #signup {
+      &:hover {
+        cursor: pointer;
+      }
       font-size: 20px;
       font-weight: bold;
       strong {
@@ -242,11 +282,21 @@ const MenuList = styled.ul`
   margin: 0;
   padding: 0;
   margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: left;
+
   li {
     margin-bottom: 1.5rem;
-    font-size: 20px;
-    @media (max-width:500px){
-      font-size:1rem;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    & *:nth-child(1) {
+      margin-right: 10px;
+    }
+    &:hover {
+      cursor: pointer;
     }
     img {
       width: 18px;
@@ -255,16 +305,21 @@ const MenuList = styled.ul`
     svg {
       font-size: 20px;
     }
-    a {
-      display: flex;
-      align-items: center;
-      & *:nth-child(1) {
-        margin-right: 10px;
-      }
-    }
   }
   #out {
     color: #d6d6d6;
+  }
+`;
+
+// 임시 변수명, 제작중있음 모달
+const Modal2 = styled.div`
+  strong {
+    color: #ff4d57;
+  }
+  #last-modified {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999;
   }
 `;
 

@@ -2,33 +2,46 @@ import Head from 'next/head';
 import styled, { keyframes } from 'styled-components';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from './_app';
+import {useEffect} from 'react'
 import { AppLayout } from 'components/layout';
 import Router from 'next/router';
 const Page: NextPageWithLayout = () => {
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&response_type=code`;
 
   const goKakaoLogin = () => {
     Router.push(KAKAO_AUTH_URL);
   };
+
   return (
-    <Wrapper>
-      <MainContainer>
-        <Title>
-          <span>캐</span>
-          <span>치</span>
-          <span>캐</span>
-          <span>치</span>
-        </Title>
-        <SubTitle>
-          로그인 <strong>1</strong>초컷 하고 <br />
-          <strong>나만의 퀴즈</strong>를 만들어보세요!
-        </SubTitle>
-        <KakaoLoginBtn onClick={goKakaoLogin}>
-          <img src={'/assets/img/kakao_icon.png'} />
-          <span>카카오로 시작하기</span>
-        </KakaoLoginBtn>
-      </MainContainer>
-    </Wrapper>
+    <div>
+      <Head>
+        <title>캐치캐치</title>
+        <meta name="description" content="나만의 퀴즈를 만들고 공유해보세요!" />
+        <link rel="icon" href="/catch_favicon.ico" />
+        <meta property="og:type" content="website" />
+      </Head>
+
+      <main>
+        <Wrapper>
+          <MainContainer>
+            <Title>
+              <span>캐</span>
+              <span>치</span>
+              <span>캐</span>
+              <span>치</span>
+            </Title>
+            <SubTitle>
+              로그인 <strong>1</strong>초컷 하고 <br />
+              <strong>나만의 퀴즈</strong>를 만들어보세요!
+            </SubTitle>
+            <KakaoLoginBtn onClick={goKakaoLogin}>
+              <img src={'/assets/img/kakao_icon.png'} />
+              <span>카카오로 시작하기</span>
+            </KakaoLoginBtn>
+          </MainContainer>
+        </Wrapper>
+      </main>
+    </div>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {

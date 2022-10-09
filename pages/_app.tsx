@@ -5,9 +5,10 @@ import type { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import axios from 'utils/customAxios';
+import { authAxios } from 'utils/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
+import {getCookie} from 'utils/token'
 // NextPageWithLayout으로 Page의 타입을 지정하면,
 // getLayout 속성함수를 사용할 수 있게된다. (사용해도 되고 안해도 되고 )
 export type NextPageWithLayout = NextPage & {
@@ -37,12 +38,22 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
-    // 카카오 sdk 초기화 
-    useEffect(() => {
+  // 카카오 sdk 초기화
+  useEffect(() => {
+    if (!window.Kakao.isInitialized()) {
       window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-    }, []);
-  
-    useEffect(() => storePathValues, [router.asPath]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const access_token = getCookie('access_token');
+    if (access_token) {
+      authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    }
+  }, [router]);
+
+
+  useEffect(() => storePathValues, [router.asPath]);
 
   useEffect(() => {
     if (isLoggedin) {
@@ -63,14 +74,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // _app 에서 getInitialProps 에서 가져오는 context의 타입은 AppContext임.
 // https://github.com/vercel/next.js/discussions/36832
 
+
+
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
+  console.log("흐음 ")
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
     // 빠르게 정규식으로 한다 .. 문자열 내장함수로 하게되면 매우 비효율적...
     let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
     if (match) {
       const access_token = match[2]; // RegExp 객체 반환값 참고
-      axios.defaults.headers.common.Authorization = `${access_token}`;
+      authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
     }
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
@@ -79,23 +93,3 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
 };
 
 export default wrapper.withRedux(MyApp);
-
-// // _app.js
-// import { useRouter } from "next/router";
-// import { useEffect } from "react";
-
-// export default function App(props) {
-//   const router = useRouter();
-
-//   useEffect(() => storePathValues, [router.asPath]);
-
-//   function storePathValues() {
-//     const storage = globalThis?.sessionStorage;
-//     if (!storage) return;
-//     // Set the previous path as the value of the current path.
-//     const prevPath = storage.getItem("currentPath");
-//     storage.setItem("prevPath", prevPath);
-//     // Set the current path value by looking at the browser's location object.
-//     storage.setItem("currentPath", globalThis.location.pathname);
-//   }
-// }

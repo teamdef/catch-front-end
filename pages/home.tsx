@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Card, QuizCard } from 'components/common';
@@ -6,6 +6,9 @@ import styled from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import ModalFrame from 'components/modal/ModalFrame';
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
@@ -14,43 +17,48 @@ import 'swiper/css/pagination';
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
+  const { isLoggedin } = useSelector((state: RootState) => state.user);
+  const [loginModal, setLoginModal] = useState<boolean>(false);
+
+  const goQuizCreateIndex = () => {
+    if (isLoggedin) {
+      router.push('/quiz/create');
+    } else {
+      setLoginModal(true);
+    }
+  };
+  const goLogin = () => {
+    router.push('/');
+  };
   return (
     <>
       <Background>
         <MyQuizList>
-          <Swiper
-            spaceBetween={0}
-            pagination={{ clickable: true }}
-            modules={[Pagination]}
-            loop={true}
-          >
-            <SwiperSlide>
-              <MyQuizCard
-                url={'https://press.com.mx/wp-content/uploads/2022/01/licenciatura-en-psicologi%CC%81a-1140x641.png'}
-              >
-                <div id="quiz-title">팡머가 좋아하는 것들</div>
-                <div id="quiz-info">참여 19 · 평균점수 7.7점</div>
-                <div id="quiz-detail-btn-wrapper">
-                  <button
-                    id="quiz-detail-btn"
-                    onClick={() => {
-                      router.push('/quiz/detail/q');
-                    }}
-                  >
-                    자세히 보기
-                  </button>
-                </div>
-              </MyQuizCard>
-            </SwiperSlide>
+          <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={true}>
+            {isLoggedin && (
+              <SwiperSlide>
+                <MyQuizCard
+                  url={'https://press.com.mx/wp-content/uploads/2022/01/licenciatura-en-psicologi%CC%81a-1140x641.png'}
+                >
+                  <div id="quiz-title">팡머가 좋아하는 것들</div>
+                  <div id="quiz-info">참여 19 · 평균점수 7.7점</div>
+                  <div id="quiz-detail-btn-wrapper">
+                    <button
+                      id="quiz-detail-btn"
+                      onClick={() => {
+                        router.push('/quiz/detail/q');
+                      }}
+                    >
+                      자세히 보기
+                    </button>
+                  </div>
+                </MyQuizCard>
+              </SwiperSlide>
+            )}
             <SwiperSlide>
               <CreateCard>
-                <span>퀴즈를 만들어 볼까요 ? ✨</span>
-                <button
-                  id="create-btn"
-                    onClick={() => {
-                      router.push('/quiz/create');
-                    }}
-                >
+                <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
+                <button id="create-btn" onClick={goQuizCreateIndex}>
                   새로 만들기
                 </button>
               </CreateCard>
@@ -98,6 +106,18 @@ const Home: NextPageWithLayout = () => {
           </ImageCardContainer>
         </RecentQuizList>
       </Background>
+      {loginModal && (
+        <ModalFrame
+          handleClose={() => setLoginModal(false)}
+          handleNo={() => setLoginModal(false)}
+          handleYes={goLogin}
+          isOpen={loginModal}
+          noTitle={'닫기'}
+          yesTitle={'로그인'}
+        >
+          <div>로그인이 필요한 서비스 입니다.</div>
+        </ModalFrame>
+      )}
     </>
   );
 };
@@ -134,14 +154,13 @@ const ImageCardContainer = styled.div`
   flex-direction: column;
   width: inherit;
   flex-wrap: nowrap;
-  align-items:center;
-  width:95%;
-  margin:0 auto;
+  align-items: center;
+  width: 95%;
+  margin: 0 auto;
 `;
 interface ImageCardProps {
   url?: string;
 }
-
 
 const MyQuizList = styled.div`
   #title {

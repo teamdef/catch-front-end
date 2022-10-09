@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, forwardRef } from 'react';
 import ModalPortal from './ModalPortal';
 
 type Listener = (this: HTMLElement, ev: KeyboardEvent) => any;
 
-// esc 클릭시 
+// esc 클릭시
 // const useOnEscapeClick = (callback: () => void) => {
 //   useEffect(() => {
 //     const closeOnEscapeKey: Listener = (e) => (e.key === 'Escape' ? callback() : null);
@@ -15,48 +15,52 @@ type Listener = (this: HTMLElement, ev: KeyboardEvent) => any;
 //   }, [callback]);
 // };
 
-function ModalFrame({
-  children,
-  isOpen,
-  handleClose,
-  handleYes,
-  handleNo,
-  yesTitle,
-  noTitle,
-}: {
-  children: React.ReactNode;
-  isOpen: boolean;
-  handleClose: () => void;
-  handleYes?: () => void;
-  handleNo?: () => void;
-  yesTitle?: string;
-  noTitle?: string;
-}) {
-  const nodeRef = useRef(null);
-  const onClickNo = () => {
-    handleNo && handleNo();
-    handleClose();
-  };
-  const onClickYes = () => {
-    handleYes && handleYes();
-    handleClose();
-  };
+const ModalFrame = forwardRef<HTMLDivElement, any>(
+  (
+    {
+      children,
+      isOpen,
+      handleClose,
+      handleYes,
+      handleNo,
+      yesTitle,
+      noTitle,
+    }: {
+      children: React.ReactNode;
+      isOpen: boolean;
+      handleClose: () => void;
+      handleYes?: () => void;
+      handleNo?: () => void;
+      yesTitle?: string;
+      noTitle?: string;
+    },
+    ref,
+  ) => {
+    const onClickNo = () => {
+      handleNo && handleNo();
+      handleClose();
+    };
+    const onClickYes = () => {
+      handleYes && handleYes();
+      handleClose();
+    };
 
-  return (
-    <ModalPortal wrapperId="react-portal-modal-container">
-      <Background>
-        {/* Modal component클릭시 background 컴포넌트 클릭 방지 */}
-        <ModalWrapper onClick={(e) => e.stopPropagation()} ref={nodeRef}>
-          <ModalBody>{children}</ModalBody>
-          <ActionButtonContainer>
-            {handleNo && <ActionButtonNo onClick={onClickNo}>{noTitle || '취소'}</ActionButtonNo>}
-            <ActionButtonDefault onClick={onClickYes}>{yesTitle || '닫기'}</ActionButtonDefault>
-          </ActionButtonContainer>
-        </ModalWrapper>
-      </Background>
-    </ModalPortal>
-  );
-}
+    return (
+      <ModalPortal wrapperId="react-portal-modal-container">
+        <Background ref={ref}>
+          {/* Modal component클릭시 background 컴포넌트 클릭 방지 */}
+          <ModalWrapper onClick={(e) => e.stopPropagation()}>
+            <ModalBody>{children}</ModalBody>
+            <ActionButtonContainer>
+              {handleNo && <ActionButtonNo onClick={onClickNo}>{noTitle || '취소'}</ActionButtonNo>}
+              <ActionButtonDefault onClick={onClickYes}>{yesTitle || '닫기'}</ActionButtonDefault>
+            </ActionButtonContainer>
+          </ModalWrapper>
+        </Background>
+      </ModalPortal>
+    );
+  },
+);
 
 const Background = styled.div`
   z-index: 100;
@@ -82,11 +86,10 @@ const ModalWrapper = styled.div`
   border-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
 
-  min-width: 300px; /* 모달창 기본 사이즈 */
-  @media (max-width: 400px) {
-    min-width: 200px;
+  width: 350px; /* 모달창 기본 사이즈 */
+  @media (max-width: 500px) {
+    width: 80vw;
   }
-  max-width: 80vw;
   max-height: 50vh;
   overflow: auto;
 

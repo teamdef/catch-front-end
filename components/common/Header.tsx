@@ -7,9 +7,8 @@ import { RootState } from 'store';
 import { SideBar } from 'components/common';
 import Router from 'next/router'
 const Header = () => {
-  const { userProfileImage } = useSelector((state: RootState) => state.user);
-  const tempProfileImg =
-    'https://yt3.ggpht.com/Wz_McnxaW8rF695zl22kcIg2QrbQuQleD4Gmw9JG30B5PUSShd6cJ8JBBFvCA6IkX3zj0717jQ=s900-c-k-c0x00ffffff-no-rj';
+  const { profileImg } = useSelector((state: RootState) => state.user);
+  
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
   const [resizeHeader, setResizeHeader] = useState<boolean>(false);
   const goHome = () => {
@@ -23,7 +22,7 @@ const Header = () => {
   };
   // Header 및 DropDownMyMenu 내 유저 프로필 이미지가 존재하지 않을 시 대체 이미지 출력
   const userImgError = (e: any) => {
-    e.target.src = '/assets/img/user.png';
+    e.target.src = '/assets/img/user_default.png';
   };
 
   const handleScroll = useCallback(() => {
@@ -45,12 +44,12 @@ const Header = () => {
             <Logo onClick={goHome}>캐치캐치</Logo>
             <UserProfile onClick={openSideBar}>
               {/* 이미지 없을 시 대체 이미지 보이기 */}
-              <img src={tempProfileImg} onError={userImgError} />
+              <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
             </UserProfile>
           </HeaderContent>
         </HeaderContentWrapper>
       </Wrapper>
-      {sideBarOpen && <SideBar profileImg={tempProfileImg} closeSideBar={closeSideBar} sideBarOpen={sideBarOpen} />}
+      {sideBarOpen && <SideBar closeSideBar={closeSideBar} sideBarOpen={sideBarOpen} />}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback,MouseEvent } from 'react';
+import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallback, MouseEvent } from 'react';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌
 import { Button, Loading } from 'components/common';
 import useInput from 'hooks/useInput';
 import { AppLayout, SmartphoneLayout } from 'components/layout';
+import { AxiosResponse } from 'axios';
 
 interface ThumbnailObjectType {
   imgURL: string;
@@ -24,7 +25,7 @@ const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
-  const { userId } = useSelector((state: RootState) => state.user);
+  const { id } = useSelector((state: RootState) => state.user);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [제작중없음, set제작중없음] = useState<boolean>(false); // 홈화면으로 돌아갑니다 모달
@@ -282,45 +283,50 @@ const Page: NextPageWithLayout = () => {
   // 문제집 생성하기 ( 서버에 저장하기 )
   const publicationProblems = async () => {
     // 문제 저장 조건 체크
-    // if (await checkProblemSet()) {
-    //   setLoading(true);
-    //   const tempUserId = 1234;
-    //   // url 형태의 이미지를 다시 blob 객체로 변환.
-    //   let _problems = problems.map((problem: ProblemTypes) => {
-    //     if (problem.choiceType === 'img') {
-    //       let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-    //       let _choices: File[] = [];
-    //       problem.choices.forEach(async (img) => {
-    //         try {
-    //           const _temp = img as ChoiceImageTypes;
-    //           const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
-    //           _choices.push(_file);
-    //         } catch (e) {
-    //           console.log(e);
-    //         }
-    //       });
-    //       _problem.choices = _choices;
-    //       return _problem;
-    //     } else {
-    //       return problem;
-    //     }
-    //   });
-    //   Promise.all(_problems).then((res) => {
-    //     imageTestApi(res, tempUserId, setTitle).then((res) => {
-    //       console.log(res);
-    //       setLoading(false);
-    //       router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
-    //     });
-    //   });
-    // } else {
-    //   alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
-    // }
-    router.push('/quiz/create/share'); // 문제집 생성 완료 및 공유 화면으로 이동
-  };;
+    if (await checkProblemSet()) {
+      setLoading(true);
+      // url 형태의 이미지를 다시 blob 객체로 변환.
+      let _problems = problems.map((problem: ProblemTypes) => {
+        if (problem.choiceType === 'img') {
+          let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
+          let _choices: File[] = [];
+          problem.choices.forEach(async (img) => {
+            try {
+              const _temp = img as ChoiceImageTypes;
+              const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
+              _choices.push(_file);
+            } catch (e) {
+              console.log(e);
+            }
+          });
+          _problem.choices = _choices;
+          return _problem;
+        } else {
+          return problem;
+        }
+      });
+      Promise.all(_problems).then((res) => {
+        imageTestApi(res, id, setTitle).then((res: AxiosResponse) => {
+          resetProblemSet(); // 문제집 redux 초기화
+          setLoading(false); // 로딩 해제 
+          router.push({
+            pathname: '/quiz/create/share',
+            query: {
+              probSetTitle: setTitle,
+              probSetCount: problems.length,
+              returnThumb: res.data.returnThumb,
+              returnSetId: res.data.returnSetId,
+            },
+          }); // 문제집 생성 완료 및 공유 화면으로 이동
+        });
+      });
+    } else {
+      alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+    }
+  };
 
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
-    console.log("초기");
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
     if (!prevPath || prevPath !== '/quiz/create') {
@@ -339,13 +345,12 @@ const Page: NextPageWithLayout = () => {
         createProblem(); // 새롭게 문제 1개 추가
       }
     }
-    // 문제집 타이틀 값 세팅하기  
+    // 문제집 타이틀 값 세팅하기
     setTempSetTitle(setTitle);
   }, []);
 
   // problemCount가 바뀔 경우, 구슬 클릭
   useEffect(() => {
-    console.log('카운트');
     if (problemCount < 0 || problemCount > 9) {
       return; // 비정상 접근
     }
@@ -367,7 +372,6 @@ const Page: NextPageWithLayout = () => {
   }, [problemCount]);
 
   useEffect(() => {
-    console.log('답안변경');
     // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
     if (choiceType === 'text') {
       if (correctIndex > choicesText.length - 1) {
@@ -382,14 +386,12 @@ const Page: NextPageWithLayout = () => {
   }, [correctIndex, choicesText, choicesImgFile]);
 
   useEffect(() => {
-    console.log('자동저장');
     // 자동 저장
     saveProblem();
   }, [problemTitle, choiceType, correctIndex, choicesText, choicesImgFile]);
 
   useEffect(() => {
-    console.log('문제저장');
-      dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
+    dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
   }, [tempSetTitle]);
 
   return (
@@ -590,7 +592,7 @@ const Page: NextPageWithLayout = () => {
         <ModalFrame
           handleClose={() => set제작중있음(false)}
           handleNo={goQuizCreate}
-          handleYes={() => {}}
+          handleYes={set제작중있음(false)}
           isOpen={제작중있음}
           noTitle={'새롭게'}
           yesTitle={'이어서'}
@@ -607,7 +609,7 @@ const Page: NextPageWithLayout = () => {
       )}
     </>
   );
-};;
+};
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout>
@@ -637,7 +639,6 @@ const Wrapper = styled.div`
   }
 `;
 
-
 const Header = styled.div`
   padding: 1.5rem;
   #logo {
@@ -651,15 +652,15 @@ const Header = styled.div`
   }
   #input-wrapper {
     color: #888;
-    display:flex;
-    justify-content:center;
-    input{
-      text-align:center;
-      border:none;
-      border-bottom:solid 1px #eee;
-      padding-bottom:0.5rem;
-      &:focus{
-        outline:none;
+    display: flex;
+    justify-content: center;
+    input {
+      text-align: center;
+      border: none;
+      border-bottom: solid 1px #eee;
+      padding-bottom: 0.5rem;
+      &:focus {
+        outline: none;
       }
     }
   }

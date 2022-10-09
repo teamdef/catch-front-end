@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { HiLink } from 'react-icons/hi';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
 
 interface shareProps {
   quiz_thumb?: string;
@@ -11,6 +13,8 @@ const SNSShare = ({
   title,
   url,
 }: shareProps) => {
+
+  const { profileImg, nickName } = useSelector((state: RootState) => state.user);
   
   const handleCopyClipBoard = async (text: string) => {
     try {
@@ -32,8 +36,8 @@ const SNSShare = ({
       requestUrl: 'http://localhost:3000/', // 요청 페이지 url 카카오 developer 에 등록된 도메인
       templateId: 83714, // 메시지템플릿 번호 카카오 developer 에 있음
       templateArgs: {
-        PROFILE_IMG: 'https://i.stack.imgur.com/l60Hf.png', // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
-        NICKNAME: '멍어지', // 퀴즈 제작자 닉네임 ${NICKNAME}
+        PROFILE_IMG: profileImg, // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
+        NICKNAME: nickName , // 퀴즈 제작자 닉네임 ${NICKNAME}
         QUIZ_THUMB: quiz_thumb, // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
         TITLE: title, // 퀴즈 제목 텍스트 ${TITLE}
         ROUTE: url, // 퀴즈 공유 링크
