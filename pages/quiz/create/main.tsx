@@ -10,11 +10,11 @@ import imageCompression from 'browser-image-compression'; // 이미지 최적화
 import { MdClose, MdCheck } from 'react-icons/md'; // 아이콘
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai'; // 아이콘
 import { imageTestApi } from 'pages/api/test'; // 이미지 업로드 테스트 api
-import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
 import { Button, Loading } from 'components/common';
 import useInput from 'hooks/useInput';
 import { AppLayout, SmartphoneLayout } from 'components/layout';
 import { AxiosResponse } from 'axios';
+import { useModal } from 'hooks';
 
 interface ThumbnailObjectType {
   imgURL: string;
@@ -28,9 +28,33 @@ const Page: NextPageWithLayout = () => {
   const { id } = useSelector((state: RootState) => state.user);
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [제작중없음, set제작중없음] = useState<boolean>(false); // 홈화면으로 돌아갑니다 모달
-  const [제작중있음, set제작중있음] = useState<boolean>(false); // 이어하시겠습니까 모달
 
+    const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
+      yesTitle: '이어서',
+      noTitle: '새롭게',
+      noAction:()=>{goQuizCreate()},
+      contents: (
+        <div>
+          <div>
+            제작하던<strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
+            <br />
+            문제집이 있습니다
+          </div>
+          <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>이어서 제작하시겠습니까?</div>
+        </div>
+      ),
+    });
+    const [open제작중없음Modal, , Render제작중없음Modal] = useModal({
+      yesTitle: '확인',
+      yesAction: () => { router.push('/quiz/create') },
+      contents: (
+        <div>
+          제작중인 퀴즈가 없어
+          <br />
+          시작 화면으로 돌아갑니다.
+        </div>
+      ),
+    });
   const [tempSetTitle, setTempSetTitle, , tempSetTitleHandler] = useInput<string>(''); // 문제집 제목 변경 전용 input 핸들러
   const [problemTitle, setProblemTitle, problemTitleClear, problemTitleHandler] = useInput<string>(''); // 문제 제목 input 핸들러
 
@@ -329,13 +353,14 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
-    if (!prevPath || prevPath !== '/quiz/create') {
+    if (!prevPath || prevPath !== '/quiz/create/') {
       // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
+      console.log("test")
       if (problems.length !== 0) {
         // 제작 중이던 문제가 있을 경우
-        set제작중있음(true);
+        open제작중있음Modal();
       } else {
-        set제작중없음(true);
+        open제작중없음Modal();
       }
     }
     if (prevPath === '/quiz/create') {
@@ -573,40 +598,8 @@ const Page: NextPageWithLayout = () => {
           </ButtonContainer>
         </div>
       </Wrapper>
-      {제작중없음 && (
-        <ModalFrame
-          handleClose={() => set제작중없음(false)}
-          handleYes={() => {
-            router.push('/quiz/create');
-          }}
-          isOpen={제작중없음}
-        >
-          <div>
-            제작중인 퀴즈가 없어
-            <br />
-            시작 화면으로 돌아갑니다.
-          </div>
-        </ModalFrame>
-      )}
-      {제작중있음 && (
-        <ModalFrame
-          handleClose={() => set제작중있음(false)}
-          handleNo={goQuizCreate}
-          handleYes={set제작중있음(false)}
-          isOpen={제작중있음}
-          noTitle={'새롭게'}
-          yesTitle={'이어서'}
-        >
-          <Modal2>
-            <div>
-              제작하던 <strong>{setTitle}</strong>
-              <br />
-              문제집이 있습니다.
-            </div>
-            <div id="last-modified">이어서 제작 하시겠습니까?</div>
-          </Modal2>
-        </ModalFrame>
-      )}
+      <Render제작중있음Modal />
+      <Render제작중없음Modal />
     </>
   );
 };
@@ -617,17 +610,6 @@ Page.getLayout = function getLayout(page: ReactElement) {
     </AppLayout>
   );
 };
-// 임시 변수명, 제작중있음 모달
-const Modal2 = styled.div`
-  strong {
-    color: #ff4d57;
-  }
-  #last-modified {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #999;
-  }
-`;
 // 기능 가시성을 위한 임시 디자인
 const Wrapper = styled.div`
   height: 100%;

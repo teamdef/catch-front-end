@@ -9,7 +9,7 @@ const initialState: ProblemSetTypes = {
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
 const quizSlice = createSlice({
   name: 'quiz', // 해당 모듈의 이름. store.user 형식으로 추후 접근
-  initialState,
+  initialState, // 초기값 설정 
   reducers: {
     saveProblemSetTitleAction: (
       state: ProblemSetTypes,

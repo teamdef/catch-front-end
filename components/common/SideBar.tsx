@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
 import { kakaoLeaveApi } from 'pages/api/test';
-import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
+import { useModal } from 'hooks';
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -17,10 +17,26 @@ interface SideBarProps {
 const SideBar = ({ closeSideBar }: SideBarProps) => {
   const dispatch = useDispatch();
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
   const { isLoggedin, profileImg, nickName, kakaoUid } = useSelector((state: RootState) => state.user);
   const [animation, setAnimation] = useState('openAnimation');
-  const [leaveModalOpen, setLeaveModalOpen] = useState<boolean>(false);
+  const [openLeaveModal, _, RenderLeaveModal] = useModal({
+    escClickable: true,
+    backgroundClickable: true,
+    yesTitle: '탈퇴',
+    noTitle: '취소',
+    yesAction: () => seviceLeave(),
+    contents: 
+      <div>
+        <div>
+          <strong style={{ color: '#ff4d57' }}>탈퇴하시겠습니까? 😥</strong>
+          <br />
+          지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
+        </div>
+        <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>진행하시겠습니까? ㅜㅜㅜ</div>
+      </div>
+    ,
+  });
+
   const close = () => {
     setAnimation('closeAnimation');
     setTimeout(() => {
@@ -54,18 +70,21 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   }, []);
 
   useEffect(() => {
+    const body = document.querySelector('body') as HTMLBodyElement;
     const handleClickOutside = (e: MouseEvent): void => {
       if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
-        if (!modalRef.current?.contains(e.target as Node)) {
+        // 원래는 DOM 객체에 직접 접근하는건 좋진 않지만... portal로 생성된 모달이라 ㅜ
+        const modal = document.getElementById('react-portal-modal-container');
+        if (!modal?.contains(e.target as Node)) {
           // 모달을 제외한 모든 외부 컴포넌트 클릭시 메뉴를 닫음.
           close();
         }
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    body.addEventListener('mousedown', handleClickOutside);
     // 컴포넌트가 unmount 되었을 때 액션
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      body.removeEventListener('mousedown', handleClickOutside);
     };
   }, [sidebarRef]);
 
@@ -78,7 +97,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
           </div>
           <Profile>
             <div id="profile-img">
-              <img src={profileImg ||'/assets/img/user_default.png'} />
+              <img src={profileImg || '/assets/img/user_default.png'} />
             </div>
             <div id="profile-info-container">
               {isLoggedin ? (
@@ -102,7 +121,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
               공지사항
             </li>
             <li>
-              <img src={"/assets/img/kakao_icon.png"} />
+              <img src={'/assets/img/kakao_icon.png'} />
               카카오톡 오픈채팅 문의
             </li>
             {isLoggedin && (
@@ -114,7 +133,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
                 <li
                   id="out"
                   onClick={() => {
-                    setLeaveModalOpen(true);
+                    openLeaveModal();
                   }}
                 >
                   <HiOutlineEmojiSad />
@@ -128,26 +147,9 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
             <AiOutlineClose size={24} />
           </CloseButton>
         </Wrapper>
-        {leaveModalOpen && (
-          <ModalFrame
-            ref={modalRef}
-            handleClose={() => setLeaveModalOpen(false)}
-            handleNo={() => {}}
-            handleYes={seviceLeave}
-            isOpen={leaveModalOpen}
-            noTitle={'취소'}
-            yesTitle={'탈퇴'}
-          >
-            <Modal2>
-              <div>
-                <strong>탈퇴하시겠습니까? 😥</strong>
-                <br />
-                지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
-              </div>
-              <div id="last-modified">진행하시겠습니까? ㅜㅜㅜ</div>
-            </Modal2>
-          </ModalFrame>
-        )}
+
+        <RenderLeaveModal />
+        
       </Background>
     </>
   );

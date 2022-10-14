@@ -24,6 +24,19 @@ const createNoopStorage = () => {
   };
 };
 
+
+
+// redux-persist v6 이후에는 react-native의 경우 asyncstorage를 쓰는것이 맞고,
+// redux-persist 에서 noop 에러가 발생한다면 윈도우 객체의 존재 여부를 파악하여 알맞는 스토리지를 생성하고 대입할 것.
+
+const storage = typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage: storage, // react-persist v6 이후에는 AsyncStorage를 써야된다던데..
+};
+
 // state의 자료형을 뭘로 해야 하는가? RootState ... ?
 const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
   switch (action.type) {
@@ -38,16 +51,6 @@ const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
     }
   }
 };
-
-const storage = typeof window !== 'undefined' ? createWebStorage('local') : createNoopStorage();
-const persistConfig = {
-  key: 'root',
-  version: 1,
-  storage: storage, // react-persist v6 이후에는 AsyncStorage를 써야된다던데..
-};
-
-// redux-persist v6 이후에는 react-native의 경우 asyncstorage를 쓰는것이 맞고,
-// redux-persist 에서 noop 에러가 발생한다면 윈도우 객체의 존재 여부를 파악하여 알맞는 스토리지를 생성하고 대입할 것.
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

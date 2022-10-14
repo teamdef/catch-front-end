@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import ModalFrame from 'components/modal/ModalFrame';
+import { useModal } from 'hooks';
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
@@ -18,17 +18,22 @@ import 'swiper/css/pagination';
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
   const { isLoggedin } = useSelector((state: RootState) => state.user);
-  const [loginModal, setLoginModal] = useState<boolean>(false);
+  const [openLoginModal, _, RenderLoginModal] = useModal({
+    backgroundClickable: true,
+    yesTitle: '로그인',
+    noTitle: '닫기',
+    yesAction: () => router.push('/'),
+    contents: <div>로그인이 필요한 서비스입니다.</div>,
+  });
 
+  const checkLogin = () => {
+    isLoggedin ? goQuizCreateIndex() : goLogin();
+  };
   const goQuizCreateIndex = () => {
-    if (isLoggedin) {
-      router.push('/quiz/create');
-    } else {
-      setLoginModal(true);
-    }
+    router.push('/quiz/create');
   };
   const goLogin = () => {
-    router.push('/');
+    openLoginModal();
   };
   return (
     <>
@@ -58,7 +63,7 @@ const Home: NextPageWithLayout = () => {
             <SwiperSlide>
               <CreateCard>
                 <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
-                <button id="create-btn" onClick={goQuizCreateIndex}>
+                <button id="create-btn" onClick={checkLogin}>
                   새로 만들기
                 </button>
               </CreateCard>
@@ -106,18 +111,8 @@ const Home: NextPageWithLayout = () => {
           </ImageCardContainer>
         </RecentQuizList>
       </Background>
-      {loginModal && (
-        <ModalFrame
-          handleClose={() => setLoginModal(false)}
-          handleNo={() => setLoginModal(false)}
-          handleYes={goLogin}
-          isOpen={loginModal}
-          noTitle={'닫기'}
-          yesTitle={'로그인'}
-        >
-          <div>로그인이 필요한 서비스 입니다.</div>
-        </ModalFrame>
-      )}
+
+      <RenderLoginModal />
     </>
   );
 };
