@@ -11,7 +11,9 @@ import 'react-circular-progressbar/dist/styles.css';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
+  // 해당 문제를 푼 사람 (결과를 받을 사람)의 닉네임
   const new_user: string = '주호민';
+  // 해당 문제를 푼 사람의 점수
   const new_user_score: number = 4;
 
   // 더미 데이터

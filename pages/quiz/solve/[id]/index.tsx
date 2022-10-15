@@ -2,21 +2,41 @@ import styled from 'styled-components';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'components/common';
+import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
+import { RootState } from 'store';
+import { saveSolveProblemsAction, saveSolveProblemSetAction } from 'store/quiz_solve'
 
 // quiz/solve/1
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { solveSetTitle } = useSelector((state: RootState) => state.solve);
+  const { solveProblems } = useSelector((state: RootState) => state.solve);
   let { id } = router.query;
-
-  // 더미 데이터
-  const props = {
-    id: 1,
-    title: '내가 좋아하는 것들',
-    count: 10,
-    maker: '진현우',
-  };
+  console.log(id);
+  // id 값이 변경될 시
+  useEffect(() => {
+    async function getQuiz() {
+      try {
+        const response = await axios.get(
+          `https://jh441bonx0.execute-api.ap-northeast-2.amazonaws.com/Stage/loadprobset/${id}`,
+        );
+        dispatch(saveSolveProblemSetAction({solveSetTitle : response.data[0].set_title}));
+        dispatch(saveSolveProblemsAction({solveProblems : response.data[0].prob}));
+        console.log(solveProblems);
+        // 정답 배열 생성
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getQuiz();
+  }, [id]);
+  console.log(solveSetTitle);
 
   return (
     <Container>
@@ -24,13 +44,23 @@ const Page: NextPageWithLayout = () => {
       <QuizInfo>
         <Circle>
           <span>
-            총 <em>{props.count}</em> 문제
+            총 <em>{solveProblems.length}</em> 문제
           </span>
         </Circle>
-        <p>"{props.title}"</p>
-        <span>출제자 : {props.maker}</span>
+        <p>"{solveSetTitle}"</p>
+        <span>출제자 : {}</span>
       </QuizInfo>
-      <Button width="250px" height="55px" fontSize="1.4rem" bgColor="#ff4d57" fontColor="#fff">
+      <Button
+        width="250px"
+        height="55px"
+        fontSize="1.4rem"
+        bgColor="#ff4d57"
+        fontColor="#fff"
+        id="create-btn"
+        onClick={() => {
+          router.push(`/quiz/solve/${id}/main`);
+        }}
+      >
         시작하기
       </Button>
     </Container>
@@ -41,15 +71,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #fff;
-  padding-top: 20%;
 `;
 const Logo = styled.div`
   position: relative;
   display: block;
   font-size: 2.5rem;
+  padding-top: 5%;
   font-family: 'RixInooAriDuriR';
   color: #ff4d57;
 `;
@@ -59,7 +90,6 @@ const QuizInfo = styled.div`
   flex-direction: column;
   align-items: center;
   font-weight: bold;
-  padding: 20% 0;
   > p {
     color: #ff4d57;
     font-size: 1.5rem;

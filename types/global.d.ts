@@ -20,3 +20,22 @@ interface ProblemSetTypes {
   setTitle: string; // 문제집 제목
   problems: ProblemTypes[]; // 문제 배열
 }
+
+
+//----------------------풀이------------------------
+// SolveProblemTypes - 문제(풀이용) 정보
+interface SolveProblemTypes {
+  solveProblemTitle: string; // 문제 제목
+  solveChoices: string[]; // 객관식 항목 배열
+}
+interface SolveAnswerTypes {
+  solveAnswer: string; // 정답 이름
+  solveAnswerId: string; // 정답 id 값
+}
+// SolveProblemSetTypes - 문제집(풀이용) 정보
+interface SolveProblemSetTypes {
+  solveSetTitle: string; // 문제집 제목
+  solveProblems: SolveProblemTypes[]; // 문제 배열
+  solveAnswers: SolveAnswerTypes[];
+}
+// /------------------------------------------------
