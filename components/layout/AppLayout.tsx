@@ -15,8 +15,9 @@ const Centering = styled.div`
   justify-content: center;
 `;
 const FixedWidth = styled.div`
-  max-width:500px;
+  max-width: 500px;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;;
+  background-color: #fff;
 `;
 export default AppLayout;

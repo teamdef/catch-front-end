@@ -1,4 +1,4 @@
-import axios from 'utils/customAxios';
+import { authAxios, notAuthAxios } from 'utils/customAxios';
 import Cookies from 'universal-cookie';
 // react-cookies는 범용성이 낮음. react-cookie 업그레이드 버전인 universal-cookie
 const HTTP_ONLY = process.env.NODE_ENV !== 'development';
@@ -9,7 +9,7 @@ const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 const saveToken = (accessToken: string): Promise<boolean> =>
   new Promise<boolean>((resolve, reject) => {
     // 모든 axios 요청 헤더에 token정보를 저장해야 함
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+    authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
 
     const cookies = new Cookies(); // 쿠키 생성
 
@@ -26,15 +26,18 @@ const saveToken = (accessToken: string): Promise<boolean> =>
     resolve(true);
   });
 
-const deleteToken = ()=> {
-    delete axios.defaults.headers.common['access_token']; // axios 요청 헤더에서 token정보 삭제
-    const cookies = new Cookies(); // 쿠키 생성
-    const delete_time = new Date();
-    delete_time.setDate(Date.now() - 1); // 현재 이전의 날짜로 만료일자를 설정하면 쿠키가 바로 만료된다.
+const deleteToken = () => {
+  delete authAxios.defaults.headers.common['Authorization']; // axios 요청 헤더에서 token정보 삭제
+  const cookies = new Cookies(); // 쿠키 생성
+  const delete_time = new Date();
+  delete_time.setDate(Date.now() - 1); // 현재 이전의 날짜로 만료일자를 설정하면 쿠키가 바로 만료된다.
 
-  cookies.remove('access_token');
-  
-}
+  cookies.remove('Authorization');
+};
 
+const getCookie = (name: string) => {
+  const cookies = new Cookies(); // 쿠키 생성
+  return cookies.get(name);
+};;
 
-export { saveToken, deleteToken};
+export { saveToken, deleteToken, getCookie };

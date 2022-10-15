@@ -1,4 +1,4 @@
-import Document, { Html,Head, Main, NextScript, DocumentContext } from 'next/document';
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
 export default class MyDocument extends Document {
@@ -25,14 +25,16 @@ export default class MyDocument extends Document {
       sheet.seal();
     }
   }
-
   render() {
     return (
       <Html>
-        <Head />
+        <Head>
+          <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+        </Head>
         <body>
           <Main />
           <NextScript />
+          <div id="modal-root" />
         </body>
       </Html>
     );

@@ -1,10 +1,14 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card, Navbar } from 'components/common';
+import { Card, QuizCard } from 'components/common';
 import styled from 'styled-components';
-import { RiHeart3Fill } from 'react-icons/ri';
+import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import ModalFrame from 'components/modal/ModalFrame';
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
@@ -13,154 +17,150 @@ import 'swiper/css/pagination';
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
+  const { isLoggedin } = useSelector((state: RootState) => state.user);
+  const [loginModal, setLoginModal] = useState<boolean>(false);
+
+  const goQuizCreateIndex = () => {
+    if (isLoggedin) {
+      router.push('/quiz/create');
+    } else {
+      setLoginModal(true);
+    }
+  };
+  const goLogin = () => {
+    router.push('/');
+  };
   return (
     <>
       <Background>
         <MyQuizList>
-          <Swiper
-            spaceBetween={0}
-            slidesPerView={1}
-            pagination={true}
-            modules={[Pagination]}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
-          >
+          <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
+            {isLoggedin && (
+              <SwiperSlide>
+                <MyQuizCard
+                  url={'https://press.com.mx/wp-content/uploads/2022/01/licenciatura-en-psicologi%CC%81a-1140x641.png'}
+                >
+                  <div id="quiz-title">팡머가 좋아하는 것들</div>
+                  <div id="quiz-info">참여 19 · 평균점수 7.7점</div>
+                  <div id="quiz-detail-btn-wrapper">
+                    <button
+                      id="quiz-detail-btn"
+                      onClick={() => {
+                        router.push('/quiz/detail/q');
+                      }}
+                    >
+                      자세히 보기
+                    </button>
+                  </div>
+                </MyQuizCard>
+              </SwiperSlide>
+            )}
             <SwiperSlide>
-              <CustomCard>
-                <CreateCard>
-                  <span>생성된 퀴즈가 없어요 !</span>
-                  <button
-                    id="create-btn"
-                    onClick={() => {
-                      router.push('/quiz/start');
-                    }}
-                  >
-                    새로 만들기
-                  </button>
-                </CreateCard>
-              </CustomCard>
-            </SwiperSlide>
-            <SwiperSlide>
-              <CustomCard>
-                <CreateCard>
-                  <span>생성된 퀴즈가 없어요 !</span>
-                  <button
-                    id="create-btn"
-                    onClick={() => {
-                      router.push('/quiz/start');
-                    }}
-                  >
-                    새로 만들기
-                  </button>
-                </CreateCard>
-              </CustomCard>
+              <CreateCard>
+                <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
+                <button id="create-btn" onClick={goQuizCreateIndex}>
+                  새로 만들기
+                </button>
+              </CreateCard>
             </SwiperSlide>
           </Swiper>
         </MyQuizList>
 
-        <PopularQuizList>
-          <div id="title">인기 문제집 (❁´◡`❁)</div>
+        <RecentQuizList>
+          <div id="title">
+            <div>최근에 생성된 퀴즈에요! 🐣</div>
+            <Link passHref href="/recent">
+              <a>
+                전체 목록
+                <IoIosArrowForward />
+              </a>
+            </Link>
+          </div>
           <ImageCardContainer>
-            <ImageCard
-              url={
-                'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
-              }
-            >
-              <div id="like">
-                <RiHeart3Fill />
-                <div id="count">12</div>
-              </div>
-              <div>
-                <div id="card-title">Do You Know Me?</div>
-                <div id="card-sub-title">당신의 친구들은 당신에 대해서 얼마나 알고 있을까요?</div>
-              </div>
-            </ImageCard>
-            <ImageCard
-              url={'https://press.com.mx/wp-content/uploads/2022/01/licenciatura-en-psicologi%CC%81a-1140x641.png'}
-            >
-              <div id="like">
-                <RiHeart3Fill />
-                <div id="count">12</div>
-              </div>
-              <div>
-                <div id="card-title">MBTI 기반 행동 맞추기</div>
-                <div id="card-sub-title">나는 이런 상황에 이런 행동을 한다!</div>
-              </div>
-            </ImageCard>
+            <QuizCard
+              userName="전하영"
+              quizDate="6일전"
+              quizTitle="메이플스토리 몬스터 퀴즈"
+              quizCount={10}
+              quizPlay={365}
+              quizRoute="/home"
+              quizThumbnail="https://t1.daumcdn.net/cfile/tistory/205419184B3C998139"
+            />
+            <QuizCard
+              userName="배광호"
+              quizDate="12일전"
+              quizTitle="haha ha 고양이 이름 맞추기"
+              quizCount={6}
+              quizPlay={111}
+              quizRoute="/home"
+              quizThumbnail="https://thumbs.gfycat.com/PoshBountifulAndalusianhorse-size_restricted.gif"
+            />
+            <QuizCard
+              userName="진현우"
+              quizDate="14일전"
+              quizTitle="팡머가 좋아하는 것들"
+              quizCount={7}
+              quizPlay={19}
+              quizRoute="/home"
+            />
           </ImageCardContainer>
-        </PopularQuizList>
-        <Navbar></Navbar>
+        </RecentQuizList>
       </Background>
+      {loginModal && (
+        <ModalFrame
+          handleClose={() => setLoginModal(false)}
+          handleNo={() => setLoginModal(false)}
+          handleYes={goLogin}
+          isOpen={loginModal}
+          noTitle={'닫기'}
+          yesTitle={'로그인'}
+        >
+          <div>로그인이 필요한 서비스 입니다.</div>
+        </ModalFrame>
+      )}
     </>
   );
 };
 
 const Background = styled.div`
   padding-top: 3rem;
-  padding-bottom: 80px;
   position: relative;
+  background-color: #fff6f7;
 `;
 
-const PopularQuizList = styled.div`
+const RecentQuizList = styled.div`
   padding: 1rem;
+  background-color: #fff;
   #title {
-    padding: 1rem 0.5rem 1rem 0.5rem;
-    color: #000;
+    padding: 1rem 0.5rem 2rem 0.5rem;
+    color: #595959;
     font-weight: bold;
     font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    a {
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      color: #ff4d57;
+      svg {
+        margin-left: 4px;
+      }
+    }
   }
 `;
 const ImageCardContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: inherit;
   flex-wrap: nowrap;
+  align-items: center;
+  width: 95%;
+  margin: 0 auto;
 `;
 interface ImageCardProps {
   url?: string;
 }
-
-const ImageCard = styled.div<ImageCardProps>`
-  #like {
-    display: flex;
-    align-items: center;
-    justify-content: right;
-  }
-  #card-title {
-    font-size: 20px;
-    font-size: bold;
-  }
-  #card-sub-title {
-    font-size: 12px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: white;
-  width: 240px;
-  height: 10rem;
-  border-radius: 12px;
-  padding: 1rem;
-  background: linear-gradient(
-      to bottom,
-      rgba(20, 20, 20, 0) 10%,
-      rgba(20, 20, 20, 0.25) 25%,
-      rgba(20, 20, 20, 0.5) 50%,
-      rgba(20, 20, 20, 0.75) 75%,
-      rgba(20, 20, 20, 1) 100%
-    ),
-    url(${(props) => props.url});
-  margin-right: 0.5rem;
-  background-size: cover;
-  background-repeat: no-repeat;
-  &:last-child {
-    margin: 0;
-  }
-  transition: all 0.1s ease-in-out;
-  &:hover {
-    transform: scale(1.025);
-  }
-`;
 
 const MyQuizList = styled.div`
   #title {
@@ -174,41 +174,99 @@ const MyQuizList = styled.div`
   .swiper-pagination {
     position: relative;
     .swiper-pagination-bullet {
-      width: 10px;
-      height: 10px;
+      width: 1rem;
+      height: 1rem;
+      &:last-child {
+        background-color: #ffa5aa;
+        position: relative;
+        &:after {
+          content: '+';
+          color: #fff;
+          font-size: 17px;
+          position: absolute;
+          top: -5px;
+          right: 3px;
+        }
+      }
     }
     .swiper-pagination-bullet-active {
       background-color: #ff4d57;
     }
   }
 `;
+
 const CustomCard = styled(Card)`
+  height: 18rem;
+  border-radius: 30px;
   margin: 0 auto;
-  width: 70%;
+  width: 90%;
+  @media (max-width: 400px) {
+    width: 95%;
+    height: 15rem;
+  }
   display: flex;
+`;
+const CreateCard = styled(CustomCard)`
+  text-align: center;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
-  border-radius: 30px;
-  height: 20rem;
-`;
-const CreateCard = styled.div`
-  text-align: center;
   span {
     position: relative;
     display: block;
-    color: #777;
+    color: #888;
+    font-size: 18px;
   }
   button {
-    margin: 50px 0;
-    padding: 10px 20px;
     background-color: #ff4d57;
     border: none;
-    border-radius: 20px;
-    font-size: 1.2rem;
-    font-weight: bold;
+    border-radius: 2rem;
+    font-size: 1rem;
     color: #fff;
+    font-weight: 500;
+    padding: 0.75rem 1.75rem 0.75rem 1.75rem;
+    margin-top: 50px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+const MyQuizCard = styled(CustomCard)<ImageCardProps>`
+  background: linear-gradient(
+      to bottom,
+      rgba(20, 20, 20, 0) 10%,
+      rgba(20, 20, 20, 0.1) 25%,
+      rgba(20, 20, 20, 0.25) 50%,
+      rgba(20, 20, 20, 0.5) 75%,
+      rgba(20, 20, 20, 0.75) 100%
+    ),
+    url(${(props) => props.url});
+  background-size: cover;
+
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+  padding: 1.5rem;
+  #quiz-title {
+    font-size: 24px;
+    font-weight: 500;
+  }
+  #quiz-info {
+    font-weight: 300;
+  }
+  #quiz-detail-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    button {
+      border-radius: 20px;
+      border: none;
+      padding: 0.5rem 1rem 0.5rem 1rem;
+      color: #595959;
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 `;
 Home.getLayout = function getLayout(page: ReactElement) {
