@@ -1,17 +1,76 @@
 import type { ReactElement, ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, QuizCard } from 'components/common';
+import { Title, QuizCard, SkeletonQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import { RecentQuizListApi } from 'pages/api/test';
+
+interface recentQuizType {
+  created_at: string;
+  id: string;
+  profile_img: string;
+  nickname: string;
+  set_title: string;
+  solverCnt: number;
+  thumbnail: string | null;
+}
 const Page: NextPageWithLayout = () => {
   const [dateSort, setDateSort] = useState<boolean>(true); // true 최신순, false 오래된순
+  const [recentQuizList, setRecentQuizList] = useState<recentQuizType[] | null>(null);
 
   const dateSortHandler = () => {
     setDateSort(!dateSort);
   };
+
+  const timeForToday = (date: string) => {
+    const today = new Date();
+    const timeValue = new Date(date);
+
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+      return `${betweenTime}분전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
+
+    if (betweenTimeDay < 365) {
+      return `${betweenTimeDay}일전`;
+    }
+
+    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
+    if (betweenTimeMonth < 11) {
+      return `${betweenTimeMonth}달전`;
+    }
+
+    const value = today.toISOString().substring(0, 10);
+    return value;
+  };
+
+  const getRecentQuizList = async () => {
+    const res = await RecentQuizListApi();
+    console.log(res.data)
+    let _quizList = res.data.map((quiz: recentQuizType) => {
+      let returnObj = { ...quiz };
+      returnObj.created_at = timeForToday(quiz.created_at);
+      returnObj.thumbnail = quiz.thumbnail === '' ? null : quiz.thumbnail;
+      returnObj.solverCnt = Number(quiz.solverCnt);
+      return returnObj;
+    });
+    setRecentQuizList(_quizList);
+  };
+
+  useEffect(() => {
+    getRecentQuizList();
+  }, []);
   return (
     <>
       <Title title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
@@ -37,7 +96,35 @@ const Page: NextPageWithLayout = () => {
           </SearchBar>
         </OptionWrapper>
         <ListWrapper>
-          <QuizCard
+          {recentQuizList ? (
+            recentQuizList.map((quiz) => {
+              return (
+                <QuizCard
+                  key={quiz.id}
+                  userName={quiz.nickname}
+                  userProfileImg={quiz.profile_img}
+                  quizDate={quiz.created_at}
+                  quizTitle={quiz.set_title}
+                  quizCount={0}
+                  quizPlay={quiz.solverCnt}
+                  quizRoute={`/quiz/solve/${quiz.id}`}
+                  quizThumbnail={quiz.thumbnail}
+                />
+              );
+            })
+          ) : (
+            <>
+              <SkeletonQuizCard isthumb={true} />
+              <SkeletonQuizCard isthumb={false} />
+              <SkeletonQuizCard isthumb={true} />
+              <SkeletonQuizCard isthumb={false} />
+              <SkeletonQuizCard isthumb={false} />
+              <SkeletonQuizCard isthumb={true} />
+              <SkeletonQuizCard isthumb={false} />
+            </>
+          )}
+
+          {/* <QuizCard
             userName="전하영"
             quizDate="6일전"
             quizTitle="메이플스토리 몬스터 퀴즈"
@@ -62,6 +149,7 @@ const Page: NextPageWithLayout = () => {
             quizCount={7}
             quizPlay={19}
             quizRoute="/home"
+            quizThumbnail={null}
           />
           <QuizCard
             userName="장원석"
@@ -71,7 +159,7 @@ const Page: NextPageWithLayout = () => {
             quizPlay={44}
             quizRoute="/home"
             quizThumbnail="http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/08/25/5H2SPdjC8oEh637654501997865235.jpg"
-          />
+          /> */}
         </ListWrapper>
       </Wrapper>
     </>
@@ -112,7 +200,7 @@ const OptionWrapper = styled.div`
   margin: 0 auto;
   margin-top: 1.5rem;
   display: flex;
-  width:95%;
+  width: 95%;
 `;
 const ListWrapper = styled.div`
   display: flex;
@@ -144,4 +232,5 @@ const SearchBar = styled.div`
     margin-left: 0.25rem;
   }
 `;
+
 export default Page;

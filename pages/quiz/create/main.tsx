@@ -321,19 +321,8 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
-    const currentPath = storage.getItem('currentPath');
-    // if (!prevPath || prevPath !== '/quiz/create/') {
-    //   // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
-    //   if (problems.length !== 0) {
-    //     // 제작 중이던 문제가 있을 경우
-    //     open제작중있음Modal();
-    //   } else {
-    //     open제작중없음Modal();
-    //   }
-    // }
-    // 4페이지 통해 접근하지 않았을 경우
-    // prevPath가 /quiz/create/가 아니면 모든 경우 체크
-    if (prevPath !== '/quiz/create/') {
+
+    if (!prevPath && prevPath !== '/quiz/create/') {
       if (problems.length !== 0) {
         // 제작 중이던 문제가 있을 경우
         open제작중있음Modal();
@@ -341,15 +330,6 @@ const Page: NextPageWithLayout = () => {
         open제작중없음Modal();
       }
     }
-
-    /*
-    if (prevPath === '/quiz/create') {
-      // /quiz/create 를 통해 넘어왔을 경우
-      if (problems.length === 0) {
-        // 초기 상태일 경우
-        createProblem(); // 새롭게 문제 1개 추가
-      }
-    }*/
     // 문제집 타이틀 값 세팅하기
     setTempSetTitle(setTitle);
     if (problems) {

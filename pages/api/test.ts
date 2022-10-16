@@ -67,4 +67,9 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
     resolve(res2.status);
   });
 };
-export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi };
+
+const RecentQuizListApi = ():Promise<AxiosResponse> => { 
+  return notAuthAxios.get('https://8anald9349.execute-api.ap-northeast-2.amazonaws.com/Stage/recentprobset');
+
+}
+export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi, RecentQuizListApi };
