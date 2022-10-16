@@ -19,8 +19,7 @@ import { VscChromeClose } from 'react-icons/vsc';
 
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper';
-import { EffectCards } from 'swiper';
+import { Pagination , EffectFade} from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-cards';

@@ -39,6 +39,9 @@ const Home: NextPageWithLayout = () => {
     <>
       <Background>
         <MyQuizList>
+          <div id="title">
+            <div>내가 만든 퀴즈들 🐻‍❄️</div>
+          </div>
           <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
             {isLoggedin && (
               <SwiperSlide>
@@ -118,7 +121,6 @@ const Home: NextPageWithLayout = () => {
 };
 
 const Background = styled.div`
-  padding-top: 3rem;
   position: relative;
   background-color: #fff6f7;
 `;
@@ -158,13 +160,19 @@ interface ImageCardProps {
 }
 
 const MyQuizList = styled.div`
+  margin-bottom: 1rem;
+  padding-top: 2rem;
+  background-color: #fff;
   #title {
-    padding: 1rem 0.5rem 1rem 0.5rem;
-    color: white;
+    padding: 0 0 2rem 1.5rem;
+    color: #595959;
+    font-weight: bold;
     font-size: 18px;
+    display: flex;
+    justify-content: space-between;
   }
   .swiper-wrapper {
-    padding-bottom: 25px;
+    padding-bottom: 2rem;
   }
   .swiper-pagination {
     position: relative;

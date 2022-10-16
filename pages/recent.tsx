@@ -5,8 +5,9 @@ import { AppLayout, HeaderLayout } from 'components/layout';
 import { Title, QuizCard, SkeletonQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
-import { FaSort,FaSortUp, FaSortDown } from 'react-icons/fa';
+import { FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
 import { RecentQuizListApi } from 'pages/api/test';
+import {useInput} from 'hooks'
 
 interface recentQuizType {
   created_at: string;
@@ -20,6 +21,7 @@ interface recentQuizType {
 const Page: NextPageWithLayout = () => {
   const [dateSort, setDateSort] = useState<boolean>(true); // true 최신순, false 오래된순
   const [recentQuizList, setRecentQuizList] = useState<recentQuizType[] | null>(null);
+  const [searchKeyword,,searchKeywordClear,searchKeywordHandler] = useInput<string>('');
 
   const dateSortHandler = () => {
     setDateSort(!dateSort);
@@ -57,7 +59,7 @@ const Page: NextPageWithLayout = () => {
 
   const getRecentQuizList = async () => {
     const res = await RecentQuizListApi();
-    console.log(res.data)
+    console.log(res.data);
     let _quizList = res.data.map((quiz: recentQuizType) => {
       let returnObj = { ...quiz };
       returnObj.created_at = timeForToday(quiz.created_at);
@@ -92,7 +94,7 @@ const Page: NextPageWithLayout = () => {
 
           <SearchBar>
             <MdOutlineSearch size={20} />
-            <input type="text" placeholder="문제집 명, 출제자 명 ..." />
+            <input type="text" value={searchKeyword} onChange={searchKeywordHandler} placeholder="문제집 명, 출제자 명 ..." />
           </SearchBar>
         </OptionWrapper>
         <ListWrapper>
