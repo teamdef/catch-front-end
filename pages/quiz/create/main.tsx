@@ -94,49 +94,65 @@ const Page: NextPageWithLayout = () => {
     temp.push(obj);
     setProblemList(temp);
   };
-  const deleteProblem = (problemIndex: number) => {
-    let temp = [...problemList];
-    temp.splice(problemIndex, 1);
-    setProblemList(temp);
-  };
+
+  const deleteProblem = useCallback(
+    (problemIndex: number) => {
+      let temp = [...problemList];
+      temp.splice(problemIndex, 1);
+      setProblemList(temp);
+    },
+    [problemList],
+  );
+
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    console.log(value, name, index);
     const problem = { ...problemList[index], [name]: value };
     let temp = [...problemList];
     temp[index] = problem;
     setProblemList(temp);
   };
 
-  const choiceTypeHandler = (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
-    const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    const problem = { ...problemList[problemIndex], [name]: value };
-    let temp = [...problemList];
-    if (value === 'img') {
-      const _arr: ChoiceImageTypes = [];
-      temp[problemIndex].choices = _arr;
+  const setChoiceType = (problemIndex: number, choiceType: 'img' | 'text') => {
+    let temp = JSON.parse(JSON.stringify(problemList));
+    if (problemList[problemIndex].choices.length !== 0) {
+      if (choiceType === 'img') {
+        temp[problemIndex].choices = [] as ChoiceImageTypes[];
+      } else {
+        temp[problemIndex].choices = [] as ChoiceTextTypes[];
+      }
     }
-  };
-
-  const setCorrectIndex = (problemIndex: number, choiceIndex: number) => {
-    let temp = [...problemList];
-    temp[problemIndex].correctIndex = choiceIndex;
+    temp[problemIndex].choiceType = choiceType;
     setProblemList(temp);
   };
 
-  const addChoiceText = (problemIndex: number) => {
-    let temp = [...problemList];
-    const obj: ChoiceTextTypes = {
-      choiceText: textChoiceInput,
-    };
-    temp[problemIndex].choices.push(obj);
-    setProblemList(temp);
-    textChoiceInputClear();
-  };
+  const setCorrectIndex = useCallback(
+    (problemIndex: number, choiceIndex: number) => {
+      let temp = JSON.parse(JSON.stringify(problemList));
+      temp[problemIndex].correctIndex = choiceIndex;
+      setProblemList(temp);
+    },
+    [problemList],
+  );
+
+  const addChoiceText = useCallback(
+    (problemIndex: number) => {
+      let temp = JSON.parse(JSON.stringify(problemList));
+      const obj: ChoiceTextTypes = {
+        choiceText: textChoiceInput,
+      };
+      temp[problemIndex].choices.push(obj);
+      setProblemList(temp);
+      textChoiceInputClear();
+    },
+    [textChoiceInput],
+  );
 
   const deleteChoice = (problemIndex: number, choiceIndex: number) => {
-    let temp = [...problemList];
+    let temp = JSON.parse(JSON.stringify(problemList));
     temp[problemIndex].choices.splice(choiceIndex, 1);
+    if (temp[problemIndex].correctIndex > temp[problemIndex].choices.length - 1) {
+      temp[problemIndex].correctIndex = 0;
+    }
     setProblemList(temp);
   };
 
@@ -146,10 +162,11 @@ const Page: NextPageWithLayout = () => {
   // 주사위 버튼 누르면 실행되는 함수
   const randomProblemTitle = (problemIndex: number) => {
     const randomTitle: string = data.questions[Math.floor(Math.random() * data.questions.length)];
-    let temp = [...problemList];
+    let temp = JSON.parse(JSON.stringify(problemList));
+    // spread 연산자와 Object.assign은 1depth 까지만 깊은 복사가 되며, 2depth 부터는 얕은 복사가 된다.
+    // 완전히 복사하기 위해서는 JSON 을 이용하면 된다
     temp[problemIndex].problemTitle = randomTitle;
-    console.log(temp);
-    //setProblemList(temp);
+    setProblemList(temp);
   };
 
   // 이미지 압축을 위한 옵션
@@ -178,8 +195,8 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
-  // 동일 파일이 재업로드 되지 않는 오류 해결을 위한 함수
-  const onImgClick = (e: any) => {
+  // onChange 이벤트 발생을 위해서
+  const onClickChange = (e: any) => {
     e.target.value = null;
   };
   // 이미지 onChange 이벤트 처리 함수
@@ -190,21 +207,16 @@ const Page: NextPageWithLayout = () => {
     // 이미지가 있을 경우
     if (files && files[0]) {
       // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
-
+      console.log(files.length);
       if (files.length + problemList[problemIndex].choices.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
 
       let _choicesImgThumbnail: ThumbnailObjectType[] = [];
-      // let _choicesImgFile: File[] = [];
 
       // PromiseAll 로 개선하기
       await Array.from(files).reduce(async (promise, file) => {
-        // This line will wait for the last async function to finish.
-        // The first iteration uses an already resolved Promise
-        // so, it will immediately continue.
-
         await promise; // 이전 작업이 종료될때 까지 대기
         await loadImage(_URL.createObjectURL(file)).then(async (img) => {
           let _imgFile;
@@ -223,9 +235,6 @@ const Page: NextPageWithLayout = () => {
             }); // 압축 이미지 대입
           }
 
-          // 이미지 파일 객체저장
-          // _choicesImgFile.push(_imgFile);
-
           // resize된 , 또는 압축되지 않은 이미지 파일의 썸네일 url을 생성함.
           const _imgURL = await imageCompression.getDataUrlFromFile(_imgFile);
           let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _imgFile.name };
@@ -235,9 +244,8 @@ const Page: NextPageWithLayout = () => {
         });
       }, Promise.resolve());
 
-      let temp = [...problemList];
+      let temp = JSON.parse(JSON.stringify(problemList));
       let _choices = [...temp[problemIndex].choices, ..._choicesImgThumbnail];
-      console.log(_choices);
       temp[problemIndex].choices = _choices;
       setProblemList(temp);
     }
@@ -270,7 +278,7 @@ const Page: NextPageWithLayout = () => {
     if (await checkProblemSet()) {
       setLoading(true);
       // url 형태의 이미지를 다시 blob 객체로 변환.
-      let _problems = problems.map((problem: ProblemTypes) => {
+      let _problems = problemList.map((problem: ProblemTypes) => {
         if (problem.choiceType === 'img') {
           let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
           let _choices: File[] = [];
@@ -313,8 +321,19 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
-    if (!prevPath || prevPath !== '/quiz/create/') {
-      // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
+    const currentPath = storage.getItem('currentPath');
+    // if (!prevPath || prevPath !== '/quiz/create/') {
+    //   // /quiz/create 가 아닌 직접URL 또는 외부 이탈 후 재접속 하였음
+    //   if (problems.length !== 0) {
+    //     // 제작 중이던 문제가 있을 경우
+    //     open제작중있음Modal();
+    //   } else {
+    //     open제작중없음Modal();
+    //   }
+    // }
+    // 4페이지 통해 접근하지 않았을 경우
+    // prevPath가 /quiz/create/가 아니면 모든 경우 체크
+    if (prevPath !== '/quiz/create/') {
       if (problems.length !== 0) {
         // 제작 중이던 문제가 있을 경우
         open제작중있음Modal();
@@ -322,6 +341,7 @@ const Page: NextPageWithLayout = () => {
         open제작중없음Modal();
       }
     }
+
     /*
     if (prevPath === '/quiz/create') {
       // /quiz/create 를 통해 넘어왔을 경우
@@ -336,22 +356,6 @@ const Page: NextPageWithLayout = () => {
       setProblemList(problems);
     }
   }, []);
-
-  /*
-  useEffect(() => {
-    // 정답으로 선택한 답안이 삭제 되었을 경우 첫번째 요소로 초기화
-    if (choiceType === 'text') {
-      if (correctIndex > choicesText.length - 1) {
-        setCorrectIndex(0);
-      }
-    }
-    if (choiceType === 'img') {
-      if (correctIndex > choicesImgFile.length - 1) {
-        setCorrectIndex(0);
-      }
-    }
-  }, [correctIndex, choicesText, choicesImgFile]);
-    */
 
   useEffect(() => {
     console.log(problemList);
@@ -419,30 +423,24 @@ const Page: NextPageWithLayout = () => {
                         <img src={'/assets/img/dice2.png'} />
                       </button>
                     </ProblemTitleContainer>
-                    <ChoiceTypeRadioContainer>
-                      <input
-                        type="radio"
-                        name="choiceType"
-                        id="text_choice"
-                        value="text"
-                        onChange={(e) => {
-                          onChangeProblem(e, problemIndex);
+                    <ChoiceTypeContainer>
+                      <ChoiceTypeButton
+                        select={problem.choiceType === 'text'}
+                        onClick={() => {
+                          setChoiceType(problemIndex, 'text');
                         }}
-                        checked={problem.choiceType === 'text'}
-                      />
-                      <label htmlFor="text_choice">텍스트</label>
-                      <input
-                        type="radio"
-                        name="choiceType"
-                        id="img_choice"
-                        value="img"
-                        onChange={(e) => {
-                          onChangeProblem(e, problemIndex);
+                      >
+                        텍스트
+                      </ChoiceTypeButton>
+                      <ChoiceTypeButton
+                        select={problem.choiceType === 'img'}
+                        onClick={() => {
+                          setChoiceType(problemIndex, 'img');
                         }}
-                        checked={problem.choiceType === 'img'}
-                      />
-                      <label htmlFor="img_choice">이미지</label>
-                    </ChoiceTypeRadioContainer>
+                      >
+                        이미지
+                      </ChoiceTypeButton>
+                    </ChoiceTypeContainer>
                     <ChoiceWrapper>
                       {problem.choiceType === 'text' ? (
                         <TextChoiceListContainer>
@@ -460,7 +458,8 @@ const Page: NextPageWithLayout = () => {
                                     {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />}
                                     <div>{item.choiceText}</div>
                                     <button
-                                      onClick={() => {
+                                      onClick={(e) => {
+                                        e.stopPropagation();
                                         deleteChoice(problemIndex, choiceIndex);
                                       }}
                                     >
@@ -502,7 +501,7 @@ const Page: NextPageWithLayout = () => {
                                   type="file"
                                   accept="image/*"
                                   multiple
-                                  onClick={onImgClick}
+                                  onClick={onClickChange}
                                   onChange={(e) => {
                                     onImgChange(e, problemIndex);
                                   }}
@@ -527,7 +526,8 @@ const Page: NextPageWithLayout = () => {
                                   <img alt="미리보기" src={item.imgURL} />
                                   <button
                                     id="delete-btn"
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                      e.stopPropagation();
                                       deleteChoice(problemIndex, choiceIndex);
                                     }}
                                   >
@@ -547,7 +547,7 @@ const Page: NextPageWithLayout = () => {
               );
             })}
 
-            {problems.length < 9 && (
+            {problems.length < 10 && (
               <SwiperSlide>
                 <QuizCreateCard>
                   <CreateNewQuizContainer>
@@ -594,7 +594,7 @@ const Wrapper = styled.div`
   }
   .swiper-wrapper {
     padding-top: 30px;
-    padding-bottom: 4px;
+    padding-bottom: 10px;
   }
   .swiper-pagination {
     bottom: calc(100% - 1rem);
@@ -729,30 +729,28 @@ const ProblemTitleInputBubble = styled.input`
     color: #00000020;
   }
 `;
-const ChoiceTypeRadioContainer = styled.div`
+interface choiceProps {
+  select: boolean;
+}
+const ChoiceTypeContainer = styled.div`
   margin-top: 0.5rem;
   display: flex;
   font-size: 14px;
   justify-content: center;
-  input[type='radio'] {
-    display: none;
-  }
-  label {
-    margin: 0 0.5rem 0 0.5rem;
-    padding: 0.25rem 1.25rem 0.25rem 1.25rem;
-    cursor: pointer;
-    color: #ff4d57;
-    border-radius: 30px;
-    border: solid 1px #ff4d57;
-  }
-  input[type='radio']:checked + label {
-    background-color: #ff4d57;
-    color: white;
-    transition: ease-in-out 0.2s;
-    box-shadow: 0 0 0.875rem 0 rgba(33, 37, 41, 0.05);
-  }
 `;
 
+const ChoiceTypeButton = styled.div<choiceProps>`
+  margin: 0 0.5rem 0 0.5rem;
+  padding: 0.25rem 1.25rem 0.25rem 1.25rem;
+  border-radius: 30px;
+  border: ${({ select }) => (select ? 'none' : 'solid 1px #ff4d57;')};
+  color: ${({ select }) => (select ? '#fff' : '#ff4d57')};
+  transition: ease-in-out 0.2s;
+  background-color: ${({ select }) => (select ? '#ff4d57' : '#fff')};
+  &:hover {
+    cursor: pointer;
+  }
+`;
 const ChoiceWrapper = styled.div`
   width: 90%;
   margin-top: 1rem;

@@ -274,7 +274,8 @@ const ButtonContainer = styled.div`
     font-size: 14px;
     border-radius: 30px;
     height: 50px;
-    font-weight: 500;
+    box-shadow: 0 4px #c4363e;
+    font-weight: bold;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
     background-color: #ff4d57;
@@ -282,6 +283,7 @@ const ButtonContainer = styled.div`
     &:disabled {
       color: #7c7c7c;
       background-color: #ececec;
+      box-shadow: 0 4px lightgrey;
     }
   }
 `;
