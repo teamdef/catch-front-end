@@ -5,7 +5,7 @@ import { AppLayout, HeaderLayout } from 'components/layout';
 import { Title, QuizCard, SkeletonQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
-import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import { FaSort,FaSortUp, FaSortDown } from 'react-icons/fa';
 import { RecentQuizListApi } from 'pages/api/test';
 
 interface recentQuizType {
@@ -79,12 +79,12 @@ const Page: NextPageWithLayout = () => {
           <SortButton onClick={dateSortHandler}>
             {dateSort ? (
               <div>
-                <FaSortUp />
+                <FaSort />
                 최신순
               </div>
             ) : (
               <div>
-                <FaSortDown />
+                <FaSort />
                 오래된순
               </div>
             )}
