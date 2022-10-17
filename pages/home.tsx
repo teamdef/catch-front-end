@@ -72,6 +72,21 @@ const Home: NextPageWithLayout = () => {
             <div>내가 만든 퀴즈들 🐻‍❄️</div>
           </div>
           <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
+            <SwiperSlide>
+              <MyQuizCard url={null}>
+                <div id="quiz-title">{'꽥꽥'}</div>
+                <div id="quiz-info">
+                  참여 0 · 평균점수 0점
+                </div>
+                <div id="quiz-detail-btn-wrapper">
+                  <button
+                    id="quiz-detail-btn"
+                  >
+                    자세히 보기
+                  </button>
+                </div>
+              </MyQuizCard>
+            </SwiperSlide>
             {isLoggedin &&
               (myQuizList ? (
                 myQuizList?.map((quiz, index) => {
@@ -147,7 +162,7 @@ const Background = styled.div`
 const RecentQuizList = styled.div`
   padding: 1rem;
   background-color: #fff;
-  margin-bottom: 10rem;
+  margin-bottom: 7rem;
   #title {
     padding: 1rem 0.5rem 2rem 0.5rem;
     color: #595959;
@@ -270,12 +285,14 @@ const MyQuizCard = styled(CustomCard)<ImageCardProps>`
           background-size: cover;
         `
       : css`
-          background-color: grey;
+          background: url('/assets/img/catch_character4.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
         `}
 
   flex-direction: column;
   justify-content: flex-end;
-  color: #fff;
+  color: ${(props) => (props.url ? '#fff' : '#595959')};
   padding: 1.5rem;
   #quiz-title {
     font-size: 24px;
@@ -293,6 +310,8 @@ const MyQuizCard = styled(CustomCard)<ImageCardProps>`
       border: none;
       padding: 0.5rem 1rem 0.5rem 1rem;
       color: #595959;
+      color: ${(props) => (props.url ? '#595959' : '#fff')};
+      background-color: ${(props) => (props.url ? 'none' : '#ff4d57')};
       &:hover {
         cursor: pointer;
       }

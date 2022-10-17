@@ -18,6 +18,10 @@ interface DetailQuizType {
   thumbnail: string | null;
   average: number;
 }
+interface test{
+  nickname: string;
+  score: number;
+}
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -53,35 +57,35 @@ const Page: NextPageWithLayout = () => {
     }
   }, [router.isReady]);
 
-  const score_list = [
-    {
-      nickname: '덴마크유산균',
-      score: 8,
-    },
-    {
-      nickname: '춘식이',
-      score: 8,
-    },
-    {
-      nickname: '올라프',
-      score: 7,
-    },
-    {
-      nickname: '헤라',
-      score: 6,
-    },
-    {
-      nickname: '스윙스',
-      score: 4,
-    },
-    {
-      nickname: '커피매니아',
-      score: 4,
-    },
-    {
-      nickname: '부리부리용사',
-      score: 2,
-    },
+  const score_list: test[] = [
+    // {
+    //   nickname: '덴마크유산균',
+    //   score: 8,
+    // },
+    // {
+    //   nickname: '춘식이',
+    //   score: 8,
+    // },
+    // {
+    //   nickname: '올라프',
+    //   score: 7,
+    // },
+    // {
+    //   nickname: '헤라',
+    //   score: 6,
+    // },
+    // {
+    //   nickname: '스윙스',
+    //   score: 4,
+    // },
+    // {
+    //   nickname: '커피매니아',
+    //   score: 4,
+    // },
+    // {
+    //   nickname: '부리부리용사',
+    //   score: 2,
+    // },
   ];
 
   return (
@@ -121,47 +125,46 @@ const Page: NextPageWithLayout = () => {
             </DateInfoWrapper>
           </div>
         </SectionBlock>
-        <SectionBlock>
-          <div id="section-title">문제집 공유 👋</div>
-          <div id="section-contents">
-            <div id="quiz-share-contents">
-              <SNSShare title={'test'} url={'zz'} />
+        {quizDetailData && (
+          <SectionBlock>
+            <div id="section-title">문제집 공유 👋</div>
+            <div id="section-contents">
+              <div id="quiz-share-contents">
+                <SNSShare
+                  set_title={quizDetailData?.set_title}
+                  url={`quiz/solve/${quizDetailData?.id}`}
+                  thumbnail={quizDetailData?.thumbnail}
+                />
+              </div>
             </div>
-          </div>
-        </SectionBlock>
-        <SectionBlock>
-          <div id="section-title">참여자 랭킹 🏆</div>
-          <div id="section-contents">
-            {quizDetailData ? (
-              <>
-                <RankingBoard>
-                  {score_list.length === 0 ? (
-                    <NotFound
-                      title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
-                      subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
-                    />
-                  ) : (
-                    score_list.map((userScore, index) => {
-                      return (
-                        <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
-                          <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
-                          <strong>{userScore?.nickname}</strong>
-                          <em>{userScore?.score}점</em>
-                        </li>
-                      );
-                    })
-                  )}
-                </RankingBoard>
-              </>
-            ) : (
-              <>
-                <SkeletonRanking />
-                <SkeletonRanking />
-                <SkeletonRanking />
-              </>
-            )}
-          </div>
-        </SectionBlock>
+          </SectionBlock>
+        )}
+        {quizDetailData && (
+          <SectionBlock>
+            <div id="section-title">참여자 랭킹 🏆</div>
+            <div id="section-contents">
+              <RankingBoard>
+                {score_list.length === 0 ? (
+                  <NotFound
+                    title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
+                    subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
+                  />
+                ) : (
+                  score_list.map((userScore: test, index:number) => {
+                    return (
+                      <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
+                        <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
+                        <strong>{userScore?.nickname}</strong>
+                        <em>{userScore?.score}점</em>
+                      </li>
+                    );
+                  })
+                )}
+              </RankingBoard>
+            </div>
+          </SectionBlock>
+        )}
+
         <DeleteButton>
           <AiOutlineDelete size={30} />
         </DeleteButton>
@@ -177,6 +180,7 @@ const Wrapper = styled.div`
   width: 85%;
   margin: 0 auto;
   margin-top: 2rem;
+  margin-bottom:7rem;
 `;
 
 const SectionBlock = styled.div`

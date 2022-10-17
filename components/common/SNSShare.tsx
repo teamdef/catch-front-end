@@ -2,20 +2,16 @@ import styled from 'styled-components';
 import { HiLink } from 'react-icons/hi';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
+import {useEffect} from 'react'
 
 interface shareProps {
-  quiz_thumb?: string;
-  title: string;
+  thumbnail: string|null;
+  set_title: string;
   url: string;
 }
-const SNSShare = ({
-  quiz_thumb = 'https://t1.daumcdn.net/cfile/tistory/2403BA485896A5C829',
-  title,
-  url,
-}: shareProps) => {
-
+const SNSShare = ({ thumbnail, set_title, url }: shareProps) => {
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
-  
+
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -37,14 +33,19 @@ const SNSShare = ({
       templateId: 83714, // 메시지템플릿 번호 카카오 developer 에 있음
       templateArgs: {
         PROFILE_IMG: profileImg, // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
-        NICKNAME: nickName , // 퀴즈 제작자 닉네임 ${NICKNAME}
-        QUIZ_THUMB: quiz_thumb, // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
-        TITLE: title, // 퀴즈 제목 텍스트 ${TITLE}
-        ROUTE: url, // 퀴즈 공유 링크
+        NICKNAME: nickName, // 퀴즈 제작자 닉네임 ${NICKNAME}
+        QUIZ_THUMB: thumbnail || '/assets/img/catch_share.png', // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
+        TITLE: set_title, // 퀴즈 제목 텍스트 ${TITLE}
+        ROUTE: `http://localhost:3000/${url}`, // 퀴즈 공유 링크
       },
     });
   };
-
+  //카카오 sdk 초기화
+  useEffect(() => {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+    }
+  }, []);
   return (
     <Wrapper>
       <img onClick={goInstagram} className="instagram-btn" src={'/assets/img/instagram_icon.png'} />

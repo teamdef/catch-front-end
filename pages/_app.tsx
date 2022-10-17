@@ -39,12 +39,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
-  // 카카오 sdk 초기화
-  // useEffect(() => {
-  //   if (!window.Kakao.isInitialized()) {
-  //     window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-  //   }
-  // }, []);
 
   useEffect(() => {
     const access_token = getCookie('access_token');
@@ -54,14 +48,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }, [router]);
 
   useEffect(() => storePathValues, [router.asPath]);
-
-  // useEffect(() => {
-  //   if (isLoggedin) {
-  //     const now_router = router.pathname;
-  //     if (now_router === '/home') router.push('/home'); // 현재 라우터가 home 이라면 home으로
-  //     else router.push(now_router); // 현재 라우터가 home이 아니라면 기존에 있더 라우터로
-  //   }
-  // }, [isLoggedin]);
 
   return (
     <>
