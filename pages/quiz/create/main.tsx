@@ -121,6 +121,7 @@ const Page: NextPageWithLayout = () => {
       }
     }
     temp[problemIndex].choiceType = choiceType;
+    temp[problemIndex].correctIndex = 0;
     setProblemList(temp);
   };
 
@@ -369,7 +370,7 @@ const Page: NextPageWithLayout = () => {
             pagination={{ clickable: false }}
             modules={[Pagination]}
             loop={false}
-            grabCursor={false}
+            grabCursor={true}
           >
             {problemList.map((problem, problemIndex) => {
               return (

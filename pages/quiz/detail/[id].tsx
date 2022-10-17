@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { Title, SNSShare } from 'components/common';
-import styled,{keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -37,8 +37,7 @@ const Page: NextPageWithLayout = () => {
     setQuizDetailData(_detail);
   };
   useEffect(() => {
-    if (id === 'e87fa62e-c992-4370-9fbe-f9c31c855008') getMyQuizData();
-    else {
+    if (id === '1234') {
       const obj: DetailQuizType = {
         created_at: '2022-10-17',
         updated_at: '2022-10-17',
@@ -49,6 +48,8 @@ const Page: NextPageWithLayout = () => {
         average: 7.7,
       };
       setQuizDetailData(obj);
+    } else {
+      getMyQuizData();
     }
   }, [router.isReady]);
 
@@ -337,9 +338,9 @@ const SkeletonRanking = styled.div`
   border-radius: 4px;
   animation: ${gradient} 1.5s linear infinite alternate;
   width: 100%;
-  height:50px;
-  margin:3px;
-  margin-bottom:7px;
+  height: 50px;
+  margin: 3px;
+  margin-bottom: 7px;
 `;
 
 export default Page;

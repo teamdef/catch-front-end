@@ -9,16 +9,24 @@ import Link from 'next/link';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useModal } from 'hooks';
-import {UserQuizListApi} from 'pages/api/test'
+import { UserQuizListApi } from 'pages/api/test';
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+interface MyQuizType {
+  average: number;
+  id: string;
+  solverCnt: number;
+  thumbnail: string | null;
+  set_title: string;
+}
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
-  const { isLoggedin,id } = useSelector((state: RootState) => state.user);
+  const { isLoggedin, id } = useSelector((state: RootState) => state.user);
+  const [myQuizList, setMyQuizList] = useState<MyQuizType[] | null>(null);
   const [openLoginModal, _, RenderLoginModal] = useModal({
     backgroundClickable: true,
     yesTitle: '로그인',
@@ -39,14 +47,23 @@ const Home: NextPageWithLayout = () => {
 
   const getMyQuizList = async () => {
     const res = await UserQuizListApi(id);
-    console.log(res)
-  }
+    const _myQuizList: MyQuizType[] = res?.data?.map((quiz: any) => {
+      let _obj: MyQuizType = quiz;
+      _obj['average'] = Number(quiz.average.substring(0, 3));
+      _obj['id'] = quiz?.id;
+      _obj['set_title'] = quiz?.set_title;
+      _obj['thumbnail'] = quiz?.thumbnail === '' ? null : quiz.thumbnail;
+      _obj['solverCnt'] = Number(quiz?.solverCnt);
+      return _obj;
+    });
+    setMyQuizList(_myQuizList);
+  };
 
   useEffect(() => {
     if (isLoggedin) {
       getMyQuizList();
     }
-  },[])
+  }, []);
   return (
     <>
       <Background>
@@ -55,35 +72,41 @@ const Home: NextPageWithLayout = () => {
             <div>내가 만든 퀴즈들 🐻‍❄️</div>
           </div>
           <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
-            {isLoggedin && (
-              <SwiperSlide>
-                <MyQuizCard
-                  url={null}
-                >
-                  <div id="quiz-title">팡머가 좋아하는 것들</div>
-                  <div id="quiz-info">참여 19 · 평균점수 7.7점</div>
-                  <div id="quiz-detail-btn-wrapper">
-                    <button
-                      id="quiz-detail-btn"
-                      onClick={() => {
-                        router.push('/quiz/detail/q');
-                      }}
-                    >
-                      자세히 보기
-                    </button>
-                  </div>
-                </MyQuizCard>
-              </SwiperSlide>
-            )}
-            {/* <SwiperSlide>
-              <SkeletonMyQuizCard>
-                <div id="quiz-title"></div>
-                <div id="quiz-info"></div>
-                <div id="quiz-detail-btn-wrapper">
-                  <div id="quiz-detail-btn"></div>
-                </div>
-              </SkeletonMyQuizCard>
-            </SwiperSlide> */}
+            {isLoggedin &&
+              (myQuizList ? (
+                myQuizList?.map((quiz, index) => {
+                  return (
+                    <SwiperSlide>
+                      <MyQuizCard key={index} url={quiz?.thumbnail}>
+                        <div id="quiz-title">{quiz?.set_title}</div>
+                        <div id="quiz-info">
+                          참여 {quiz?.solverCnt} · 평균점수 {quiz?.average}점
+                        </div>
+                        <div id="quiz-detail-btn-wrapper">
+                          <button
+                            id="quiz-detail-btn"
+                            onClick={() => {
+                              router.push(`/quiz/detail/${quiz?.id}`);
+                            }}
+                          >
+                            자세히 보기
+                          </button>
+                        </div>
+                      </MyQuizCard>
+                    </SwiperSlide>
+                  );
+                })
+              ) : (
+                <SwiperSlide>
+                  <SkeletonMyQuizCard url={null}>
+                    <div id="quiz-title"></div>
+                    <div id="quiz-info"></div>
+                    <div id="quiz-detail-btn-wrapper">
+                      <div id="quiz-detail-btn"></div>
+                    </div>
+                  </SkeletonMyQuizCard>
+                </SwiperSlide>
+              ))}
             <SwiperSlide>
               <CreateCard>
                 <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
@@ -124,6 +147,7 @@ const Background = styled.div`
 const RecentQuizList = styled.div`
   padding: 1rem;
   background-color: #fff;
+  margin-bottom: 10rem;
   #title {
     padding: 1rem 0.5rem 2rem 0.5rem;
     color: #595959;
@@ -152,7 +176,7 @@ const ImageCardContainer = styled.div`
   margin: 0 auto;
 `;
 interface ImageCardProps {
-  url: string|null;
+  url: string | null;
 }
 
 const MyQuizList = styled.div`

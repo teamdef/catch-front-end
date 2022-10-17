@@ -81,7 +81,7 @@ const Page: NextPageWithLayout = () => {
     <>
       <Title title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
       <Wrapper>
-        <OptionWrapper>
+        {/* <OptionWrapper>
           <SortButton onClick={dateSortHandler}>
             {dateSort ? (
               <div>
@@ -105,7 +105,7 @@ const Page: NextPageWithLayout = () => {
               placeholder="문제집 명, 출제자 명 ..."
             />
           </SearchBar>
-        </OptionWrapper>
+        </OptionWrapper> */}
         <ListWrapper>
           {recentQuizList ? (
             recentQuizList.length === 0 ? (
@@ -134,50 +134,9 @@ const Page: NextPageWithLayout = () => {
             <>
               <SkeletonQuizCard isthumb={true} />
               <SkeletonQuizCard isthumb={false} />
-              <SkeletonQuizCard isthumb={true} />
-              <SkeletonQuizCard isthumb={false} />
-              <SkeletonQuizCard isthumb={false} />
-              <SkeletonQuizCard isthumb={true} />
               <SkeletonQuizCard isthumb={false} />
             </>
           )}
-
-          {/* <QuizCard
-            userName="전하영"
-            quizDate="6일전"
-            quizTitle="메이플스토리 몬스터 퀴즈"
-            quizCount={10}
-            quizPlay={365}
-            quizRoute="/home"
-            quizThumbnail="https://t1.daumcdn.net/cfile/tistory/205419184B3C998139"
-          />
-          <QuizCard
-            userName="배광호"
-            quizDate="12일전"
-            quizTitle="haha ha 고양이 이름 맞추기"
-            quizCount={6}
-            quizPlay={111}
-            quizRoute="/home"
-            quizThumbnail="https://thumbs.gfycat.com/PoshBountifulAndalusianhorse-size_restricted.gif"
-          />
-          <QuizCard
-            userName="진현우"
-            quizDate="14일전"
-            quizTitle="팡머가 좋아하는 것들"
-            quizCount={7}
-            quizPlay={19}
-            quizRoute="/home"
-            quizThumbnail={null}
-          />
-          <QuizCard
-            userName="장원석"
-            quizDate="18일전"
-            quizTitle="주호민 파괴왕 업적 맞추기"
-            quizCount={5}
-            quizPlay={44}
-            quizRoute="/home"
-            quizThumbnail="http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/08/25/5H2SPdjC8oEh637654501997865235.jpg"
-          /> */}
         </ListWrapper>
       </Wrapper>
     </>
@@ -194,7 +153,7 @@ Page.getLayout = function getLayout(page: ReactElement) {
 const Wrapper = styled.div`
   width: 90%;
   margin: 0 auto;
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
 `;
 
 const SortButton = styled.div`
