@@ -4,9 +4,7 @@ import { AxiosResponse } from 'axios';
 
 // 카카오톡 로그인
 const kakaoLoginApi = async (code: string): Promise<AxiosResponse> => {
-  const res: AxiosResponse = await notAuthAxios.get(
-    `https://8anald9349.execute-api.ap-northeast-2.amazonaws.com/Stage/kakao/${code}`,
-  );
+  const res: AxiosResponse = await notAuthAxios.get(`/kakao/${code}`);
   return res;
 };
 
@@ -62,10 +60,7 @@ const imageTestApi = (problems: ProblemTypes[], userId: number, setTitle: string
 
 const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<number> => {
   return new Promise(async (resolve, reject) => {
-    const res: AxiosResponse = await authAxios.post(
-      'https://8anald9349.execute-api.ap-northeast-2.amazonaws.com/Stage/thumbnail',
-      { probsetId, thumbnail: imgBlob.name },
-    );
+    const res: AxiosResponse = await authAxios.post('/thumbnail', { probsetId, thumbnail: imgBlob.name });
     const res2: AxiosResponse = await notAuthAxios.put(res.data, imgBlob, {
       headers: { 'Content-Type': imgBlob.type },
     });
@@ -73,11 +68,22 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
   });
 };
 
-const RecentQuizListApi = ():Promise<AxiosResponse> => { 
-  return notAuthAxios.get('https://8anald9349.execute-api.ap-northeast-2.amazonaws.com/Stage/recentprobset');
-
-}
+const RecentQuizListApi = (): Promise<AxiosResponse> => {
+  return notAuthAxios.get('/recentprobset');
+};
 const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`https://8anald9349.execute-api.ap-northeast-2.amazonaws.com/Stage/probset/detail/${probsetId}`);
-}
-export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi, RecentQuizListApi, MyQuizDetailApi };
+  return notAuthAxios.get(`/probset/detail/${probsetId}`);
+};
+
+const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
+  return authAxios.get(`/userprobset/${userId}`);
+};
+export {
+  kakaoLoginApi,
+  imageTestApi,
+  kakaoLeaveApi,
+  ThumbnailChangeApi,
+  RecentQuizListApi,
+  MyQuizDetailApi,
+  UserQuizListApi,
+};

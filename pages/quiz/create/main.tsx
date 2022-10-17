@@ -136,10 +136,11 @@ const Page: NextPageWithLayout = () => {
   const addChoiceText = useCallback(
     (problemIndex: number) => {
       let temp = JSON.parse(JSON.stringify(problemList));
-      const obj: ChoiceTextTypes = {
-        choiceText: textChoiceInput,
-      };
-      temp[problemIndex].choices.push(obj);
+      // const obj: ChoiceTextTypes = {
+      //   choiceText: textChoiceInput,
+      // };
+      temp[problemIndex].choices.push(textChoiceInput);
+      //temp[problemIndex].choices.push(obj);
       setProblemList(temp);
       textChoiceInputClear();
     },
@@ -206,7 +207,6 @@ const Page: NextPageWithLayout = () => {
     // 이미지가 있을 경우
     if (files && files[0]) {
       // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
-      console.log(files.length);
       if (files.length + problemList[problemIndex].choices.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
@@ -337,7 +337,6 @@ const Page: NextPageWithLayout = () => {
   }, []);
 
   useEffect(() => {
-    console.log(problemList);
     dispatch(saveProblemsAction({ problems: problemList }));
   }, [problemList]);
 
@@ -435,7 +434,7 @@ const Page: NextPageWithLayout = () => {
                                     }}
                                   >
                                     {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />}
-                                    <div>{item.choiceText}</div>
+                                    <div>{item}</div>
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();

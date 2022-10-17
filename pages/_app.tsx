@@ -55,13 +55,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => storePathValues, [router.asPath]);
 
-  useEffect(() => {
-    if (isLoggedin) {
-      const now_router = router.pathname;
-      if (now_router === '/home') router.push('/home'); // 현재 라우터가 home 이라면 home으로
-      else router.push(now_router); // 현재 라우터가 home이 아니라면 기존에 있더 라우터로
-    }
-  }, [isLoggedin]);
+  // useEffect(() => {
+  //   if (isLoggedin) {
+  //     const now_router = router.pathname;
+  //     if (now_router === '/home') router.push('/home'); // 현재 라우터가 home 이라면 home으로
+  //     else router.push(now_router); // 현재 라우터가 home이 아니라면 기존에 있더 라우터로
+  //   }
+  // }, [isLoggedin]);
 
   return (
     <>

@@ -71,6 +71,7 @@ const Page: NextPageWithLayout = () => {
       return returnObj;
     });
     setRecentQuizList(_quizList);
+    console.log(res.data)
   };
 
   useEffect(() => {

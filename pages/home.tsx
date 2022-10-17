@@ -1,14 +1,15 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card, QuizCard } from 'components/common';
-import styled,{keyframes} from 'styled-components';
+import { Card, NotFound, QuizCard } from 'components/common';
+import styled, { keyframes, css } from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useModal } from 'hooks';
+import {UserQuizListApi} from 'pages/api/test'
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
@@ -17,7 +18,7 @@ import 'swiper/css/pagination';
 
 const Home: NextPageWithLayout = () => {
   const router = useRouter();
-  const { isLoggedin } = useSelector((state: RootState) => state.user);
+  const { isLoggedin,id } = useSelector((state: RootState) => state.user);
   const [openLoginModal, _, RenderLoginModal] = useModal({
     backgroundClickable: true,
     yesTitle: '로그인',
@@ -35,6 +36,17 @@ const Home: NextPageWithLayout = () => {
   const goLogin = () => {
     openLoginModal();
   };
+
+  const getMyQuizList = async () => {
+    const res = await UserQuizListApi(id);
+    console.log(res)
+  }
+
+  useEffect(() => {
+    if (isLoggedin) {
+      getMyQuizList();
+    }
+  },[])
   return (
     <>
       <Background>
@@ -46,7 +58,7 @@ const Home: NextPageWithLayout = () => {
             {isLoggedin && (
               <SwiperSlide>
                 <MyQuizCard
-                  url={'https://press.com.mx/wp-content/uploads/2022/01/licenciatura-en-psicologi%CC%81a-1140x641.png'}
+                  url={null}
                 >
                   <div id="quiz-title">팡머가 좋아하는 것들</div>
                   <div id="quiz-info">참여 19 · 평균점수 7.7점</div>
@@ -63,7 +75,7 @@ const Home: NextPageWithLayout = () => {
                 </MyQuizCard>
               </SwiperSlide>
             )}
-            <SwiperSlide>
+            {/* <SwiperSlide>
               <SkeletonMyQuizCard>
                 <div id="quiz-title"></div>
                 <div id="quiz-info"></div>
@@ -71,7 +83,7 @@ const Home: NextPageWithLayout = () => {
                   <div id="quiz-detail-btn"></div>
                 </div>
               </SkeletonMyQuizCard>
-            </SwiperSlide>
+            </SwiperSlide> */}
             <SwiperSlide>
               <CreateCard>
                 <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
@@ -94,32 +106,7 @@ const Home: NextPageWithLayout = () => {
             </Link>
           </div>
           <ImageCardContainer>
-            <QuizCard
-              userName="전하영"
-              quizDate="6일전"
-              quizTitle="메이플스토리 몬스터 퀴즈"
-              quizCount={10}
-              quizPlay={365}
-              quizRoute="/home"
-              quizThumbnail="https://t1.daumcdn.net/cfile/tistory/205419184B3C998139"
-            />
-            <QuizCard
-              userName="배광호"
-              quizDate="12일전"
-              quizTitle="haha ha 고양이 이름 맞추기"
-              quizCount={6}
-              quizPlay={111}
-              quizRoute="/home"
-              quizThumbnail="https://thumbs.gfycat.com/PoshBountifulAndalusianhorse-size_restricted.gif"
-            />
-            <QuizCard
-              userName="진현우"
-              quizDate="14일전"
-              quizTitle="팡머가 좋아하는 것들"
-              quizCount={7}
-              quizPlay={19}
-              quizRoute="/home"
-            />
+            <NotFound title={'최근 생성한 문제를 보려면?'} subTitle={'잠시동안만 목록보기를 이용해주세요'} />
           </ImageCardContainer>
         </RecentQuizList>
       </Background>
@@ -165,7 +152,7 @@ const ImageCardContainer = styled.div`
   margin: 0 auto;
 `;
 interface ImageCardProps {
-  url?: string;
+  url: string|null;
 }
 
 const MyQuizList = styled.div`
@@ -244,16 +231,23 @@ const CreateCard = styled(CustomCard)`
   }
 `;
 const MyQuizCard = styled(CustomCard)<ImageCardProps>`
-  background: linear-gradient(
-      to bottom,
-      rgba(20, 20, 20, 0) 10%,
-      rgba(20, 20, 20, 0.1) 25%,
-      rgba(20, 20, 20, 0.25) 50%,
-      rgba(20, 20, 20, 0.5) 75%,
-      rgba(20, 20, 20, 0.75) 100%
-    ),
-    url(${(props) => props.url});
-  background-size: cover;
+  ${(props) =>
+    props.url
+      ? css`
+          background: linear-gradient(
+              to bottom,
+              rgba(20, 20, 20, 0) 10%,
+              rgba(20, 20, 20, 0.1) 25%,
+              rgba(20, 20, 20, 0.25) 50%,
+              rgba(20, 20, 20, 0.5) 75%,
+              rgba(20, 20, 20, 0.75) 100%
+            ),
+            url(${props.url});
+          background-size: cover;
+        `
+      : css`
+          background-color: grey;
+        `}
 
   flex-direction: column;
   justify-content: flex-end;

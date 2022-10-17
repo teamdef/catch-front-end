@@ -8,4 +8,4 @@ export { default as SideBar } from './SideBar'
 export { default as SNSShare} from './SNSShare'
 export { default as SkeletonQuizCard } from './SkeletonQuizCard';
 export { default as ThumbnailChange } from './ThumbnailChange'
-export { default as NotFound} from './NotFound'
+export { default as NotFound } from './NotFound'

@@ -2,12 +2,12 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { Title, SNSShare } from 'components/common';
-import styled from 'styled-components';
+import styled,{keyframes} from 'styled-components';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MyQuizDetailApi } from 'pages/api/test';
-import { ThumbnailChange,NotFound } from 'components/common';
+import { ThumbnailChange, NotFound } from 'components/common';
 
 interface DetailQuizType {
   created_at: string;
@@ -23,7 +23,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
 
-  const [quizDetailData, setQuizDetailData] = useState<DetailQuizType>();
+  const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
 
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
@@ -46,13 +46,13 @@ const Page: NextPageWithLayout = () => {
         set_title: '하영이가 좋아하는 할맥 안주',
         solverCnt: 11,
         thumbnail: null,
-        average:7.7,
+        average: 7.7,
       };
       setQuizDetailData(obj);
-    };
+    }
   }, [router.isReady]);
 
-  const score_list= [
+  const score_list = [
     {
       nickname: '덴마크유산균',
       score: 8,
@@ -88,19 +88,32 @@ const Page: NextPageWithLayout = () => {
       <Title backRoute="/home" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
       <Wrapper>
         <SectionBlock>
-          <div id="section-title">{quizDetailData?.set_title}</div>
+          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <SkeletonTitle />}
+
           <div id="section-contents">
-            <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={id as string} />
-            <StatusContainer>
-              <div id="status">
-                <div>참여자</div>
-                <div id="count">{quizDetailData?.solverCnt}명</div>
-              </div>
-              <div id="status">
-                <div>평균점수</div>
-                <div id="count">{quizDetailData?.average}점</div>
-              </div>
-            </StatusContainer>
+            {quizDetailData ? (
+              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={id as string} />
+            ) : (
+              <SkeletonThunmbnailChange />
+            )}
+            {quizDetailData ? (
+              <StatusContainer>
+                <div id="status">
+                  <div>참여자</div>
+                  <div id="count">{quizDetailData?.solverCnt}명</div>
+                </div>
+                <div id="status">
+                  <div>평균점수</div>
+                  <div id="count">{quizDetailData?.average}점</div>
+                </div>
+              </StatusContainer>
+            ) : (
+              <SkeletonStatusContainer>
+                <div></div>
+                <div></div>
+              </SkeletonStatusContainer>
+            )}
+
             <DateInfoWrapper>
               <div>생성 날짜 {quizDetailData?.created_at}</div>
               <div>마지막으로 푼 날짜 {quizDetailData?.updated_at}</div>
@@ -118,24 +131,34 @@ const Page: NextPageWithLayout = () => {
         <SectionBlock>
           <div id="section-title">참여자 랭킹 🏆</div>
           <div id="section-contents">
-            <RankingBoard>
-              {score_list.length === 0 ? (
-                <NotFound
-                  title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
-                  subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
-                />
-              ) : (
-                score_list.map((userScore, index) => {
-                  return (
-                    <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
-                      <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
-                      <strong>{userScore?.nickname}</strong>
-                      <em>{userScore?.score}점</em>
-                    </li>
-                  );
-                })
-              )}
-            </RankingBoard>
+            {quizDetailData ? (
+              <>
+                <RankingBoard>
+                  {score_list.length === 0 ? (
+                    <NotFound
+                      title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
+                      subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
+                    />
+                  ) : (
+                    score_list.map((userScore, index) => {
+                      return (
+                        <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
+                          <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
+                          <strong>{userScore?.nickname}</strong>
+                          <em>{userScore?.score}점</em>
+                        </li>
+                      );
+                    })
+                  )}
+                </RankingBoard>
+              </>
+            ) : (
+              <>
+                <SkeletonRanking />
+                <SkeletonRanking />
+                <SkeletonRanking />
+              </>
+            )}
           </div>
         </SectionBlock>
         <DeleteButton>
@@ -275,4 +298,48 @@ const RankingBoard = styled.ul`
     background-color: #ffe6d4;
   }
 `;
+
+// skeleton
+const gradient = keyframes` 
+  0% {background-color: rgba(165, 165, 165, 0.1);}
+  50% {background-color: rgba(165, 165, 165, 0.3);}
+  100% {background-color: rgba(165, 165, 165, 0.1);}
+`;
+
+const Skeleton = styled.div`
+  background-color: #eee;
+  border-radius: 1rem;
+`;
+const SkeletonThunmbnailChange = styled(Skeleton)`
+  width: 100%;
+  height: 200px;
+  animation: ${gradient} 1.5s linear infinite alternate;
+`;
+const SkeletonStatusContainer = styled(StatusContainer)`
+  display: grid;
+  gap: 15px;
+  grid-template-columns: 1fr 1fr;
+  height: 70px;
+  margin-top: 10px;
+  div {
+    background-color: #eee;
+    border-radius: 12px;
+    animation: ${gradient} 1.5s linear infinite alternate;
+  }
+`;
+const SkeletonTitle = styled(Skeleton)`
+  width: 250px;
+  height: 24px;
+  animation: ${gradient} 1.5s linear infinite alternate;
+`;
+const SkeletonRanking = styled.div`
+  background-color: #eee;
+  border-radius: 4px;
+  animation: ${gradient} 1.5s linear infinite alternate;
+  width: 100%;
+  height:50px;
+  margin:3px;
+  margin-bottom:7px;
+`;
+
 export default Page;
