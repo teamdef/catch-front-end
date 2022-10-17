@@ -2,14 +2,14 @@ import type { ReactElement, ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, QuizCard, SkeletonQuizCard } from 'components/common';
+import { Title, QuizCard, SkeletonQuizCard,NotFound } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
-import { FaSort, FaSortUp, FaSortDown } from 'react-icons/fa';
+import { FaSort } from 'react-icons/fa';
 import { RecentQuizListApi } from 'pages/api/test';
 import {useInput} from 'hooks'
 
-interface recentQuizType {
+interface RecentQuizType {
   created_at: string;
   id: string;
   profile_img: string;
@@ -20,7 +20,7 @@ interface recentQuizType {
 }
 const Page: NextPageWithLayout = () => {
   const [dateSort, setDateSort] = useState<boolean>(true); // true 최신순, false 오래된순
-  const [recentQuizList, setRecentQuizList] = useState<recentQuizType[] | null>(null);
+  const [recentQuizList, setRecentQuizList] = useState<RecentQuizType[] | null>(null);
   const [searchKeyword,,searchKeywordClear,searchKeywordHandler] = useInput<string>('');
 
   const dateSortHandler = () => {
@@ -47,9 +47,13 @@ const Page: NextPageWithLayout = () => {
     if (betweenTimeDay < 365) {
       return `${betweenTimeDay}일전`;
     }
+    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
+        if (betweenTimeWeek < 4) {
+          return `${betweenTimeWeek}주전`;
+        }
 
     const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
-    if (betweenTimeMonth < 11) {
+    if (betweenTimeMonth < 12) {
       return `${betweenTimeMonth}달전`;
     }
 
@@ -59,8 +63,7 @@ const Page: NextPageWithLayout = () => {
 
   const getRecentQuizList = async () => {
     const res = await RecentQuizListApi();
-    console.log(res.data);
-    let _quizList = res.data.map((quiz: recentQuizType) => {
+    let _quizList = res.data.map((quiz: RecentQuizType) => {
       let returnObj = { ...quiz };
       returnObj.created_at = timeForToday(quiz.created_at);
       returnObj.thumbnail = quiz.thumbnail === '' ? null : quiz.thumbnail;
@@ -94,26 +97,38 @@ const Page: NextPageWithLayout = () => {
 
           <SearchBar>
             <MdOutlineSearch size={20} />
-            <input type="text" value={searchKeyword} onChange={searchKeywordHandler} placeholder="문제집 명, 출제자 명 ..." />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={searchKeywordHandler}
+              placeholder="문제집 명, 출제자 명 ..."
+            />
           </SearchBar>
         </OptionWrapper>
         <ListWrapper>
           {recentQuizList ? (
-            recentQuizList.map((quiz) => {
-              return (
-                <QuizCard
-                  key={quiz.id}
-                  userName={quiz.nickname}
-                  userProfileImg={quiz.profile_img}
-                  quizDate={quiz.created_at}
-                  quizTitle={quiz.set_title}
-                  quizCount={0}
-                  quizPlay={quiz.solverCnt}
-                  quizRoute={`/quiz/solve/${quiz.id}`}
-                  quizThumbnail={quiz.thumbnail}
-                />
-              );
-            })
+            recentQuizList.length === 0 ? (
+              <NotFound
+                title={'등록된 퀴즈집이 없습니다 😣'}
+                subTitle={'퀴즈집을 만들어주세요 !! '}
+              />
+            ) : (
+              recentQuizList.map((quiz) => {
+                return (
+                  <QuizCard
+                    key={quiz.id}
+                    userName={quiz.nickname}
+                    userProfileImg={quiz.profile_img}
+                    quizDate={quiz.created_at}
+                    quizTitle={quiz.set_title}
+                    quizCount={0}
+                    quizPlay={quiz.solverCnt}
+                    quizRoute={`/quiz/solve/${quiz.id}`}
+                    quizThumbnail={quiz.thumbnail}
+                  />
+                );
+              })
+            )
           ) : (
             <>
               <SkeletonQuizCard isthumb={true} />
