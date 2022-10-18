@@ -1,9 +1,9 @@
 // ModalPortal.tsx
 
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useEffect,useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-function createWrapperAndAppendToBody(wrapperId: string) {
+const createWrapperAndAppendToBody = (wrapperId: string) => {
   if (document.getElementById(wrapperId)) return document.getElementById(wrapperId) as HTMLDivElement;
   else {
     const wrapperElement = document.createElement('div');
@@ -11,16 +11,17 @@ function createWrapperAndAppendToBody(wrapperId: string) {
     document.body.appendChild(wrapperElement);
     return wrapperElement;
   }
-}
+};
 
-function ModalPortal({
+const ModalPortal = ({
   children,
-  wrapperId = 'react-portal-wrapper',
+  wrapperId = 'react-portal-modal-container',
 }: {
   children: React.ReactNode;
   wrapperId: string;
-}) {
+}) => {
   const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(null);
+
   useLayoutEffect(() => {
     setWrapperElement(createWrapperAndAppendToBody(wrapperId));
     return () => {
@@ -28,6 +29,6 @@ function ModalPortal({
     };
   }, [wrapperId]);
   return wrapperElement ? createPortal(children, wrapperElement) : null;
-}
+};
 
 export default ModalPortal;

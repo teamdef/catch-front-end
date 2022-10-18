@@ -1,31 +1,96 @@
 import type { ReactElement, ChangeEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, QuizCard } from 'components/common';
+import { Title, QuizCard, SkeletonQuizCard,NotFound } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
-import { FaSortUp, FaSortDown } from 'react-icons/fa';
+import { FaSort } from 'react-icons/fa';
+import { RecentQuizListApi } from 'pages/api/test';
+import {useInput} from 'hooks'
+
+interface RecentQuizType {
+  created_at: string;
+  id: string;
+  profile_img: string;
+  nickname: string;
+  set_title: string;
+  solverCnt: number;
+  thumbnail: string | null;
+}
 const Page: NextPageWithLayout = () => {
   const [dateSort, setDateSort] = useState<boolean>(true); // true 최신순, false 오래된순
+  const [recentQuizList, setRecentQuizList] = useState<RecentQuizType[] | null>(null);
+  const [searchKeyword,,searchKeywordClear,searchKeywordHandler] = useInput<string>('');
 
   const dateSortHandler = () => {
     setDateSort(!dateSort);
   };
+
+  const timeForToday = (date: string) => {
+    const today = new Date();
+    const timeValue = new Date(date);
+
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+      return `${betweenTime}분전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
+
+    if (betweenTimeDay < 365) {
+      return `${betweenTimeDay}일전`;
+    }
+    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
+        if (betweenTimeWeek < 4) {
+          return `${betweenTimeWeek}주전`;
+        }
+
+    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
+    if (betweenTimeMonth < 12) {
+      return `${betweenTimeMonth}달전`;
+    }
+
+    const value = today.toISOString().substring(0, 10);
+    return value;
+  };
+
+  const getRecentQuizList = async () => {
+    const res = await RecentQuizListApi();
+    let _quizList = res.data.map((quiz: RecentQuizType) => {
+      let returnObj = { ...quiz };
+      returnObj.created_at = timeForToday(quiz.created_at);
+      returnObj.thumbnail = quiz.thumbnail === '' ? null : quiz.thumbnail;
+      returnObj.solverCnt = Number(quiz.solverCnt);
+      return returnObj;
+    });
+    setRecentQuizList(_quizList);
+    console.log(res.data)
+  };
+
+  useEffect(() => {
+    getRecentQuizList();
+  }, []);
   return (
     <>
       <Title title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
       <Wrapper>
-        <OptionWrapper>
+        {/* <OptionWrapper>
           <SortButton onClick={dateSortHandler}>
             {dateSort ? (
               <div>
-                <FaSortUp />
+                <FaSort />
                 최신순
               </div>
             ) : (
               <div>
-                <FaSortDown />
+                <FaSort />
                 오래된순
               </div>
             )}
@@ -33,45 +98,45 @@ const Page: NextPageWithLayout = () => {
 
           <SearchBar>
             <MdOutlineSearch size={20} />
-            <input type="text" placeholder="문제집 명, 출제자 명 ..." />
+            <input
+              type="text"
+              value={searchKeyword}
+              onChange={searchKeywordHandler}
+              placeholder="문제집 명, 출제자 명 ..."
+            />
           </SearchBar>
-        </OptionWrapper>
+        </OptionWrapper> */}
         <ListWrapper>
-          <QuizCard
-            userName="전하영"
-            quizDate="6일전"
-            quizTitle="메이플스토리 몬스터 퀴즈"
-            quizCount={10}
-            quizPlay={365}
-            quizRoute="/home"
-            quizThumbnail="https://t1.daumcdn.net/cfile/tistory/205419184B3C998139"
-          />
-          <QuizCard
-            userName="배광호"
-            quizDate="12일전"
-            quizTitle="haha ha 고양이 이름 맞추기"
-            quizCount={6}
-            quizPlay={111}
-            quizRoute="/home"
-            quizThumbnail="https://thumbs.gfycat.com/PoshBountifulAndalusianhorse-size_restricted.gif"
-          />
-          <QuizCard
-            userName="진현우"
-            quizDate="14일전"
-            quizTitle="팡머가 좋아하는 것들"
-            quizCount={7}
-            quizPlay={19}
-            quizRoute="/home"
-          />
-          <QuizCard
-            userName="장원석"
-            quizDate="18일전"
-            quizTitle="주호민 파괴왕 업적 맞추기"
-            quizCount={5}
-            quizPlay={44}
-            quizRoute="/home"
-            quizThumbnail="http://talkimg.imbc.com/TVianUpload/tvian/TViews/image/2021/08/25/5H2SPdjC8oEh637654501997865235.jpg"
-          />
+          {recentQuizList ? (
+            recentQuizList.length === 0 ? (
+              <NotFound
+                title={'등록된 퀴즈집이 없습니다 😣'}
+                subTitle={'퀴즈집을 만들어주세요 !! '}
+              />
+            ) : (
+              recentQuizList.map((quiz) => {
+                return (
+                  <QuizCard
+                    key={quiz.id}
+                    userName={quiz.nickname}
+                    userProfileImg={quiz.profile_img}
+                    quizDate={quiz.created_at}
+                    quizTitle={quiz.set_title}
+                    quizCount={0}
+                    quizPlay={quiz.solverCnt}
+                    quizRoute={`/quiz/solve/${quiz.id}`}
+                    quizThumbnail={quiz.thumbnail}
+                  />
+                );
+              })
+            )
+          ) : (
+            <>
+              <SkeletonQuizCard isthumb={true} />
+              <SkeletonQuizCard isthumb={false} />
+              <SkeletonQuizCard isthumb={false} />
+            </>
+          )}
         </ListWrapper>
       </Wrapper>
     </>
@@ -88,7 +153,7 @@ Page.getLayout = function getLayout(page: ReactElement) {
 const Wrapper = styled.div`
   width: 90%;
   margin: 0 auto;
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
 `;
 
 const SortButton = styled.div`
@@ -112,7 +177,7 @@ const OptionWrapper = styled.div`
   margin: 0 auto;
   margin-top: 1.5rem;
   display: flex;
-  width:95%;
+  width: 95%;
 `;
 const ListWrapper = styled.div`
   display: flex;
@@ -144,4 +209,5 @@ const SearchBar = styled.div`
     margin-left: 0.25rem;
   }
 `;
+
 export default Page;

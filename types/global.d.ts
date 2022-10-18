@@ -11,7 +11,7 @@ interface ChoiceTextTypes {
 // ProblemType - 문제 정보
 interface ProblemTypes {
   problemTitle: string; // 문제 제목
-  correctIndex: string; // 정답 번호
+  correctIndex: number; // 정답 번호
   choiceType: 'img' | 'text'; // 이미지형 문제 , 텍스트형 문제
   choices: (ChoiceTextTypes | ChoiceImageTypes)[]; // 객관식 답안 배열
 }

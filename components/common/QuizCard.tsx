@@ -3,14 +3,15 @@ import { MdPlayArrow } from 'react-icons/md';
 import Link from 'next/link';
 interface QuizProps {
   userName: string;
+  userProfileImg: string;
   quizDate: string;
   quizTitle: string;
   quizCount: number;
   quizPlay: number;
   quizRoute: string;
-  quizThumbnail?: string;
+  quizThumbnail: string | null;
 }
-const QuizCard = ({ userName, quizDate, quizTitle, quizCount, quizPlay, quizRoute, quizThumbnail }: QuizProps) => {
+const QuizCard = ({ userName, userProfileImg,quizDate, quizTitle, quizCount, quizPlay, quizRoute, quizThumbnail }: QuizProps) => {
   return (
     <QuizCardWrapper>
       {quizThumbnail && (
@@ -21,7 +22,7 @@ const QuizCard = ({ userName, quizDate, quizTitle, quizCount, quizPlay, quizRout
       <div id="quiz-contents-container">
         <div id="profile-row">
           <ProfileImgWrapper>
-            <img src={'/assets/img/user_default.png'} />
+            <img src={userProfileImg || '/assets/img/user_default.png'} />
           </ProfileImgWrapper>
           <div id="user-name">{userName}</div>
           <div id="quiz-date">{quizDate}</div>

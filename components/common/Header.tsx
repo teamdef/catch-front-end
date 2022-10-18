@@ -85,8 +85,12 @@ const Logo = styled.div`
   font-size: 1.5rem;
   font-family: 'RixInooAriDuriR';
   color: #ff4d57;
-  &:hover{
-    cursor:pointer;
+  &:hover {
+    filter: brightness(155%);
+    cursor: pointer;
+  }
+  &:active {
+    filter: brightness(85%);
   }
 `;
 

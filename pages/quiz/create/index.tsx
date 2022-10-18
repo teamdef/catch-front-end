@@ -7,16 +7,31 @@ import useInput from 'hooks/useInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { BsCheck } from 'react-icons/bs';
 import { MdClear } from 'react-icons/md';
-import ModalFrame from 'components/modal/ModalFrame'; // 모달 기본 컴포넌트
+import { useModal } from 'hooks';
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [title, , titleClear, titleHandler] = useInput<string>('');
   const { setTitle, problems } = useSelector((state: RootState) => state.quiz);
-  const [modal, setModal] = useState<boolean>(false);
+  const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
+    yesTitle: '이어서',
+    noTitle: '새롭게',
+    yesAction: () => router.push('/quiz/create/main'),
+    contents: (
+      <div>
+        <div>
+          제작하던<strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
+          <br />
+          문제집이 있습니다
+        </div>
+        <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>이어서 제작하시겠습니까?</div>
+      </div>
+    ),
+  });
 
   const goQuizCreateMain = () => {
     // 시작하기 클릭해서 제작을 시작할 땐, 무조건 초기화 해줌
@@ -33,16 +48,15 @@ const Page: NextPageWithLayout = () => {
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
     const prevPath = storage.getItem('prevPath'); // prevPath 라고 하는 key 의 value 를 가져옴 . 현재 router 의 이전 router
     if (prevPath) {
-
       if (problems.length !== 0) {
         // 제작 중이던 문제가 있을 경우
-        setModal(true);
-      } 
+        open제작중있음Modal();
+      }
     }
     // 이 페이지에 최초 접속하였는데, 만들던 데이터가 있다면
     else if (!prevPath) {
-      if (problems.length !== 0) { 
-        setModal(true);
+      if (problems.length !== 0) {
+        open제작중있음Modal();
       }
     }
   }, []);
@@ -101,27 +115,7 @@ const Page: NextPageWithLayout = () => {
           </Button>
         </ButtonContainer>
       </Wrapper>
-      {modal && (
-        <ModalFrame
-          handleClose={() => setModal(false)}
-          handleYes={() => {
-            Router.push('/quiz/create/main');
-          }}
-          isOpen={modal}
-          handleNo={() => {}}
-          noTitle={'새롭게'}
-          yesTitle={'이어서'}
-        >
-          <Modal>
-            <div>
-              제작하던 <strong>{setTitle}</strong>
-              <br />
-              퀴즈가 있습니다.
-            </div>
-            <div id="last-modified">이어서 제작 하시겠습니까?</div>
-          </Modal>
-        </ModalFrame>
-      )}
+      <Render제작중있음Modal/>
     </>
   );
 };
@@ -154,8 +148,8 @@ const Wrapper = styled.div`
     margin: 15% 0;
     @media (max-height: 700px) {
       margin: 10% 0;
-      li{
-        margin-bottom:5%;
+      li {
+        margin-bottom: 5%;
       }
     }
     li {
@@ -268,38 +262,30 @@ const TitleInput = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
   padding: 0 1rem 0 1rem;
   background-color: #fff;
-  padding:1rem;
-  position:absolute;
-  width:100%;
-  bottom:0;
+  padding: 1rem;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
   button {
-    bottom:0;
+    bottom: 0;
     font-size: 14px;
     border-radius: 30px;
     height: 50px;
-    font-weight:500;
+    box-shadow: 0 4px #c4363e;
+    font-weight: bold;
     margin-right: 0.5rem;
-    margin-left:0.5rem;
+    margin-left: 0.5rem;
     background-color: #ff4d57;
     color: #fff;
     &:disabled {
       color: #7c7c7c;
       background-color: #ececec;
+      box-shadow: 0 4px lightgrey;
     }
   }
 `;
 
-const Modal = styled.div`
-  strong {
-    color: #ff4d57;
-  }
-  #last-modified {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #999;
-  }
-`;
 export default Page;

@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 
 // 카카오톡 로그인
 const kakaoLoginApi = async (code: string): Promise<AxiosResponse> => {
-  const res: AxiosResponse = await authAxios.get(`/kakao/${code}`);
+  const res: AxiosResponse = await notAuthAxios.get(`/kakao/${code}`);
   return res;
 };
 
@@ -67,4 +67,23 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
     resolve(res2.status);
   });
 };
-export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi };
+
+const RecentQuizListApi = (): Promise<AxiosResponse> => {
+  return notAuthAxios.get('/recentprobset');
+};
+const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
+  return notAuthAxios.get(`/probset/detail/${probsetId}`);
+};
+
+const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
+  return authAxios.get(`/userprobset/${userId}`);
+};
+export {
+  kakaoLoginApi,
+  imageTestApi,
+  kakaoLeaveApi,
+  ThumbnailChangeApi,
+  RecentQuizListApi,
+  MyQuizDetailApi,
+  UserQuizListApi,
+};
