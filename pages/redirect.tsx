@@ -20,6 +20,7 @@ interface DataProps {
   nickName: string;
   profileImg: string;
   accessToken: string;
+  isReqSignUp: boolean;
 }
 
 // { data, status }: Props
@@ -42,16 +43,24 @@ const redirect: NextPageWithLayout = () => {
     const nickName: string = data?.nickName;
     const profileImg: string = data?.profileImg;
     const accessToken: string = data?.accessToken;
+    const isReqSignUp: boolean = data?.isReqSignUp;
     dispatch(loginAction({ id, profileImg, nickName, kakaoUid })); // 개인정보를 redux에 저장
     await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
 
-    Router.replace('/home'); // 뒤로가기를 통해 로그인 redirection 페이지로 재접근 하는 것을 방지
+    if (isReqSignUp) {
+      Router.replace({
+        pathname: '/member/profile',
+        query: { isReqSignUp },
+      }); // 뒤로가기를 통해 로그인 redirection 페이지로 재접근 하는 것을 방지
+    } else {
+      Router.replace('/');
+    }
   };
 
   useEffect(() => {
     dataFetch();
   }, []);
-  
+
   return (
     <div>
       <Loading />

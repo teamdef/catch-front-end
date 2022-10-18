@@ -9,7 +9,6 @@ import { RootState } from 'store';
 import { saveSolveAnswersAction, saveSolveUserNameAction,saveSolveUserScoreAction } from 'store/quiz_solve';
 import { BiChevronRight } from 'react-icons/bi';
 import SwipeAniIcon from 'components/common/SwipeAniIcon';
-import ModalFrame from 'components/modal/ModalFrame';
 // swiper
 import { Pagination, EffectFade } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';

@@ -78,11 +78,36 @@ const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
 const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
   return authAxios.get(`/userprobset/${userId}`);
 };
+
+
+interface ProfileChangeProps {
+  id: string;
+  imgBlob?: File;
+  nickname?: string;
+}
+const ProfileChangeApi = async ({id,imgBlob,nickname}:ProfileChangeProps): Promise<AxiosResponse> => {
+  return new Promise(async (resolve, reject) => {
+    let _obj: any = {};
+    _obj['userId'] = id;
+    imgBlob && (_obj['profile_img'] = imgBlob.name);
+    nickname && (_obj['nickname'] = nickname);
+    const res: AxiosResponse = await authAxios.put('/user', _obj);
+    if (imgBlob && res?.data?.uploadURL) {
+      const res2: AxiosResponse = await notAuthAxios.put(res.data.uploadURL, imgBlob, {
+        headers: { 'Content-Type': imgBlob.type },
+      });
+    }
+    resolve(res);
+  });
+};
+
+
 export {
   kakaoLoginApi,
   imageTestApi,
   kakaoLeaveApi,
   ThumbnailChangeApi,
+  ProfileChangeApi,
   RecentQuizListApi,
   MyQuizDetailApi,
   UserQuizListApi,
