@@ -31,7 +31,13 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
     Router.push('/notice');
   };
   const goLogin = () => {
-    Router.push('/');
+    Router.push('/member/login');
+  };
+  const goProfile = () => {
+    Router.replace({
+      pathname: '/member/profile',
+      query: { isReqSignUp: false },
+    });
   };
   const seviceLeave = () => {
     kakaoLeaveApi().then((res) => {
@@ -78,12 +84,12 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
           </div>
           <Profile>
             <div id="profile-img">
-              <img src={profileImg ||'/assets/img/user_default.png'} />
+              <img src={profileImg || '/assets/img/user_default.png'} />
             </div>
             <div id="profile-info-container">
               {isLoggedin ? (
                 <>
-                  <div id="user-nickname">
+                  <div id="user-nickname" onClick={goProfile}>
                     {nickName} 님<MdOutlineSettings size={16} />
                   </div>
                   <div id="user-code"># {kakaoUid}</div>
@@ -102,7 +108,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
               공지사항
             </li>
             <li>
-              <img src={"/assets/img/kakao_icon.png"} />
+              <img src={'/assets/img/kakao_icon.png'} />
               카카오톡 오픈채팅 문의
             </li>
             {isLoggedin && (
@@ -259,6 +265,7 @@ const Profile = styled.div`
         margin-left: 0.5rem;
         color: #505050;
       }
+      cursor: pointer;
     }
     #user-code {
       color: #d6d6d6;

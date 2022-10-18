@@ -47,9 +47,11 @@ const userSlice = createSlice({
     },
     profileUploadAction: (
       state: UserTypes,
-      action: PayloadAction<{ profileImg: string; }>,
+      action: PayloadAction<{ profileImg: string;nickName:string }>,
     ) => { 
-      state.profileImg = action.payload.profileImg;
+      const { profileImg, nickName } = action.payload;
+      state.profileImg = profileImg;
+      state.nickName = nickName;
     }
   },
 });

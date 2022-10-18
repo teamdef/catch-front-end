@@ -69,15 +69,26 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
 };
 
 
-const ProfileImgChangeApi = async (id:string,imgBlob: File): Promise<AxiosResponse> => {
+interface ProfileChangeProps {
+  id: string;
+  imgBlob?: File;
+  nickname?: string;
+}
+const ProfileChangeApi = async ({id,imgBlob,nickname}:ProfileChangeProps): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
-    const res: AxiosResponse = await authAxios.put('/user', { userId:id, profile_img: imgBlob.name });
-    const res2: AxiosResponse = await notAuthAxios.put(res.data.uploadURL, imgBlob, {
-      headers: { 'Content-Type': imgBlob.type },
-    });
+    let _obj: any = {};
+    _obj['userId'] = id;
+    imgBlob && (_obj['profile_img'] = imgBlob.name);
+    nickname && (_obj['nickname'] = nickname);
+    const res: AxiosResponse = await authAxios.put('/user', _obj);
+    if (imgBlob && res?.data?.uploadURL) {
+      const res2: AxiosResponse = await notAuthAxios.put(res.data.uploadURL, imgBlob, {
+        headers: { 'Content-Type': imgBlob.type },
+      });
+    }
     resolve(res);
   });
 };
 
 
-export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi, ProfileImgChangeApi };
+export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi, ProfileChangeApi };
