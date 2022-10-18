@@ -8,7 +8,7 @@ import { Button } from 'components/common';
 import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { saveSolveProblemsAction, saveSolveProblemSetAction } from 'store/quiz_solve'
+import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve'
 
 // quiz/solve/1
 const Page: NextPageWithLayout = () => {
@@ -18,7 +18,6 @@ const Page: NextPageWithLayout = () => {
   const { solveProblems } = useSelector((state: RootState) => state.solve);
   const [ thumbnail, setThumbnail] = useState('');
   let { id } = router.query;
-  console.log(id);
   // id 값이 변경될 시
   useEffect(() => {
     async function getQuiz() {
@@ -28,6 +27,7 @@ const Page: NextPageWithLayout = () => {
         );
         dispatch(saveSolveProblemSetAction({solveSetTitle : response.data[0].set_title}));
         dispatch(saveSolveProblemsAction({solveProblems : response.data[0].prob}));
+        dispatch(saveQuizIdAction({quizId : response.data[0].id}))
         setThumbnail(response.data[0].thumbnail);
         // 정답 배열 생성
         
@@ -37,7 +37,6 @@ const Page: NextPageWithLayout = () => {
     }
     getQuiz();
   }, [id]);
-  console.log(solveSetTitle);
 
   return (
     <Container>

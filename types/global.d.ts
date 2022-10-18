@@ -34,6 +34,7 @@ interface SolveAnswerTypes {
 }
 // SolveProblemSetTypes - 문제집(풀이용) 정보
 interface SolveProblemSetTypes {
+  quizId: string; // 퀴즈 아이디
   solveUserName: string; // 유저 닉네임
   solveUserScore: Number; // 유저 스코어
   solveSetTitle: string; // 문제집 제목
