@@ -44,3 +44,15 @@ interface SolveUserInfoTypes {
   
 }
 // /------------------------------------------------
+
+// 공지사항 타입
+interface NoticeTypes {
+  title: string;
+  content: string;
+  uploadDate: string;
+}
+// 전역 window 객체에 KaKao 라는 객체가 있음을 알린다.
+
+interface Window {
+  Kakao: any;
+}
