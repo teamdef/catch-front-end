@@ -46,15 +46,6 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
         <ModalWrapper onClick={(e) => e.stopPropagation()}>
           <ModalBody>{props.contents}</ModalBody>
           <ActionButtonContainer>
-            {props.noTitle && (
-              <ActionButtonNo
-                onClick={() => {
-                  props.noAction ? props.noAction() : closeModal();
-                }}
-              >
-                {props.noTitle || '취소'}
-              </ActionButtonNo>
-            )}
             {props.yesTitle && (
               <ActionButtonYes
                 onClick={() => {
@@ -63,6 +54,15 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
               >
                 {props.yesTitle || '확인'}
               </ActionButtonYes>
+            )}
+            {props.noTitle && (
+              <ActionButtonNo
+                onClick={() => {
+                  props.noAction ? props.noAction() : closeModal();
+                }}
+              >
+                {props.noTitle || '취소'}
+              </ActionButtonNo>
             )}
           </ActionButtonContainer>
         </ModalWrapper>
