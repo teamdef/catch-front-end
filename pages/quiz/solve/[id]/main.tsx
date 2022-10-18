@@ -114,17 +114,7 @@ const Page: NextPageWithLayout = () => {
         ) : (
           <SwipeAniIcon />
         )}
-        {leaveModalOpen ? (
-          <ModalFrame
-            handleClose={() => setLeaveModalOpen(false)}
-            handleNo={() => {}}
-            yesTitle="확인"
-            // handleYes={seviceLeave}
-            isOpen={leaveModalOpen}
-          />
-        ) : (
-          ''
-        )}
+        
       </QuizSolveBottom>
     </Container>
   );
