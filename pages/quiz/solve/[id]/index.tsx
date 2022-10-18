@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'components/common';
 import axios from 'axios';
@@ -16,6 +16,7 @@ const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const { solveSetTitle } = useSelector((state: RootState) => state.solve);
   const { solveProblems } = useSelector((state: RootState) => state.solve);
+  const [ thumbnail, setThumbnail] = useState('');
   let { id } = router.query;
   console.log(id);
   // id 값이 변경될 시
@@ -23,11 +24,11 @@ const Page: NextPageWithLayout = () => {
     async function getQuiz() {
       try {
         const response = await axios.get(
-          `https://jh441bonx0.execute-api.ap-northeast-2.amazonaws.com/Stage/loadprobset/${id}`,
+          `https://api.catchcatch.link/v1/loadprobset/${id}`,
         );
         dispatch(saveSolveProblemSetAction({solveSetTitle : response.data[0].set_title}));
         dispatch(saveSolveProblemsAction({solveProblems : response.data[0].prob}));
-        console.log(solveProblems);
+        setThumbnail(response.data[0].thumbnail);
         // 정답 배열 생성
         
       } catch (error) {
@@ -43,6 +44,7 @@ const Page: NextPageWithLayout = () => {
       <Logo>캐치캐치</Logo>
       <QuizInfo>
         <Circle>
+          <img src={thumbnail} />
           <span>
             총 <em>{solveProblems.length}</em> 문제
           </span>
@@ -110,12 +112,33 @@ const Circle = styled.div`
   height: 250px;
   border-radius: 50%;
   border: 8px solid #ff4d57;
+  overflow: hidden;
   span {
+    z-index: 1;
     font-size: 2rem;
+    color: #fff;
+    
     em {
       font-style: normal;
       color: #ff4d57;
     }
+    &::before {
+      content: '';
+      position:absolute;
+      top: 0;
+      left: 0;
+      display:block;
+      width: 100%;
+      height: 100%;
+      z-index:-1;
+      background-color: rgba(0,0,0,.5);
+    }
+  }
+  img {
+    position:absolute;
+    object-fit: cover;
+    height: 100%;
+    
   }
 `;
 

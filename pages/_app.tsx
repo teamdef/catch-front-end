@@ -39,14 +39,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
-  // 카카오 sdk 초기화
-  useEffect(() => {
-
+  // 카카오 sdk 초기화 (SKC&C 데이터센터 화재로 인해 임시 주석)
+  // useEffect(() => {
     
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-    }
-  }, []);
+  //   if (!window.Kakao.isInitialized()) {
+  //     window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const access_token = getCookie('access_token');

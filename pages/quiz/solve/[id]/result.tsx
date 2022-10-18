@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 import { Button } from 'components/common';
+import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -11,6 +13,7 @@ import 'react-circular-progressbar/dist/styles.css';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
+  const { solveUserName, SolveUserScore } = useSelector((state: RootState) => state.solve);
   // 해당 문제를 푼 사람 (결과를 받을 사람)의 닉네임
   const new_user: string = '주호민';
   // 해당 문제를 푼 사람의 점수
@@ -96,8 +99,12 @@ const Page: NextPageWithLayout = () => {
             })}
           />
         </ProgressArea>
-        <p>총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요</p>
-        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">정답 보기</Button>
+        <p>
+          총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요{' '}
+        </p>
+        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">
+          오답 노트
+        </Button>
       </ScoreArea>
 
       <RankingArea>
@@ -137,7 +144,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #fff;
   padding-top: 10%;
 `;
@@ -210,7 +217,6 @@ const RankingArea = styled.div`
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
     padding: 0;
     margin: 0;
     flex-direction: column;
@@ -274,7 +280,7 @@ const RankingArea = styled.div`
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
         background-size: 300% 300%;
         background-image: linear-gradient(-45deg, #ff4d57 0%, #ff4d57 10%, #fff 20%, #ff4d57 30%, #ff4d57 100%);
-        animation: AnimateBG 2s cubic-bezier(1, 0, 0.2, .2) infinite;
+        animation: AnimateBG 2s cubic-bezier(1, 0, 0.2, 0.2) infinite;
         strong {
           font-weight: 500;
         }
