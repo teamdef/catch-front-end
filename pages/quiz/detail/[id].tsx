@@ -6,8 +6,9 @@ import styled, { keyframes } from 'styled-components';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi } from 'pages/api/test';
+import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/test';
 import { ThumbnailChange, NotFound } from 'components/common';
+import { useModal } from 'hooks';
 
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -49,7 +50,16 @@ const Page: NextPageWithLayout = () => {
   let { id } = router.query;
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
-
+  const [openDeleteModal, closeDeleteModal, RenderDeleteModal] = useModal({
+    backgroundClickable: true,
+    yesTitle: '삭제',
+    yesAction: () => {
+      MyQuizDelete();
+    },
+    noTitle: '취소',
+    contents: <div>삭제하시겠습니까? 삭제 클릭시 즉시 삭제됩니다.</div>,
+  });
+ 
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
     const res = await MyQuizDetailApi(id as string);
@@ -60,6 +70,16 @@ const Page: NextPageWithLayout = () => {
     _detail.thumbnail = _detail.thumbnail === '' ? null : _detail.thumbnail;
     _detail.average = Number(_detail.average.substring(0, 3));
     setQuizDetailData(_detail);
+  };
+
+  const MyQuizDelete = async () => {
+    if (!!id) {
+      const res = await QuizDeleteApi(id as string);
+      if (res.status === 200) {
+        closeDeleteModal();
+        router.push('/');
+      }
+    }
   };
   useEffect(() => {
     if (id === '1234') {
@@ -79,34 +99,34 @@ const Page: NextPageWithLayout = () => {
   }, [router.isReady]);
 
   const score_list: test[] = [
-    // {
-    //   nickname: '덴마크유산균',
-    //   score: 8,
-    // },
-    // {
-    //   nickname: '춘식이',
-    //   score: 8,
-    // },
-    // {
-    //   nickname: '올라프',
-    //   score: 7,
-    // },
-    // {
-    //   nickname: '헤라',
-    //   score: 6,
-    // },
-    // {
-    //   nickname: '스윙스',
-    //   score: 4,
-    // },
-    // {
-    //   nickname: '커피매니아',
-    //   score: 4,
-    // },
-    // {
-    //   nickname: '부리부리용사',
-    //   score: 2,
-    // },
+     {
+       nickname: '냉동피자',
+       score: 8,
+     },
+     {
+       nickname: '유통기한지난우유',
+       score: 8,
+     },
+     {
+       nickname: '먹다남은떡볶이',
+       score: 7,
+     },
+     {
+       nickname: '남은거포장해온치킨',
+       score: 6,
+     },
+     {
+      nickname: '삼겹살두루치기',
+      score: 4,
+     },
+     {
+       nickname: '장유산균음료',
+       score: 4,
+     },
+     {
+       nickname: '유통기한지난오뎅',
+       score: 2,
+     },
   ];
 
   return (
@@ -186,10 +206,11 @@ const Page: NextPageWithLayout = () => {
           </SectionBlock>
         )}
 
-        <DeleteButton>
+        <DeleteButton onClick={openDeleteModal}>
           <AiOutlineDelete size={30} />
         </DeleteButton>
       </Wrapper>
+      <RenderDeleteModal/>
     </>
   );
 };
@@ -265,6 +286,9 @@ const DeleteButton = styled.div`
     right: 20px;
   }
   z-index: 5;
+  &:hover{
+    cursor:pointer; 
+  }
 `;
 
 const RankingBoard = styled.ul`

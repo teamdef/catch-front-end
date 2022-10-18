@@ -79,6 +79,9 @@ const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
   return authAxios.get(`/userprobset/${userId}`);
 };
 
+const QuizDeleteApi = (probsetId: string): Promise<AxiosResponse> => {
+  return authAxios.delete(`/probset/${probsetId}`);
+ }
 
 interface ProfileChangeProps {
   id: string;
@@ -111,4 +114,5 @@ export {
   RecentQuizListApi,
   MyQuizDetailApi,
   UserQuizListApi,
+  QuizDeleteApi,
 };
