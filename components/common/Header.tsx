@@ -12,7 +12,7 @@ const Header = () => {
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
   const [resizeHeader, setResizeHeader] = useState<boolean>(false);
   const goHome = () => {
-    Router.push('/home');
+    Router.push('/');
   }
   const openSideBar = () => {
     setSideBarOpen(true);

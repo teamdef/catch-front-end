@@ -34,12 +34,18 @@ const deleteToken = () => {
   const delete_time = new Date();
   delete_time.setDate(Date.now() - 1); // 현재 이전의 날짜로 만료일자를 설정하면 쿠키가 바로 만료된다.
 
-  cookies.remove('Authorization');
+  cookies.remove('access_token');
+
+  cookies.set('access_token', '', {
+    path: '/',
+    httpOnly: HTTP_ONLY,
+    maxAge: 0,
+  });
 };
 
 const getCookie = (name: string) => {
   const cookies = new Cookies(); // 쿠키 생성
   return cookies.get(name);
-};;
+};
 
 export { saveToken, deleteToken, getCookie };

@@ -7,12 +7,12 @@ const nextConfig = {
     return [
       {
         source: '/404', // 404 페이지에 URL 접근 방지
-        destination: '/home',
+        destination: '/',
         permanent: true,
       },
       {
         source: '/quiz/create/share', // share 페이지에 URL 접근 방지
-        destination: '/home',
+        destination: '/',
         permanent: true,
       },
     ];

@@ -36,6 +36,18 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
       </div>
     ,
   });
+  const [openLogoutModal, closeLogoutModal, RenderLogoutModal] = useModal({
+    escClickable: true,
+    backgroundClickable: true,
+    yesTitle: '로그아웃',
+    noTitle: '닫기',
+    yesAction: () => { closeLogoutModal(); logout(); },
+    contents: (
+      <div>
+        로그아웃 하시겠습니까? 다시 로그인 할 수 있습니다.
+      </div>
+    ),
+  });
 
   const close = () => {
     setAnimation('closeAnimation');
@@ -65,6 +77,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   };
   const logout = () => {
     dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+    closeSideBar(); // 사이드바 닫기.
   };
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
@@ -132,7 +145,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
             </li>
             {isLoggedin && (
               <>
-                <li id="out" onClick={logout}>
+                <li id="out" onClick={openLogoutModal}>
                   <AiOutlineLogout />
                   로그아웃
                 </li>
@@ -155,7 +168,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
         </Wrapper>
 
         <RenderLeaveModal />
-        
+        <RenderLogoutModal />
       </Background>
     </>
   );

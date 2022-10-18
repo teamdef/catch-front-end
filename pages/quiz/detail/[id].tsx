@@ -9,6 +9,27 @@ import { useEffect, useState } from 'react';
 import { MyQuizDetailApi } from 'pages/api/test';
 import { ThumbnailChange, NotFound } from 'components/common';
 
+// next.js 위한 라이브러리 및 타입
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
+  const cookie = req ? req?.headers?.cookie : null;
+  if (cookie) {
+    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
+    // 쿠키가 적용되어 있다면 (로그인 상태라면)
+    if (!!match === false) {
+      res.statusCode = 302;
+      res.setHeader('Location', `/`);
+      res.end();
+    }
+  } else {
+    res.statusCode = 302;
+    res.setHeader('Location', `/`);
+    res.end();
+  }
+  return { props: {} };
+};
 interface DetailQuizType {
   created_at: string;
   updated_at: string;
@@ -18,7 +39,7 @@ interface DetailQuizType {
   thumbnail: string | null;
   average: number;
 }
-interface test{
+interface test {
   nickname: string;
   score: number;
 }
@@ -90,7 +111,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      <Title backRoute="/home" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
+      <Title backRoute="/" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
       <Wrapper>
         <SectionBlock>
           {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <SkeletonTitle />}
@@ -150,7 +171,7 @@ const Page: NextPageWithLayout = () => {
                     subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
                   />
                 ) : (
-                  score_list.map((userScore: test, index:number) => {
+                  score_list.map((userScore: test, index: number) => {
                     return (
                       <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
                         <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
@@ -180,7 +201,7 @@ const Wrapper = styled.div`
   width: 85%;
   margin: 0 auto;
   margin-top: 2rem;
-  margin-bottom:7rem;
+  margin-bottom: 7rem;
 `;
 
 const SectionBlock = styled.div`

@@ -9,6 +9,8 @@ import { authAxios } from 'utils/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
+import { logoutAction } from 'store/user';
+import { useDispatch } from 'react-redux';
 
 // NextPageWithLayout으로 Page의 타입을 지정하면,
 // getLayout 속성함수를 사용할 수 있게된다. (사용해도 되고 안해도 되고 )
@@ -25,6 +27,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   // Next.js에서는 document.referrer을 사용할 수 없다
   // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.
@@ -39,10 +42,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     storage.setItem('currentPath', globalThis.location.pathname);
   };
 
+  // 페이지 이동 때 마다 토큰 유실 되지 않게 다시 헤더에 집어넣어주기
+  // 페이지 이동 마다 쿠키에 저장된 토큰 및 isLoggedIn 확인하기
   useEffect(() => {
+    // 쿠키 값 받아오기
     const access_token = getCookie('access_token');
     if (access_token) {
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    } else {
+      // 로그인 되어 있는 상태라면?
+      if (isLoggedin) {
+        dispatch(logoutAction()); // 로그인 상태에서 쿠키 없으면 로그아웃 시키기
+      }
     }
   }, [router]);
 
@@ -60,14 +71,22 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // https://github.com/vercel/next.js/discussions/36832
 
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  console.log('흐음 ');
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
-    // 빠르게 정규식으로 한다 .. 문자열 내장함수로 하게되면 매우 비효율적...
+    // 정규식으로 쿠키값 추출
     let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
-    if (match) {
+    // 쿠키가 있다면
+    if (!!match) {
       const access_token = match[2]; // RegExp 객체 반환값 참고
+      // axios 객체에 인증헤더 추가
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    } else {
+      // 쿠키가 없다면 비로그인 상태 .
+      if (ctx.res) {
+        ctx.res.statusCode = 302;
+        ctx.res.setHeader('Location', ``); 
+        ctx.res.end();
+      }
     }
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};

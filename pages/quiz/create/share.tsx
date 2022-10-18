@@ -9,13 +9,34 @@ import { HiOutlineShare } from 'react-icons/hi';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { ThumbnailChangeApi } from 'pages/api/test';
 
+// next.js 위한 라이브러리 및 타입
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
+  const cookie = req ? req?.headers?.cookie : null;
+  if (cookie) {
+    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
+    // 쿠키가 적용되어 있다면 (로그인 상태라면)
+    if (!!match === false) {
+      res.statusCode = 302;
+      res.setHeader('Location', `/`);
+      res.end();
+    }
+  } else {
+    res.statusCode = 302;
+    res.setHeader('Location', `/`);
+    res.end();
+  }
+  return { props: {} };
+};
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { probSetTitle, probSetCount, returnSetId, returnThumb } = router?.query;
   const [thumbnailURL, setThumbnailURL] = useState<string>('');
 
   const goHome = () => {
-    router.push('/home');
+    router.push('/');
   };
 
   const randomString = (len: number): string => {
@@ -97,7 +118,7 @@ const Page: NextPageWithLayout = () => {
             <span>직접 만든 퀴즈를 공유해보세요!</span>
           </div>
           <div id="share-wrapper">
-            <SNSShare quiz_thumb={thumbnailURL} title={probSetTitle as string} url={returnSetId as string} />
+            <SNSShare thumbnail={thumbnailURL} set_title={probSetTitle as string} url={returnSetId as string} />
           </div>
         </ShareContainer>
         <HomeButton onClick={goHome}>

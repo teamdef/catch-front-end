@@ -63,7 +63,7 @@ const redirect: NextPageWithLayout = () => {
 
   return (
     <div>
-      <Loading />
+      <Loading ment={'로그인 중 입니다...'} />
     </div>
   );
 };

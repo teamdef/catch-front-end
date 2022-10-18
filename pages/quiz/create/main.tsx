@@ -24,10 +24,33 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-cards';
 
+// next.js 위한 라이브러리 및 타입
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
+  const cookie = req ? req?.headers?.cookie : null;
+  if (cookie) {
+    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
+    // 쿠키가 적용되어 있다면 (로그인 상태라면)
+    if (!!match === false) {
+      res.statusCode = 302;
+      res.setHeader('Location', `/`);
+      res.end();
+    }
+  } else {
+    res.statusCode = 302;
+    res.setHeader('Location', `/`);
+    res.end();
+  }
+  return { props: {} };
+};
+
 interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
 }
+
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -75,7 +98,7 @@ const Page: NextPageWithLayout = () => {
 
   // 메인화면으로
   const goHome = () => {
-    router.push('/home');
+    router.push('/');
   };
   // 퀴즈 생성 화면으로
   const goQuizCreate = () => {
