@@ -67,4 +67,17 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
     resolve(res2.status);
   });
 };
-export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi };
+
+
+const ProfileImgChangeApi = async (id:string,imgBlob: File): Promise<AxiosResponse> => {
+  return new Promise(async (resolve, reject) => {
+    const res: AxiosResponse = await authAxios.put('/user', { userId:id, profile_img: imgBlob.name });
+    const res2: AxiosResponse = await notAuthAxios.put(res.data.uploadURL, imgBlob, {
+      headers: { 'Content-Type': imgBlob.type },
+    });
+    resolve(res);
+  });
+};
+
+
+export { kakaoLoginApi, imageTestApi, kakaoLeaveApi, ThumbnailChangeApi, ProfileImgChangeApi };

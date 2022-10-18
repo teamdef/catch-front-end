@@ -7,3 +7,4 @@ export { default as Title } from './Title';
 export { default as SideBar } from './SideBar'
 export { default as Modal } from '../modal/ModalFrame';
 export { default as SNSShare} from './SNSShare'
+export { default as ProfileImg} from './ProfileImg'

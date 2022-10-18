@@ -45,8 +45,14 @@ const userSlice = createSlice({
       state.nickName = '';
       state.kakaoUid = -1;
     },
+    profileUploadAction: (
+      state: UserTypes,
+      action: PayloadAction<{ profileImg: string; }>,
+    ) => { 
+      state.profileImg = action.payload.profileImg;
+    }
   },
 });
 
-export const { loginAction, logoutAction } = userSlice.actions;
+export const { loginAction, logoutAction, profileUploadAction } = userSlice.actions;
 export default userSlice.reducer;
