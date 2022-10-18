@@ -2,9 +2,9 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { useModal } from 'hooks';
-import Test from 'components/modal/test';
+import TestModal from 'components/modal/TestModal';
 const Page: NextPageWithLayout = () => {
-    
+
   const 등록함수 = (text: string) => {
     console.log(text);
   };
@@ -15,7 +15,7 @@ const Page: NextPageWithLayout = () => {
     yesAction: () => {
       closeModal();
     },
-    contents: <Test speak={등록함수} />,
+    contents: <TestModal speak={등록함수} />,
   });
   return (
     <div>
