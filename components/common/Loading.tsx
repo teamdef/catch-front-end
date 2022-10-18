@@ -1,72 +1,65 @@
 import styled, { keyframes } from 'styled-components';
+import { SyncLoader } from 'react-spinners';
 
-const Loading = () => {
+interface LoadingProps {
+  ment?: string;
+}
+const Loading = ({ ment }: LoadingProps) => {
   return (
-    <LoadingComponent>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
-    </LoadingComponent>
+    <Background>
+      <Title>
+        <span>캐</span>
+        <span>치</span>
+        <span>캐</span>
+        <span>치</span>
+      </Title>
+      {ment && <div id="ment">{ment}</div>}
+    </Background>
   );
 };
 
-const LdsEllipsis1 = keyframes`
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-const LdsEllipsis2 = keyframes`
-0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
-`;
-const LdsEllipsis3 = keyframes`
-0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
+const Background = styled.div`
+  background-color: #00000085;
+  width: 500px;
+  height: 100vh;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  #ment {
+    color: #fff6f7;
   }
 `;
-const LoadingComponent = styled.div`
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  & div {
-    position: absolute;
-    top: 33px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #fff;
-    animation-timing-function: cubic-bezier(0, 1, 1, 0);
-  }
-  & div:nth-child(1) {
-    left: 8px;
-    animation: ${LdsEllipsis1} 0.6s infinite;
-  }
-  & div:nth-child(2) {
-    left: 8px;
-    animation: ${LdsEllipsis2} 0.6s infinite;
-  }
-  & div:nth-child(3) {
-    left: 32px;
-    animation: ${LdsEllipsis2} 0.6s infinite;
-  }
-  & div:nth-child(4) {
-    left: 56px;
-    animation: ${LdsEllipsis3} 0.6s infinite;
-  }
+const bounce = keyframes` 
+  0% {transform: translatey(0px);}
+  5% {transform: translatey(-10px);}
+  10% {transform: translatey(0px);}
+  100% {transform: translatey(0px);}
 `;
 
-// https://loading.io/css/ 출처
-
+const Title = styled.div`
+  span {
+    position: relative;
+    display: inline-block;
+    animation: ${bounce} 2s linear 0.1s infinite;
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    &:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+  }
+  font-family: 'RixInooAriDuriR';
+  font-size: 2rem;
+  color: #ff4d57;
+  padding: 1rem 0 1rem 0;
+`;
 export default Loading;

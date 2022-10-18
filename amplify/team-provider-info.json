@@ -1,0 +1,65 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-catchmefrontend-dev-14147-authRole",
+      "UnauthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-dev-14147-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-dev-14147-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-catchmefrontend-dev-14147-deployment",
+      "UnauthRoleName": "amplify-catchmefrontend-dev-14147-unauthRole",
+      "StackName": "amplify-catchmefrontend-dev-14147",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:193644030112:stack/amplify-catchmefrontend-dev-14147/44aaad40-47f1-11ed-b525-02da414b7114",
+      "AmplifyAppId": "d1k3e08r5xj5lt"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1k3e08r5xj5lt",
+          "type": "manual"
+        }
+      }
+    }
+  },
+  "frontend": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-catchmefrontend-frontend-20543-authRole",
+      "UnauthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-frontend-20543-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-frontend-20543-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-catchmefrontend-frontend-20543-deployment",
+      "UnauthRoleName": "amplify-catchmefrontend-frontend-20543-unauthRole",
+      "StackName": "amplify-catchmefrontend-frontend-20543",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:193644030112:stack/amplify-catchmefrontend-frontend-20543/9cb8ea30-47f4-11ed-94e1-0690737b76fa",
+      "AmplifyAppId": "d1k3e08r5xj5lt"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1k3e08r5xj5lt",
+          "type": "manual"
+        }
+      }
+    }
+  },
+  "catchfront": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-catchmefrontend-catchfront-20915-authRole",
+      "UnauthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-catchfront-20915-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::193644030112:role/amplify-catchmefrontend-catchfront-20915-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-catchmefrontend-catchfront-20915-deployment",
+      "UnauthRoleName": "amplify-catchmefrontend-catchfront-20915-unauthRole",
+      "StackName": "amplify-catchmefrontend-catchfront-20915",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:193644030112:stack/amplify-catchmefrontend-catchfront-20915/1ab1e860-47f5-11ed-baa8-06056e47ffb2",
+      "AmplifyAppId": "d1k3e08r5xj5lt"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1k3e08r5xj5lt",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}

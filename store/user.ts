@@ -2,19 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteToken } from 'utils/token';
 import Router from 'next/router';
 // user 스토어 타입 정의
+
 interface UserTypes {
   isLoggedin: boolean;
-  userId: string;
-  userProfileImage: string;
-  userNickname: string;
+  id: string;
+  profileImg: string;
+  nickName: string;
+  kakaoUid: number;
 }
 
 // user스토어의 초기값을 설정
 const initialState: UserTypes = {
   isLoggedin: false,
-  userId: '',
-  userProfileImage: '',
-  userNickname: '',
+  id: '',
+  profileImg: '/assets/img/user_default.png', // 디폴트 이미지
+  nickName: '',
+  kakaoUid: -1,
 };
 
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
@@ -24,24 +27,34 @@ const userSlice = createSlice({
   reducers: {
     loginAction: (
       state: UserTypes,
-      action: PayloadAction<{ userId: string; userProfileImage: string; userNickname: string }>,
+      action: PayloadAction<{ id: string; profileImg: string; nickName: string; kakaoUid: number }>,
     ) => {
-      const { userId, userProfileImage, userNickname } = action.payload;
+      const { id, profileImg, nickName, kakaoUid } = action.payload;
       state.isLoggedin = true;
-      state.userId = userId;
-      state.userProfileImage = userProfileImage;
-      state.userNickname = userNickname;
+      state.id = id;
+      state.profileImg = profileImg;
+      state.nickName = nickName;
+      state.kakaoUid = kakaoUid;
     },
     logoutAction: (state: UserTypes) => {
-      Router.push('/'); // 로그인 화면으로 이동
+      Router.push('/'); // 메인화면으로 이동
       deleteToken(); // 헤더와 쿠키에서 토큰 제거
       state.isLoggedin = false;
-      state.userId = '';
-      state.userProfileImage = '';
-      state.userNickname = '';
+      state.id = '';
+      state.profileImg = '/assets/img/user_default.png'; // 디폴트 이미지
+      state.nickName = '';
+      state.kakaoUid = -1;
+    },
+    profileUploadAction: (
+      state: UserTypes,
+      action: PayloadAction<{ profileImg: string;nickName:string }>,
+    ) => { 
+      const { profileImg, nickName } = action.payload;
+      state.profileImg = profileImg;
+      state.nickName = nickName;
     }
   },
 });
 
-export const { loginAction, logoutAction } = userSlice.actions;
+export const { loginAction, logoutAction, profileUploadAction } = userSlice.actions;
 export default userSlice.reducer;

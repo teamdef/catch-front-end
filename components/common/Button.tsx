@@ -42,6 +42,9 @@ const CustomButton = styled.button<ColorProps>`
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 2rem;
   font-weight: bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   &:hover {
     cursor: pointer;
   }
