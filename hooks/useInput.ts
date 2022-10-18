@@ -1,7 +1,6 @@
 import { useState, useCallback, ChangeEvent } from 'react';
 
 // 제네릭을 사용하여 다양한 타입을 지원하는 input handler 구현
-
 const useInput = <T>(
   initialState: T,
   callback?: (e: ChangeEvent<HTMLInputElement>) => T)
