@@ -82,7 +82,7 @@ const Profile: NextPageWithLayout = () => {
         const { profile_img, nickname } = res.data;
         dispatch(profileUploadAction({ profileImg: profile_img, nickName: nickname }));
         alert('성공적으로 저장되었습니다'); // 모달창으로 바꿀것.
-        router.push('/') // 홈으로
+        router.push('/'); // 홈으로
       }
     }
   };
@@ -91,7 +91,7 @@ const Profile: NextPageWithLayout = () => {
     if (isReqSignUp) {
       isReqSignUp === 'true' ? setIsRegister(true) : setIsRegister(false);
     }
-  },[router.isReady])
+  }, [router.isReady]);
   return (
     <Wrapper>
       {isRegister && <MarginDiv />}
@@ -123,11 +123,23 @@ const Profile: NextPageWithLayout = () => {
         </ProfileImgInputContainer>
         <ProfileNicknameInput
           type="text"
-          placeholder="최소 2글자, 최대 6글자 입력이 가능합니다."
+          placeholder="한글 2~6자까지 입력 가능합니다."
           value={tempNickname}
           onChange={_tempNicknameHandler}
         />
         {error && <Error>{error}</Error>}
+        {isRegister ? (
+          <Info>
+            소셜 로그인에서 설정된 프로필 값이 기본으로 설정되며,
+            <br /> 이 단계에서 수정하지 않아도 서비스 내에서 수정 가능 합니다 :)
+          </Info>
+        ) : (
+          <Info>
+            수정 완료 버튼을 누르면 변경사항이 저장되고,
+            <br /> 홈 화면으로 이동됩니다.
+          </Info>
+        )}
+
         <SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
           {isRegister ? '등록' : '수정'}완료
         </SaveButton>
@@ -168,7 +180,7 @@ const ProfileNicknameInput = styled.input`
   text-align: center;
   margin-bottom: 1rem;
   &::placeholder {
-    color: #888;
+    color: #d6d6d6;
   }
 `;
 const SaveButton = styled.button`
@@ -234,5 +246,9 @@ const Error = styled.div`
   font-size: 14px;
   text-align: center;
 `;
-
+const Info = styled.div`
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+`;
 export default Profile;
