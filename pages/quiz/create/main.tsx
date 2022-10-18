@@ -19,7 +19,7 @@ import { VscChromeClose } from 'react-icons/vsc';
 
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination , EffectFade} from 'swiper';
+import { Pagination, EffectFade } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-cards';
@@ -50,7 +50,6 @@ interface ThumbnailObjectType {
   imgURL: string;
   imgName: string;
 }
-
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -340,6 +339,7 @@ const Page: NextPageWithLayout = () => {
     }
   };
 
+
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
     const storage = globalThis?.sessionStorage; // sesstion storage 를 가져옴
@@ -367,6 +367,7 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
   }, [tempSetTitle]);
+
 
   // TODO: useMemo 및 useCallback을 이용하여 렌더링 최적화하기
   return (
@@ -447,28 +448,26 @@ const Page: NextPageWithLayout = () => {
                       {problem.choiceType === 'text' ? (
                         <TextChoiceListContainer>
                           <>
-                            {problem.choices.map((item, choiceIndex) => {
+                            {problem.choices.map((item: any, choiceIndex: number) => {
                               return (
-                                <>
-                                  <TextChoiceBubble
-                                    correct={problem.correctIndex === choiceIndex}
-                                    key={choiceIndex}
-                                    onClick={() => {
-                                      setCorrectIndex(problemIndex, choiceIndex);
+                                <TextChoiceBubble
+                                  correct={problem.correctIndex === choiceIndex}
+                                  key={choiceIndex}
+                                  onClick={() => {
+                                    setCorrectIndex(problemIndex, choiceIndex);
+                                  }}
+                                >
+                                  {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />}
+                                  <div>{item}</div>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      deleteChoice(problemIndex, choiceIndex);
                                     }}
                                   >
-                                    {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />}
-                                    <div>{item}</div>
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        deleteChoice(problemIndex, choiceIndex);
-                                      }}
-                                    >
-                                      <VscChromeClose size={20} />
-                                    </button>
-                                  </TextChoiceBubble>
-                                </>
+                                    <VscChromeClose size={20} />
+                                  </button>
+                                </TextChoiceBubble>
                               );
                             })}
                             {problem.choices.length < 4 && (
@@ -516,7 +515,7 @@ const Page: NextPageWithLayout = () => {
                                 </label>
                               </ImgInputContainer>
                             )}
-                            {problem.choices.map((item, choiceIndex) => {
+                            {problem.choices.map((item: any, choiceIndex) => {
                               return (
                                 <ImgWrapper
                                   key={choiceIndex}
@@ -578,6 +577,8 @@ const Page: NextPageWithLayout = () => {
     </>
   );
 };
+
+
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
