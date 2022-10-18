@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
     backgroundClickable: true,
     yesTitle: '로그인',
     noTitle: '닫기',
-    yesAction: () => router.push('/'),
+    yesAction: () => router.push('/member/login'),
     contents: <div>로그인이 필요한 서비스입니다.</div>,
   });
 
@@ -85,15 +85,6 @@ const Page: NextPageWithLayout = () => {
                 <div>내가 만든 퀴즈들 🐻‍❄️</div>
               </div>
               <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
-                <SwiperSlide>
-                  <MyQuizCard url={null}>
-                    <div id="quiz-title">{'꽥꽥'}</div>
-                    <div id="quiz-info">참여 0 · 평균점수 0점</div>
-                    <div id="quiz-detail-btn-wrapper">
-                      <button id="quiz-detail-btn">자세히 보기</button>
-                    </div>
-                  </MyQuizCard>
-                </SwiperSlide>
                 {isLoggedin &&
                   (myQuizList ? (
                     myQuizList?.map((quiz, index) => {
