@@ -6,14 +6,14 @@ import { useSelector } from 'react-redux';
 import { Button } from 'components/common';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import ProgressBar from '@ramonak/react-progress-bar';
 
 // quiz/solve/1/result
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
   const { solveUserName, SolveUserScore } = useSelector((state: RootState) => state.solve);
+
   // 해당 문제를 푼 사람 (결과를 받을 사람)의 닉네임
   const new_user: string = '주호민';
   // 해당 문제를 푼 사람의 점수
@@ -86,17 +86,10 @@ const Page: NextPageWithLayout = () => {
           <strong>{new_user}</strong> 님
         </h1>
         <ProgressArea>
-          <CircularProgressbar
-            strokeWidth={10}
-            value={new_user_score}
-            text={`${new_user_score}`}
-            maxValue={10}
-            styles={buildStyles({
-              textSize: '1.5rem',
-              pathTransitionDuration: 0.5,
-              trailColor: '#eee',
-              backgroundColor: '#fff',
-            })}
+          <ProgressBar
+            completed={`${new_user_score}`}
+            maxCompleted={props.count}
+            bgColor={'#ff4d57'}
           />
         </ProgressArea>
         <p>
@@ -128,10 +121,10 @@ const Page: NextPageWithLayout = () => {
       </RankingArea>
 
       <ButtonArea>
-        <Button width="150px" height="55px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff">
+        <Button width="150px" height="50px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff">
           홈으로
         </Button>
-        <Button width="150px" height="55px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">
+        <Button width="150px" height="50px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">
           나도 퀴즈 만들기
         </Button>
       </ButtonArea>
@@ -142,19 +135,18 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
   width: 100%;
   height: 100vh;
   background-color: #fff;
-  padding-top: 10%;
 `;
 const ButtonArea = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  margin: 10% 0;
-  padding: 0 10%;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
 `;
 const ScoreArea = styled.div`
   position: relative;
@@ -166,7 +158,7 @@ const ScoreArea = styled.div`
     font-size: 1.3rem;
     font-weight: normal;
     color: #888;
-    margin-top: 0;
+    margin: 0 0 10%;
     strong {
       font-weight: 500;
       font-size: 1.8rem;
@@ -188,13 +180,9 @@ const ScoreArea = styled.div`
 const ProgressArea = styled.div`
   position: relative;
   display: block;
-  width: 125px;
-  height: 125px;
-  .CircularProgressbar-path {
-    stroke: #ff4d57;
-  }
-  .CircularProgressbar-text {
-    fill: #ff4d57;
+  width: 80%;
+  span {
+    padding: 0 10px !important;
   }
 `;
 const RankingArea = styled.div`
@@ -204,7 +192,7 @@ const RankingArea = styled.div`
   align-items: center;
   width: 100%;
   > h2 {
-    margin-top: 5%;
+    margin-top: 0;
     font-weight: normal;
     color: #888;
     font-size: 1rem;
