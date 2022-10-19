@@ -1,133 +1,62 @@
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { saveSolveUserScoreAction } from 'store/quiz_solve';
 import { Button } from 'components/common';
+import Router from 'next/router'
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
+import Match from 'components/common/match'
 import ProgressBar from '@ramonak/react-progress-bar';
+import RankBoard from 'components/common/RankBoard';
 
 // quiz/solve/1/result
 const Page: NextPageWithLayout = () => {
-  const router = useRouter();
-  let { id } = router.query;
-  const { solveUserName, SolveUserScore } = useSelector((state: RootState) => state.solve);
-
-  // 해당 문제를 푼 사람 (결과를 받을 사람)의 닉네임
-  const new_user: string = '주호민';
-  // 해당 문제를 푼 사람의 점수
-  const new_user_score: number = 4;
-
-  // 더미 데이터
-  const props = {
-    id: 1,
-    title: '내가 좋아하는 것들',
-    count: 10,
-    score_list: [
-      {
-        nickname: '병건이올시다',
-        score: 8,
-      },
-      {
-        nickname: '단군',
-        score: 8,
-      },
-      {
-        nickname: '최고민수',
-        score: 7,
-      },
-      {
-        nickname: '벌레아저씨',
-        score: 6,
-      },
-      {
-        nickname: '킨더조이',
-        score: 4,
-      },
-      {
-        nickname: '주호민',
-        score: 4,
-      },
-      {
-        nickname: '김풍',
-        score: 2,
-      },
-    ],
-    maker: '진현우',
-  };
-
-  // 퀴즈 점수 높은 순으로 나열
-  const ranking = props.score_list.sort(
-    (a: { nickname: string; score: number }, b: { nickname: string; score: number }) => {
-      return b.score - a.score;
-    },
-  );
-  // 문제를 푼 사람의 순위
-  const isRank = (element: { nickname: string; score: number }) => {
-    if (element.nickname === new_user) return true;
-  };
-  const new_user_rank = ranking.findIndex(isRank) + 1;
-  // 랭킹 순으로 JSX 로 변환
-  const RankBoard = ranking.map((item, index) => (
-    <li className={`rank_${index + 1} ${item.nickname == new_user ? 'active' : ''}`} key={index}>
-      <div>
-        <i>{index + 1 == 1 ? '🥇' : index + 1 == 2 ? '🥈' : index + 1 == 3 ? '🥉' : index + 1}</i>
-        <strong>{item.nickname}</strong>
-        <em>{item.score}점</em>
-      </div>
-    </li>
-  ));
-  console.log(RankBoard);
+  const dispatch = useDispatch();
+  const { solveUserName, solveUserScore, solveProblems,solveAnswers } = useSelector((state: RootState) => state.solve);
+  useEffect(()=> {
+    dispatch(saveSolveUserScoreAction({ solveUserScore: solveAnswers.filter((element: any) => undefined === element).length }));
+  },[])
+  const [openMatch, setOpenMatch] = useState<Boolean>(false);
   return (
     <Container>
       <ScoreArea>
         <h1>
-          <strong>{new_user}</strong> 님
+          <strong>{solveUserName}</strong> 님
         </h1>
         <ProgressArea>
-          <ProgressBar
-            completed={`${new_user_score}`}
-            maxCompleted={props.count}
-            bgColor={'#ff4d57'}
-          />
+          <ProgressBar completed={`${solveUserScore}`} maxCompleted={solveProblems.length} bgColor={'#ff4d57'} />
         </ProgressArea>
         <p>
-          총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요{' '}
+          총 <span>{solveProblems.length}</span> 문제 중 <span>{solveUserScore}</span> 문제 맞았어요{' '}
         </p>
-        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">
+        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57"
+          onClick={() => setOpenMatch(true)}
+        >
           오답 노트
         </Button>
       </ScoreArea>
-
+      
+      
       <RankingArea>
         <h2>
-          <strong>{new_user}</strong> 님의 랭킹을 확인해 보세요!
+          <strong>{solveUserName}</strong> 님의 랭킹을 확인해 보세요!
         </h2>
-        {new_user_rank > 5 ? (
-          <ul>
-            {RankBoard.slice(0, 5)}
-            <li className={`rank_${new_user_rank} active`}>
-              <div>
-                <i>{new_user_rank}</i>
-                <strong>{new_user}</strong>
-                <em>{new_user_score}점</em>
-              </div>
-            </li>
-          </ul>
-        ) : (
-          <ul>{RankBoard.slice(0, 6)}</ul>
-        )}
+        <RankBoard/>
       </RankingArea>
-
+          
       <ButtonArea>
-        <Button width="150px" height="50px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff">
+        <Button width="150px" height="50px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff"
+        onClick={()=> Router.push('/home')}>
           홈으로
         </Button>
         <Button width="150px" height="50px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">
           나도 퀴즈 만들기
         </Button>
       </ButtonArea>
+      {openMatch ? <Match setOpenMatch={setOpenMatch} /> : ''}
     </Container>
   );
 };
@@ -155,13 +84,13 @@ const ScoreArea = styled.div`
   flex-direction: column;
   align-items: center;
   > h1 {
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: normal;
     color: #888;
-    margin: 0 0 10%;
+    margin: 0 0 5%;
     strong {
       font-weight: 500;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       font-weight: normal;
       color: #ff4d57;
     }
@@ -182,7 +111,7 @@ const ProgressArea = styled.div`
   display: block;
   width: 80%;
   span {
-    padding: 0 10px !important;
+    padding: 0 15px !important;
   }
 `;
 const RankingArea = styled.div`

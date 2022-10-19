@@ -6,7 +6,7 @@ import { Button } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import { saveSolveAnswersAction, saveSolveUserNameAction, saveSolveUserScoreAction } from 'store/quiz_solve';
+import { saveSolveAnswersAction, saveSolveUserNameAction } from 'store/quiz_solve';
 import { BiChevronRight } from 'react-icons/bi';
 import SwipeAniIcon from 'components/common/SwipeAniIcon';
 import { useModal } from 'hooks';
@@ -22,7 +22,7 @@ const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const dispatch = useDispatch();
-  const { solveSetTitle, solveProblems, solveAnswers, solveUserScore } = useSelector((state: RootState) => state.solve);
+  const { solveSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
 
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
   let answers: string[] = userAnswers;
@@ -39,21 +39,13 @@ const Page: NextPageWithLayout = () => {
     }
   });
 
-  // 유저 점수
-  const score = solveAnswers.filter((element: any) => undefined === element).length;
-
-  console.log(score);
-  console.log(solveSetTitle);
   const onChange = () => {
-    console.log('유저가 고른답', answers);
     /* 배열 내 빈 값을 찾고 빈 값이 없을 경우(false) + 유저가 선택한 답의 갯수와 문제의 갯수가 일치할 경우 버튼 출력 */
     if (answers.includes(undefined) == false && answers.length == solveProblems.length) {
       setChoice(true);
       setUserAnswers(answers);
     }
   };
-
-  
 
   const QuizList = solveProblems.map((item: any, i: number) => (
     <SwiperSlide key={i}>
@@ -79,20 +71,13 @@ const Page: NextPageWithLayout = () => {
       </QuizSolveCard>
     </SwiperSlide>
   ));
-
   const moveResult = (_nickname: string) => {
-    dispatch(
-      saveSolveUserScoreAction({ solveUserScore: solveAnswers.filter((element: any) => undefined === element).length }),
-    );
-    dispatch(
-      saveSolveUserNameAction({ solveUserName: _nickname })
-    );
-    
+    dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
   };
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    contents: <NickNameModal moveResult={moveResult}/>,
+    contents: <NickNameModal moveResult={moveResult} />,
   });
 
   return (
@@ -123,7 +108,6 @@ const Page: NextPageWithLayout = () => {
         ) : (
           <SwipeAniIcon />
         )}
-
         <RenderModal />
       </QuizSolveBottom>
     </Container>
