@@ -49,12 +49,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const access_token = getCookie('access_token');
     if (access_token) {
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } else {
-      // 로그인 되어 있는 상태라면?
-      if (isLoggedin) {
-        dispatch(logoutAction()); // 로그인 상태에서 쿠키 없으면 로그아웃 시키기
-      }
-    }
+    } 
   }, [router]);
 
   useEffect(() => storePathValues, [router.asPath]);
