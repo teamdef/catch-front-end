@@ -80,14 +80,7 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
       const access_token = match[2]; // RegExp 객체 반환값 참고
       // axios 객체에 인증헤더 추가
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } else {
-      // 쿠키가 없다면 비로그인 상태 .
-      if (ctx.res) {
-        ctx.res.statusCode = 302;
-        ctx.res.setHeader('Location', ``); 
-        ctx.res.end();
-      }
-    }
+    } 
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 
