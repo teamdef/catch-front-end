@@ -22,7 +22,8 @@ const saveToken = (accessToken: string): Promise<boolean> =>
       httpOnly: HTTP_ONLY, // document.cookie와 같이 자바스크립트에서 쿠키에 접근하는 것을 방지
       expires: expires_time, // 쿠키 만료 시점
       maxAge: max_age, // 쿠키 유효 기간
-      //sameSite: 'none', // 웹 애플리케이션에서 CSRF(교차 사이트 요청 위조)공격을 방지하기 위해 */
+      domain:'catchcatch.link',
+      sameSite: 'none', // 웹 애플리케이션에서 CSRF(교차 사이트 요청 위조)공격을 방지하기 위해 */
       //secure: false, // https로 통신할 때만 쿠키가 저장된다
     });
     resolve(true);
