@@ -50,6 +50,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (access_token) {
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
     } else {
+      console.log("access_token 없음 실행됨.... ")
       dispatch(logoutAction());
     }
   }, [router]);
