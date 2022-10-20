@@ -19,11 +19,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
       res.setHeader('Location', `/`);
       res.end();
     }
-  } else {
-    res.statusCode = 302;
-    res.setHeader('Location', `/`);
-    res.end();
-  }
+  } 
   return { props: {} };
 };
 const Page: NextPageWithLayout = () => {
