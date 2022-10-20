@@ -49,7 +49,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     const access_token = getCookie('access_token');
     if (access_token) {
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } 
+    } else {
+      dispatch(logoutAction());
+    }
   }, [router]);
 
   useEffect(() => storePathValues, [router.asPath]);

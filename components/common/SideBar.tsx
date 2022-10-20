@@ -72,6 +72,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
       if (res.status === 200) {
         alert(res.data.message);
         dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+        Router.push('/'); // 메인화면으로 이동
       }
     });
   };
