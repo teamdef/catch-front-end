@@ -1,28 +1,50 @@
 import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
+import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import {AiOutlineClose} from 'react-icons/ai'
+import axios from 'axios'
+
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
 interface NickNameProps {
   moveResult: (arg0: string) => void;
 }
-const NickNameModal = ({ moveResult }: NickNameProps) => {
-  const { quizId } = useSelector((state: RootState) => state.solve);
+
+const NickNameModal = () => {
+  const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
+
+  const moveResult = (_nickname: string) => {
+    async function postSolver() {
+      await axios
+        .post('https://api.catchcatch.link/v1/solver', {
+          nickName: _nickname,
+          score: solveUserScore,
+          probsetId: quizId,
+        })
+        .then(function (response) {
+          Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    postSolver();
+  };
+
   const [text, , clearFunction, textHandler] = useInput<string>('');
+
   return (
     <NickNameModalEl>
       <h1>닉네임을 입력해주세요</h1>
       <div>
-        <input type="text" value={text} onChange={textHandler} placeholder="한글 최대 6자, 영어 최대 12자, 중복가능"/>
-        <AiOutlineClose color="#bcbcbc" onClick={clearFunction}/>
+        <input type="text" value={text} onChange={textHandler} placeholder="한글 최대 6자, 영어 최대 12자, 중복가능" />
+        <AiOutlineClose color="#bcbcbc" onClick={clearFunction} />
       </div>
       <button
         onClick={() => {
           moveResult(text);
-          Router.push(`/quiz/solve/${quizId}/result`);
         }}
       >
         확인
@@ -40,22 +62,24 @@ const NickNameModalEl = styled.div`
     font-weight: normal;
     font-size: 1rem;
   }
-  
+
   > div {
-    position:relative;
-    display:flex;
+    position: relative;
+    display: flex;
     justify-content: space-between;
     margin: 15% 0 10%;
     padding: 10px 20px;
     padding-right: 10px;
     border-radius: 25px;
-    border: 1px solid #CDCDCD;
+    border: 1px solid #cdcdcd;
     width: 225px;
     input {
-      position:relative;
-      font-size: .6rem;
+      position: relative;
+      font-size: 0.6rem;
       width: 100%;
-      &::placeholder {color: #BCBCBC;}
+      &::placeholder {
+        color: #bcbcbc;
+      }
       border: none;
       outline-style: none;
       padding: 0;

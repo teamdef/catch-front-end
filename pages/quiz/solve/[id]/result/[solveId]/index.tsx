@@ -2,24 +2,22 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
-import { useSelector, useDispatch } from 'react-redux';
-import { saveSolveUserScoreAction } from 'store/quiz_solve';
+import { useSelector } from 'react-redux';
 import { Button } from 'components/common';
-import Router from 'next/router'
+import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
-import Match from 'components/common/match'
+import Match from 'components/common/match';
 import ProgressBar from '@ramonak/react-progress-bar';
 import RankBoard from 'components/common/RankBoard';
 
 // quiz/solve/1/result
 const Page: NextPageWithLayout = () => {
-  const dispatch = useDispatch();
-  const { solveUserName, solveUserScore, solveProblems,solveAnswers } = useSelector((state: RootState) => state.solve);
-  useEffect(()=> {
-    dispatch(saveSolveUserScoreAction({ solveUserScore: solveAnswers.filter((element: any) => undefined === element).length }));
-  },[])
+  const router = useRouter();
+  const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
+  let { solveId } = router.query;
   return (
     <Container>
       <ScoreArea>
@@ -32,24 +30,34 @@ const Page: NextPageWithLayout = () => {
         <p>
           총 <span>{solveProblems.length}</span> 문제 중 <span>{solveUserScore}</span> 문제 맞았어요{' '}
         </p>
-        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57"
+        <Button
+          width="40%"
+          height="35px"
+          fontSize=".9rem"
+          bgColor="#fff"
+          fontColor="#ff4d57"
           onClick={() => setOpenMatch(true)}
         >
           오답 노트
         </Button>
       </ScoreArea>
-      
-      
+
       <RankingArea>
         <h2>
           <strong>{solveUserName}</strong> 님의 랭킹을 확인해 보세요!
         </h2>
-        <RankBoard/>
+        <RankBoard solveId={solveId}/>
       </RankingArea>
-          
+
       <ButtonArea>
-        <Button width="150px" height="50px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff"
-        onClick={()=> Router.push('/home')}>
+        <Button
+          width="150px"
+          height="50px"
+          fontSize="1.2rem"
+          bgColor="#ff4d57"
+          fontColor="#fff"
+          onClick={() => Router.push('/home')}
+        >
           홈으로
         </Button>
         <Button width="150px" height="50px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">

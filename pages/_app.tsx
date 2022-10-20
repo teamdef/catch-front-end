@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // https://github.com/vercel/next.js/discussions/36832
 
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  console.log('흐음 ');
+  
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
     // 빠르게 정규식으로 한다 .. 문자열 내장함수로 하게되면 매우 비효율적...

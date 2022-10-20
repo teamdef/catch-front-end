@@ -10,7 +10,7 @@ import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve'
 
-// quiz/solve/1
+
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const Page: NextPageWithLayout = () => {
         );
         dispatch(saveSolveProblemSetAction({solveSetTitle : response.data[0].set_title}));
         dispatch(saveSolveProblemsAction({solveProblems : response.data[0].prob}));
-        dispatch(saveQuizIdAction({quizId : response.data[0].id}))
+        dispatch(saveQuizIdAction({quizId : `${id}`}));
         setThumbnail(response.data[0].thumbnail);
         // 정답 배열 생성
         

@@ -1,78 +1,67 @@
-const RankBoard = () => {
-  // 해당 문제를 푼 사람 (결과를 받을 사람)의 닉네임
-  const new_user: string = '주호민';
-  // 해당 문제를 푼 사람의 점수
-  const new_user_score: number = 4;
-  // 더미 데이터
-  const props = {
-    id: 1,
-    title: '내가 좋아하는 것들',
-    count: 10,
-    score_list: [
-      {
-        nickname: '병건이올시다',
-        score: 8,
-      },
-      {
-        nickname: '단군',
-        score: 8,
-      },
-      {
-        nickname: '최고민수',
-        score: 7,
-      },
-      {
-        nickname: '벌레아저씨',
-        score: 6,
-      },
-      {
-        nickname: '킨더조이',
-        score: 4,
-      },
-      {
-        nickname: '주호민',
-        score: 4,
-      },
-      {
-        nickname: '김풍',
-        score: 2,
-      },
-    ],
-    maker: '진현우',
-  };
+import { useEffect, useState } from 'react';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
-  // 퀴즈 점수 높은 순으로 나열
-  const list_sort = props.score_list.sort(
-    (a: { nickname: string; score: number }, b: { nickname: string; score: number }) => {
-      return b.score - a.score;
-    },
+interface NewUserType {
+  created_at: string;
+  id: string;
+  nickname: string;
+  ranking: string;
+  score: number;
+}
+const RankBoard = ({ solveId }:any) => {
+  const { quizId } = useSelector((state: RootState) => state.solve);
+  const [rankList, setRankList] = useState<string[]>([]);
+  const [newUser, setNewUser] = useState<NewUserType>();
+
+  useEffect(() => {
+    async function getRank() {
+      try {
+        const rank_res = await axios.get(`https://api.catchcatch.link/v1/solver/ranking?probsetId=${quizId}`);
+        console.log(rank_res);
+        setRankList(rank_res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    async function getUser() {
+      try {
+        const user_res = await axios.get(
+          `https://api.catchcatch.link/v1/solver/ranking?probsetId=${quizId}&solverId=${solveId}`,
+        );
+        console.log(user_res);
+        setNewUser(user_res.data[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getRank();
+    getUser();
+  }, []);
+
+  const Ranking = rankList.map(
+    (item: any, index: number) =>
+      newUser && (
+        <li className={`rank_${index + 1} ${item.nickname == newUser.nickname ? 'active' : ''}`} key={index}>
+          <div>
+            <i>{index + 1 == 1 ? '🥇' : index + 1 == 2 ? '🥈' : index + 1 == 3 ? '🥉' : index + 1}</i>
+            <strong>{item.nickname}</strong>
+            <em>{item.score}점</em>
+          </div>
+        </li>
+      ),
   );
-  // 문제를 푼 사람의 순위
-  const isRank = (element: { nickname: string; score: number }) => {
-    if (element.nickname === new_user) return true;
-  };
-  const new_user_rank = list_sort.findIndex(isRank) + 1;
-  // 랭킹 순으로 JSX 로 변환
-  
-  const Ranking = list_sort.map((item, index) => (
-    <li className={`rank_${index + 1} ${item.nickname == new_user ? 'active' : ''}`} key={index}>
-      <div>
-        <i>{index + 1 == 1 ? '🥇' : index + 1 == 2 ? '🥈' : index + 1 == 3 ? '🥉' : index + 1}</i>
-        <strong>{item.nickname}</strong>
-        <em>{item.score}점</em>
-      </div>
-    </li>
-  ));
   return (
     <>
-      {new_user_rank > 5 ? (
+      {newUser && Number(newUser.ranking) > 5 ? (
         <ul>
           {Ranking.slice(0, 5)}
-          <li className={`rank_${new_user_rank} active`}>
+          <li className={`rank_${Number(newUser.ranking)} active`}>
             <div>
-              <i>{new_user_rank}</i>
-              <strong>{new_user}</strong>
-              <em>{new_user_score}점</em>
+              <i>{Number(newUser.ranking)}</i>
+              <strong>{newUser.nickname}</strong>
+              <em>{newUser.score}점</em>
             </div>
           </li>
         </ul>

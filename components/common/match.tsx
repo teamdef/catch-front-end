@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Button } from 'components/common';
 const match = ({ setOpenMatch }: any) => {
   const { solveAnswers } = useSelector((state: RootState) => state.solve);
-  console.log(solveAnswers);
   return (
     <MatchEl>
       <h1>오답노트</h1>

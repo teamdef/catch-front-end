@@ -4,20 +4,23 @@ import styled from 'styled-components';
 import { AppLayout } from 'components/layout';
 import { Button } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import { saveSolveAnswersAction, saveSolveUserNameAction } from 'store/quiz_solve';
+import { saveSolveAnswersAction, saveSolveUserScoreAction } from 'store/quiz_solve';
 import { BiChevronRight } from 'react-icons/bi';
 import SwipeAniIcon from 'components/common/SwipeAniIcon';
 import { useModal } from 'hooks';
+import Router from 'next/router';
 import NickNameModal from 'components/modal/NickNameModal';
+
 // swiper
 import { Pagination, EffectFade } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-// quiz/solve/1/result
+
 const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -38,7 +41,7 @@ const Page: NextPageWithLayout = () => {
       return { title: prob.prob_title, user_answer: userAnswers[index], correct_answer: result.cho_txt };
     }
   });
-
+  
   const onChange = () => {
     /* 배열 내 빈 값을 찾고 빈 값이 없을 경우(false) + 유저가 선택한 답의 갯수와 문제의 갯수가 일치할 경우 버튼 출력 */
     if (answers.includes(undefined) == false && answers.length == solveProblems.length) {
@@ -71,18 +74,15 @@ const Page: NextPageWithLayout = () => {
       </QuizSolveCard>
     </SwiperSlide>
   ));
-  const moveResult = (_nickname: string) => {
-    dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
-  };
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    contents: <NickNameModal moveResult={moveResult} />,
+    contents: <NickNameModal />,
   });
 
   return (
     <Container>
-      <Logo>캐치캐치</Logo>
+      <Logo onClick={() => Router.push('/home')}>캐치캐치</Logo>
       <QuizSolveContent>
         <QuizTitle>{solveSetTitle}</QuizTitle>
         <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
@@ -99,6 +99,11 @@ const Page: NextPageWithLayout = () => {
             bgColor="#ff4d57"
             onClick={() => {
               dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
+              dispatch(
+                saveSolveUserScoreAction({
+                  solveUserScore: matchList.filter((element: any) => undefined === element).length,
+                }),
+              );
               openModal();
             }}
           >
