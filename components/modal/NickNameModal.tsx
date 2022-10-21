@@ -2,20 +2,23 @@ import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { saveSolveUserNameAction } from 'store/quiz_solve';
 import Router from 'next/router';
 import { RootState } from 'store';
-import axios from 'axios'
+import axios from 'axios';
 
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
 interface NickNameProps {
   moveResult: (arg0: string) => void;
 }
 
-const NickNameModal = ({setLoading}:any) => {
+const NickNameModal = ({ setLoading }: any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
-  console.log(setLoading);
+  const dispatch = useDispatch();
+
   const moveResult = (_nickname: string) => {
+    dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
     setLoading(true);
     async function postSolver() {
       await axios

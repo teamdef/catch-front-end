@@ -20,7 +20,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-
 const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -29,7 +28,7 @@ const Page: NextPageWithLayout = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
   let answers: string[] = userAnswers;
-
+  
   // 오답노트
   let matchList = solveProblems.map((prob: any, index: number) => {
     // 정답(correct_choice)의 id 와 일치하는 항목을 찾아내서 정답지 배열을 생성
@@ -37,11 +36,13 @@ const Page: NextPageWithLayout = () => {
       return choice.id === prob.correct_choice;
     });
     // result : id 와 cho_txt||cho_img 를 가진 object
-    if (result.cho_txt != userAnswers[index]) {
+    if (result.cho_txt != userAnswers[index] && result.cho_txt != null) {
       return { title: prob.prob_title, user_answer: userAnswers[index], correct_answer: result.cho_txt };
     }
+    else if (result.cho_img != userAnswers[index] && result.cho_img != null) {
+      return { title: prob.prob_title, user_answer: userAnswers[index], correct_answer: result.cho_img };
+    }
   });
-  
   const onChange = () => {
     /* 배열 내 빈 값을 찾고 빈 값이 없을 경우(false) + 유저가 선택한 답의 갯수와 문제의 갯수가 일치할 경우 버튼 출력 */
     if (answers.includes(undefined) == false && answers.length == solveProblems.length) {
@@ -54,30 +55,61 @@ const Page: NextPageWithLayout = () => {
     <SwiperSlide key={i}>
       <QuizSolveCard>
         <CardTitle>{item.prob_title}</CardTitle>
-        <ChoiceWrapper>
-          {item.choices.map((_choice: any, j: number) => (
-            <ChoiceItem key={j} id="choice-item">
-              <input
-                type="radio"
-                id={_choice.id}
-                name={`choice_${i}`}
-                value={_choice.cho_txt}
-                onChange={() => {
-                  answers[i] = _choice.cho_txt;
-                  onChange();
-                }}
-              />
-              <label htmlFor={_choice.id}>{_choice.cho_txt}</label>
-            </ChoiceItem>
-          ))}
-        </ChoiceWrapper>
+        {item.is_img ? (
+          <ChoiceWrapper id="choice-img-wrapper">
+            {item.choices.map(
+              (_choice: any, j: number) => (
+                (
+                  <ChoiceItem key={j} className="choice-item" id="choice-img-item">
+                    <input
+                      type="radio"
+                      id={_choice.id}
+                      name={`choice_${i}`}
+                      value={_choice.cho_img}
+                      onChange={() => {
+                        answers[i] = _choice.cho_img;
+                        onChange();
+                      }}
+                    />
+                    <label htmlFor={_choice.id}>
+                      <img src={_choice.cho_img} />
+                    </label>
+                  </ChoiceItem>
+                )
+              ),
+            )}
+          </ChoiceWrapper>
+        ) : (
+          <ChoiceWrapper>
+            {item.choices.map(
+              (_choice: any, j: number) => (
+                console.log(_choice),
+                (
+                  <ChoiceItem key={j} className="choice-item" id="choice-item-txt">
+                    <input
+                      type="radio"
+                      id={_choice.id}
+                      name={`choice_${i}`}
+                      value={_choice.cho_txt}
+                      onChange={() => {
+                        answers[i] = _choice.cho_txt;
+                        onChange();
+                      }}
+                    />
+                    <label htmlFor={_choice.id}>{_choice.cho_txt}</label>
+                  </ChoiceItem>
+                )
+              ),
+            )}
+          </ChoiceWrapper>
+        )}
       </QuizSolveCard>
     </SwiperSlide>
   ));
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    contents: <NickNameModal setLoading={setLoading}/>,
+    contents: <NickNameModal setLoading={setLoading} />,
   });
 
   return (
@@ -104,6 +136,7 @@ const Page: NextPageWithLayout = () => {
                   solveUserScore: matchList.filter((element: any) => undefined === element).length,
                 }),
               );
+              console.log(matchList);
               openModal();
             }}
           >
@@ -113,9 +146,8 @@ const Page: NextPageWithLayout = () => {
         ) : (
           <SwipeAniIcon />
         )}
-        <RenderModal/>
-        {loading ? <Loading ment="결과 출력 중 . . ."/> : ''}
-        
+        <RenderModal />
+        {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
       </QuizSolveBottom>
     </Container>
   );
@@ -185,7 +217,7 @@ const QuizSolveContent = styled.div`
       opacity: 0;
       transition: opacity 1s 0.2s;
     }
-    #choice-item {
+    .choice-item {
       opacity: 0;
       transition: 0.5s;
 
@@ -211,13 +243,13 @@ const QuizSolveContent = styled.div`
     visibility: visible;
 
     h2,
-    #choice-item {
+    .choice-item {
       opacity: 1;
     }
     h2 {
       animation: Bounce 1s;
     }
-    #choice-item {
+    .choice-item {
       animation: Right 0.5s;
     }
   }
@@ -225,12 +257,12 @@ const QuizSolveContent = styled.div`
 const QuizSolveCard = styled.div`
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
   width: 90%;
+  height: 100%;
   border-radius: 25px;
   background-color: white;
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  width: inherit;
   flex-wrap: nowrap;
   align-items: center;
   margin: 0 auto;
@@ -260,6 +292,11 @@ const ChoiceWrapper = styled.div`
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 3%;
+  &#choice-img-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 5px));
+    grid-template-rows: repeat(2, 120px);
+  }
 `;
 const ChoiceItem = styled.div`
   position: relative;
@@ -278,6 +315,28 @@ const ChoiceItem = styled.div`
   input:checked + label {
     color: #fff;
     background-color: #aad775;
+  }
+  &#choice-img-item {
+    width:100%;
+    height: 100%;
+    label {
+      padding: 0;
+      overflow:hidden;
+      border-radius: 18px;
+      width:100%;
+      height:100%;
+    }
+    input:checked + label {
+      color: #fff;
+      background-color: #f4f4f4;
+      border: 3px solid #aad775;
+    }
+    img {
+      position:relative;
+      width:100%;
+      height:100%;
+      object-fit: contain;
+    }
   }
 `;
 const QuizSolveBottom = styled.div`

@@ -8,7 +8,7 @@ import Router from 'next/router';
 import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
-import Match from 'components/common/match';
+import MatchNote from 'components/common/MatchNote';
 import ProgressBar from '@ramonak/react-progress-bar';
 import RankBoard from 'components/common/RankBoard';
 
@@ -63,7 +63,7 @@ const Page: NextPageWithLayout = () => {
           나도 퀴즈 만들기
         </Button>
       </ButtonArea>
-      {openMatch ? <Match setOpenMatch={setOpenMatch} /> : ''}
+      {openMatch ? <MatchNote setOpenMatch={setOpenMatch} /> : ''}
     </Container>
   );
 };
