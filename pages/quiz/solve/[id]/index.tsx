@@ -8,6 +8,7 @@ import { Button } from 'components/common';
 import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
+import Router from 'next/router';
 import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve'
 
 
@@ -40,7 +41,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <Container>
-      <Logo>캐치캐치</Logo>
+      <Logo onClick={() => Router.push('/home')}>캐치캐치</Logo>
       <QuizInfo>
         <Circle>
           <img src={thumbnail} />
@@ -49,7 +50,6 @@ const Page: NextPageWithLayout = () => {
           </span>
         </Circle>
         <p>"{solveSetTitle}"</p>
-        <span>출제자 : {}</span>
       </QuizInfo>
       <Button
         width="250px"

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import styled from 'styled-components';
 import { AppLayout } from 'components/layout';
-import { Button } from 'components/common';
+import { Button, Loading } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,7 +26,7 @@ const Page: NextPageWithLayout = () => {
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const dispatch = useDispatch();
   const { solveSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
-
+  const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
   let answers: string[] = userAnswers;
 
@@ -77,7 +77,7 @@ const Page: NextPageWithLayout = () => {
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    contents: <NickNameModal />,
+    contents: <NickNameModal setLoading={setLoading}/>,
   });
 
   return (
@@ -113,7 +113,9 @@ const Page: NextPageWithLayout = () => {
         ) : (
           <SwipeAniIcon />
         )}
-        <RenderModal />
+        <RenderModal/>
+        {loading ? <Loading ment="결과 출력 중 . . ."/> : ''}
+        
       </QuizSolveBottom>
     </Container>
   );

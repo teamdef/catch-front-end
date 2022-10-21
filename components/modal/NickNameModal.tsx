@@ -12,10 +12,11 @@ interface NickNameProps {
   moveResult: (arg0: string) => void;
 }
 
-const NickNameModal = () => {
+const NickNameModal = ({setLoading}:any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
-
+  console.log(setLoading);
   const moveResult = (_nickname: string) => {
+    setLoading(true);
     async function postSolver() {
       await axios
         .post('https://api.catchcatch.link/v1/solver', {
@@ -24,9 +25,11 @@ const NickNameModal = () => {
           probsetId: quizId,
         })
         .then(function (response) {
+          setLoading(false);
           Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
         })
         .catch(function (error) {
+          setLoading(false);
           console.log(error);
         });
     }

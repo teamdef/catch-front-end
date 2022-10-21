@@ -12,7 +12,6 @@ import Match from 'components/common/match';
 import ProgressBar from '@ramonak/react-progress-bar';
 import RankBoard from 'components/common/RankBoard';
 
-// quiz/solve/1/result
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
