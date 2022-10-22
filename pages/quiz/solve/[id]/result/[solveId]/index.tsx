@@ -119,6 +119,7 @@ const ProgressArea = styled.div`
   width: 80%;
   span {
     padding: 0 15px !important;
+    display:none !important;
   }
 `;
 const RankingArea = styled.div`
@@ -201,7 +202,7 @@ const RankingArea = styled.div`
         }
       }
       &.active {
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0px 0px 5px 5px rgba(255,165,170,.5);
         background-size: 300% 300%;
         background-image: linear-gradient(-45deg, #ff4d57 0%, #ff4d57 10%, #fff 20%, #ff4d57 30%, #ff4d57 100%);
         animation: AnimateBG 2s cubic-bezier(1, 0, 0.2, 0.2) infinite;
