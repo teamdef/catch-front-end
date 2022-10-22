@@ -7,7 +7,7 @@ import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'store/user';
 import { saveToken } from 'utils/token';
-import { Loading } from 'components/common';
+import { Loading, HeadMeta } from 'components/common';
 
 interface Props {
   data?: any;
@@ -32,7 +32,6 @@ const redirect: NextPageWithLayout = () => {
     const code = urlParams.get('code');
     if (code) {
       const res = await kakaoLoginApi(code);
-      console.log(res.data);
       saveUser(res.data);
     }
   };
@@ -63,6 +62,7 @@ const redirect: NextPageWithLayout = () => {
 
   return (
     <div>
+      <HeadMeta/>
       <Loading ment={'로그인 중 입니다...'} />
     </div>
   );

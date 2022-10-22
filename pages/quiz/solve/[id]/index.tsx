@@ -4,7 +4,7 @@ import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'components/common';
+import { Button,HeadMeta } from 'components/common';
 import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
@@ -37,35 +37,37 @@ const Page: NextPageWithLayout = () => {
     }
     getQuiz();
   }, [id]);
-  console.log(solveSetTitle);
 
   return (
-    <Container>
-      <Logo>캐치캐치</Logo>
-      <QuizInfo>
-        <Circle>
-          <img src={thumbnail} />
-          <span>
-            총 <em>{solveProblems.length}</em> 문제
-          </span>
-        </Circle>
-        <p>"{solveSetTitle}"</p>
-        <span>출제자 : {}</span>
-      </QuizInfo>
-      <Button
-        width="250px"
-        height="55px"
-        fontSize="1.4rem"
-        bgColor="#ff4d57"
-        fontColor="#fff"
-        id="create-btn"
-        onClick={() => {
-          router.push(`/quiz/solve/${id}/main`);
-        }}
-      >
-        시작하기
-      </Button>
-    </Container>
+    <>
+      <HeadMeta />
+      <Container>
+        <Logo>캐치캐치</Logo>
+        <QuizInfo>
+          <Circle>
+            <img src={thumbnail} />
+            <span>
+              총 <em>{solveProblems.length}</em> 문제
+            </span>
+          </Circle>
+          <p>"{solveSetTitle}"</p>
+          <span>출제자 : {}</span>
+        </QuizInfo>
+        <Button
+          width="250px"
+          height="55px"
+          fontSize="1.4rem"
+          bgColor="#ff4d57"
+          fontColor="#fff"
+          id="create-btn"
+          onClick={() => {
+            router.push(`/quiz/solve/${id}/main`);
+          }}
+        >
+          시작하기
+        </Button>
+      </Container>
+    </>
   );
 };
 const Container = styled.div`

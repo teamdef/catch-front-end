@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { SideBar } from 'components/common';
-import Router from 'next/router'
+import { SideBar, Logo } from 'components/common';
+import Router from 'next/router';
+
 const Header = () => {
   const { profileImg } = useSelector((state: RootState) => state.user);
   
@@ -41,7 +42,7 @@ const Header = () => {
       <Wrapper>
         <HeaderContentWrapper>
           <HeaderContent resize={resizeHeader}>
-            <Logo onClick={goHome}>캐치캐치</Logo>
+            <Logo/>
             <UserProfile onClick={openSideBar}>
               {/* 이미지 없을 시 대체 이미지 보이기 */}
               <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
@@ -81,19 +82,6 @@ const HeaderContent = styled.div<HeaderProps>`
   align-items: center;
   transition:ease-in-out 0.2s;
 `;
-const Logo = styled.div`
-  font-size: 1.5rem;
-  font-family: 'RixInooAriDuriR';
-  color: #ff4d57;
-  &:hover {
-    filter: brightness(155%);
-    cursor: pointer;
-  }
-  &:active {
-    filter: brightness(85%);
-  }
-`;
-
 const UserProfile = styled.div`
   width: 2rem;
   height: 2rem;

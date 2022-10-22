@@ -1,9 +1,8 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout, HeaderLayout } from 'components/layout';
-import Router from 'next/router';
-import { Title } from 'components/common';
+import { AppLayout } from 'components/layout';
+import { Title, HeadMeta,Loading } from 'components/common';
 import { MdOutlineSettings } from 'react-icons/md';
 import { useState, ChangeEvent } from 'react';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
@@ -12,8 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { profileUploadAction } from 'store/user';
 import { useRouter } from 'next/router';
-
-
+import {useModal} from 'hooks'
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
@@ -44,6 +42,7 @@ const Profile: NextPageWithLayout = () => {
   const [tempNickname, setTempNickname] = useState<string>(nickName);
   const [error, setError] = useState<string | null>(null);
   const [isRegister, setIsRegister] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const _tempNicknameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTempNickname(e.target.value);
   };
@@ -78,12 +77,11 @@ const Profile: NextPageWithLayout = () => {
   };
 
   const saveProfile = async () => {
-    console.log(tempNickname);
-
     if (tempNickname && (tempNickname.length < 3 || tempNickname.length > 6)) {
       setError('닉네임은 최소 2글자에서 최대 6글자까지 입력 필수입니다');
     } else {
       setError(null);
+      setIsLoading(true);
       // 기존 등록된 닉네임이랑 변경하고자 하는 닉네임이 다를 경우에만 변경 진행
       let _obj: any = {};
       _obj['id'] = id;
@@ -103,7 +101,7 @@ const Profile: NextPageWithLayout = () => {
       if (res.status === 200) {
         const { profile_img, nickname } = res.data;
         dispatch(profileUploadAction({ profileImg: profile_img, nickName: nickname }));
-        alert('성공적으로 저장되었습니다'); // 모달창으로 바꿀것.
+        setIsLoading(false);
         router.push('/'); // 홈으로
       }
     }
@@ -115,58 +113,62 @@ const Profile: NextPageWithLayout = () => {
     }
   }, [router.isReady]);
   return (
-    <Wrapper>
-      {isRegister && <MarginDiv />}
-      <Title
-        title={isRegister ? '프로필 등록 👧' : '프로필 수정 👧'}
-        subTitle={`서비스에서 사용하실 프로필을 ${isRegister ? '등록' : '수정'}해보세요!`}
-        backRoute={isRegister ? undefined : '/'}
-      />
-      <ProfileContentContainer>
-        <ProfileImgInputContainer>
-          <ProfileThumbnail>
-            <img src={profileImg ? tempProfileImg : '/assets/img/user_default.png'} />
-            {id && (
-              <ProfileSetting>
-                <input
-                  type="file"
-                  accept="image/*"
-                  id="select-image"
-                  name="select-image"
-                  onClick={onImgClick}
-                  onChange={onImgChange}
-                />
-                <label htmlFor="select-image">
-                  <MdOutlineSettings size={20} color={'#B4B4B4'} />
-                </label>
-              </ProfileSetting>
-            )}
-          </ProfileThumbnail>
-        </ProfileImgInputContainer>
-        <ProfileNicknameInput
-          type="text"
-          placeholder="한글 2~6자까지 입력 가능합니다."
-          value={tempNickname}
-          onChange={_tempNicknameHandler}
+    <>
+      <HeadMeta />
+      {isLoading && <Loading ment={'저장중 입니다...'} />}
+      <Wrapper>
+        {isRegister && <MarginDiv />}
+        <Title
+          title={isRegister ? '프로필 등록 👧' : '프로필 수정 👧'}
+          subTitle={`서비스에서 사용하실 프로필을 ${isRegister ? '등록' : '수정'}해보세요!`}
+          backRoute={isRegister ? undefined : '/'}
         />
-        {error && <Error>{error}</Error>}
-        {isRegister ? (
-          <Info>
-            소셜 로그인에서 설정된 프로필 값이 기본으로 설정되며,
-            <br /> 이 단계에서 수정하지 않아도 서비스 내에서 수정 가능 합니다 :)
-          </Info>
-        ) : (
-          <Info>
-            수정 완료 버튼을 누르면 변경사항이 저장되고,
-            <br /> 홈 화면으로 이동됩니다.
-          </Info>
-        )}
+        <ProfileContentContainer>
+          <ProfileImgInputContainer>
+            <ProfileThumbnail>
+              <img src={profileImg ? tempProfileImg : '/assets/img/user_default.png'} />
+              {id && (
+                <ProfileSetting>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="select-image"
+                    name="select-image"
+                    onClick={onImgClick}
+                    onChange={onImgChange}
+                  />
+                  <label htmlFor="select-image">
+                    <MdOutlineSettings size={20} color={'#B4B4B4'} />
+                  </label>
+                </ProfileSetting>
+              )}
+            </ProfileThumbnail>
+          </ProfileImgInputContainer>
+          <ProfileNicknameInput
+            type="text"
+            placeholder="한글 2~6자까지 입력 가능합니다."
+            value={tempNickname}
+            onChange={_tempNicknameHandler}
+          />
+          {error && <Error>{error}</Error>}
+          {isRegister ? (
+            <Info>
+              소셜 로그인에서 설정된 프로필 값이 기본으로 설정되며,
+              <br /> 이 단계에서 수정하지 않아도 서비스 내에서 수정 가능 합니다 :)
+            </Info>
+          ) : (
+            <Info>
+              수정 완료 버튼을 누르면 변경사항이 저장되고,
+              <br /> 홈 화면으로 이동됩니다.
+            </Info>
+          )}
 
-        <SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
-          {isRegister ? '등록' : '수정'}완료
-        </SaveButton>
-      </ProfileContentContainer>
-    </Wrapper>
+          <SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
+            {isRegister ? '등록' : '수정'}완료
+          </SaveButton>
+        </ProfileContentContainer>
+      </Wrapper>
+    </>
   );
 };
 Profile.getLayout = function getLayout(page: ReactElement) {

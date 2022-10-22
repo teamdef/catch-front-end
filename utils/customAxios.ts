@@ -20,9 +20,3 @@ notAuthAxios.defaults.withCredentials = false;
 
 export { authAxios, notAuthAxios };
 
-/* 
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json;charset=utf-8',
-*/
-
-/* 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'  */

@@ -1,7 +1,7 @@
 import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card, NotFound, QuizCard } from 'components/common';
+import { Card, RecentQuiz, HeadMeta } from 'components/common';
 import styled, { keyframes, css } from 'styled-components';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
@@ -70,13 +70,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <div>
-      <Head>
-        <title>캐치캐치</title>
-        <meta name="description" content="나만의 퀴즈를 만들고 공유해보세요!" />
-        <link rel="icon" href="/catch_favicon.ico" />
-        <meta property="og:type" content="website" />
-      </Head>
-
+      <HeadMeta />
       <main>
         <>
           <Background>
@@ -84,13 +78,18 @@ const Page: NextPageWithLayout = () => {
               <div id="title">
                 <div>내가 만든 퀴즈들 🐻‍❄️</div>
               </div>
-              <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={isLoggedin}>
+              <Swiper
+                spaceBetween={0}
+                pagination={{ clickable: true }}
+                modules={[Pagination]}
+                loop={false}
+              >
                 {isLoggedin &&
                   (myQuizList ? (
                     myQuizList?.map((quiz, index) => {
                       return (
                         <SwiperSlide>
-                          <MyQuizCard key={index} url={quiz?.thumbnail}>
+                          <MyQuizCard key={quiz?.id} url={quiz?.thumbnail}>
                             <div id="quiz-title">{quiz?.set_title}</div>
                             <div id="quiz-info">
                               참여 {quiz?.solverCnt} · 평균점수 {quiz?.average}점
@@ -132,18 +131,18 @@ const Page: NextPageWithLayout = () => {
             </MyQuizList>
 
             <RecentQuizList>
-              <div id="title">
+              <div id="section-title">
                 <div>최근에 생성된 퀴즈에요! 🐣</div>
-                <Link passHref href="/recent">
+                {/* <Link passHref href="/recent">
                   <a>
                     전체 목록
                     <IoIosArrowForward />
                   </a>
-                </Link>
+                </Link> */}
               </div>
-              <ImageCardContainer>
-                <NotFound title={'최근 생성한 문제를 보려면?'} subTitle={'잠시동안만 목록보기를 이용해주세요'} />
-              </ImageCardContainer>
+              <div id='section-contents'>
+                <RecentQuiz/>
+              </div>
             </RecentQuizList>
           </Background>
 
@@ -169,9 +168,8 @@ const Background = styled.div`
 const RecentQuizList = styled.div`
   padding: 1rem;
   background-color: #fff;
-  margin-bottom: 7rem;
-  #title {
-    padding: 1rem 0.5rem 2rem 0.5rem;
+  #section-title {
+    padding: 1rem 0.5rem 1rem 0.5rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -186,6 +184,10 @@ const RecentQuizList = styled.div`
         margin-left: 4px;
       }
     }
+  }
+  #section-contents{
+    width:95%;
+    margin:0 auto;
   }
 `;
 const ImageCardContainer = styled.div`

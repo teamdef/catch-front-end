@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import styled from 'styled-components';
 import { AppLayout } from 'components/layout';
-import { Button } from 'components/common';
+import { Button, HeadMeta } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
@@ -41,11 +41,7 @@ const Page: NextPageWithLayout = () => {
   // 유저 점수
   const score = solveAnswers.filter((element:any) => undefined === element).length;
 
-  console.log(score);
-  console.log(solveAnswers);
   const onChange = () => {
-    console.log('유저가 고른답', userAnswers);
-    console.log('setAnswers', userAns);
     /* 배열 내 빈 값을 찾고 빈 값이 없을 경우(false) + 유저가 선택한 답의 갯수와 문제의 갯수가 일치할 경우 버튼 출력 */
     if (userAnswers.includes('') == false && userAnswers.length == solveProblems.length) {
       setChoice(true);
@@ -87,36 +83,38 @@ const Page: NextPageWithLayout = () => {
     </SwiperSlide>
   ));
   return (
-    <Container>
-      <Logo>캐치캐치</Logo>
-      <QuizSolveContent>
-        <QuizTitle>{solveSetTitle}</QuizTitle>
-        <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
-          {QuizList}
-        </Swiper>
-      </QuizSolveContent>
-      <QuizSolveBottom>
-        {choice ? (
-          <Button
-            fontColor="#fff"
-            style={{ margin: '0 auto' }}
-            width="50%"
-            height="50px"
-            bgColor="#ff4d57"
-            onClick={() => {
-              dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
-              setLeaveModalOpen(true);
-            }}
-          >
-            <span>결과 확인</span>
-            <BiChevronRight size="35" />
-          </Button>
-        ) : (
-          <SwipeAniIcon />
-        )}
-        
-      </QuizSolveBottom>
-    </Container>
+    <>
+      <HeadMeta />
+      <Container>
+        <Logo>캐치캐치</Logo>
+        <QuizSolveContent>
+          <QuizTitle>{solveSetTitle}</QuizTitle>
+          <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
+            {QuizList}
+          </Swiper>
+        </QuizSolveContent>
+        <QuizSolveBottom>
+          {choice ? (
+            <Button
+              fontColor="#fff"
+              style={{ margin: '0 auto' }}
+              width="50%"
+              height="50px"
+              bgColor="#ff4d57"
+              onClick={() => {
+                dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
+                setLeaveModalOpen(true);
+              }}
+            >
+              <span>결과 확인</span>
+              <BiChevronRight size="35" />
+            </Button>
+          ) : (
+            <SwipeAniIcon />
+          )}
+        </QuizSolveBottom>
+      </Container>
+    </>
   );
 };
 

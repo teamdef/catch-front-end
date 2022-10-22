@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title } from 'components/common';
+import { Title,HeadMeta } from 'components/common';
 import styled, { css } from 'styled-components';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import notice from 'data/notice.json';
@@ -16,6 +16,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
+      <HeadMeta/>
       <Title backRoute="/" title="공지사항 📣" subTitle="서비스 이용에 필요한 내용을 확인하세요" />
       <Wrapper>
         <NoticeList>
@@ -29,9 +30,7 @@ const Page: NextPageWithLayout = () => {
                   </div>
                   <MdOutlineKeyboardArrowDown size={30} color={'#888'} />
                 </summary>
-                <textarea id="content" readOnly rows={10}>
-                  {item.content}
-                </textarea>
+                <textarea id="content" readOnly rows={10} value={item.content}/>
               </Notice>
             );
           })}

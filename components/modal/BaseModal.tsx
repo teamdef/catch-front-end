@@ -32,6 +32,19 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
     e.stopPropagation();
   };
 
+  const yesActionAndClose = () => {
+    if (props.yesAction) {
+      props.yesAction();
+      closeModal();
+    }
+  }
+
+  const noActionAndClose = () => {
+    if (props.noAction) {
+      props.noAction();
+      closeModal();
+    }
+  }
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
     body.style.overflowY = 'hidden';
@@ -49,7 +62,7 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
             {props.yesTitle && (
               <ActionButtonYes
                 onClick={() => {
-                  props.yesAction ? props.yesAction() : closeModal();
+                  props.yesAction ? yesActionAndClose() : closeModal();
                 }}
               >
                 {props.yesTitle || '확인'}
@@ -58,7 +71,7 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
             {props.noTitle && (
               <ActionButtonNo
                 onClick={() => {
-                  props.noAction ? props.noAction() : closeModal();
+                  props.noAction ? noActionAndClose() : closeModal();
                 }}
               >
                 {props.noTitle || '취소'}

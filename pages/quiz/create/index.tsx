@@ -2,7 +2,7 @@ import { ReactElement, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Button } from 'components/common';
+import { Logo,HeadMeta } from 'components/common';
 import useInput from 'hooks/useInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
@@ -11,7 +11,7 @@ import Router, { useRouter } from 'next/router';
 import { BsCheck } from 'react-icons/bs';
 import { MdClear } from 'react-icons/md';
 import { useModal } from 'hooks';
-
+import { MainButton } from 'styles/common';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
@@ -42,10 +42,14 @@ const Page: NextPageWithLayout = () => {
     yesTitle: '이어서',
     noTitle: '새롭게',
     yesAction: () => router.push('/quiz/create/main'),
+    noAction: () => {
+      dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
+      dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
+    },
     contents: (
       <div>
         <div>
-          제작하던<strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
+          제작하던 <strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
           <br />
           문제집이 있습니다
         </div>
@@ -83,12 +87,11 @@ const Page: NextPageWithLayout = () => {
   }, []);
   return (
     <>
+      <HeadMeta/>
       <Wrapper>
         <TitleContainer>
           <div id="logo-wrapper">
-            <div id="logo" onClick={goHome}>
-              캐치캐치
-            </div>
+            <Logo color={'#fff'} />
           </div>
           <div id="title-input-wrapper">
             <span>참여자들에게 어떤 제목으로 보여줄까요?</span>
@@ -131,12 +134,12 @@ const Page: NextPageWithLayout = () => {
           </li>
         </ul>
         <ButtonContainer>
-          <Button width={'90%'} onClick={goQuizCreateMain} disabled={title === ''}>
+          <MainButton onClick={goQuizCreateMain} disabled={title === ''}>
             <span>시작하기</span>
-          </Button>
+          </MainButton>
         </ButtonContainer>
       </Wrapper>
-      <Render제작중있음Modal/>
+      <Render제작중있음Modal />
     </>
   );
 };
@@ -204,15 +207,6 @@ const TitleContainer = styled.div`
     position: relative;
     background-color: transparent;
     z-index: 2;
-    #logo {
-      color: #fff;
-      font-size: 1.5rem;
-      font-family: 'RixInooAriDuriR';
-      &:hover {
-        cursor: pointer;
-        color: lightgrey;
-      }
-    }
   }
   #title-input-wrapper {
     color: #fff;
@@ -290,23 +284,6 @@ const ButtonContainer = styled.div`
   position: absolute;
   width: 100%;
   bottom: 0;
-  button {
-    bottom: 0;
-    font-size: 14px;
-    border-radius: 30px;
-    height: 50px;
-    box-shadow: 0 4px #c4363e;
-    font-weight: bold;
-    margin-right: 0.5rem;
-    margin-left: 0.5rem;
-    background-color: #ff4d57;
-    color: #fff;
-    &:disabled {
-      color: #7c7c7c;
-      background-color: #ececec;
-      box-shadow: 0 4px lightgrey;
-    }
-  }
 `;
 
 export default Page;

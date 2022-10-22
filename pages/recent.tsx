@@ -2,7 +2,7 @@ import type { ReactElement, ChangeEvent } from 'react';
 import { useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, QuizCard, SkeletonQuizCard,NotFound } from 'components/common';
+import { Title, QuizCard, SkeletonQuizCard, NotFound, HeadMeta } from 'components/common';
 import styled from 'styled-components';
 import { MdOutlineSearch } from 'react-icons/md';
 import { FaSort } from 'react-icons/fa';
@@ -79,6 +79,7 @@ const Page: NextPageWithLayout = () => {
   }, []);
   return (
     <>
+      <HeadMeta/>
       <Title title="최근 생성된 문제" subTitle="최근 생성된 문제집 목록을 확인하세요!  🔎 🤔" />
       <Wrapper>
         {/* <OptionWrapper>

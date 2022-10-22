@@ -22,6 +22,7 @@ interface ProblemSetTypes {
 }
 
 
+
 //----------------------풀이------------------------
 // SolveProblemTypes - 문제(풀이용) 정보
 interface SolveProblemTypes {

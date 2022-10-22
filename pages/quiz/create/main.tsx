@@ -10,12 +10,13 @@ import imageCompression from 'browser-image-compression'; // 이미지 최적화
 import { MdClose, MdCheck } from 'react-icons/md'; // 아이콘
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai'; // 아이콘
 import { imageTestApi } from 'pages/api/test'; // 이미지 업로드 테스트 api
-import { Loading } from 'components/common';
+import { Loading, Logo, SwipeAniIcon, HeadMeta } from 'components/common';
 import useInput from 'hooks/useInput';
 import { AppLayout } from 'components/layout';
 import { AxiosResponse } from 'axios';
 import { useModal } from 'hooks';
 import { VscChromeClose } from 'react-icons/vsc';
+import { MainButton } from 'styles/common';
 
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -63,12 +64,13 @@ const Page: NextPageWithLayout = () => {
     yesTitle: '이어서',
     noTitle: '새롭게',
     noAction: () => {
+      resetProblemSet();
       goQuizCreate();
     },
     contents: (
       <div>
         <div>
-          제작하던<strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
+          제작하던 <strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
           <br />
           문제집이 있습니다
         </div>
@@ -78,9 +80,7 @@ const Page: NextPageWithLayout = () => {
   });
   const [open제작중없음Modal, , Render제작중없음Modal] = useModal({
     yesTitle: '확인',
-    yesAction: () => {
-      router.push('/quiz/create');
-    },
+    yesAction: () => router.push('/quiz/create'),
     contents: (
       <div>
         제작중인 퀴즈가 없어
@@ -105,15 +105,14 @@ const Page: NextPageWithLayout = () => {
   };
 
   const createProblem = () => {
-    let temp = [...problemList];
     const obj: ProblemTypes = {
       problemTitle: '',
       choiceType: 'text',
       choices: [],
       correctIndex: 0,
     };
-    temp.push(obj);
-    setProblemList(temp);
+    //prev => [...prev, obj]
+    setProblemList((prev) => [...prev, obj]);
   };
 
   const deleteProblem = useCallback(
@@ -134,6 +133,7 @@ const Page: NextPageWithLayout = () => {
   };
 
   const setChoiceType = (problemIndex: number, choiceType: 'img' | 'text') => {
+    console.log(problemIndex);
     let temp = JSON.parse(JSON.stringify(problemList));
     if (problemList[problemIndex].choices.length !== 0) {
       if (choiceType === 'img') {
@@ -147,14 +147,11 @@ const Page: NextPageWithLayout = () => {
     setProblemList(temp);
   };
 
-  const setCorrectIndex = useCallback(
-    (problemIndex: number, choiceIndex: number) => {
-      let temp = JSON.parse(JSON.stringify(problemList));
-      temp[problemIndex].correctIndex = choiceIndex;
-      setProblemList(temp);
-    },
-    [problemList],
-  );
+  const setCorrectIndex = (problemIndex: number, choiceIndex: number) => {
+    let temp = JSON.parse(JSON.stringify(problemList));
+    temp[problemIndex].correctIndex = choiceIndex;
+    setProblemList(temp);
+  };
 
   const addChoiceText = useCallback(
     (problemIndex: number) => {
@@ -218,10 +215,6 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
-  // onChange 이벤트 발생을 위해서
-  const onClickChange = (e: any) => {
-    e.target.value = null;
-  };
   // 이미지 onChange 이벤트 처리 함수
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
@@ -270,6 +263,7 @@ const Page: NextPageWithLayout = () => {
       let _choices = [...temp[problemIndex].choices, ..._choicesImgThumbnail];
       temp[problemIndex].choices = _choices;
       setProblemList(temp);
+      e.target.value = '';
     }
   };
 
@@ -332,13 +326,13 @@ const Page: NextPageWithLayout = () => {
               returnSetId: res.data.returnSetId,
             },
           }); // 문제집 생성 완료 및 공유 화면으로 이동
+          resetProblemSet();
         });
       });
     } else {
       alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
     }
   };
-
 
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
@@ -368,16 +362,14 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveProblemSetTitleAction({ setTitle: tempSetTitle })); // 임시 제목 저장
   }, [tempSetTitle]);
 
-
   // TODO: useMemo 및 useCallback을 이용하여 렌더링 최적화하기
   return (
     <>
+      <HeadMeta />
       <Wrapper>
         {loading && <Loading ment={'문제집 저장중 입니다!'} />}
         <Header>
-          <div id="logo" onClick={goHome}>
-            캐치캐치
-          </div>
+          <Logo />
           <ProblemSetTitleInputWrapper>
             <input
               type="text"
@@ -385,6 +377,7 @@ const Page: NextPageWithLayout = () => {
               onChange={tempSetTitleHandler}
               placeholder={'퀴즈 제목을 입력하세요!'}
               spellCheck="false"
+              maxLength={50}
             />
           </ProblemSetTitleInputWrapper>
         </Header>
@@ -452,7 +445,7 @@ const Page: NextPageWithLayout = () => {
                               return (
                                 <TextChoiceBubble
                                   correct={problem.correctIndex === choiceIndex}
-                                  key={choiceIndex}
+                                  key={`${problem.choiceType} ${problemIndex + choiceIndex}`}
                                   onClick={() => {
                                     setCorrectIndex(problemIndex, choiceIndex);
                                   }}
@@ -476,6 +469,7 @@ const Page: NextPageWithLayout = () => {
                                   type="text"
                                   placeholder={'객관식 답안을 입력해주세요!'}
                                   autoComplete="off"
+                                  maxLength={30}
                                   value={textChoiceInput}
                                   onChange={textChoiceInputHandler}
                                   onKeyDown={(e) => {
@@ -502,14 +496,13 @@ const Page: NextPageWithLayout = () => {
                                   type="file"
                                   accept="image/*"
                                   multiple
-                                  onClick={onClickChange}
                                   onChange={(e) => {
                                     onImgChange(e, problemIndex);
                                   }}
-                                  id="select-image"
-                                  name="select-image"
+                                  id={`select_img_${problemIndex}`}
+                                  name={`select_img_${problemIndex}`}
                                 />
-                                <label htmlFor="select-image">
+                                <label htmlFor={`select_img_${problemIndex}`}>
                                   <AiFillCamera size={30} />
                                   <span>이미지추가</span>
                                 </label>
@@ -518,7 +511,7 @@ const Page: NextPageWithLayout = () => {
                             {problem.choices.map((item: any, choiceIndex) => {
                               return (
                                 <ImgWrapper
-                                  key={choiceIndex}
+                                  key={`${problem.choiceType} ${problemIndex + choiceIndex}`}
                                   onClick={() => {
                                     setCorrectIndex(problemIndex, choiceIndex);
                                   }}
@@ -541,13 +534,11 @@ const Page: NextPageWithLayout = () => {
                         </ImgChoiceBubble>
                       )}
                     </ChoiceWrapper>
-
                     <InfoContainer>정답 항목을 클릭해주세요!</InfoContainer>
                   </QuizCreateCard>
                 </SwiperSlide>
               );
             })}
-
             {problems.length < 10 && (
               <SwiperSlide>
                 <QuizCreateCard>
@@ -565,11 +556,11 @@ const Page: NextPageWithLayout = () => {
             )}
           </Swiper>
         </CardWrapper>
-
+        <SwipeAniIcon />
         <CompleteButtonWrapper>
-          <button onClick={publicationProblemSet} disabled={problems.length < 2}>
+          <MainButton onClick={publicationProblemSet} disabled={problems.length < 2}>
             퀴즈 생성 완료!
-          </button>
+          </MainButton>
         </CompleteButtonWrapper>
       </Wrapper>
       <Render제작중있음Modal />
@@ -577,7 +568,6 @@ const Page: NextPageWithLayout = () => {
     </>
   );
 };
-
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
@@ -597,7 +587,7 @@ const Wrapper = styled.div`
   }
   .swiper-wrapper {
     padding-top: 30px;
-    padding-bottom: 10px;
+    padding-bottom: 3px;
   }
   .swiper-pagination {
     bottom: calc(100% - 1rem);
@@ -617,15 +607,6 @@ const Wrapper = styled.div`
 `;
 const Header = styled.div`
   padding: 1.5rem;
-  #logo {
-    color: #ff4d57;
-    font-family: 'RixInooAriDuriR';
-    font-size: 1.5rem;
-    &:hover {
-      cursor: pointer;
-      color: lightgrey;
-    }
-  }
 `;
 const blink = keyframes` 
   50% {opacity: 0;}
@@ -650,8 +631,7 @@ const CreateNewQuizContainer = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  padding: 1rem;
-  padding-top: 0;
+  padding: 0rem 1rem 0.5rem 1rem;
 `;
 const ProblemSetTitleInputWrapper = styled.div`
   display: flex;
@@ -684,7 +664,7 @@ const QuizCreateCard = styled.div`
   flex-wrap: nowrap;
   align-items: center;
   margin: 0 auto;
-  height: 650px;
+  height: 600px;
 `;
 const DeleteButton = styled.button`
   background-color: transparent;
@@ -726,7 +706,7 @@ const ProblemTitleInputBubble = styled.input`
   background-color: #fff6f7;
   color: #ffa5aa;
   border: none;
-  padding: 1.5rem 1.75rem 1.5rem 1.75rem;
+  padding: 1.25rem 1.75rem 1.25rem 1.75rem;
   font-size: 1rem;
   &::placeholder {
     color: #00000020;
@@ -778,7 +758,7 @@ const TextChoiceBubble = styled.li<CorrectProps>`
   justify-content: space-between;
   background-color: ${({ correct }) => (correct ? '#AAD775' : '#eee')};
   color: ${({ correct }) => (correct ? '#fff' : '#999')};
-  padding: 1.5rem 1.25rem 1.5rem 1.75rem;
+  padding: 1.25rem 1.25rem 1.25rem 1.75rem;
   border-radius: 30px 0px 30px 30px;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -831,9 +811,6 @@ const ImgChoiceListContainer = styled.div`
   grid-row-gap: 10px;
 `;
 const ImgInputContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #fff6f7;
   border: dashed 1px #ffa5aa;
   border-radius: 1rem;
@@ -845,7 +822,10 @@ const ImgInputContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     color: #ffa5aa;
+    width: 100%;
+    height: 100%;
     &:hover {
       cursor: pointer;
     }
@@ -854,9 +834,6 @@ const ImgInputContainer = styled.div`
 const ImgWrapper = styled.div<CorrectProps>`
   width: 100%;
   height: 150px;
-  @media (max-width: 400px) {
-    height: 120px;
-  }
   position: relative;
   img {
     width: 100%;
@@ -893,23 +870,5 @@ const CompleteButtonWrapper = styled.div`
   justify-content: center;
   width: 100%;
   margin-top: 0.5rem;
-  button {
-    border: none;
-    border-radius: 30px;
-    background-color: #ff4d57;
-    box-shadow: 0 4px #c4363e;
-    color: #fff;
-    font-weight: bold;
-    width: 60%;
-    height: 60px;
-    font-size: 18px;
-    &:disabled {
-      cursor: not-allowed;
-      border: none;
-      color: #7c7c7c;
-      background-color: #ececec;
-      box-shadow: 0 4px lightgrey;
-    }
-  }
 `;
 export default Page;

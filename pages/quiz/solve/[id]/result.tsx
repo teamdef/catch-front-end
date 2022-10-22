@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import { Button } from 'components/common';
+import { Button,HeadMeta } from 'components/common';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
@@ -80,62 +80,65 @@ const Page: NextPageWithLayout = () => {
   ));
   console.log(RankBoard);
   return (
-    <Container>
-      <ScoreArea>
-        <h1>
-          <strong>{new_user}</strong> 님
-        </h1>
-        <ProgressArea>
-          <CircularProgressbar
-            strokeWidth={10}
-            value={new_user_score}
-            text={`${new_user_score}`}
-            maxValue={10}
-            styles={buildStyles({
-              textSize: '1.5rem',
-              pathTransitionDuration: 0.5,
-              trailColor: '#eee',
-              backgroundColor: '#fff',
-            })}
-          />
-        </ProgressArea>
-        <p>
-          총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요{' '}
-        </p>
-        <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">
-          오답 노트
-        </Button>
-      </ScoreArea>
+    <>
+      <HeadMeta />
+      <Container>
+        <ScoreArea>
+          <h1>
+            <strong>{new_user}</strong> 님
+          </h1>
+          <ProgressArea>
+            <CircularProgressbar
+              strokeWidth={10}
+              value={new_user_score}
+              text={`${new_user_score}`}
+              maxValue={10}
+              styles={buildStyles({
+                textSize: '1.5rem',
+                pathTransitionDuration: 0.5,
+                trailColor: '#eee',
+                backgroundColor: '#fff',
+              })}
+            />
+          </ProgressArea>
+          <p>
+            총 <span>10</span> 문제 중 <span>4</span> 문제 맞았어요{' '}
+          </p>
+          <Button width="40%" height="35px" fontSize=".9rem" bgColor="#fff" fontColor="#ff4d57">
+            오답 노트
+          </Button>
+        </ScoreArea>
 
-      <RankingArea>
-        <h2>
-          <strong>{new_user}</strong> 님의 랭킹을 확인해 보세요!
-        </h2>
-        {new_user_rank > 5 ? (
-          <ul>
-            {RankBoard.slice(0, 5)}
-            <li className={`rank_${new_user_rank} active`}>
-              <div>
-                <i>{new_user_rank}</i>
-                <strong>{new_user}</strong>
-                <em>{new_user_score}점</em>
-              </div>
-            </li>
-          </ul>
-        ) : (
-          <ul>{RankBoard.slice(0, 6)}</ul>
-        )}
-      </RankingArea>
+        <RankingArea>
+          <h2>
+            <strong>{new_user}</strong> 님의 랭킹을 확인해 보세요!
+          </h2>
+          {new_user_rank > 5 ? (
+            <ul>
+              {RankBoard.slice(0, 5)}
+              <li className={`rank_${new_user_rank} active`}>
+                <div>
+                  <i>{new_user_rank}</i>
+                  <strong>{new_user}</strong>
+                  <em>{new_user_score}점</em>
+                </div>
+              </li>
+            </ul>
+          ) : (
+            <ul>{RankBoard.slice(0, 6)}</ul>
+          )}
+        </RankingArea>
 
-      <ButtonArea>
-        <Button width="150px" height="55px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff">
-          홈으로
-        </Button>
-        <Button width="150px" height="55px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">
-          나도 퀴즈 만들기
-        </Button>
-      </ButtonArea>
-    </Container>
+        <ButtonArea>
+          <Button width="150px" height="55px" fontSize="1.2rem" bgColor="#ff4d57" fontColor="#fff">
+            홈으로
+          </Button>
+          <Button width="150px" height="55px" fontSize="1rem" bgColor="#ff4d57" fontColor="#fff">
+            나도 퀴즈 만들기
+          </Button>
+        </ButtonArea>
+      </Container>
+    </>
   );
 };
 const Container = styled.div`

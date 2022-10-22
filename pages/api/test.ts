@@ -1,6 +1,6 @@
 // Custom Axios에서 instance만든거 가져와서 사용
 import { authAxios, notAuthAxios } from 'utils/customAxios';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosInstance } from 'axios';
 
 // 카카오톡 로그인
 const kakaoLoginApi = async (code: string): Promise<AxiosResponse> => {
@@ -68,8 +68,12 @@ const ThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<num
   });
 };
 
-const RecentQuizListApi = (): Promise<AxiosResponse> => {
-  return notAuthAxios.get('/recentprobset');
+const RecentQuizListApi = (lastCreatedAt?:string): Promise<AxiosResponse> => { 
+  if (lastCreatedAt) {
+    return notAuthAxios.get('/recentprobset', { params: { createdAt: lastCreatedAt } });
+  } else {
+    return notAuthAxios.get('/recentprobset');
+  }
 };
 const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
   return notAuthAxios.get(`/probset/detail/${probsetId}`);
@@ -81,14 +85,14 @@ const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
 
 const QuizDeleteApi = (probsetId: string): Promise<AxiosResponse> => {
   return authAxios.delete(`/probset/${probsetId}`);
- }
+};
 
 interface ProfileChangeProps {
   id: string;
   imgBlob?: File;
   nickname?: string;
 }
-const ProfileChangeApi = async ({id,imgBlob,nickname}:ProfileChangeProps): Promise<AxiosResponse> => {
+const ProfileChangeApi = async ({ id, imgBlob, nickname }: ProfileChangeProps): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
     let _obj: any = {};
     _obj['userId'] = id;
@@ -104,6 +108,9 @@ const ProfileChangeApi = async ({id,imgBlob,nickname}:ProfileChangeProps): Promi
   });
 };
 
+const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> => {
+  return notAuthAxios.get(`/solver/ranking`, { params: { probsetId, limit: 20 } });
+};
 
 export {
   kakaoLoginApi,
@@ -115,4 +122,5 @@ export {
   MyQuizDetailApi,
   UserQuizListApi,
   QuizDeleteApi,
+  QuizRankingListApi,
 };
