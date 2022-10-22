@@ -8,8 +8,9 @@ import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
 import type { NextPageWithLayout } from 'pages/_app';
-import { HeadMeta, MatchNote, RankBoard, Button } from 'components/common';
+import { HeadMeta, MatchNote,Logo, RankBoard, Button } from 'components/common';
 import ProgressBar from '@ramonak/react-progress-bar';
+import { isAbsolute } from 'path/posix';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <Container>
       <HeadMeta />
+      <Logo/>
       <ScoreArea>
         <h1>
           <strong>{solveUserName}</strong> 님
@@ -49,8 +51,7 @@ const Page: NextPageWithLayout = () => {
       </RankingArea>
 
       <ButtonArea>
-        <MainButton onClick={() => Router.push('/')}>홈으로</MainButton>
-        <MainButton>나도 퀴즈 만들기</MainButton>
+        <MainButton onClick={() => Router.push('/quiz/create')}>나도 퀴즈 만들기</MainButton>
       </ButtonArea>
       {openMatch ? <MatchNote setOpenMatch={setOpenMatch} /> : ''}
     </Container>
@@ -65,6 +66,13 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #fff;
+  a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    padding:5%;
+  }
 `;
 const ButtonArea = styled.div`
   position: relative;
