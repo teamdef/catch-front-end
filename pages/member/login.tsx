@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import Router from 'next/router';
+import {HeadMeta} from 'components/common'
 
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -34,24 +35,27 @@ const Page: NextPageWithLayout = () => {
   };
 
   return (
-    <Wrapper>
-      <MainContainer>
-        <Title>
-          <span>캐</span>
-          <span>치</span>
-          <span>캐</span>
-          <span>치</span>
-        </Title>
-        <SubTitle>
-          로그인 <strong>1</strong>초컷 하고 <br />
-          <strong>나만의 퀴즈</strong>를 만들어보세요!
-        </SubTitle>
-        <KakaoLoginBtn onClick={goKakaoLogin}>
-          <img src={'/assets/img/kakao_icon.png'} />
-          <span>카카오로 시작하기</span>
-        </KakaoLoginBtn>
-      </MainContainer>
-    </Wrapper>
+    <>
+      <HeadMeta />
+      <Wrapper>
+        <MainContainer>
+          <Title>
+            <span>캐</span>
+            <span>치</span>
+            <span>캐</span>
+            <span>치</span>
+          </Title>
+          <SubTitle>
+            로그인 <strong>1</strong>초컷 하고 <br />
+            <strong>나만의 퀴즈</strong>를 만들어보세요!
+          </SubTitle>
+          <KakaoLoginBtn onClick={goKakaoLogin}>
+            <img src={'/assets/img/kakao_icon.png'} />
+            <span>카카오로 시작하기</span>
+          </KakaoLoginBtn>
+        </MainContainer>
+      </Wrapper>
+    </>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {

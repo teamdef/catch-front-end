@@ -57,6 +57,12 @@ body {
   scroll-behavior: smooth;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+
+  -webkit-user-select: none; /* 텍스트 드래그 방지 input 드래그는 작동함 . */ 
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
 }
 
 body::-webkit-scrollbar {

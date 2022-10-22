@@ -9,6 +9,7 @@ import { kakaoLeaveApi } from 'pages/api/test';
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';
+import {Loading} from 'components/common'
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -19,6 +20,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { isLoggedin, profileImg, nickName, kakaoUid } = useSelector((state: RootState) => state.user);
   const [animation, setAnimation] = useState('openAnimation');
+  const [isLoading, setIsLoading] = useState(false);
   const [openLeaveModal, _, RenderLeaveModal] = useModal({
     escClickable: true,
     backgroundClickable: true,
@@ -41,7 +43,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
     backgroundClickable: true,
     yesTitle: '로그아웃',
     noTitle: '닫기',
-    yesAction: () => { closeLogoutModal(); logout(); },
+    yesAction: () => logout(),
     contents: (
       <div>
         로그아웃 하시겠습니까? 다시 로그인 할 수 있습니다.
@@ -67,12 +69,17 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
       query: { isReqSignUp: false },
     });
   };
+  const goOpenChat = () => {
+    window.open('https://open.kakao.com/o/sLi3afJe');
+  }
   const seviceLeave = () => {
+    setIsLoading(true);
     kakaoLeaveApi().then((res) => {
       if (res.status === 200) {
         alert(res.data.message);
         dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
         Router.push('/'); // 메인화면으로 이동
+        setIsLoading(false);
       }
     });
   };
@@ -110,6 +117,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
 
   return (
     <>
+      {isLoading && <Loading ment={'탈퇴 진행중 입니다...'} />}
       <Background>
         <Wrapper id="side-bar" ref={sidebarRef} className={animation}>
           <div id="greeting">
@@ -140,7 +148,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
               <AiOutlineNotification />
               공지사항
             </li>
-            <li>
+            <li onClick={goOpenChat}>
               <img src={'/assets/img/kakao_icon.png'} />
               카카오톡 오픈채팅 문의
             </li>

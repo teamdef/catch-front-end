@@ -1,12 +1,12 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare } from 'components/common';
+import { Title, SNSShare,HeadMeta } from 'components/common';
 import styled, { keyframes } from 'styled-components';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/test';
+import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/test';
 import { ThumbnailChange, NotFound } from 'components/common';
 import { useModal } from 'hooks';
 
@@ -40,26 +40,27 @@ interface DetailQuizType {
   thumbnail: string | null;
   average: number;
 }
-interface test {
+interface RankingType {
+  created_at: string;
   nickname: string;
   score: number;
+  ranking: string;
+  id: string;
 }
-
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
+  const [quizRankingList, setQuizRankingList] = useState<RankingType[] | null>(null);
   const [openDeleteModal, closeDeleteModal, RenderDeleteModal] = useModal({
     backgroundClickable: true,
     yesTitle: '삭제',
-    yesAction: () => {
-      MyQuizDelete();
-    },
+    yesAction: () => MyQuizDelete(),
     noTitle: '취소',
     contents: <div>삭제하시겠습니까? 삭제 클릭시 즉시 삭제됩니다.</div>,
   });
- 
+
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
     const res = await MyQuizDetailApi(id as string);
@@ -72,6 +73,13 @@ const Page: NextPageWithLayout = () => {
     setQuizDetailData(_detail);
   };
 
+
+  const getMyQuizRanking = async () => {
+    const res = await QuizRankingListApi(id as string);
+    let _ranking: RankingType[] = res?.data;
+    setQuizRankingList(_ranking);
+  }
+
   const MyQuizDelete = async () => {
     if (!!id) {
       const res = await QuizDeleteApi(id as string);
@@ -82,55 +90,14 @@ const Page: NextPageWithLayout = () => {
     }
   };
   useEffect(() => {
-    if (id === '1234') {
-      const obj: DetailQuizType = {
-        created_at: '2022-10-17',
-        updated_at: '2022-10-17',
-        id: '1234',
-        set_title: '하영이가 좋아하는 할맥 안주',
-        solverCnt: 11,
-        thumbnail: null,
-        average: 7.7,
-      };
-      setQuizDetailData(obj);
-    } else {
-      getMyQuizData();
-    }
+    getMyQuizData();
+    getMyQuizRanking();
   }, [router.isReady]);
 
-  const score_list: test[] = [
-     {
-       nickname: '냉동피자',
-       score: 8,
-     },
-     {
-       nickname: '유통기한지난우유',
-       score: 8,
-     },
-     {
-       nickname: '먹다남은떡볶이',
-       score: 7,
-     },
-     {
-       nickname: '남은거포장해온치킨',
-       score: 6,
-     },
-     {
-      nickname: '삼겹살두루치기',
-      score: 4,
-     },
-     {
-       nickname: '장유산균음료',
-       score: 4,
-     },
-     {
-       nickname: '유통기한지난오뎅',
-       score: 2,
-     },
-  ];
 
   return (
     <>
+      <HeadMeta/> 
       <Title backRoute="/" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
       <Wrapper>
         <SectionBlock>
@@ -180,23 +147,23 @@ const Page: NextPageWithLayout = () => {
             </div>
           </SectionBlock>
         )}
-        {quizDetailData && (
+        {quizRankingList && (
           <SectionBlock>
             <div id="section-title">참여자 랭킹 🏆</div>
             <div id="section-contents">
               <RankingBoard>
-                {score_list.length === 0 ? (
+                {quizRankingList.length === 0 ? (
                   <NotFound
                     title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
                     subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
                   />
                 ) : (
-                  score_list.map((userScore: test, index: number) => {
+                  quizRankingList.map((userRanking: RankingType, index: number) => {
                     return (
-                      <li id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
+                      <li key={userRanking.id}  id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
                         <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
-                        <strong>{userScore?.nickname}</strong>
-                        <em>{userScore?.score}점</em>
+                        <strong>{userRanking?.nickname}</strong>
+                        <em>{userRanking?.score}점</em>
                       </li>
                     );
                   })
@@ -210,7 +177,7 @@ const Page: NextPageWithLayout = () => {
           <AiOutlineDelete size={30} />
         </DeleteButton>
       </Wrapper>
-      <RenderDeleteModal/>
+      <RenderDeleteModal />
     </>
   );
 };
@@ -286,8 +253,8 @@ const DeleteButton = styled.div`
     right: 20px;
   }
   z-index: 5;
-  &:hover{
-    cursor:pointer; 
+  &:hover {
+    cursor: pointer;
   }
 `;
 

@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import styled, { keyframes } from 'styled-components';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { SNSShare } from 'components/common';
+import { SNSShare, HeadMeta } from 'components/common';
 import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
 import { HiOutlineShare } from 'react-icons/hi';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { ThumbnailChangeApi } from 'pages/api/test';
-
+import { MainButton } from 'styles/common';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
@@ -74,59 +74,62 @@ const Page: NextPageWithLayout = () => {
     setThumbnailURL(router?.query?.returnThumb as string);
   }, [router.isReady]);
   return (
-    <Wrapper>
-      <div id="inner-wrapper">
-        <Complete>퀴즈 완성 !!!</Complete>
-        <QuizInfoContainer>
-          <div id="top">{probSetTitle}</div>
-          <div id="bottom">
-            총<strong>{probSetCount}</strong>문제
-          </div>
-        </QuizInfoContainer>
-        <ThumbnailSettingContainer>
-          <div id="explain">
-            <span>
-              퀴즈의 대표 사진을 설정해보세요! <br />
-              설정하지 않으면, 등록된 이미지 중 <strong>랜덤</strong>으로 설정됩니다.
-              <br />
-              대표 사진의 <strong>수정 및 삭제</strong>는 문제집 상세보기에서 가능합니다!
-            </span>
-          </div>
-          <div id="thumbnail-img-wrapper">
-            <input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
-            <label htmlFor="thumbnail-input">
-              {thumbnailURL ? (
-                <>
-                  {thumbnailURL && (
-                    <div id="thumbnail-input-btn">
-                      <MdPhotoCamera size={20} />
-                    </div>
-                  )}
-                  <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
-                </>
-              ) : (
-                <DefaultThumbnail>
-                  <MdPhotoCamera size={40} />
-                </DefaultThumbnail>
-              )}
-            </label>
-          </div>
-        </ThumbnailSettingContainer>
-        <ShareContainer>
-          <div id="explain">
-            <HiOutlineShare />
-            <span>직접 만든 퀴즈를 공유해보세요!</span>
-          </div>
-          <div id="share-wrapper">
-            <SNSShare thumbnail={thumbnailURL} set_title={probSetTitle as string} url={returnSetId as string} />
-          </div>
-        </ShareContainer>
-        <HomeButton onClick={goHome}>
-          <MdHomeFilled size={20} />
-          홈으로
-        </HomeButton>
-      </div>
-    </Wrapper>
+    <>
+      <HeadMeta />
+      <Wrapper>
+        <div id="inner-wrapper">
+          <Complete>퀴즈 완성 !!!</Complete>
+          <QuizInfoContainer>
+            <div id="top">{probSetTitle}</div>
+            <div id="bottom">
+              총<strong>{probSetCount}</strong>문제
+            </div>
+          </QuizInfoContainer>
+          <ThumbnailSettingContainer>
+            <div id="explain">
+              <span>
+                퀴즈의 대표 사진을 설정해보세요! <br />
+                설정하지 않으면, 등록된 이미지 중 <strong>랜덤</strong>으로 설정됩니다.
+                <br />
+                대표 사진의 <strong>수정 및 삭제</strong>는 문제집 상세보기에서 가능합니다!
+              </span>
+            </div>
+            <div id="thumbnail-img-wrapper">
+              <input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
+              <label htmlFor="thumbnail-input">
+                {thumbnailURL ? (
+                  <>
+                    {thumbnailURL && (
+                      <div id="thumbnail-input-btn">
+                        <MdPhotoCamera size={20} />
+                      </div>
+                    )}
+                    <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
+                  </>
+                ) : (
+                  <DefaultThumbnail>
+                    <MdPhotoCamera size={40} />
+                  </DefaultThumbnail>
+                )}
+              </label>
+            </div>
+          </ThumbnailSettingContainer>
+          <ShareContainer>
+            <div id="explain">
+              <HiOutlineShare />
+              <span>직접 만든 퀴즈를 공유해보세요!</span>
+            </div>
+            <div id="share-wrapper">
+              <SNSShare thumbnail={thumbnailURL} set_title={probSetTitle as string} url={returnSetId as string} />
+            </div>
+          </ShareContainer>
+          <MainButton onClick={goHome}>
+            <MdHomeFilled size={20} />
+            홈으로
+          </MainButton>
+        </div>
+      </Wrapper>
+    </>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
@@ -259,6 +262,7 @@ const ThumbnailSettingContainer = styled.div`
 
 const ShareContainer = styled.div`
   margin-top: 36px;
+  margin-bottom:50px;
   width: 75%;
   #explain {
     display: flex;
