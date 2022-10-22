@@ -43,7 +43,7 @@ const RankBoard = ({ solveId }:any) => {
   const Ranking = rankList.map(
     (item: any, index: number) =>
       newUser && (
-        <li className={`rank_${index + 1} ${item.nickname == newUser.nickname ? 'active' : ''}`} key={index}>
+        <li className={`rank_${index + 1} ${index < 3 ? 'ranked': ''} ${item.nickname == newUser.nickname ? 'active' : ''}`} key={index}>
           <div>
             <i>{index + 1 == 1 ? '🥇' : index + 1 == 2 ? '🥈' : index + 1 == 3 ? '🥉' : index + 1}</i>
             <strong>{item.nickname}</strong>

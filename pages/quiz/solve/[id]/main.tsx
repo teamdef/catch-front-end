@@ -2,15 +2,14 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import styled from 'styled-components';
 import { AppLayout } from 'components/layout';
-import { Button, HeadMeta, Loading } from 'components/common';
+import { HeadMeta, Loading,Logo, SwipeAniIcon } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
-import Router from 'next/router';
 import { RootState } from 'store';
 import { saveSolveAnswersAction, saveSolveUserScoreAction } from 'store/quiz_solve';
 import { BiChevronRight } from 'react-icons/bi';
-import SwipeAniIcon from 'components/common/SwipeAniIcon';
 import { useModal } from 'hooks';
+import { MainButton } from 'styles/common';
 import { NickNameModal } from 'components/modal';
 // swiper
 import { Pagination, EffectFade } from 'swiper';
@@ -104,7 +103,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <Container>
       <HeadMeta />
-      <Logo onClick={() => Router.push('/home')}>캐치캐치</Logo>
+      <Logo/>
       <QuizSolveContent>
         <QuizTitle>{solveSetTitle}</QuizTitle>
         <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
@@ -113,12 +112,8 @@ const Page: NextPageWithLayout = () => {
       </QuizSolveContent>
       <QuizSolveBottom>
         {choice ? (
-          <Button
-            fontColor="#fff"
-            style={{ margin: '0 auto' }}
-            width="50%"
-            height="50px"
-            bgColor="#ff4d57"
+          <MainButton
+          style={{width: '100%', margin:'0'}}
             onClick={() => {
               dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
               dispatch(
@@ -132,7 +127,7 @@ const Page: NextPageWithLayout = () => {
           >
             <span>결과 확인</span>
             <BiChevronRight size="35" />
-          </Button>
+          </MainButton>
         ) : (
           <SwipeAniIcon />
         )}
@@ -150,20 +145,12 @@ const Container = styled.div`
   background-color: #fff6f7;
   flex-direction: column;
   padding: 0 5%;
-  padding-top: 10%;
+  padding-top: 5%;
   width: 100%;
   color: #555;
   height: 100vh;
 `;
-const Logo = styled.div`
-  position: absolute;
-  top: 0;
-  display: block;
-  font-size: 1.5rem;
-  padding-top: 5%;
-  font-family: 'RixInooAriDuriR';
-  color: #ff4d57;
-`;
+
 const QuizTitle = styled.h1`
   text-align: center;
   font-weight: normal;

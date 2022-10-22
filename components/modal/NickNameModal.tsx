@@ -1,4 +1,4 @@
-import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';

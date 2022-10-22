@@ -4,12 +4,11 @@ import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button,HeadMeta } from 'components/common';
+import { HeadMeta,Loading } from 'components/common';
 import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { Loading } from 'components/common';
-import Router from 'next/router';
+import { MainButton } from 'styles/common';
 import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve';
 
 const Page: NextPageWithLayout = () => {
@@ -44,8 +43,9 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <Container>
+      <HeadMeta/>
       {loading ? <Loading /> : ''}
-      <Logo onClick={() => Router.push('/home')}>캐치캐치</Logo>
+      <Logo/>
       <QuizInfo>
         {thumbnail == '' ? (
           <Bubbling style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
@@ -71,19 +71,13 @@ const Page: NextPageWithLayout = () => {
       )}
 
       <ButtonWrap>
-        <Button
-          width="250px"
-          height="55px"
-          fontSize="1.4rem"
-          bgColor="#ff4d57"
-          fontColor="#fff"
-          id="create-btn"
+        <MainButton
           onClick={() => {
             router.push(`/quiz/solve/${id}/main`);
           }}
         >
           시작하기
-        </Button>
+        </MainButton>
       </ButtonWrap>
     </Container>
   );
