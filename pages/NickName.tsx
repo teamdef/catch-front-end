@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { useModal } from 'hooks';
-import TestModal from 'components/modal/TestModal';
+import NickNameModal from 'components/modal/NickNameModal';
 const Page: NextPageWithLayout = () => {
 
   const 등록함수 = (text: string) => {
@@ -11,11 +11,11 @@ const Page: NextPageWithLayout = () => {
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    yesTitle: '등록',
+    yesTitle: '확인',
     yesAction: () => {
       closeModal();
     },
-    contents: <TestModal speak={등록함수} />,
+    contents: <NickNameModal speak={등록함수} />,
   });
   return (
     <div>

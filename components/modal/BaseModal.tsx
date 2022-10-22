@@ -131,7 +131,6 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalBody = styled.div`
-  padding: 1rem 0.5rem 1rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,7 +138,6 @@ const ModalBody = styled.div`
   text-align: center;
 `;
 const ActionButtonContainer = styled.div`
-  padding: 0.5rem;
   display: flex;
   justify-content: center;
 `;
