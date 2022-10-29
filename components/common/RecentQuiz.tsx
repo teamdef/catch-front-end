@@ -125,7 +125,7 @@ const RecentQuizList = () => {
               {recentQuizList.map((quiz,index) => {
                 return (
                   <>
-                    {(index+1)/2===0 && <AdsQuizCard/>}
+                    {(index+1)%2 === 0 && <AdsQuizCard/>}
                     <QuizCard
                       key={quiz.id}
                       userName={quiz.nickname}
