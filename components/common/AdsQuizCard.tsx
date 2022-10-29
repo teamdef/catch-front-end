@@ -32,7 +32,6 @@ const QuizCardWrapper = styled.div`
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;
-  height:375.25px;
   &:last-child {
     margin: 0;
   }
