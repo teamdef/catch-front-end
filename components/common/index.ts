@@ -15,3 +15,7 @@ export { default as QuizCard } from './QuizCard';
 export { default as RecentQuiz } from './RecentQuiz';
 export { default as AdsQuizCard } from './AdsQuizCard'
 export { default as SkeletonQuizCard } from './SkeletonQuizCard';
+
+
+export { default as MatchNote } from './MatchNote';
+export { default as RankBoard } from './RankBoard';

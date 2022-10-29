@@ -68,6 +68,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // https://github.com/vercel/next.js/discussions/36832
 
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
+  
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
     // 정규식으로 쿠키값 추출
