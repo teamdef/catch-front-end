@@ -55,5 +55,6 @@ interface NoticeTypes {
 // 전역 window 객체에 KaKao 라는 객체가 있음을 알린다.
 
 interface Window {
-  Kakao: any;
+  Kakao: any; // 카카오
+  adsbygoogle: any; // 구글 애드센스 
 }
