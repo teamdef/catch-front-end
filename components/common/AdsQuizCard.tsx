@@ -2,14 +2,6 @@ import styled from 'styled-components';
 import {useEffect} from 'react'
 const AdsQuizCard = () => {
 
-    useEffect(() => {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        console.log('Advertise is pushed');
-      } catch (e) {
-        if (process.env.NODE_ENV !== 'production') console.error('AdvertiseError', e);
-      }
-    }, []);
     return process.env.NODE_ENV !== 'production' ? (
       <></>
     ) : (
@@ -22,6 +14,7 @@ const AdsQuizCard = () => {
           data-ad-client="ca-pub-7873415242511235"
           data-ad-slot="8940715357"
         ></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({})</script>
       </QuizCardWrapper>
     );
 };
