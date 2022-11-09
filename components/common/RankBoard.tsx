@@ -18,7 +18,7 @@ const RankBoard = ({ solveId }:any) => {
   useEffect(() => {
     async function getRank() {
       try {
-        const rank_res = await axios.get(`https://api.catchcatch.link/v1/solver/ranking?probsetId=${quizId}`);
+        const rank_res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/solver/ranking?probsetId=${quizId}`);
         console.log(rank_res);
         setRankList(rank_res.data);
       } catch (error) {
@@ -28,7 +28,7 @@ const RankBoard = ({ solveId }:any) => {
     async function getUser() {
       try {
         const user_res = await axios.get(
-          `https://api.catchcatch.link/v1/solver/ranking?probsetId=${quizId}&solverId=${solveId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND}/solver/ranking?probsetId=${quizId}&solverId=${solveId}`,
         );
         console.log(user_res);
         setNewUser(user_res.data[0]);

@@ -25,7 +25,7 @@ const Page: NextPageWithLayout = () => {
     setLoading(true);
     async function getQuiz() {
       try {
-        const response = await axios.get(`https://api.catchcatch.link/v1/loadprobset/${id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/loadprobset/${id}`);
         dispatch(saveSolveProblemSetAction({ solveSetTitle: response.data[0].set_title }));
         dispatch(saveSolveProblemsAction({ solveProblems: response.data[0].prob }));
         dispatch(saveQuizIdAction({ quizId: `${id}` }));

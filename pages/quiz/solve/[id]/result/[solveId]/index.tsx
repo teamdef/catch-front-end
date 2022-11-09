@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import { MainButton } from 'styles/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { HeadMeta, MatchNote,Logo, RankBoard, Button } from 'components/common';
 import ProgressBar from '@ramonak/react-progress-bar';
-import { isAbsolute } from 'path/posix';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

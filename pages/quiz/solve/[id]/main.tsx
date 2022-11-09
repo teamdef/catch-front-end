@@ -121,7 +121,6 @@ const Page: NextPageWithLayout = () => {
                   solveUserScore: matchList.filter((element: any) => undefined === element).length,
                 }),
               );
-              console.log(matchList);
               openModal();
             }}
           >

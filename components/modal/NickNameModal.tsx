@@ -18,11 +18,9 @@ const NickNameModal = ({ setLoading }: any) => {
   const dispatch = useDispatch();
 
   const moveResult = (_nickname: string) => {
-    dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
-    setLoading(true);
     async function postSolver() {
       await axios
-        .post('https://api.catchcatch.link/v1/solver', {
+        .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
           nickName: _nickname,
           score: solveUserScore,
           probsetId: quizId,
@@ -36,7 +34,14 @@ const NickNameModal = ({ setLoading }: any) => {
           console.log(error);
         });
     }
-    postSolver();
+    if (_nickname && _nickname.length <= 12) {
+      dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
+      setLoading(true);
+      postSolver();
+    }
+    else if(_nickname.length > 13) {
+      alert('닉네임이 너무 길어요 !');
+    }
   };
 
   const [text, , clearFunction, textHandler] = useInput<string>('');
@@ -46,9 +51,12 @@ const NickNameModal = ({ setLoading }: any) => {
       <h1>닉네임을 입력해주세요</h1>
       <div>
         <input type="text" value={text} onChange={textHandler} placeholder="한글 최대 6자, 영어 최대 12자, 중복가능" />
-        <AiOutlineClose color="#bcbcbc" onClick={clearFunction} />
+        {text && <AiOutlineClose color="#bcbcbc" onClick={clearFunction} />}
+        
       </div>
+
       <button
+        style={text == '' ? { backgroundColor: '#aaa' } : {}}
         onClick={() => {
           moveResult(text);
         }}
