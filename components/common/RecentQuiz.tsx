@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { QuizCard, SkeletonQuizCard, NotFound } from 'components/common';
+import { QuizCard, SkeletonQuizCard, NotFound,AdsQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/test';
 
@@ -121,20 +121,23 @@ const RecentQuizList = () => {
           recentQuizList.length === 0 ? (
             <NotFound title={'등록된 퀴즈집이 없습니다 😣'} subTitle={'퀴즈집을 만들어주세요 !! '} />
           ) : (
-            <>
-              {recentQuizList.map((quiz) => {
+              <>
+              {recentQuizList.map((quiz,index) => {
                 return (
-                  <QuizCard
-                    key={quiz.id}
-                    userName={quiz.nickname}
-                    userProfileImg={quiz.profile_img}
-                    quizDate={timeForToday(quiz.created_at)}
-                    quizTitle={quiz.set_title}
-                    quizCount={0}
-                    quizPlay={quiz.solverCnt}
-                    quizRoute={`/quiz/solve/${quiz.id}`}
-                    quizThumbnail={quiz.thumbnail}
-                  />
+                  <>
+                    {(index+1)%2 === 0 && <AdsQuizCard/>}
+                    <QuizCard
+                      key={quiz.id}
+                      userName={quiz.nickname}
+                      userProfileImg={quiz.profile_img}
+                      quizDate={timeForToday(quiz.created_at)}
+                      quizTitle={quiz.set_title}
+                      quizCount={0}
+                      quizPlay={quiz.solverCnt}
+                      quizRoute={`/quiz/solve/${quiz.id}`}
+                      quizThumbnail={quiz.thumbnail}
+                    />
+                  </>
                 );
               })}
               {load && (
