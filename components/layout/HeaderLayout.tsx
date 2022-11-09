@@ -5,7 +5,7 @@ const HeaderLayout = (props: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-      {props.children}
+      <div style={{paddingTop: '116px'}}>{props.children}</div>
     </>
   );
 };

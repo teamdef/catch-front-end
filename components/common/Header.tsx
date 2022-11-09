@@ -56,12 +56,13 @@ const Header = () => {
 };
 
 const Wrapper = styled.div`
-  position: relative;
+  position: fixed;
   background-color: #fff;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  position: sticky;
   top: 0px;
+  width: 100%;
+  max-width: 500px;
   z-index: 10;
   border-bottom: solid 1px #eee;
 `;
@@ -69,7 +70,6 @@ const Wrapper = styled.div`
 const HeaderContentWrapper = styled.div`
   display: flex;
   padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-  width: 100%;
 `;
 interface HeaderProps {
   resize: boolean;
