@@ -15,41 +15,62 @@ interface NickNameProps {
 
 const NickNameModal = ({ setLoading }: any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
-  const { isLoggedin,nickName } = useSelector((state: RootState) => state.user);
+  const { isLoggedin, nickName, id} = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  
+
   const moveResult = (_nickname: string) => {
+    /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
     async function postSolver() {
-      await axios
-        .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
-          nickName: _nickname,
-          score: solveUserScore,
-          probsetId: quizId,
-        })
-        .then(function (response) {
-          setLoading(false);
-          Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
-        })
-        .catch(function (error) {
-          setLoading(false);
-          console.log(error);
-        });
+      // 로그인한 유저의 경우 유저아이디를 추가로 전달
+      if (isLoggedin) {
+        await axios
+          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
+            nickName: _nickname,
+            score: solveUserScore,
+            probsetId: quizId,
+            userId: id,
+          })
+          .then(function () {
+            setLoading(false);
+            Router.push(`/quiz/solve/${quizId}/result/${id}`);
+          })
+          .catch(function (error) {
+            setLoading(false);
+            console.log(error);
+          });
+      } else {
+        // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
+        await axios
+          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
+            nickName: _nickname,
+            score: solveUserScore,
+            probsetId: quizId,
+          })
+          .then(function (response) {
+            setLoading(false);
+            Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
+          })
+          .catch(function (error) {
+            setLoading(false);
+            console.log(error);
+          });
+      }
     }
+
     if (_nickname && _nickname.length <= 12) {
+      postSolver();
       dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
       setLoading(true);
-      postSolver();
-    }
-    else if(_nickname.length > 13) {
+    } else if (_nickname.length > 13) {
       alert('닉네임이 너무 길어요 !');
     }
   };
-  const [text, Setter,clearFunction, textHandler] = useInput<string>('');
-  
+  const [text, Setter, clearFunction, textHandler] = useInput<string>('');
+
   // 로그인 환경일 경우 닉네임 default 넣어주기
-  useEffect (() => {
-    if(isLoggedin) Setter(nickName);
-  },[])
+  useEffect(() => {
+    if (isLoggedin) Setter(nickName);
+  }, []);
 
   return (
     <NickNameModalEl>
@@ -57,7 +78,6 @@ const NickNameModal = ({ setLoading }: any) => {
       <div>
         <input type="text" value={text} onChange={textHandler} placeholder="한글 최대 6자, 영어 최대 12자, 중복가능" />
         {text && <AiOutlineClose color="#bcbcbc" onClick={clearFunction} />}
-        
       </div>
 
       <button
