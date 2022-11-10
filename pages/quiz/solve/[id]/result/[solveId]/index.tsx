@@ -14,6 +14,7 @@ import ProgressBar from '@ramonak/react-progress-bar';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
+  const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
   let { solveId } = router.query;
   return (
@@ -50,7 +51,7 @@ const Page: NextPageWithLayout = () => {
       </RankingArea>
 
       <ButtonArea>
-        <MainButton onClick={() => Router.push('/quiz/create')}>나도 퀴즈 만들기</MainButton>
+        <MainButton onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>나도 퀴즈 만들기</MainButton>
       </ButtonArea>
       {openMatch ? <MatchNote setOpenMatch={setOpenMatch} /> : ''}
     </Container>

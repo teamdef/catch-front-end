@@ -15,10 +15,7 @@ interface NickNameProps {
 
 const NickNameModal = ({ setLoading }: any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
-  // const { isLoggedin } = useSelector((state: RootState) => state.user);
-  // const { nickName } = useSelector((state: RootState) => state.user);
-  const isLoggedin = true;
-  const nickName = 'wlsusn'
+  const { isLoggedin,nickName } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   
   const moveResult = (_nickname: string) => {
@@ -53,7 +50,7 @@ const NickNameModal = ({ setLoading }: any) => {
   useEffect (() => {
     if(isLoggedin) Setter(nickName);
   },[])
-  
+
   return (
     <NickNameModalEl>
       <h1>닉네임을 입력해주세요</h1>
