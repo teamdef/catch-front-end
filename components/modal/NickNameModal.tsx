@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
@@ -15,8 +15,12 @@ interface NickNameProps {
 
 const NickNameModal = ({ setLoading }: any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
+  // const { isLoggedin } = useSelector((state: RootState) => state.user);
+  // const { nickName } = useSelector((state: RootState) => state.user);
+  const isLoggedin = true;
+  const nickName = 'wlsusn'
   const dispatch = useDispatch();
-
+  
   const moveResult = (_nickname: string) => {
     async function postSolver() {
       await axios
@@ -43,9 +47,13 @@ const NickNameModal = ({ setLoading }: any) => {
       alert('닉네임이 너무 길어요 !');
     }
   };
-
-  const [text, , clearFunction, textHandler] = useInput<string>('');
-
+  const [text, Setter,clearFunction, textHandler] = useInput<string>('');
+  
+  // 로그인 환경일 경우 닉네임 default 넣어주기
+  useEffect (() => {
+    if(isLoggedin) Setter(nickName);
+  },[])
+  
   return (
     <NickNameModalEl>
       <h1>닉네임을 입력해주세요</h1>
