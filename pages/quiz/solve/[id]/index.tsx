@@ -28,7 +28,7 @@ const Page: NextPageWithLayout = () => {
         dispatch(
           saveSolveProblemSetAction({
             solveProblemSetTitle: response.data[0].set_title,
-            quizId: `${id}`,
+            ProblemSetId: `${id}`,
             solveProblems: response.data[0].prob,
           }),
         );

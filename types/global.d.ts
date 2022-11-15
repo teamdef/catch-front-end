@@ -23,29 +23,34 @@ interface ProblemSetTypes {
 
 
 
-//----------------------풀이------------------------
+//------------------------------------풀이------------------------------------------
+
 // SolveProblemTypes - 문제(풀이용) 정보
 interface SolveProblemTypes {
   solveProblemTitle: string; // 문제 제목
   solveChoices: string[]; // 객관식 항목 배열
 }
+// 풀이자 오답 노트
 interface SolveAnswerTypes {
-  solveAnswer: string; // 정답 이름
-  solveAnswerId: string; // 정답 id 값
+  solveCorrectAnswer: string; // 정답 
+  solveProbleTitle: string; // 문제 제목
+  solveUserAnswer: string; // 풀이자 답
 }
-// SolveProblemSetTypes - 문제집(풀이용) 정보
-interface SolveProblemSetTypes {
-  quizId: string; // 퀴즈 아이디
+
+// 풀이자 정보
+interface SolveUserTypes {
   solveUserName: string; // 유저 닉네임
   solveUserScore: Number; // 유저 스코어
   solveUserId: string; // 유저 아이디
+}
+// SolveProblemSetTypes - 문제집(풀이용) 정보
+interface SolveProblemSetTypes {
+  ProblemSetId: string; // 퀴즈 아이디
   solveProblemSetTitle: string; // 문제집 제목
   solveProblems: SolveProblemTypes[]; // 문제 배열
   solveAnswers: SolveAnswerTypes[];
 }
-interface SolveUserInfoTypes {
-  
-}
+
 // /------------------------------------------------
 
 // 공지사항 타입

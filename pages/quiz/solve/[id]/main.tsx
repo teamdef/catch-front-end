@@ -6,7 +6,8 @@ import { HeadMeta, Loading,Logo, SwipeAniIcon } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import { saveSolveAnswersAction, saveSolveUserScoreAction } from 'store/quiz_solve';
+import { saveSolveAnswersAction } from 'store/quiz_solve';
+import { saveSolveUserScoreAction } from 'store/user_solve'
 import { BiChevronRight } from 'react-icons/bi';
 import { useModal } from 'hooks';
 import { MainButton } from 'styles/common';
@@ -21,7 +22,7 @@ const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const dispatch = useDispatch();
-  const { solveSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
+  const { solveProblemSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
   let answers: string[] = userAnswers;
@@ -44,6 +45,7 @@ const Page: NextPageWithLayout = () => {
     /* 사용자가 선택한 답의 배열 내 빈 값(선택하지 않음)을 찾고 빈 값이 없을 경우(false) + 유저가 선택한 답의 갯수와 문제의 갯수가 일치할 경우 버튼 출력 */
     if (answers.filter((answer) => typeof answer != undefined).length == solveProblems.length) {
       setChoice(true);
+      console.log(answers);
       setUserAnswers(answers);
     }
   };
@@ -105,7 +107,7 @@ const Page: NextPageWithLayout = () => {
       <HeadMeta />
       <Logo/>
       <QuizSolveContent>
-        <QuizTitle>{solveSetTitle}</QuizTitle>
+        <QuizTitle>{solveProblemSetTitle}</QuizTitle>
         <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
           {QuizList}
         </Swiper>
@@ -115,6 +117,7 @@ const Page: NextPageWithLayout = () => {
           <MainButton
           style={{width: '100%', margin:'0'}}
             onClick={() => {
+              console.log(matchList);
               dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
               dispatch(
                 saveSolveUserScoreAction({

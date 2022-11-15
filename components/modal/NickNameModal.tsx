@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveSolveUserNameAction } from 'store/quiz_solve';
+import { saveSolveUserNameAction } from 'store/user_solve';
 import Router from 'next/router';
 import { RootState } from 'store';
 import axios from 'axios';
@@ -14,7 +14,7 @@ interface NickNameProps {
 }
 
 const NickNameModal = ({ setLoading }: any) => {
-  const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
+  const { solveUserScore, ProblemSetId } = useSelector((state: RootState) => state.solve);
   const { isLoggedin, nickName, id} = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
@@ -27,12 +27,12 @@ const NickNameModal = ({ setLoading }: any) => {
           .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
             nickName: _nickname,
             score: solveUserScore,
-            probsetId: quizId,
+            probsetId: ProblemSetId,
             userId: id,
           })
           .then(function () {
             setLoading(false);
-            Router.push(`/quiz/solve/${quizId}/result/${id}`);
+            Router.push(`/quiz/solve/${ProblemSetId}/result/${id}`);
           })
           .catch(function (error) {
             setLoading(false);
@@ -44,11 +44,11 @@ const NickNameModal = ({ setLoading }: any) => {
           .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
             nickName: _nickname,
             score: solveUserScore,
-            probsetId: quizId,
+            probsetId: ProblemSetId,
           })
           .then(function (response) {
             setLoading(false);
-            Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
+            Router.push(`/quiz/solve/${ProblemSetId}/result/${response.data.solverId}`);
           })
           .catch(function (error) {
             setLoading(false);

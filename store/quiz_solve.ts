@@ -2,10 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // user스토어의 초기값을 설정
 const initialState: SolveProblemSetTypes = {
-  solveUserId: '',
-  quizId: '',
-  solveUserName: '',
-  solveUserScore: 0,
+  ProblemSetId: '',
   solveProblemSetTitle: '',
   solveProblems: [],
   solveAnswers: [],
@@ -17,24 +14,12 @@ const solveSlice = createSlice({
   reducers: {
     saveSolveProblemSetAction: (
       state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveProblemSetTitle: string; quizId: string; solveProblems: SolveProblemTypes[] }>,
+      action: PayloadAction<{ solveProblemSetTitle: string; ProblemSetId: string; solveProblems: SolveProblemTypes[] }>,
     ) => {
-      const { solveProblemSetTitle, quizId, solveProblems } = action.payload;
+      const { solveProblemSetTitle, ProblemSetId, solveProblems } = action.payload;
       state.solveProblemSetTitle = solveProblemSetTitle;
-      state.quizId = quizId;
+      state.ProblemSetId = ProblemSetId;
       state.solveProblems = solveProblems;
-    },
-    saveSolveUserNameAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveUserName: string }>) => {
-      const { solveUserName } = action.payload;
-      state.solveUserName = solveUserName;
-    },
-    saveSolveUserIdAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveUserId: string }>) => {
-      const { solveUserId } = action.payload;
-      state.solveUserId = solveUserId;
-    },
-    saveSolveUserScoreAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveUserScore: number }>) => {
-      const { solveUserScore } = action.payload;
-      state.solveUserScore = solveUserScore;
     },
     saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>) => {
       const { solveAnswers } = action.payload;
@@ -46,9 +31,6 @@ const solveSlice = createSlice({
 export const {
   saveSolveProblemSetAction,
   saveSolveAnswersAction,
-  saveSolveUserNameAction,
-  saveSolveUserIdAction,
-  saveSolveUserScoreAction,
 } = solveSlice.actions;
 
 export default solveSlice.reducer;
