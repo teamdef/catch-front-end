@@ -3,24 +3,23 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
-import Router from 'next/router';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
 import type { NextPageWithLayout } from 'pages/_app';
-import { HeadMeta, MatchNote,Logo, RankBoard, Button } from 'components/common';
+import { HeadMeta, MatchNote, Logo, RankBoard, Button } from 'components/common';
 import ProgressBar from '@ramonak/react-progress-bar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  let { solveId } = router.query;
   const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
-  let { solveId } = router.query;
   return (
     <Container>
       <HeadMeta />
-      <Logo/>
+      <Logo />
       <ScoreArea>
         <h1>
           <strong>{solveUserName}</strong> 님
@@ -71,7 +70,7 @@ const Container = styled.div`
     top: 0;
     left: 0;
     display: block;
-    padding:5%;
+    padding: 5%;
   }
 `;
 const ButtonArea = styled.div`

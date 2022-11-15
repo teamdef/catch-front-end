@@ -39,7 +39,7 @@ interface SolveProblemSetTypes {
   solveUserName: string; // 유저 닉네임
   solveUserScore: Number; // 유저 스코어
   solveUserId: string; // 유저 아이디
-  solveSetTitle: string; // 문제집 제목
+  solveProblemSetTitle: string; // 문제집 제목
   solveProblems: SolveProblemTypes[]; // 문제 배열
   solveAnswers: SolveAnswerTypes[];
 }

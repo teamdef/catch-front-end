@@ -6,7 +6,7 @@ const initialState: SolveProblemSetTypes = {
   quizId: '',
   solveUserName: '',
   solveUserScore: 0,
-  solveSetTitle: '',
+  solveProblemSetTitle: '',
   solveProblems: [],
   solveAnswers: [],
 };
@@ -15,13 +15,14 @@ const solveSlice = createSlice({
   name: 'solve', // 해당 모듈의 이름. store.user 형식으로 추후 접근
   initialState,
   reducers: {
-    saveSolveProblemSetAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveSetTitle: string }>) => {
-      const { solveSetTitle } = action.payload;
-      state.solveSetTitle = solveSetTitle;
-    },
-    saveQuizIdAction: (state: SolveProblemSetTypes, action: PayloadAction<{ quizId: string }>) => {
-      const { quizId } = action.payload;
+    saveSolveProblemSetAction: (
+      state: SolveProblemSetTypes,
+      action: PayloadAction<{ solveProblemSetTitle: string; quizId: string; solveProblems: SolveProblemTypes[] }>,
+    ) => {
+      const { solveProblemSetTitle, quizId, solveProblems } = action.payload;
+      state.solveProblemSetTitle = solveProblemSetTitle;
       state.quizId = quizId;
+      state.solveProblems = solveProblems;
     },
     saveSolveUserNameAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveUserName: string }>) => {
       const { solveUserName } = action.payload;
@@ -35,17 +36,7 @@ const solveSlice = createSlice({
       const { solveUserScore } = action.payload;
       state.solveUserScore = solveUserScore;
     },
-    saveSolveProblemsAction: (
-      state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveProblems: SolveProblemTypes[] }>,
-    ) => {
-      const { solveProblems } = action.payload;
-      state.solveProblems = solveProblems;
-    },
-    saveSolveAnswersAction: (
-      state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>,
-    ) => {
+    saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>) => {
       const { solveAnswers } = action.payload;
       state.solveAnswers = solveAnswers;
     },
@@ -53,13 +44,11 @@ const solveSlice = createSlice({
 });
 
 export const {
-  saveQuizIdAction,
   saveSolveProblemSetAction,
-  saveSolveProblemsAction,
   saveSolveAnswersAction,
   saveSolveUserNameAction,
   saveSolveUserIdAction,
-  saveSolveUserScoreAction
+  saveSolveUserScoreAction,
 } = solveSlice.actions;
 
 export default solveSlice.reducer;

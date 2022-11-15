@@ -4,18 +4,17 @@ import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeadMeta,Loading } from 'components/common';
+import { HeadMeta, Loading } from 'components/common';
 import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
-import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve';
+import { saveSolveProblemSetAction } from 'store/quiz_solve';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { solveSetTitle } = useSelector((state: RootState) => state.solve);
-  const { solveProblems } = useSelector((state: RootState) => state.solve);
+  const { solveSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
   const [thumbnail, setThumbnail] = useState('');
   const [maker, setMaker] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,9 +25,13 @@ const Page: NextPageWithLayout = () => {
     async function getQuiz() {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/loadprobset/${id}`);
-        dispatch(saveSolveProblemSetAction({ solveSetTitle: response.data[0].set_title }));
-        dispatch(saveSolveProblemsAction({ solveProblems: response.data[0].prob }));
-        dispatch(saveQuizIdAction({ quizId: `${id}` }));
+        dispatch(
+          saveSolveProblemSetAction({
+            solveProblemSetTitle: response.data[0].set_title,
+            quizId: `${id}`,
+            solveProblems: response.data[0].prob,
+          }),
+        );
         setMaker(response.data[0].user.nickname);
         setThumbnail(response.data[0].thumbnail);
         setLoading(false);
@@ -43,9 +46,9 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <Container>
-      <HeadMeta/>
+      <HeadMeta />
       {loading ? <Loading /> : ''}
-      <Logo/>
+      <Logo />
       <QuizInfo>
         {thumbnail == '' ? (
           <Bubbling style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
@@ -65,7 +68,7 @@ const Page: NextPageWithLayout = () => {
         </InfoTxt>
       </QuizInfo>
       {thumbnail && (
-        <Bubbling style={{padding:'5%'}}>
+        <Bubbling style={{ padding: '5%' }}>
           <img src="/assets/img/chch.png" />
         </Bubbling>
       )}
