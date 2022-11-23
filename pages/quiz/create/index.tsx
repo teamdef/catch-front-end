@@ -1,5 +1,5 @@
-import { ReactElement, useState, useEffect } from 'react';
-import styled from 'styled-components';
+import * as S from 'styles/quiz/create/index.style'
+import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
 import { Logo,HeadMeta } from 'components/common';
@@ -87,15 +87,14 @@ const Page: NextPageWithLayout = () => {
   }, []);
   return (
     <>
-      <HeadMeta/>
-      <Wrapper>
-        <TitleContainer>
+      <S.Wrapper>
+        <S.TitleContainer>
           <div id="logo-wrapper">
             <Logo color={'#fff'} />
           </div>
           <div id="title-input-wrapper">
             <span>참여자들에게 어떤 제목으로 보여줄까요?</span>
-            <TitleInput>
+            <S.TitleInput>
               <input
                 type="text"
                 placeholder="제목을 입력해주세요!"
@@ -106,9 +105,9 @@ const Page: NextPageWithLayout = () => {
               <button id="clear-btn" onClick={titleClear} disabled={title === ''}>
                 <MdClear size={20} />
               </button>
-            </TitleInput>
+            </S.TitleInput>
           </div>
-        </TitleContainer>
+        </S.TitleContainer>
         <ul className="notice">
           <li>
             <BsCheck size="20" color="#ff4d57" />
@@ -133,12 +132,12 @@ const Page: NextPageWithLayout = () => {
             생성한 퀴즈는 수정이 불가능 합니다.
           </li>
         </ul>
-        <ButtonContainer>
+        <S.ButtonContainer>
           <MainButton onClick={goQuizCreateMain} disabled={title === ''}>
             <span>시작하기</span>
           </MainButton>
-        </ButtonContainer>
-      </Wrapper>
+        </S.ButtonContainer>
+      </S.Wrapper>
       <Render제작중있음Modal />
     </>
   );
@@ -146,144 +145,5 @@ const Page: NextPageWithLayout = () => {
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
-
-// 임시 디자인
-const Wrapper = styled.div`
-  position: relative;
-  display: block;
-  flex-direction: column;
-  justify-content: center;
-  height: 100vh;
-  color: #000;
-  background-color: white;
-  #warning {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    color: red;
-  }
-  * {
-    margin: 0 auto;
-  }
-
-  .notice {
-    padding: 0 10%;
-    margin: 15% 0;
-    @media (max-height: 700px) {
-      margin: 10% 0;
-      li {
-        margin-bottom: 5%;
-      }
-    }
-    li {
-      position: relative;
-      font-size: 0.9rem;
-      color: #888;
-      list-style: none;
-      padding-left: 10%;
-      margin-bottom: 10%;
-      word-break: keep-all;
-      strong {
-        color: #ff4d57;
-      }
-      svg {
-        position: absolute;
-        left: 0;
-      }
-    }
-  }
-`;
-
-const TitleContainer = styled.div`
-  overflow: hidden;
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 35%;
-  #logo-wrapper {
-    padding: 1.5rem;
-    text-align: left;
-    position: relative;
-    background-color: transparent;
-    z-index: 2;
-  }
-  #title-input-wrapper {
-    color: #fff;
-    span {
-      text-align: center;
-      position: relative;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 15px;
-      z-index: 2;
-    }
-  }
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ff4d57;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
-    display: block;
-    width: 600px;
-    height: 100%;
-    z-index: 1;
-  }
-`;
-const TitleInput = styled.div`
-  z-index: 2;
-  display: flex;
-  position: relative;
-  border-bottom: 2px solid #fff;
-  max-width: 70%;
-  input {
-    height: 50px;
-    border: 0;
-    width: 85%;
-    background-color: transparent;
-    color: #fff;
-    font-size: 1rem;
-    text-align: center;
-    &:focus {
-      outline: none;
-    }
-    &::placeholder {
-      font-size: 20px;
-      font-weight: 300;
-      opacity: 0.5;
-      color: #fff;
-    }
-  }
-  #clear-btn {
-    margin: 0;
-    height: 50px;
-    background-color: transparent;
-    border: none;
-    color: #fff;
-    &:disabled {
-      display: none;
-    }
-    svg {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-`;
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 1rem 0 1rem;
-  background-color: #fff;
-  padding: 1rem;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-`;
 
 export default Page;

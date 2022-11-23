@@ -1,18 +1,13 @@
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { NextPageContext } from 'next';
 import { kakaoLoginApi } from 'pages/api/test';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'store/user';
 import { saveToken } from 'utils/token';
-import { Loading, HeadMeta } from 'components/common';
+import { Loading } from 'components/common';
 
-interface Props {
-  data?: any;
-  status?: number;
-}
 
 interface DataProps {
   id: string;
@@ -62,7 +57,6 @@ const redirect: NextPageWithLayout = () => {
 
   return (
     <div>
-      <HeadMeta/>
       <Loading ment={'로그인 중 입니다...'} />
     </div>
   );
@@ -71,14 +65,5 @@ const redirect: NextPageWithLayout = () => {
 redirect.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
-
-// url 의 params 를 가져와서 초기값으로 세팅하기 SSR
-
-/*redirect.getInitialProps = async (context: NextPageContext) => {
-  const code = context.query.code as string; // 타입 단언
-  console.log(code);
-  const res = await kakaoLoginApi(code);
-  return { data: res.data, status: res.status };
-};*/
 
 export default redirect;

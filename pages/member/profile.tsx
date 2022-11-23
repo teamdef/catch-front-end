@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import * as S from 'styles/member/profile.style';
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, HeadMeta,Loading } from 'components/common';
+import { Title, HeadMeta, Loading } from 'components/common';
 import { MdOutlineSettings } from 'react-icons/md';
 import { useState, ChangeEvent } from 'react';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { profileUploadAction } from 'store/user';
 import { useRouter } from 'next/router';
-import {useModal} from 'hooks'
+
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
@@ -114,21 +114,20 @@ const Profile: NextPageWithLayout = () => {
   }, [router.isReady]);
   return (
     <>
-      <HeadMeta />
       {isLoading && <Loading ment={'저장중 입니다...'} />}
-      <Wrapper>
-        {isRegister && <MarginDiv />}
+      <S.Wrapper>
+        {isRegister && <S.MarginDiv />}
         <Title
           title={isRegister ? '프로필 등록 👧' : '프로필 수정 👧'}
           subTitle={`서비스에서 사용하실 프로필을 ${isRegister ? '등록' : '수정'}해보세요!`}
           backRoute={isRegister ? undefined : '/'}
         />
-        <ProfileContentContainer>
-          <ProfileImgInputContainer>
-            <ProfileThumbnail>
+        <S.ProfileContentContainer>
+          <S.ProfileImgInputContainer>
+            <S.ProfileThumbnail>
               <img src={profileImg ? tempProfileImg : '/assets/img/user_default.png'} />
               {id && (
-                <ProfileSetting>
+                <S.ProfileSetting>
                   <input
                     type="file"
                     accept="image/*"
@@ -140,34 +139,34 @@ const Profile: NextPageWithLayout = () => {
                   <label htmlFor="select-image">
                     <MdOutlineSettings size={20} color={'#B4B4B4'} />
                   </label>
-                </ProfileSetting>
+                </S.ProfileSetting>
               )}
-            </ProfileThumbnail>
-          </ProfileImgInputContainer>
-          <ProfileNicknameInput
+            </S.ProfileThumbnail>
+          </S.ProfileImgInputContainer>
+          <S.ProfileNicknameInput
             type="text"
             placeholder="한글 2~6자까지 입력 가능합니다."
             value={tempNickname}
             onChange={_tempNicknameHandler}
           />
-          {error && <Error>{error}</Error>}
+          {error && <S.Error>{error}</S.Error>}
           {isRegister ? (
-            <Info>
+            <S.Info>
               소셜 로그인에서 설정된 프로필 값이 기본으로 설정되며,
               <br /> 이 단계에서 수정하지 않아도 서비스 내에서 수정 가능 합니다 :)
-            </Info>
+            </S.Info>
           ) : (
-            <Info>
+            <S.Info>
               수정 완료 버튼을 누르면 변경사항이 저장되고,
               <br /> 홈 화면으로 이동됩니다.
-            </Info>
+            </S.Info>
           )}
 
-          <SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
+          <S.SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
             {isRegister ? '등록' : '수정'}완료
-          </SaveButton>
-        </ProfileContentContainer>
-      </Wrapper>
+          </S.SaveButton>
+        </S.ProfileContentContainer>
+      </S.Wrapper>
     </>
   );
 };
@@ -175,104 +174,4 @@ Profile.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-const MarginDiv = styled.div`
-  height: 62px;
-`;
-const ProfileImgInputContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-`;
-const ProfileContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const ProfileNicknameInput = styled.input`
-  height: 50px;
-  width: 80%;
-  border-radius: 25px;
-  border: solid 1px #d6d6d6;
-  outline: none;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  &::placeholder {
-    color: #d6d6d6;
-  }
-`;
-const SaveButton = styled.button`
-  bottom: 0;
-  font-size: 14px;
-  border-radius: 30px;
-  border: none;
-  height: 50px;
-  font-weight: 500;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
-  background-color: #ff4d57;
-  color: #fff;
-  width: 50%;
-  margin-top: 3rem;
-  &:disabled {
-    color: #7c7c7c;
-    background-color: #ececec;
-  }
-  &:hover {
-    cursor: pointer;
-  }
-`;
-const ProfileThumbnail = styled.div`
-  width: 150px;
-  height: 150px;
-  position: relative;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-`;
-
-const ProfileSetting = styled.div`
-  display: flex;
-  align-items: center;
-  input {
-    display: none;
-  }
-  label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    position: absolute;
-    top: 5px;
-    right: 0px;
-    border: solid 1px #d6d6d6;
-    background-color: white;
-    padding: 0.5rem;
-    border-radius: 50%;
-    color: rgb(59, 59, 59);
-    &:hover {
-      background-color: lightgrey;
-      cursor: pointer;
-    }
-  }
-`;
-const Error = styled.div`
-  color: #ff4d57;
-  font-size: 14px;
-  text-align: center;
-`;
-const Info = styled.div`
-  color: #888;
-  font-size: 14px;
-  text-align: center;
-`;
 export default Profile;

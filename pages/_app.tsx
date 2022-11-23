@@ -1,5 +1,7 @@
 import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import theme from 'styles/theme';
 import type { AppProps, AppContext } from 'next/app';
 import type { NextPage } from 'next';
 import { useSelector } from 'react-redux';
@@ -58,7 +60,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      <ThemeProvider theme={theme}>
+        <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      </ThemeProvider>
     </>
   );
 }

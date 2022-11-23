@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
+
 interface TitleProps {
   backRoute?: string;
   title: string;
@@ -51,5 +52,3 @@ const Wrapper = styled.div`
 `;
 
 export default Title;
-
-// 서비스 footer 작성필요

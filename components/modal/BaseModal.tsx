@@ -1,6 +1,6 @@
 import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
 import styled from 'styled-components';
-import ModalPortal from 'components/modal/ModalPortal';
+import ModalPortal from 'components/modal/PortalWrapper';
 import { useOnOutsideClick } from 'hooks/useModal';
 
 export interface BaseModalType {

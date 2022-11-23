@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import * as S from 'styles/quiz/solve/index.style'
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
@@ -42,35 +42,34 @@ const Page: NextPageWithLayout = () => {
   }, [id]);
 
   return (
-    <Container>
-      <HeadMeta/>
+    <S.Container>
       {loading ? <Loading /> : ''}
-      <Logo/>
-      <QuizInfo>
+      <S.Logo/>
+      <S.QuizInfo>
         {thumbnail == '' ? (
-          <Bubbling style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
+          <S.Bubbling style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
             <img src="/assets/img/catch_character.png" />
-          </Bubbling>
+          </S.Bubbling>
         ) : (
-          <BgImg src={thumbnail} />
+          <S.BgImg src={thumbnail} />
         )}
-        <InfoTxt>
-          <InfoTitle>
+        <S.InfoTxt>
+          <S.InfoTitle>
             <h1>{solveSetTitle}</h1>
-          </InfoTitle>
+          </S.InfoTitle>
           <p>
             총 <em>{solveProblems.length}</em> 문제
           </p>
           <span>출제자 : {maker}</span>
-        </InfoTxt>
-      </QuizInfo>
+        </S.InfoTxt>
+      </S.QuizInfo>
       {thumbnail && (
-        <Bubbling style={{padding:'5%'}}>
+        <S.Bubbling style={{padding:'5%'}}>
           <img src="/assets/img/chch.png" />
-        </Bubbling>
+        </S.Bubbling>
       )}
 
-      <ButtonWrap>
+      <S.ButtonWrap>
         <MainButton
           onClick={() => {
             router.push(`/quiz/solve/${id}/main`);
@@ -78,109 +77,10 @@ const Page: NextPageWithLayout = () => {
         >
           시작하기
         </MainButton>
-      </ButtonWrap>
-    </Container>
+      </S.ButtonWrap>
+    </S.Container>
   );
 };
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100vh;
-  background-color: #fff;
-`;
-const Logo = styled.div`
-  position: absolute;
-  top: 0;
-  display: block;
-  z-index: 9999;
-  font-size: 1.5rem;
-  padding: 5% 0 0 5%;
-  font-family: 'RixInooAriDuriR';
-  color: #ff4d57;
-`;
-const QuizInfo = styled.div`
-  position: relative;
-  display: block;
-  height: 70%;
-  overflow: hidden;
-  border-radius: 0 0 30px 30px;
-  span {
-    position: relative;
-  }
-`;
-const BgImg = styled.img`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: block;
-  height: 100%;
-`;
-const InfoTxt = styled.div`
-  position: absolute;
-  padding: 7% 5%;
-  display: flex;
-  justify-content: end;
-  flex-direction: column;
-  width: 100%;
-  height: 80%;
-  bottom: 0;
-  color: #fff;
-  background: linear-gradient(
-    180deg,
-    rgba(20, 20, 20, 0) 0%,
-    rgba(20, 20, 20, 0.2) 26.56%,
-    rgba(20, 20, 20, 0.3) 52.6%,
-    rgba(20, 20, 20, 0.4) 78.65%,
-    rgba(20, 20, 20, 0.6) 100%
-  );
-
-  p {
-    margin: 5% 0 2% 0;
-    em {
-      color: #ff4d57;
-      font-style: normal;
-    }
-  }
-  span {
-    font-size: 0.8rem;
-    color: #ccc;
-  }
-`;
-const InfoTitle = styled.div`
-  h1 {
-    position: relative;
-    display: inline-block;
-    font-size: 1.5rem;
-    margin: 0;
-    padding-bottom: 5%;
-    &::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      display: inline-block;
-      width: 150%;
-      height: 1px;
-      background-color: #c9c9c98f;
-    }
-  }
-`;
-const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-`;
-const Bubbling = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  img {
-    width: 60%;
-  }
-`;
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
