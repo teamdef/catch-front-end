@@ -1,21 +1,18 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import type { ReactElement } from 'react';
-import { useInput } from 'hooks';
 import { AppLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
-import { HeadMeta, MatchNote, Logo, Button } from 'components/common';
+import { HeadMeta, MatchNote, Logo, Button, Comment } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 // import ProgressBar from '@ramonak/react-progress-bar';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   // let { solveId } = router.query;
-  const commCount = 232;
-  const [text, Setter, clearFunction, textHandler] = useInput<string>('');
   const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
@@ -71,22 +68,7 @@ const Page: NextPageWithLayout = () => {
           </ul>
         </div>
       </ShareArea>
-      <CommentArea>
-        <h2>
-          한줄평 남기기 <span style={{ fontSize: '.7rem' }}>({commCount})</span>
-        </h2>
-        <div>
-          <span>({text.length}/50)</span>
-          <input
-            type="text"
-            value={text}
-            onChange={textHandler}
-            id="comment-input"
-            maxLength={50}
-            placeholder="나도 한마디.."
-          />
-        </div>
-      </CommentArea>
+      <Comment />
       {/* <RankingArea>
         <h2>
           <strong>{solveUserName}</strong> 님의 랭킹을 확인해 보세요!
@@ -223,36 +205,7 @@ const ShareArea = styled.div`
     }
   }
 `;
-const CommentArea = styled.div`
-  position: relative;
-  width: 100%;
-  h2 {
-    font-size: 0.9rem;
-    color: #ff4d57;
-  }
-  div {
-    position:relative;
-    > span {
-    position: absolute;
-    font-size: .6rem;
-    color: #888;
-    bottom: 100%;
-    right: 0;
-    }
-    input {
-      background-color: #f4f4f4;
-      width: 100%;
-      height: 40px;
-      border: none;
-      padding: 0 5%;
-      color: #888;
-      border-radius: 4px;
-      ::placeholder {
-        color: #aaa;
-      }
-    }
-  }
-`;
+
 // const ProgressArea = styled.div`
 //   position: relative;
 //   display: block;
