@@ -29,6 +29,8 @@ const Page: NextPageWithLayout = () => {
         </ProgressArea> */}
         <UserScore>
           <b>{(solveUserScore / solveProblems.length) * 100}</b>
+          <span />
+          <span />
         </UserScore>
         <p>
           총 <span>{solveProblems.length}</span> 문제 중 <span>{solveUserScore}</span> 문제 맞았어요{' '}
@@ -81,7 +83,7 @@ const Page: NextPageWithLayout = () => {
 };
 const Container = styled.div`
   position: relative;
-  padding: 0 10%;
+  padding: 65px 10% 5% 10%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -97,21 +99,6 @@ const Container = styled.div`
     padding: 5%;
   }
 `;
-const ButtonArea = styled.div`
-  position: relative;
-  display: flex;
-  width: 100%;
-  gap: 3%;
-  justify-content: center;
-  align-items: center;
-  button {
-    width: 40%;
-    height: 42px;
-    font-size: 0.9rem;
-    background-color: #ff4d57;
-    color: #fff;
-  }
-`;
 const ScoreArea = styled.div`
   position: relative;
   display: flex;
@@ -122,7 +109,6 @@ const ScoreArea = styled.div`
   > h1 {
     font-size: 1rem;
     font-weight: normal;
-    margin: 0 0 5%;
     strong {
       font-weight: 500;
       font-size: 1.5rem;
@@ -132,7 +118,7 @@ const ScoreArea = styled.div`
   }
   > p {
     color: #888;
-    margin: 5% 0;
+    margin-top: 5%;
     span {
       color: #ff4d57;
     }
@@ -143,33 +129,51 @@ const ScoreArea = styled.div`
 `;
 const UserScore = styled.div`
   position: relative;
+  display: block;
+  margin-top: 5%;
   b {
     position: relative;
+    display: block;
     font-size: 3.5rem;
     color: #ff4d57;
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      display: block;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      width: 110%;
-      height: 4px;
-      border-radius: 2px;
-      background-color: #ff4d57;
-    }
-    &::after {
+  }
+  > span {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #ff4d57;
+    & + span {
       width: 130%;
-      bottom: -5px;
+      margin-top: 4px;
     }
+  }
+`;
+const ButtonArea = styled.div`
+  position: relative;
+  display: flex;
+  width: 100%;
+  gap: 3%;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+  button {
+    width: 40%;
+    height: 42px;
+    font-size: 0.9rem;
+    background-color: #ff4d57;
+    color: #fff;
   }
 `;
 const ShareArea = styled.div`
   position: relative;
   display: block;
   width: 80%;
+  margin-top: 10%;
   h2 {
     position: relative;
     display: flex;
@@ -182,7 +186,7 @@ const ShareArea = styled.div`
   }
   > div {
     position: relative;
-
+    margin-top: 5%;
     ul {
       position: relative;
       display: flex;
