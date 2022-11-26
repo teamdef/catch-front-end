@@ -9,8 +9,8 @@ import data from 'data/question.json'; // 문제 더미 데이터
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { MdClose, MdCheck } from 'react-icons/md'; // 아이콘
 import { AiOutlinePlus, AiFillCamera } from 'react-icons/ai'; // 아이콘
-import { imageTestApi } from 'pages/api/test'; // 이미지 업로드 테스트 api
-import { Loading, Logo, SwipeAniIcon, HeadMeta } from 'components/common';
+import { QuizUploadApi } from 'pages/api/quiz'; 
+import { Loading, Logo, SwipeAniIcon } from 'components/common';
 import useInput from 'hooks/useInput';
 import { AppLayout } from 'components/layout';
 import { AxiosResponse } from 'axios';
@@ -314,7 +314,7 @@ const Page: NextPageWithLayout = () => {
         }
       });
       Promise.all(_problems).then((res) => {
-        imageTestApi(res, id, setTitle).then((res: AxiosResponse) => {
+        QuizUploadApi(res, id, setTitle).then((res: AxiosResponse) => {
           resetProblemSet(); // 문제집 redux 초기화
           setLoading(false); // 로딩 해제
           router.push({

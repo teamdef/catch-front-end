@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { QuizCard, SkeletonQuizCard, NotFound,AdsQuizCard } from 'components/common';
 import styled from 'styled-components';
-import { RecentQuizListApi } from 'pages/api/test';
+import { RecentQuizListApi } from 'pages/api/quiz';
 
 interface RecentQuizType {
   created_at: string;
@@ -14,14 +14,10 @@ interface RecentQuizType {
 }
 const RecentQuizList = () => {
   const [recentQuizList, setRecentQuizList] = useState<RecentQuizType[] | null>(null);
-
-  /* infinite scroll 구현을 위한 것 */
-
-  //const obsRef = useRef(null); //observer Element
-  //const preventRef = useRef(true); //옵저버 중복 실행 방지
   const [end,setEnd] = useState(false); //모든 글 로드 확인
   const [load, setLoad] = useState(false); //로딩
   const [page, setPage] = useState<number>(0); // 내부 사용용 page 카운트
+
   const timeForToday = (date: string) => {
     const today = new Date();
     const timeValue = new Date(date);
@@ -82,25 +78,6 @@ const RecentQuizList = () => {
     [page],
   );
 
-  // const onIntersection = (entries: any) => {
-  //   const target = entries[0];
-  //   if (!endRef.current && target.isIntersecting && preventRef.current) {
-  //     //옵저버 중복 실행 방지
-  //     preventRef.current = false; //옵저버 중복 실행 방지
-  //     setPage((prev) => prev + 1); //페이지 값 증가
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getRecentQuizList(); // 문제 목록 불러오기
-  //   //threshold 관찰요소와 얼만큼 겹쳤을 때 콜백을 수행하도록 지정하는 요소
-  //   const observer = new IntersectionObserver(onIntersection, { threshold: 0.5 });
-  //   if (obsRef.current) observer.observe(obsRef.current);
-  //   return () => {
-  //     observer.disconnect();
-  //   };
-  // }, [obsRef]);
-
   useEffect(() => {
     getRecentQuizList();
   }, [])
@@ -148,11 +125,6 @@ const RecentQuizList = () => {
                   <SkeletonQuizCard isthumb={false} />
                   <SkeletonQuizCard isthumb={false} />
                   <SkeletonQuizCard isthumb={false} />
-                  <SkeletonQuizCard isthumb={false} />
-                  <SkeletonQuizCard isthumb={false} />
-                  <SkeletonQuizCard isthumb={false} />
-                  <SkeletonQuizCard isthumb={false} />
-                  <SkeletonQuizCard isthumb={false} />
                 </>
               )}
               {!end && (
@@ -183,10 +155,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const Observer = styled.div`
-  width: 100%;
-  height: 150px;
-`;
 const QuizLoad = styled.button` 
   border:none;
   background-color:transparent;

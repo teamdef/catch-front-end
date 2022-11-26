@@ -1,12 +1,12 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare, HeadMeta, ThumbnailChange, NotFound } from 'components/common';
+import { Title, SNSShare, ThumbnailChange, NotFound } from 'components/common';
 import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/test';
+import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/quiz';
 import { useModal } from 'hooks';
 
 // next.js 위한 라이브러리 및 타입

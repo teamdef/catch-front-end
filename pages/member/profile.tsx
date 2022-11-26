@@ -2,11 +2,11 @@ import * as S from 'styles/member/profile.style';
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, HeadMeta, Loading } from 'components/common';
+import { Title, Loading } from 'components/common';
 import { MdOutlineSettings } from 'react-icons/md';
 import { useState, ChangeEvent } from 'react';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { ProfileChangeApi } from 'pages/api/test';
+import { ProfileChangeApi } from 'pages/api/member';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { profileUploadAction } from 'store/user';

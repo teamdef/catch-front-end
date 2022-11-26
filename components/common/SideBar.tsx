@@ -5,7 +5,7 @@ import { HiOutlineEmojiSad } from 'react-icons/hi';
 import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
-import { kakaoLeaveApi } from 'pages/api/test';
+import { kakaoLeaveApi } from 'pages/api/member';
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';

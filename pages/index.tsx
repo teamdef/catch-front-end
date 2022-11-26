@@ -1,12 +1,12 @@
 import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card, RecentQuiz, HeadMeta } from 'components/common';
+import { Card, RecentQuiz } from 'components/common';
 import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useModal } from 'hooks';
-import { UserQuizListApi } from 'pages/api/test';
+import { UserQuizListApi } from 'pages/api/quiz';
 import * as S from 'styles/index.style';
 
 // Import Swiper

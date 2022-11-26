@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import * as S from 'styles/quiz/solve/main.style'
 import { AppLayout } from 'components/layout';
-import { HeadMeta, Loading,Logo, SwipeAniIcon } from 'components/common';
+import { Loading,Logo, SwipeAniIcon } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
@@ -102,7 +102,6 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Container>
-      <HeadMeta />
       <Logo/>
       <S.QuizSolveContent>
         <S.QuizTitle>{solveSetTitle}</S.QuizTitle>
@@ -121,7 +120,6 @@ const Page: NextPageWithLayout = () => {
                   solveUserScore: matchList.filter((element: any) => undefined === element).length,
                 }),
               );
-              console.log(matchList);
               openModal();
             }}
           >

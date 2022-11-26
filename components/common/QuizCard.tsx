@@ -16,7 +16,7 @@ const QuizCard = ({ userName, userProfileImg,quizDate, quizTitle, quizCount, qui
     <QuizCardWrapper>
       {quizThumbnail && (
         <ThumbnailWrapper>
-          <img src={quizThumbnail} />
+          <img src={quizThumbnail} alt="퀴즈 썸네일"/>
         </ThumbnailWrapper>
       )}
       <div id="quiz-contents-container">
@@ -74,7 +74,7 @@ const QuizCardWrapper = styled.div`
     #quiz-info {
       font-size: 14px;
       color: #888;
-      margin-top: 4px;
+      margin-top: 0.5rem;
     }
   }
   #quiz-solve-btn {

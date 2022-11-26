@@ -1,16 +1,14 @@
-import * as S from 'styles/quiz/solve/index.style'
-import type { ReactElement } from 'react';
+import * as S from 'styles/quiz/solve/index.style';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeadMeta,Loading } from 'components/common';
-import axios from 'axios';
+import { Loading } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
 import { saveSolveProblemsAction, saveSolveProblemSetAction, saveQuizIdAction } from 'store/quiz_solve';
-
+import { QuizDataFetchApi } from 'pages/api/quiz';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -23,32 +21,30 @@ const Page: NextPageWithLayout = () => {
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true);
-    async function getQuiz() {
-      try {
-        const response = await axios.get(`https://api.catchcatch.link/v1/loadprobset/${id}`);
-        dispatch(saveSolveProblemSetAction({ solveSetTitle: response.data[0].set_title }));
-        dispatch(saveSolveProblemsAction({ solveProblems: response.data[0].prob }));
+    QuizDataFetchApi(id as string)
+      .then((res) => {
+        dispatch(saveSolveProblemSetAction({ solveSetTitle: res?.data?.set_title }));
+        dispatch(saveSolveProblemsAction({ solveProblems: res?.data?.prob }));
         dispatch(saveQuizIdAction({ quizId: `${id}` }));
-        setMaker(response.data[0].user.nickname);
-        setThumbnail(response.data[0].thumbnail);
+        setMaker(res?.data?.user?.nickname);
+        setThumbnail(res?.data?.thumbnail);
         setLoading(false);
         // 정답 배열 생성
-      } catch (error) {
-        console.error(error);
+      })
+      .catch((err) => {
+        console.error(err);
         setLoading(false);
-      }
-    }
-    getQuiz();
+      });
   }, [id]);
 
   return (
     <S.Container>
       {loading ? <Loading /> : ''}
-      <S.Logo/>
+      <S.Logo />
       <S.QuizInfo>
         {thumbnail == '' ? (
           <S.Bubbling style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
-            <img src="/assets/img/catch_character.png" />
+            <img src="/assets/img/catch_character.png"/>
           </S.Bubbling>
         ) : (
           <S.BgImg src={thumbnail} />
@@ -64,7 +60,7 @@ const Page: NextPageWithLayout = () => {
         </S.InfoTxt>
       </S.QuizInfo>
       {thumbnail && (
-        <S.Bubbling style={{padding:'5%'}}>
+        <S.Bubbling style={{ padding: '5%' }}>
           <img src="/assets/img/chch.png" />
         </S.Bubbling>
       )}

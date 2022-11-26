@@ -1,7 +1,7 @@
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { kakaoLoginApi } from 'pages/api/test';
+import { kakaoLoginApi } from 'pages/api/member';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'store/user';

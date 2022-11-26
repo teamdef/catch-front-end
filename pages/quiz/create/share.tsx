@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import * as S from 'styles/quiz/create/share.style';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { SNSShare, HeadMeta } from 'components/common';
+import { SNSShare} from 'components/common';
 import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
 import { HiOutlineShare } from 'react-icons/hi';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { ThumbnailChangeApi } from 'pages/api/test';
+import { QuizThumbnailChangeApi } from 'pages/api/quiz';
 import { MainButton } from 'styles/common';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -55,7 +55,7 @@ const Page: NextPageWithLayout = () => {
       const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
         type: _compressed.type,
       }); // 압축 이미지 대입
-      if ((await ThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
+      if ((await QuizThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
       }

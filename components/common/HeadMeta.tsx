@@ -1,5 +1,3 @@
-import Head from 'next/head';
-
 const HeadMeta = () => {
   return (
     <>
@@ -15,7 +13,7 @@ const HeadMeta = () => {
       <meta property="og:url" content={'https://catchcatch.link'} />
       <meta property="og:image" content={'/assets/img/catch_share.png'} />
       <meta property="og:article:author" content={'캐치캐치'} />
-      <link rel="icon" href="/catch_favicon.ico" />
+      <link rel="icon" href="/favicon.ico" />
 
       {/* 스크립트 구문  */}
       <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
