@@ -1,20 +1,22 @@
 import styled, { keyframes } from 'styled-components';
-import { SyncLoader } from 'react-spinners';
+import { PortalWrapper } from 'components/modal'
 
 interface LoadingProps {
   ment?: string;
 }
 const Loading = ({ ment }: LoadingProps) => {
   return (
-    <Background>
-      <Title>
-        <span>캐</span>
-        <span>치</span>
-        <span>캐</span>
-        <span>치</span>
-      </Title>
-      {ment && <div id="ment">{ment}</div>}
-    </Background>
+    <PortalWrapper wrapperId="react-portal-loading-container">
+      <Background>
+        <Title>
+          <span>캐</span>
+          <span>치</span>
+          <span>캐</span>
+          <span>치</span>
+        </Title>
+        {ment && <div id="ment">{ment}</div>}
+      </Background>
+    </PortalWrapper>
   );
 };
 

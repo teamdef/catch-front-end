@@ -1,13 +1,12 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare,HeadMeta } from 'components/common';
-import styled, { keyframes } from 'styled-components';
+import { Title, SNSShare, ThumbnailChange, NotFound } from 'components/common';
+import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/test';
-import { ThumbnailChange, NotFound } from 'components/common';
+import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/quiz';
 import { useModal } from 'hooks';
 
 // next.js 위한 라이브러리 및 타입
@@ -97,20 +96,19 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      <HeadMeta/> 
       <Title backRoute="/" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
-      <Wrapper>
-        <SectionBlock>
-          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <SkeletonTitle />}
+      <S.Wrapper>
+        <S.SectionBlock>
+          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <S.SkeletonTitle />}
 
           <div id="section-contents">
             {quizDetailData ? (
               <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={id as string} />
             ) : (
-              <SkeletonThunmbnailChange />
+              <S.SkeletonThunmbnailChange />
             )}
             {quizDetailData ? (
-              <StatusContainer>
+              <S.StatusContainer>
                 <div id="status">
                   <div>참여자</div>
                   <div id="count">{quizDetailData?.solverCnt}명</div>
@@ -119,22 +117,22 @@ const Page: NextPageWithLayout = () => {
                   <div>평균점수</div>
                   <div id="count">{quizDetailData?.average}점</div>
                 </div>
-              </StatusContainer>
+              </S.StatusContainer>
             ) : (
-              <SkeletonStatusContainer>
+              <S.SkeletonStatusContainer>
                 <div></div>
                 <div></div>
-              </SkeletonStatusContainer>
+              </S.SkeletonStatusContainer>
             )}
 
-            <DateInfoWrapper>
+            <S.DateInfoWrapper>
               <div>생성 날짜 {quizDetailData?.created_at}</div>
               <div>마지막으로 푼 날짜 {quizDetailData?.updated_at}</div>
-            </DateInfoWrapper>
+            </S.DateInfoWrapper>
           </div>
-        </SectionBlock>
+        </S.SectionBlock>
         {quizDetailData && (
-          <SectionBlock>
+          <S.SectionBlock>
             <div id="section-title">문제집 공유 👋</div>
             <div id="section-contents">
               <div id="quiz-share-contents">
@@ -145,13 +143,13 @@ const Page: NextPageWithLayout = () => {
                 />
               </div>
             </div>
-          </SectionBlock>
+          </S.SectionBlock>
         )}
         {quizRankingList && (
-          <SectionBlock>
+          <S.SectionBlock>
             <div id="section-title">참여자 랭킹 🏆</div>
             <div id="section-contents">
-              <RankingBoard>
+              <S.RankingBoard>
                 {quizRankingList.length === 0 ? (
                   <NotFound
                     title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
@@ -168,15 +166,15 @@ const Page: NextPageWithLayout = () => {
                     );
                   })
                 )}
-              </RankingBoard>
+              </S.RankingBoard>
             </div>
-          </SectionBlock>
+          </S.SectionBlock>
         )}
 
-        <DeleteButton onClick={openDeleteModal}>
+        <S.DeleteButton onClick={openDeleteModal}>
           <AiOutlineDelete size={30} />
-        </DeleteButton>
-      </Wrapper>
+        </S.DeleteButton>
+      </S.Wrapper>
       <RenderDeleteModal />
     </>
   );
@@ -185,178 +183,5 @@ Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
 
-const Wrapper = styled.div`
-  width: 85%;
-  margin: 0 auto;
-  margin-top: 2rem;
-  margin-bottom: 7rem;
-`;
-
-const SectionBlock = styled.div`
-  margin-bottom: 2rem;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  #section-title {
-    color: #ff264d;
-    margin-bottom: 0.5rem;
-    font-size: 18px;
-  }
-  #section-contents {
-    margin-top: 1rem;
-    #quiz-share-contents {
-      width: 80%;
-      margin: 0 auto;
-    }
-  }
-`;
-
-const StatusContainer = styled.div`
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr;
-  height: 70px;
-  margin-top: 10px;
-  #status {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: #fff6f7;
-    border-radius: 12px;
-    #count {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ff264d;
-    }
-  }
-`;
-const DateInfoWrapper = styled.div`
-  margin-top: 10px;
-  font-size: 14px;
-  color: #bcbcbc;
-`;
-
-const DeleteButton = styled.div`
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background-color: #ff4d57;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 20px;
-  right: calc(50% - 32.5px - 190px);
-  @media (max-width: 500px) {
-    bottom: 20px;
-    right: 20px;
-  }
-  z-index: 5;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const RankingBoard = styled.ul`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 0;
-  margin: 0;
-  flex-direction: column;
-  align-items: center;
-  li {
-    position: relative;
-    display: flex;
-    color: #595959;
-    width: 100%;
-    list-style: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    border: solid 1px #f6f6f6;
-    border-radius: 4px;
-    height: 50px;
-    margin: 3px;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      position: relative;
-      width: 44px;
-      height: 44px;
-    }
-    strong {
-      font-weight: normal;
-    }
-    i,
-    em {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-style: normal;
-      width: 50px;
-    }
-    i {
-      color: #ff4d57;
-      font-size: 1rem;
-    }
-  }
-  #first {
-    border: none;
-    background-color: #fff1b4;
-  }
-  #second {
-    border: none;
-    background-color: #ececec;
-  }
-  #third {
-    border: none;
-    background-color: #ffe6d4;
-  }
-`;
-
-// skeleton
-const gradient = keyframes` 
-  0% {background-color: rgba(165, 165, 165, 0.1);}
-  50% {background-color: rgba(165, 165, 165, 0.3);}
-  100% {background-color: rgba(165, 165, 165, 0.1);}
-`;
-
-const Skeleton = styled.div`
-  background-color: #eee;
-  border-radius: 1rem;
-`;
-const SkeletonThunmbnailChange = styled(Skeleton)`
-  width: 100%;
-  height: 200px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-`;
-const SkeletonStatusContainer = styled(StatusContainer)`
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr;
-  height: 70px;
-  margin-top: 10px;
-  div {
-    background-color: #eee;
-    border-radius: 12px;
-    animation: ${gradient} 1.5s linear infinite alternate;
-  }
-`;
-const SkeletonTitle = styled(Skeleton)`
-  width: 250px;
-  height: 24px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-`;
-const SkeletonRanking = styled.div`
-  background-color: #eee;
-  border-radius: 4px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-  width: 100%;
-  height: 50px;
-  margin: 3px;
-  margin-bottom: 7px;
-`;
 
 export default Page;

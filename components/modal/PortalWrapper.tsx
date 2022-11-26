@@ -1,6 +1,4 @@
-// ModalPortal.tsx
-
-import React, { useState, useEffect,useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 
 const createWrapperAndAppendToBody = (wrapperId: string) => {
@@ -13,9 +11,11 @@ const createWrapperAndAppendToBody = (wrapperId: string) => {
   }
 };
 
-const ModalPortal = ({
+// 'react-portal-modal-container' - 모달 포탈
+// 'react-portal-loading-container' - 로딩 포탈
+const PortalWrapper = ({
   children,
-  wrapperId = 'react-portal-modal-container',
+  wrapperId,
 }: {
   children: React.ReactNode;
   wrapperId: string;
@@ -31,4 +31,4 @@ const ModalPortal = ({
   return wrapperElement ? createPortal(children, wrapperElement) : null;
 };
 
-export default ModalPortal;
+export default PortalWrapper;

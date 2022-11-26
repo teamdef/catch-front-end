@@ -1,11 +1,13 @@
 import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import theme from 'styles/theme';
 import type { AppProps, AppContext } from 'next/app';
 import type { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { authAxios } from 'utils/customAxios';
+import { authAxios } from 'pages/api/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
@@ -58,7 +60,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      <ThemeProvider theme={theme}>
+        <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      </ThemeProvider>
     </>
   );
 }
@@ -68,7 +72,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // https://github.com/vercel/next.js/discussions/36832
 
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
     // 정규식으로 쿠키값 추출
@@ -78,7 +81,7 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
       const access_token = match[2]; // RegExp 객체 반환값 참고
       // axios 객체에 인증헤더 추가
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } 
+    }
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 

@@ -1,13 +1,13 @@
 import { ReactElement, useState, ChangeEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styled, { keyframes } from 'styled-components';
+import * as S from 'styles/quiz/create/share.style';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { SNSShare, HeadMeta } from 'components/common';
+import { SNSShare} from 'components/common';
 import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
 import { HiOutlineShare } from 'react-icons/hi';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { ThumbnailChangeApi } from 'pages/api/test';
+import { QuizThumbnailChangeApi } from 'pages/api/quiz';
 import { MainButton } from 'styles/common';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
@@ -55,7 +55,7 @@ const Page: NextPageWithLayout = () => {
       const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
         type: _compressed.type,
       }); // 압축 이미지 대입
-      if ((await ThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
+      if ((await QuizThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
       }
@@ -74,18 +74,16 @@ const Page: NextPageWithLayout = () => {
     setThumbnailURL(router?.query?.returnThumb as string);
   }, [router.isReady]);
   return (
-    <>
-      <HeadMeta />
-      <Wrapper>
+      <S.Wrapper>
         <div id="inner-wrapper">
-          <Complete>퀴즈 완성 !!!</Complete>
-          <QuizInfoContainer>
+          <S.Complete>퀴즈 완성 !!!</S.Complete>
+          <S.QuizInfoContainer>
             <div id="top">{probSetTitle}</div>
             <div id="bottom">
               총<strong>{probSetCount}</strong>문제
             </div>
-          </QuizInfoContainer>
-          <ThumbnailSettingContainer>
+          </S.QuizInfoContainer>
+          <S.ThumbnailSettingContainer>
             <div id="explain">
               <span>
                 퀴즈의 대표 사진을 설정해보세요! <br />
@@ -107,14 +105,14 @@ const Page: NextPageWithLayout = () => {
                     <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
                   </>
                 ) : (
-                  <DefaultThumbnail>
+                  <S.DefaultThumbnail>
                     <MdPhotoCamera size={40} />
-                  </DefaultThumbnail>
+                  </S.DefaultThumbnail>
                 )}
               </label>
             </div>
-          </ThumbnailSettingContainer>
-          <ShareContainer>
+          </S.ThumbnailSettingContainer>
+          <S.ShareContainer>
             <div id="explain">
               <HiOutlineShare />
               <span>직접 만든 퀴즈를 공유해보세요!</span>
@@ -122,194 +120,17 @@ const Page: NextPageWithLayout = () => {
             <div id="share-wrapper">
               <SNSShare thumbnail={thumbnailURL} set_title={probSetTitle as string} url={returnSetId as string} />
             </div>
-          </ShareContainer>
+          </S.ShareContainer>
           <MainButton onClick={goHome}>
             <MdHomeFilled size={20} />
             홈으로
           </MainButton>
         </div>
-      </Wrapper>
-    </>
+      </S.Wrapper>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
 
-// 기능 가시성을 위한 임시 디자인
-const Wrapper = styled.div`
-  background-color: #fff6f7;
-  height: 100vh;
-  width: 100%;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  overflow-y: scroll;
-  & {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-  #inner-wrapper {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    @media (max-width: 400px) {
-      width: 100%;
-    }
-  }
-  strong {
-    font-weight: 400;
-    color: #ff4d57;
-    margin: 0 0.5rem 0 0.5rem;
-  }
-`;
-
-const bounce = keyframes` 
-  0% {transform: translatey(0px);}
-  5% {transform: translatey(-10px);}
-  10% {transform: translatey(0px);}
-  100% {transform: translatey(0px);}
-`;
-
-const Complete = styled.div`
-  color: #ff4d57;
-  font-size: 40px;
-  font-family: 'RixInooAriDuriR';
-  margin-top: 36px;
-  animation: ${bounce} 2s linear 0.1s infinite;
-`;
-
-const QuizInfoContainer = styled.div`
-  width: 90%;
-  margin-top: 36px;
-  #top {
-    padding: 1.5rem 0 1.5rem 0;
-    background-color: #ff4d57;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-  }
-  #bottom {
-    padding: 1.5rem 0 1.5rem 0;
-    background-color: #fff;
-    border-bottom-right-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    border: solid 1px #f2f2f2;
-    border-top: none;
-    display: flex;
-    justify-content: center;
-    font-size: 20px;
-    font-weight: 300;
-  }
-`;
-
-const ThumbnailSettingContainer = styled.div`
-  margin-top: 24px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  #explain {
-    color: #888;
-    text-align: center;
-    font-size: 14px;
-    strong {
-      margin: 0;
-    }
-  }
-  #thumbnail-img-wrapper {
-    margin-top: 24px;
-    width: 90%;
-    height: 200px;
-    position: relative;
-
-    input {
-      display: none;
-    }
-    label {
-      &:hover {
-        cursor: pointer;
-      }
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 1rem;
-      }
-    }
-
-    #thumbnail-input-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      color: white;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-`;
-
-const ShareContainer = styled.div`
-  margin-top: 36px;
-  margin-bottom:50px;
-  width: 75%;
-  #explain {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    font-size: 14px;
-    span {
-      margin-left: 0.5rem;
-    }
-  }
-  #share-wrapper {
-    margin-top: 24px;
-  }
-`;
-
-const HomeButton = styled.div`
-  margin-top: 48px;
-  width: 60%;
-
-  font-size: 16px;
-  border-radius: 30px;
-  padding: 1rem 1.5rem 1rem 1.5rem;
-
-  background-color: #ff4d57;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    margin-right: 4px;
-  }
-  &:hover {
-    cursor: pointer;
-    background-color: #ffa5aa;
-  }
-`;
-
-const DefaultThumbnail = styled.div`
-  background-color: #fff6f7;
-  border-radius: 1rem;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    color: #ffa5aa;
-  }
-`;
 export default Page;

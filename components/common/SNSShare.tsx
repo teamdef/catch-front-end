@@ -24,9 +24,7 @@ const SNSShare = ({ thumbnail, set_title, url }: shareProps) => {
   const goFacebook = () => {
     window.open(`http://www.facebook.com/sharer.php?u=https://catchcatch.link/${url}`);
   };
-  const goInstagram = () => {
-    alert('준비중 입니다!');
-  };
+  
   const goKakaoTalk = () => {
     window.Kakao.Link.sendScrap({
       requestUrl: 'https://catchcatch.link/', // 요청 페이지 url 카카오 developer 에 등록된 도메인

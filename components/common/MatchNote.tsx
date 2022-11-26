@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { Button } from 'components/common';
+import { MainButton } from 'styles/common';
 const MatchNote = ({ setOpenMatch }: any) => {
   const { solveAnswers } = useSelector((state: RootState) => state.solve);
   return (
@@ -11,7 +11,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
           return (
             <MatchCard key={index}>
               <h2>
-                {index + 1} <span style={{fontWeight:"normal"}}>"{item.title}"</span>
+                {index + 1} <span style={{ fontWeight: 'normal' }}>"{item.title}"</span>
               </h2>
               {item.correct_answer.includes('catchmeimages') ? (
                 <MatchImg>
@@ -38,9 +38,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
           );
         }
       })}
-      <Button width="30%" height="50px" bgColor="#ff4d57" fontColor="#fff" onClick={() => setOpenMatch(false)}>
-        닫기
-      </Button>
+      <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
     </MatchEl>
   );
 };
@@ -51,7 +49,7 @@ const MatchEl = styled.div`
   display: block;
   width: 100%;
   min-height: 100vh;
-  background-color: #FFF6F7;
+  background-color: #fff6f7;
   button {
     position: absolute;
     left: 50%;
@@ -62,7 +60,7 @@ const MatchEl = styled.div`
 const MatchCard = styled.div`
   position: relative;
   display: flex;
-  margin-bottom: 20% ;
+  margin-bottom: 20%;
   flex-direction: column;
   align-items: center;
   > div {

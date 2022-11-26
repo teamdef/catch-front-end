@@ -1,6 +1,6 @@
 import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
 import styled from 'styled-components';
-import ModalPortal from 'components/modal/ModalPortal';
+import ModalPortal from 'components/modal/PortalWrapper';
 import { useOnOutsideClick } from 'hooks/useModal';
 
 export interface BaseModalType {
@@ -118,7 +118,6 @@ const ModalWrapper = styled.div`
   font-size: 16px;
   font-weight: 300;
   color: rgb(59, 59, 59);
-  transform: scale(1.15);
 
   .close-button-wrapper {
     display: flex;
@@ -136,6 +135,8 @@ const ModalBody = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-top:1.5rem;
+  padding-bottom:2rem;
 `;
 const ActionButtonContainer = styled.div`
   display: flex;
