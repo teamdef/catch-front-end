@@ -35,9 +35,10 @@ const RecentQuizList = () => {
 
     const betweenTimeDay = Math.floor(betweenTimeHour / 24);
 
-    if (betweenTimeDay < 365) {
+    if (betweenTimeDay < 7) {
       return `${betweenTimeDay}일전`;
     }
+    
     const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
     if (betweenTimeWeek < 4) {
       return `${betweenTimeWeek}주전`;
