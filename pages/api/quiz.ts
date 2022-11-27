@@ -89,6 +89,14 @@ export const QuizThumbnailChangeApi = async (probsetId: string, imgBlob: File): 
 
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
 export const QuizDataFetchApi = async (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`https://api.catchcatch.link/v1/loadprobset/${probsetId}`);
+  return notAuthAxios.get(`/loadprobset/${probsetId}`);
 };
 
+// 풀이 - 퀴즈 풀이 정보 저장하기
+export const LoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string,userId:string) => {
+    return notAuthAxios.post(`/solver`, { nickName, score, probsetId, userId });
+
+};
+export const NotLoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string) => {
+  return notAuthAxios.post(`/solver`, { nickName, score, probsetId });
+};

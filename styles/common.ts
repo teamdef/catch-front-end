@@ -27,3 +27,24 @@ export const MainButton = styled.button`
     margin-right: 4px;
   }
 `;
+
+export const FlatButton = styled.button`
+  bottom: 0;
+  font-size: 14px;
+  border-radius: 30px;
+  border: none;
+  height: 50px;
+  font-weight: 500;
+  background-color: #ff4d57;
+  color: #fff;
+  width: 100%;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  &:disabled {
+    color: #7c7c7c;
+    background-color: #ececec;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+`;

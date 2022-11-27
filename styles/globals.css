@@ -1,10 +1,10 @@
 @import './font/NotoSansKR.css';
 @import './font/RixInooAriDuriR.css';
+@import './font/BMEuljiro10yearslater.css';
 @import './reset.css';
 
 html,
 body {
-
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
   background-color: #fff6f7;
@@ -13,12 +13,11 @@ body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 
-  /* 텍스트 드래그 방지 input 드래그는 작동함 . */ 
+  /* 텍스트 드래그 방지 input 드래그는 작동함 . */
   -webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 body::-webkit-scrollbar {
