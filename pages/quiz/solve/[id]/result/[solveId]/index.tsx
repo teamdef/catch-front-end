@@ -29,24 +29,15 @@ const Page: NextPageWithLayout = () => {
           <div id="score">{solveUserScore}</div>
           <img id="red-pencil-img" src="/assets/img/redpencil.png" />
         </S.ScorePostIt>
-        <S.ProgressArea>
-          {/* <ProgressBar completed={`${solveUserScore}`} maxCompleted={solveProblems.length} bgColor={'#ff4d57'} /> */}
-        </S.ProgressArea>
         <p>
           총 <span>{solveProblems.length}</span> 문제 중 <span>{solveUserScore}</span> 문제 맞았어요{' '}
         </p>
       </S.ScoreArea>
       <S.ButtonArea>
-        <FlatButton onClick={() => setOpenMatch(true)}>오답 노트</FlatButton>
         <FlatButton onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>나도 퀴즈 만들기</FlatButton>
+        <FlatButton onClick={() => setOpenMatch(true)}>오답 노트</FlatButton>
       </S.ButtonArea>
-      <S.RankingArea>
-        <h2>
-          <strong>{solveUserName}</strong> 님의 랭킹을 확인해 보세요!
-        </h2>
-        <RankBoard solveId={solveId} />
-      </S.RankingArea>
-      {openMatch ? <MatchNote setOpenMatch={setOpenMatch} /> : ''}
+      {openMatch && <MatchNote setOpenMatch={setOpenMatch} />}
     </S.Container>
   );
 };
