@@ -34,7 +34,7 @@ export const QuizInfo = styled.div<QuizInfoProps>`
   position: relative;
   display: flex;
   justify-content: center;
-  height: 100%;
+  height: 80%;
   width: 100%;
   top: 0;
   left: 0;
@@ -64,9 +64,10 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 
 export const QuizTitle = styled.h1`
   max-width: 300px;
-  margin-top: 10rem;
+  margin-top: 9rem;
   font-family: RixInooAriDuriR;
   font-size: 60px;
+  line-height:70px;
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
   text-align: center;
@@ -137,17 +138,23 @@ export const QuizInfoContainer = styled.div`
   }
 `;
 
-export const SNSShareContainer = styled.div` 
-  margin-top:2rem;
-  #explain{
-    color:#888;
-    display:flex;
-    align-items:center;
-    svg{
-      margin-right:4px;
+export const SNSShareContainer = styled.div`
+  margin-top: 2rem;
+  width: 75%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  #explain {
+    color: #888;
+    display: flex;
+    align-items: center;
+    margin-bottom:1rem;
+    svg {
+      margin-right: 4px;
     }
   }
-`
+`;
 export const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;

@@ -8,10 +8,10 @@ interface shareProps {
   thumbnail: string|null;
   set_title: string;
   url: string;
+  profileImg?: string;
+  nickName: string;
 }
-const SNSShare = ({ thumbnail, set_title, url }: shareProps) => {
-  const { profileImg, nickName } = useSelector((state: RootState) => state.user);
-
+const SNSShare = ({ thumbnail, set_title, url,profileImg,nickName }: shareProps) => {
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -30,7 +30,7 @@ const SNSShare = ({ thumbnail, set_title, url }: shareProps) => {
       requestUrl: 'https://catchcatch.link/', // 요청 페이지 url 카카오 developer 에 등록된 도메인
       templateId: 83714, // 메시지템플릿 번호 카카오 developer 에 있음
       templateArgs: {
-        PROFILE_IMG: profileImg, // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
+        PROFILE_IMG: profileImg || '/assets/img/user_default.png', // 퀴즈 제작자 프로필 이미지 주소 ${PROFILE_IMG}
         NICKNAME: nickName, // 퀴즈 제작자 닉네임 ${NICKNAME}
         QUIZ_THUMB: thumbnail || '/assets/img/catch_share.png', // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
         TITLE: set_title, // 퀴즈 제목 텍스트 ${TITLE}

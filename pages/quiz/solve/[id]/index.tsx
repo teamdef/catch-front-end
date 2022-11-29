@@ -3,7 +3,7 @@ import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Loading , Logo} from 'components/common';
+import { Loading , Logo, SNSShare} from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
@@ -62,8 +62,8 @@ const Page: NextPageWithLayout = () => {
               <div>문제</div>
             </div>
             <div id="block">
-              <strong>{solveProblems.length}</strong>
-              <div>문제</div>
+              <strong>???</strong>
+              <div>참여</div>
             </div>
           </S.QuizInfoContainer>
           <S.SNSShareContainer>
@@ -71,6 +71,12 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
+            <SNSShare
+              nickName={maker}
+              set_title={solveSetTitle}
+              url={`quiz/solve/${id}`}
+              thumbnail={thumbnail}
+            />
           </S.SNSShareContainer>
         </S.InnerContainer>
 

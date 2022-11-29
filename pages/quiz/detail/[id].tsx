@@ -8,7 +8,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/quiz';
 import { useModal } from 'hooks';
-
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
@@ -49,6 +50,7 @@ interface RankingType {
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { id } = router.query;
+  const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
   const [quizRankingList, setQuizRankingList] = useState<RankingType[] | null>(null);
@@ -137,6 +139,8 @@ const Page: NextPageWithLayout = () => {
             <div id="section-contents">
               <div id="quiz-share-contents">
                 <SNSShare
+                  nickName={nickName}
+                  profileImg={profileImg}
                   set_title={quizDetailData?.set_title}
                   url={`quiz/solve/${quizDetailData?.id}`}
                   thumbnail={quizDetailData?.thumbnail}
@@ -158,7 +162,10 @@ const Page: NextPageWithLayout = () => {
                 ) : (
                   quizRankingList.map((userRanking: RankingType, index: number) => {
                     return (
-                      <li key={userRanking.id}  id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
+                      <li
+                        key={userRanking.id}
+                        id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}
+                      >
                         <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
                         <strong>{userRanking?.nickname}</strong>
                         <em>{userRanking?.score}점</em>

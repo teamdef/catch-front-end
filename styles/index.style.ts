@@ -10,7 +10,8 @@ export const RecentQuizList = styled.div`
   padding: 1rem;
   background-color: #fff;
   #section-title {
-    padding: 1rem 0.5rem 1rem 0.5rem;
+    /*padding: 1rem 0.5rem 1rem 0.5rem;*/
+    padding-top:1rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -27,7 +28,7 @@ export const RecentQuizList = styled.div`
     }
   }
   #section-contents {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
   }
 `;
