@@ -18,6 +18,15 @@ export const SectionBlock = styled.div`
     color: #ff264d;
     margin-bottom: 0.5rem;
     font-size: 18px;
+    display:flex;
+    justify-content:space-between;
+    #more{
+      display:flex;
+      align-items:center;
+      font-size:14px;
+      color:#888;
+    }
+
   }
   #section-contents {
     margin-top: 1rem;
@@ -51,6 +60,9 @@ export const DateInfoWrapper = styled.div`
   margin-top: 10px;
   font-size: 14px;
   color: #bcbcbc;
+  div{
+    margin-bottom:4px;
+  }
 `;
 
 export const DeleteButton = styled.div`

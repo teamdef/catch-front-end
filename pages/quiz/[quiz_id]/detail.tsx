@@ -10,9 +10,12 @@ import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/qu
 import { useModal } from 'hooks';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
+import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import Link from 'next/link';
+
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
+/*
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -30,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};
+};*/
 interface DetailQuizType {
   created_at: string;
   updated_at: string;
@@ -49,7 +52,7 @@ interface RankingType {
 }
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  let { id } = router.query;
+  let { quiz_id } = router.query;
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
@@ -64,7 +67,7 @@ const Page: NextPageWithLayout = () => {
 
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
-    const res = await MyQuizDetailApi(id as string);
+    const res = await MyQuizDetailApi(quiz_id as string);
     let _detail = { ...res?.data[0] };
     _detail.solverCnt = Number(_detail.solverCnt);
     _detail.created_at = _detail.created_at.substring(0, 10);
@@ -74,38 +77,41 @@ const Page: NextPageWithLayout = () => {
     setQuizDetailData(_detail);
   };
 
-
   const getMyQuizRanking = async () => {
-    const res = await QuizRankingListApi(id as string);
+    const res = await QuizRankingListApi(quiz_id as string);
     let _ranking: RankingType[] = res?.data;
     setQuizRankingList(_ranking);
-  }
+  };
 
   const MyQuizDelete = async () => {
-    if (!!id) {
-      const res = await QuizDeleteApi(id as string);
+    if (!!quiz_id) {
+      const res = await QuizDeleteApi(quiz_id as string);
       if (res.status === 200) {
         closeDeleteModal();
         router.push('/');
       }
     }
   };
-  useEffect(() => {
+    useEffect(() => {
+      console.log(quiz_id)
     getMyQuizData();
     getMyQuizRanking();
   }, [router.isReady]);
 
-
   return (
     <>
-      <Title backRoute="/" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
+      <Title
+        isBack={true}
+        title="퀴즈 세트 자세히보기"
+        subTitle="퀴즈 세트 정보, 참여자 랭킹, 한줄평 등 다양한 정보를 확인해보세요!👀"
+      />
       <S.Wrapper>
         <S.SectionBlock>
           {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <S.SkeletonTitle />}
 
           <div id="section-contents">
             {quizDetailData ? (
-              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={id as string} />
+              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={quiz_id as string} />
             ) : (
               <S.SkeletonThunmbnailChange />
             )}
@@ -151,7 +157,14 @@ const Page: NextPageWithLayout = () => {
         )}
         {quizRankingList && (
           <S.SectionBlock>
-            <div id="section-title">참여자 랭킹 🏆</div>
+            <div id="section-title">
+              참여자 랭킹 🏆
+              <Link href={`/quiz/${quiz_id}/ranking`} passHref>
+                <a id="more">
+                  더보기 <MdOutlineArrowForwardIos />
+                </a>
+              </Link>
+            </div>
             <div id="section-contents">
               <S.RankingBoard>
                 {quizRankingList.length === 0 ? (
@@ -177,6 +190,21 @@ const Page: NextPageWithLayout = () => {
             </div>
           </S.SectionBlock>
         )}
+        <S.SectionBlock>
+          <div id="section-title">
+            베스트 한줄평 ✍️
+            <Link href={`/quiz/${quiz_id}/comment`} passHref>
+              <a id="more">
+                더보기 <MdOutlineArrowForwardIos />
+              </a>
+            </Link>
+          </div>
+          <div id="section-contents">
+            <div>
+              <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
+            </div>
+          </div>
+        </S.SectionBlock>
 
         <S.DeleteButton onClick={openDeleteModal}>
           <AiOutlineDelete size={30} />
@@ -189,6 +217,5 @@ const Page: NextPageWithLayout = () => {
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
-
 
 export default Page;

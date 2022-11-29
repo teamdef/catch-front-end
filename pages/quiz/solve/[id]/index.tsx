@@ -19,17 +19,19 @@ const Page: NextPageWithLayout = () => {
   const [thumbnail, setThumbnail] = useState('');
   const [maker, setMaker] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>("");
   let { id } = router.query;
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true)
     QuizDataFetchApi(id as string)
       .then((res) => {
-        dispatch(saveSolveProblemSetAction({ solveSetTitle: res?.data?.set_title }));
-        dispatch(saveSolveProblemsAction({ solveProblems: res?.data?.prob }));
-        dispatch(saveQuizIdAction({ quizId: `${id}` }));
-        setMaker(res?.data?.user?.nickname);
-        setThumbnail(res?.data?.thumbnail);
+        dispatch(saveSolveProblemSetAction({ solveSetTitle: res?.data?.set_title })); // 퀴즈 메인 타이틀
+        dispatch(saveSolveProblemsAction({ solveProblems: res?.data?.prob })); // 퀴즈 문항
+        dispatch(saveQuizIdAction({ quizId: `${id}` })); // 퀴즈 id
+        setMaker(res?.data?.user?.nickname); // 퀴즈 제작자 닉네임
+        setThumbnail(res?.data?.thumbnail); // 퀴즈 썸네일
+        setDescription(res?.data?.description); // 퀴즈 설명 
         setLoading(false);
         // 정답 배열 생성
       })
@@ -48,10 +50,7 @@ const Page: NextPageWithLayout = () => {
           <S.QuizTitle>{solveSetTitle}</S.QuizTitle>
         </S.QuizInfo>
         <S.InnerContainer>
-          <S.Description>
-            배도라지 크루의 인물퀴즈 입니다. 닮은 꼴이 워낙 많아서 난이도가 상당합니다. 간혹, 잘못 출제했다고 말씀주시는
-            분이 계시는데, 반박시 여러분 말이 맞습니다.
-          </S.Description>
+          <S.Description>{description === "" ? "해당 퀴즈의 설명이 없습니다!":description}</S.Description>
           <S.QuizInfoContainer>
             <S.QuizMakerBlock>
               <div>출제자</div>
@@ -71,12 +70,7 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare
-              nickName={maker}
-              set_title={solveSetTitle}
-              url={`quiz/solve/${id}`}
-              thumbnail={thumbnail}
-            />
+            <SNSShare nickName={maker} set_title={solveSetTitle} url={`quiz/solve/${id}`} thumbnail={thumbnail} />
           </S.SNSShareContainer>
         </S.InnerContainer>
 

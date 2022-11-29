@@ -29,12 +29,13 @@ const Wrapper = styled.div<CardStyleProps>`
   border-radius: ${(props) => props.radius};
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%); */
+  border:solid 1px #eee;
   padding: 1rem;
-  transition: all 0.1s ease-in-out;
+  /* transition: all 0.1s ease-in-out;
   &:hover {
     transform: scale(1.025);
-  }
+  } */
 `;
 
 export default Card;

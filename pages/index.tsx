@@ -27,6 +27,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { isLoggedin, id } = useSelector((state: RootState) => state.user);
   const [myQuizList, setMyQuizList] = useState<MyQuizType[] | null>(null);
+  /*
   const [openLoginModal, _, RenderLoginModal] = useModal({
     backgroundClickable: true,
     yesTitle: '로그인',
@@ -34,7 +35,7 @@ const Page: NextPageWithLayout = () => {
     yesAction: () => router.push('/member/login'),
     contents: <div>로그인이 필요한 서비스입니다.</div>,
   });
-
+*/
   const checkLogin = () => {
     isLoggedin ? goQuizCreateIndex() : goLogin();
   };
@@ -42,8 +43,11 @@ const Page: NextPageWithLayout = () => {
     router.push('/quiz/create');
   };
   const goLogin = () => {
-    openLoginModal();
-  };
+    router.push('/member/login');
+  }
+  // const goLogin = () => {
+  //   openLoginModal();
+  // };
 
   const getMyQuizList = async () => {
     const res = await UserQuizListApi(id);
@@ -87,7 +91,7 @@ const Page: NextPageWithLayout = () => {
                           <button
                             id="quiz-detail-btn"
                             onClick={() => {
-                              router.push(`/quiz/detail/${quiz?.id}`);
+                              router.push(`/quiz/${quiz?.id}/detail`);
                             }}
                           >
                             자세히 보기
@@ -111,9 +115,15 @@ const Page: NextPageWithLayout = () => {
             <SwiperSlide>
               <S.CreateCard>
                 <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
-                <button id="create-btn" onClick={checkLogin}>
-                  새로 만들기
-                </button>
+                {isLoggedin ? (
+                  <button id="create-btn" onClick={goQuizCreateIndex}>
+                    새로 만들기
+                  </button>
+                ) : (
+                  <button id="create-btn" onClick={goLogin}>
+                    로그인
+                  </button>
+                )}
               </S.CreateCard>
             </SwiperSlide>
           </Swiper>
@@ -129,7 +139,7 @@ const Page: NextPageWithLayout = () => {
         </S.RecentQuizList>
       </S.Background>
 
-      <RenderLoginModal />
+      {/* <RenderLoginModal /> */}
     </>
   );
 };

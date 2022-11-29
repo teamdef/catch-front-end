@@ -41,7 +41,7 @@ export const MyQuizList = styled.div`
   padding-top: 2rem;
   background-color: #fff;
   #title {
-    padding: 0 0 2rem 1.5rem;
+    padding: 0 0 1rem 1rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -94,7 +94,7 @@ export const CreateCard = styled(CustomCard)`
   span {
     position: relative;
     display: block;
-    color: #888;
+    color: #595959;
     font-size: 18px;
   }
   button {
