@@ -155,10 +155,20 @@ export const SNSShareContainer = styled.div`
     }
   }
 `;
+
+export const BestCommentContainer = styled.div`
+  margin-top: 2rem;
+  width:100% ;
+  #title {
+    color: #ff4d57;
+    font-size:18px;
+    font-weight:bold;
+    text-align:left;
+  }
+`;
 export const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
 `;
-

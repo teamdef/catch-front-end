@@ -3,20 +3,30 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-evenly;
+  /*justify-content: space-evenly;*/
   background-color: #fff6f7;
   flex-direction: column;
   padding: 0 5%;
-  padding-top: 5%;
+  /*padding-top: 5%;*/
   width: 100%;
   color: #555;
-  height: 100vh;
+  min-height: 100vh;
+
+  a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    padding: 5%;
+  }
 `;
 
 export const QuizTitle = styled.h1`
+  margin-top: 4rem;
+  margin-bottom:4rem;
   text-align: center;
   font-weight: normal;
-  font-size: 1.3rem;
+  font-size: 24px;
 `;
 export const QuizSolveContent = styled.div`
   @keyframes Bounce {
@@ -101,11 +111,14 @@ export const QuizSolveCard = styled.div`
   border-radius: 25px;
   background-color: white;
   padding: 1rem;
+  padding-top:10%;
+  padding-bottom:10%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   margin: 0 auto;
+
   span {
     color: #aaa;
     font-size: 0.8rem;
@@ -115,9 +128,9 @@ export const CardTitle = styled.h2`
   position: relative;
   display: block;
   text-align: center;
-  min-width: 60%;
-  margin-top: 10%;
-  margin-bottom: 20%;
+  min-width: 80%;
+  /*margin-top: 10%;*/
+  margin-bottom: 10%;
   padding: 20px 28px;
   font-weight: normal;
   border-radius: 25px;
@@ -137,18 +150,20 @@ export const ChoiceWrapper = styled.div`
   &#choice-img-wrapper {
     display: grid;
     grid-template-columns: repeat(2, calc(50% - 5px));
-    grid-template-rows: repeat(2, 120px);
+    grid-template-rows: repeat(2, 150px);
   }
 `;
 export const ChoiceItem = styled.div`
   position: relative;
-  width: 60%;
+  width: 80%;
   label {
-    padding: 15px 20px;
+    /*padding: 15px 20px;*/
+    padding: 1.25rem 1.25rem 1.25rem 1.75rem;
     position: relative;
-    font-size: 0.8rem;
+    font-size: 1rem;
     display: block;
-    border-radius: 18px 0 18px 18px;
+    /*border-radius: 18px 0 18px 18px;*/
+    border-radius: 30px 0px 30px 30px;
     background-color: #f4f4f4;
   }
   input {
@@ -164,7 +179,7 @@ export const ChoiceItem = styled.div`
     label {
       padding: 0;
       overflow: hidden;
-      border-radius: 18px;
+      border-radius: 1rem;
       width: 100%;
       height: 100%;
     }

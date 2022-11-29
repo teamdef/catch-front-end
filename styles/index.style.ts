@@ -41,7 +41,7 @@ export const MyQuizList = styled.div`
   padding-top: 2rem;
   background-color: #fff;
   #title {
-    padding: 0 0 1rem 1rem;
+    padding: 0 0 1.5rem 1rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -79,7 +79,7 @@ export const CustomCard = styled(Card)`
   height: 18rem;
   border-radius: 30px;
   margin: 0 auto;
-  width: 90%;
+  width: 95%;
   @media (max-width: 400px) {
     width: 95%;
     height: 15rem;
