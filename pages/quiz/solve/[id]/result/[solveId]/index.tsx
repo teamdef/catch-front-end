@@ -83,10 +83,10 @@ const Page: NextPageWithLayout = () => {
 };
 const Container = styled.div`
   position: relative;
-  padding: 65px 10% 5% 10%;
+  padding: 10% 10% 5% 10%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
@@ -134,7 +134,7 @@ const UserScore = styled.div`
   b {
     position: relative;
     display: block;
-    font-size: 3.5rem;
+    font-size: 3.0rem;
     color: #ff4d57;
   }
   > span {
@@ -186,7 +186,7 @@ const ShareArea = styled.div`
   }
   > div {
     position: relative;
-    margin-top: 5%;
+    margin-top: 7%;
     ul {
       position: relative;
       display: flex;

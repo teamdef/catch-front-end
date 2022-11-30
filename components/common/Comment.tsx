@@ -3,8 +3,6 @@ import { useInput } from 'hooks';
 import styled from 'styled-components';
 
 const Comment = () => {
-  const commCount = 0;
-
   const [text, Setter, clearFunction, textHandler] = useInput<string>('');
 
   const onClick = (_comm: string) => {
@@ -17,10 +15,24 @@ const Comment = () => {
       // }
     };
   };
+  const commList = [
+    {
+      uid: 'asdqwc23d2d2s21d33dse-e2d',
+      nickname: '배따라기',
+      comm: '와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따',
+      time: '2022-11-29',
+    },
+    {
+      uid: 'ggkfkfs21d33dse--df22',
+      nickname: '진따라기',
+      comm: '개꿀잼',
+      time: '2022-11-30',
+    },
+  ];
   return (
     <Container>
       <Title>
-        한줄평 남기기 <span style={{ fontSize: '.7rem' }}>({commCount})</span>
+        한줄평 남기기 <span style={{ fontSize: '.7rem' }}>({commList.length})</span>
       </Title>
       <InputBox>
         <span>({text.length}/50)</span>
@@ -35,10 +47,19 @@ const Comment = () => {
         <button onClick={() => onClick(text)}>등록</button>
       </InputBox>
       <CommentBoard>
-        {commCount !== 0 ? (
-          <></>
+        {commList.length !== 0 ? (
+          commList.map((item: any, index: number) => (
+            <CommentBox>
+              <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
+              <div>
+                <span className="nickname">{item.nickname}</span>
+                <p>{item.comm}</p>
+              </div>
+              <span className="date">{item.time}</span>
+            </CommentBox>
+          ))
         ) : (
-          <div className='empty'>
+          <div className="empty">
             <span>아직 한줄평이 없어요 !</span>
           </div>
         )}
@@ -94,13 +115,53 @@ const InputBox = styled.div`
 `;
 const CommentBoard = styled.div`
   position: relative;
-  margin: 20% 0;
+  margin-top: 5%;
   .empty {
+    margin: 20% 0;
     text-align: center;
     span {
-      font-size: .9rem;
+      font-size: 0.9rem;
       color: #888;
     }
+  }
+`;
+const CommentBox = styled.div`
+  position: relative;
+  display: flex;
+  color: #555;
+  font-size: .8rem;
+  margin-bottom: 5%;
+  img {
+    position:relative;
+    display: block;
+    width: 38px;
+    height: 38px;
+    margin-right: 20px;
+    border-radius: 50%;
+  }
+  > div {
+    position: relative;
+    display: block;
+    span {
+      display: block;
+      margin: 4px 0 8px 0;
+    }
+    p {
+      display: block;
+      padding: 15px 18px;
+      font-size: .7rem;
+      background: #f4f4f4;
+      border-radius: 0px 15px 15px 15px;
+    }
+  }
+  .date {
+    position:relative;
+    display: block;
+    color: #888;
+    font-size: 0.5rem;
+    white-space: nowrap;
+    align-self: flex-end;
+    padding-left: 5px;
   }
 `;
 export default Comment;
