@@ -4,21 +4,23 @@ import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
+import { saveCommentSetAction } from 'store/comment';
 import Router from 'next/router';
 import { RootState } from 'store';
 import axios from 'axios';
 
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
 interface NickNameProps {
-  moveResult: (arg0: string) => void;
+  onClick: (arg0: string) => void;
 }
 
 const NickNameModal = ({ setLoading }: any) => {
-  const { solveUserScore, ProblemSetId } = useSelector((state: RootState) => state.solve);
-  const { isLoggedin, nickName, id} = useSelector((state: RootState) => state.user);
+  const { problemSetId } = useSelector((state: RootState) => state.solve);
+  const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
+  const { isLoggedin, nickName, id } = useSelector((state: RootState) => state.user);
+  const { comments } = useSelector((state: RootState) => state.comment);
   const dispatch = useDispatch();
-
-  const moveResult = (_nickname: string) => {
+  const onClick = (_nickname: string) => {
     /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
     async function postSolver() {
       // 로그인한 유저의 경우 유저아이디를 추가로 전달
@@ -27,12 +29,13 @@ const NickNameModal = ({ setLoading }: any) => {
           .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
             nickName: _nickname,
             score: solveUserScore,
-            probsetId: ProblemSetId,
+            probsetId: problemSetId,
             userId: id,
           })
-          .then(function () {
+          .then((res) => {
+            dispatch(saveCommentSetAction({ comments: res.data.comments }));
             setLoading(false);
-            Router.push(`/quiz/solve/${ProblemSetId}/result/${id}`);
+            Router.push(`/quiz/solve/${problemSetId}/result/${id}`); //임마 딴데로 좀 보내자..
           })
           .catch(function (error) {
             setLoading(false);
@@ -44,11 +47,12 @@ const NickNameModal = ({ setLoading }: any) => {
           .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
             nickName: _nickname,
             score: solveUserScore,
-            probsetId: ProblemSetId,
+            probsetId: problemSetId,
           })
-          .then(function (response) {
+          .then((res) => {
             setLoading(false);
-            Router.push(`/quiz/solve/${ProblemSetId}/result/${response.data.solverId}`);
+            dispatch(saveCommentSetAction({ comments: res.data.comments }));
+            Router.push(`/quiz/solve/${problemSetId}/result/${res.data.solverId}`);
           })
           .catch(function (error) {
             setLoading(false);
@@ -83,7 +87,7 @@ const NickNameModal = ({ setLoading }: any) => {
       <button
         style={text == '' ? { backgroundColor: '#aaa' } : {}}
         onClick={() => {
-          moveResult(text);
+          onClick(text);
         }}
       >
         확인

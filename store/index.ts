@@ -4,7 +4,9 @@ import { MakeStore, createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import userReducer from 'store/user';
 import quizReducer from 'store/quiz';
+import solveUserReducer from 'store/user_solve'
 import solveReducer from 'store/quiz_solve';
+import commentReducer from 'store/comment'
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 
@@ -48,6 +50,8 @@ const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
         user: userReducer,
         quiz: quizReducer,
         solve: solveReducer,
+        user_solve: solveUserReducer,
+        comment: commentReducer
       });
       return combinedReducer(state, action);
     }

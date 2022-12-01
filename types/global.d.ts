@@ -21,9 +21,7 @@ interface ProblemSetTypes {
   problems: ProblemTypes[]; // 문제 배열
 }
 
-
-
-//------------------------------------풀이------------------------------------------
+// 풀이
 
 // SolveProblemTypes - 문제(풀이용) 정보
 interface SolveProblemTypes {
@@ -32,7 +30,7 @@ interface SolveProblemTypes {
 }
 // 풀이자 오답 노트
 interface SolveAnswerTypes {
-  solveCorrectAnswer: string; // 정답 
+  solveCorrectAnswer: string; // 정답
   solveProbleTitle: string; // 문제 제목
   solveUserAnswer: string; // 풀이자 답
 }
@@ -45,13 +43,22 @@ interface SolveUserTypes {
 }
 // SolveProblemSetTypes - 문제집(풀이용) 정보
 interface SolveProblemSetTypes {
-  ProblemSetId: string; // 퀴즈 아이디
+  problemSetId: string; // 퀴즈 아이디
   solveProblemSetTitle: string; // 문제집 제목
   solveProblems: SolveProblemTypes[]; // 문제 배열
   solveAnswers: SolveAnswerTypes[];
 }
 
-// /------------------------------------------------
+// 한줄평
+interface CommentSetTypes {
+  comments: CommentTypes[];
+}
+interface CommentTypes {
+  nickname: string;
+  content: string;
+  created_at: string;
+  user: string;
+}
 
 // 공지사항 타입
 interface NoticeTypes {
@@ -63,5 +70,5 @@ interface NoticeTypes {
 
 interface Window {
   Kakao: any; // 카카오
-  adsbygoogle: any; // 구글 애드센스 
+  adsbygoogle: any; // 구글 애드센스
 }

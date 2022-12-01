@@ -1,38 +1,36 @@
 import axios from 'axios';
 import { useInput } from 'hooks';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
+import { saveCommentSetAction } from 'store/comment';
+
 
 const Comment = () => {
   const [text, Setter, clearFunction, textHandler] = useInput<string>('');
+  const dispatch = useDispatch();
 
-  const onClick = (_comm: string) => {
-    const postComment = async () => {
-      // if (_comm) {
-      //   await axios.post(`${process.env.NEXT_PUBLIC_BACKEND}`, {
-      //     comment: _comm
-      //   }).then(()=> {
-      //   });
-      // }
-    };
+  const { problemSetId } = useSelector((state: RootState) => state.solve);
+  const { solveUserName } = useSelector((state: RootState) => state.user_solve);
+  const { comments } = useSelector((state: RootState) => state.comment);
+  console.log(comments);
+  const postComment = async (_comm: string) => {
+    if (_comm) {
+      await axios
+        .post(`${process.env.NEXT_PUBLIC_BACKEND}/comment`, {
+          nickname: solveUserName,
+          content: _comm,
+          probsetId: problemSetId,
+        })
+        .then((res) => {
+          dispatch(saveCommentSetAction({ comments: res.data }));
+        });
+    }
   };
-  const commList = [
-    {
-      uid: 'asdqwc23d2d2s21d33dse-e2d',
-      nickname: '배따라기',
-      comm: '와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따와재미따',
-      time: '2022-11-29',
-    },
-    {
-      uid: 'ggkfkfs21d33dse--df22',
-      nickname: '진따라기',
-      comm: '개꿀잼',
-      time: '2022-11-30',
-    },
-  ];
   return (
     <Container>
       <Title>
-        한줄평 남기기 <span style={{ fontSize: '.7rem' }}>({commList.length})</span>
+        한줄평 남기기 <span style={{ fontSize: '.7rem' }}>{comments.length}</span>
       </Title>
       <InputBox>
         <span>({text.length}/50)</span>
@@ -44,18 +42,18 @@ const Comment = () => {
           maxLength={50}
           placeholder="나도 한마디.."
         />
-        <button onClick={() => onClick(text)}>등록</button>
+        <button onClick={() => postComment(text)}>등록</button>
       </InputBox>
       <CommentBoard>
-        {commList.length !== 0 ? (
-          commList.map((item: any, index: number) => (
-            <CommentBox>
+        {comments && comments.length !== 0 ? (
+          comments.map((item: any, index: number) => (
+            <CommentBox key={index}>
               <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
               <div>
                 <span className="nickname">{item.nickname}</span>
-                <p>{item.comm}</p>
+                <p>{item.content}</p>
               </div>
-              <span className="date">{item.time}</span>
+              <span className="date">{item.created_at.substr(0, item.created_at.indexOf('T'))}</span>
             </CommentBox>
           ))
         ) : (
@@ -63,6 +61,7 @@ const Comment = () => {
             <span>아직 한줄평이 없어요 !</span>
           </div>
         )}
+        {/* <button className="more">더보기</button> */}
       </CommentBoard>
     </Container>
   );
@@ -124,15 +123,23 @@ const CommentBoard = styled.div`
       color: #888;
     }
   }
+  .more {
+    border: none;
+    width: 100%;
+    padding: 5px;
+    margin: 5% 0;
+    border-radius: 10px;
+    background-color: #fff6f7;
+  }
 `;
 const CommentBox = styled.div`
   position: relative;
   display: flex;
   color: #555;
-  font-size: .8rem;
+  font-size: 0.8rem;
   margin-bottom: 5%;
   img {
-    position:relative;
+    position: relative;
     display: block;
     width: 38px;
     height: 38px;
@@ -149,13 +156,13 @@ const CommentBox = styled.div`
     p {
       display: block;
       padding: 15px 18px;
-      font-size: .7rem;
+      font-size: 0.7rem;
       background: #f4f4f4;
       border-radius: 0px 15px 15px 15px;
     }
   }
   .date {
-    position:relative;
+    position: relative;
     display: block;
     color: #888;
     font-size: 0.5rem;

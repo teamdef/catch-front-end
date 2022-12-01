@@ -11,11 +11,14 @@ import { AiOutlineShareAlt } from 'react-icons/ai';
 // import ProgressBar from '@ramonak/react-progress-bar';
 
 const Page: NextPageWithLayout = () => {
-  const router = useRouter();
-  // let { solveId } = router.query;
-  const { solveUserName, solveUserScore, solveProblems } = useSelector((state: RootState) => state.solve);
+  const { comments } = useSelector((state: RootState) => state.comment);
+  const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
+  const { solveProblems } = useSelector((state: RootState) => state.solve);
+
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
+  console.log(solveUserName);
+  console.log(comments);
   return (
     <Container>
       <HeadMeta />
@@ -28,7 +31,8 @@ const Page: NextPageWithLayout = () => {
           <ProgressBar completed={`${solveUserScore}`} maxCompleted={solveProblems.length} bgColor={'#ff4d57'} />
         </ProgressArea> */}
         <UserScore>
-          <b>{(solveUserScore / solveProblems.length) * 100}</b>
+          {/* <b>{(solveUserScore / solveProblems.length) * 100}</b> */}
+          <b>60</b>
           <span />
           <span />
         </UserScore>
@@ -83,16 +87,15 @@ const Page: NextPageWithLayout = () => {
 };
 const Container = styled.div`
   position: relative;
-  padding: 10% 10% 5% 10%;
+  padding: 65px 10% 5% 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
   background-color: #fff;
   a {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: block;
@@ -131,11 +134,15 @@ const UserScore = styled.div`
   position: relative;
   display: block;
   margin-top: 5%;
+  padding: 20px 30px;
+  background-color: rgba(255, 232, 150, 1);
   b {
     position: relative;
     display: block;
-    font-size: 3.0rem;
-    color: #ff4d57;
+    text-shadow: -2px 0 #ff4d57, 0 5px #ff4d57, 2px 0 #ff4d57, 0 -2px #ff4d57;
+    font-size: 3rem;
+    font-family: 'RixInooAriDuriR';
+    color: #fff;
   }
   > span {
     position: relative;

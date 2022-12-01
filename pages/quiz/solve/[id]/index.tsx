@@ -25,15 +25,16 @@ const Page: NextPageWithLayout = () => {
     async function getQuiz() {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/loadprobset/${id}`);
+        console.log(response);
         dispatch(
           saveSolveProblemSetAction({
-            solveProblemSetTitle: response.data[0].set_title,
-            ProblemSetId: `${id}`,
-            solveProblems: response.data[0].prob,
+            solveProblemSetTitle: response.data.set_title,
+            problemSetId: `${id}`,
+            solveProblems: response.data.prob,
           }),
         );
-        setMaker(response.data[0].user.nickname);
-        setThumbnail(response.data[0].thumbnail);
+        setMaker(response.data.user.nickname);
+        setThumbnail(response.data.thumbnail);
         setLoading(false);
         // 정답 배열 생성
       } catch (error) {

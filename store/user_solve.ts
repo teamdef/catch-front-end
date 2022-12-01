@@ -8,7 +8,7 @@ const initialState: SolveUserTypes = {
 };
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
 const solveUserSlice = createSlice({
-  name: 'solve', // 해당 모듈의 이름. store.user 형식으로 추후 접근
+  name: 'user_solve', // 해당 모듈의 이름. store.user 형식으로 추후 접근
   initialState,
   reducers: {
     saveSolveUserNameAction: (state: SolveUserTypes, action: PayloadAction<{ solveUserName: string }>) => {

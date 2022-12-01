@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // user스토어의 초기값을 설정
 const initialState: SolveProblemSetTypes = {
-  ProblemSetId: '',
+  problemSetId: '',
   solveProblemSetTitle: '',
   solveProblems: [],
   solveAnswers: [],
@@ -14,23 +14,23 @@ const solveSlice = createSlice({
   reducers: {
     saveSolveProblemSetAction: (
       state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveProblemSetTitle: string; ProblemSetId: string; solveProblems: SolveProblemTypes[] }>,
+      action: PayloadAction<{ solveProblemSetTitle: string; problemSetId: string; solveProblems: SolveProblemTypes[] }>,
     ) => {
-      const { solveProblemSetTitle, ProblemSetId, solveProblems } = action.payload;
+      const { solveProblemSetTitle, problemSetId, solveProblems } = action.payload;
       state.solveProblemSetTitle = solveProblemSetTitle;
-      state.ProblemSetId = ProblemSetId;
+      state.problemSetId = problemSetId;
       state.solveProblems = solveProblems;
     },
-    saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>) => {
+    saveSolveAnswersAction: (
+      state: SolveProblemSetTypes,
+      action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>,
+    ) => {
       const { solveAnswers } = action.payload;
       state.solveAnswers = solveAnswers;
     },
   },
 });
 
-export const {
-  saveSolveProblemSetAction,
-  saveSolveAnswersAction,
-} = solveSlice.actions;
+export const { saveSolveProblemSetAction, saveSolveAnswersAction } = solveSlice.actions;
 
 export default solveSlice.reducer;
