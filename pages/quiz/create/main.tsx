@@ -2,7 +2,7 @@ import { ReactElement, ChangeEvent, KeyboardEvent, useState, useEffect, useCallb
 import * as S from 'styles/quiz/create/main.style';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
+import { saveProblemDescriptionAction, saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import data from 'data/question.json'; // 문제 더미 데이터
@@ -55,7 +55,7 @@ interface ThumbnailObjectType {
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { problems, setTitle } = useSelector((state: RootState) => state.quiz);
+  const { problems, setTitle,description } = useSelector((state: RootState) => state.quiz);
   const { id } = useSelector((state: RootState) => state.user);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -269,6 +269,7 @@ const Page: NextPageWithLayout = () => {
 
   // redux store 자체를 초기화
   const resetProblemSet = () => {
+    dispatch(saveProblemDescriptionAction({ description: '' })); // 설명 저장
     dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
     dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
   };
@@ -314,7 +315,7 @@ const Page: NextPageWithLayout = () => {
         }
       });
       Promise.all(_problems).then((res) => {
-        QuizUploadApi(res, id, setTitle).then((res: AxiosResponse) => {
+        QuizUploadApi(res, id, setTitle,description).then((res: AxiosResponse) => {
           resetProblemSet(); // 문제집 redux 초기화
           setLoading(false); // 로딩 해제
           router.push({
@@ -326,7 +327,6 @@ const Page: NextPageWithLayout = () => {
               returnSetId: res.data.returnSetId,
             },
           }); // 문제집 생성 완료 및 공유 화면으로 이동
-          resetProblemSet();
         });
       });
     } else {

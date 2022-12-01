@@ -10,7 +10,8 @@ export const RecentQuizList = styled.div`
   padding: 1rem;
   background-color: #fff;
   #section-title {
-    padding: 1rem 0.5rem 1rem 0.5rem;
+    /*padding: 1rem 0.5rem 1rem 0.5rem;*/
+    padding-top:1rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -27,7 +28,7 @@ export const RecentQuizList = styled.div`
     }
   }
   #section-contents {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
   }
 `;
@@ -37,10 +38,10 @@ interface ImageCardProps {
 
 export const MyQuizList = styled.div`
   margin-bottom: 1rem;
-  padding-top: 2rem;
+  padding: 1rem;
   background-color: #fff;
   #title {
-    padding: 0 0 2rem 1.5rem;
+    padding: 1rem 0 1.5rem 0rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -76,13 +77,8 @@ export const MyQuizList = styled.div`
 
 export const CustomCard = styled(Card)`
   height: 18rem;
-  border-radius: 30px;
+  border-radius: 12px;
   margin: 0 auto;
-  width: 90%;
-  @media (max-width: 400px) {
-    width: 95%;
-    height: 15rem;
-  }
   display: flex;
 `;
 export const CreateCard = styled(CustomCard)`
@@ -93,8 +89,8 @@ export const CreateCard = styled(CustomCard)`
   span {
     position: relative;
     display: block;
-    color: #888;
-    font-size: 18px;
+    color: #595959;
+    font-size: 16px;
   }
   button {
     background-color: #ff4d57;
@@ -138,6 +134,7 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   #quiz-title {
     font-size: 24px;
     font-weight: 500;
+    margin-bottom:8px;
   }
   #quiz-info {
     font-weight: 300;

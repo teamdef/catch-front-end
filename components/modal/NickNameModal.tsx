@@ -6,12 +6,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/quiz_solve';
 import Router from 'next/router';
 import { RootState } from 'store';
-import axios from 'axios';
+import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/api/quiz'
+
 
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
-interface NickNameProps {
-  moveResult: (arg0: string) => void;
-}
 
 const NickNameModal = ({ setLoading }: any) => {
   const { solveUserScore, quizId } = useSelector((state: RootState) => state.solve);
@@ -23,34 +21,21 @@ const NickNameModal = ({ setLoading }: any) => {
     async function postSolver() {
       // 로그인한 유저의 경우 유저아이디를 추가로 전달
       if (isLoggedin) {
-        await axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
-            nickName: _nickname,
-            score: solveUserScore,
-            probsetId: quizId,
-            userId: id,
-          })
-          .then(function () {
-            setLoading(false);
-            Router.push(`/quiz/solve/${quizId}/result/${id}`);
-          })
-          .catch(function (error) {
-            setLoading(false);
-            console.log(error);
-          });
+        LoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizId, id).then((res) => {
+          setLoading(false);
+          Router.push(`/quiz/solve/${quizId}/result/${id}`);
+        }).catch((error)=> {
+          setLoading(false);
+          console.log(error);
+        });
       } else {
         // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
-        await axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
-            nickName: _nickname,
-            score: solveUserScore,
-            probsetId: quizId,
-          })
-          .then(function (response) {
+        NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizId)
+          .then((res)=> {
             setLoading(false);
-            Router.push(`/quiz/solve/${quizId}/result/${response.data.solverId}`);
+            Router.push(`/quiz/solve/${quizId}/result/${res.data.solverId}`);
           })
-          .catch(function (error) {
+          .catch((error)=> {
             setLoading(false);
             console.log(error);
           });

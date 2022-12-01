@@ -18,6 +18,7 @@ interface ProblemTypes {
 // ProblemSetType - 문제집 정보
 interface ProblemSetTypes {
   setTitle: string; // 문제집 제목
+  description?:string // 퀴즈 세트 설명 
   problems: ProblemTypes[]; // 문제 배열
 }
 

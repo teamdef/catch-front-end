@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { QuizCard, SkeletonQuizCard, NotFound,AdsQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
-
+import { MdKeyboardArrowDown } from 'react-icons/md';
 interface RecentQuizType {
   created_at: string;
   id: string;
@@ -134,7 +134,7 @@ const RecentQuizList = () => {
                     setPage((prev) => prev + 1);
                   }}
                 >
-                  더 불러오기
+                    <MdKeyboardArrowDown size={20} />더보기
                 </QuizLoad>
               )}
             </>
@@ -158,9 +158,12 @@ const Wrapper = styled.div`
 
 const QuizLoad = styled.button` 
   border:none;
+  display:flex;
+  align-items:center;
   background-color:transparent;
-  font-size:18px;
+  font-size:14px;
   font-weight:bold;
+  color:#595959;
   padding:1rem;
   &:hover{
     cursor:pointer;

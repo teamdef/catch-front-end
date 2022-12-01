@@ -32,7 +32,12 @@ export const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> =>
 };
 
 // 생성 - 새로 만든 퀴즈 업로드
-export const QuizUploadApi = (problems: ProblemTypes[], userId: number, setTitle: string): Promise<AxiosResponse> => {
+export const QuizUploadApi = (
+  problems: ProblemTypes[],
+  userId: number,
+  setTitle: string,
+  description:string,
+): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
     const temp = problems.map((problem: ProblemTypes) => {
       if (problem.choiceType === 'img') {
@@ -49,7 +54,7 @@ export const QuizUploadApi = (problems: ProblemTypes[], userId: number, setTitle
       }
     });
 
-    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems: temp, userId });
+    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems: temp, userId, description });
 
     const urlArray = res.data.urlArray;
     const returnSetId = res.data.returnSetId;
@@ -89,6 +94,14 @@ export const QuizThumbnailChangeApi = async (probsetId: string, imgBlob: File): 
 
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
 export const QuizDataFetchApi = async (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`https://api.catchcatch.link/v1/loadprobset/${probsetId}`);
+  return notAuthAxios.get(`/loadprobset/${probsetId}`);
 };
 
+// 풀이 - 퀴즈 풀이 정보 저장하기
+export const LoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string,userId:string) => {
+    return notAuthAxios.post(`/solver`, { nickName, score, probsetId, userId });
+
+};
+export const NotLoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string) => {
+  return notAuthAxios.post(`/solver`, { nickName, score, probsetId });
+};

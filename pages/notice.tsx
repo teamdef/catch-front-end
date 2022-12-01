@@ -15,7 +15,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      <Title backRoute="/" title="공지사항 📣" subTitle="서비스 이용에 필요한 내용을 확인하세요" />
+      <Title isBack={true} title="공지사항 📣" subTitle="서비스 이용에 필요한 내용을 확인하세요" />
       <S.Wrapper>
         <S.NoticeList>
           {noticeData.map((item: NoticeTypes, index: number) => {

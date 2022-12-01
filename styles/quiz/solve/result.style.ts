@@ -4,10 +4,9 @@ export const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #fff;
   a {
     position: absolute;
@@ -20,7 +19,7 @@ export const Container = styled.div`
 export const ButtonArea = styled.div`
   position: relative;
   display: flex;
-  width: 100%;
+  width: 70%;
   justify-content: space-evenly;
   align-items: center;
 `;
@@ -31,14 +30,14 @@ export const ScoreArea = styled.div`
   flex-direction: column;
   align-items: center;
   color: #595959;
+  margin-top: 4rem;
   > h1 {
     font-size: 1rem;
     font-weight: normal;
     margin: 0 0 5%;
     strong {
-      font-weight: 500;
-      font-size: 1.5rem;
-      font-weight: normal;
+      font-weight: bold;
+      font-size: 2rem;
       color: #ff4d57;
     }
   }
@@ -167,3 +166,36 @@ export const RankingArea = styled.div`
     }
   }
 `;
+
+export const ScorePostIt = styled.div`
+  background-color: #ffe896;
+  width: 200px;
+  height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top:1rem;
+
+  #score {
+    font-family: BMEuljiro10yearslater;
+    color: #ff4d57;
+    font-size:70px;
+    padding-bottom:0.5rem;
+  }
+  #tack-img {
+    width: 50px;
+    position: absolute;
+    top: -25px;
+    left: 70px;
+  }
+  #red-pencil-img {
+    display: flex;
+    justify-content: center;
+    width: 150px;
+  }
+`;
+
+
+

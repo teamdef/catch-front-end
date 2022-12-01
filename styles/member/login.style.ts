@@ -47,10 +47,12 @@ export const Title = styled.div`
   margin-bottom: 10%;
 `;
 export const SubTitle = styled.div`
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;
   text-align: center;
+  line-height:1.5rem;
   margin-bottom: 20%;
+  color:#595959;;
   strong {
     color: #ff4d57;
   }
