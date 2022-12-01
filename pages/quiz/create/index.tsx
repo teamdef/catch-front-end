@@ -1,20 +1,19 @@
 import * as S from 'styles/quiz/create/index.style'
-import { ReactElement, useEffect } from 'react';
+import { ReactElement,ChangeEvent, useEffect , useState} from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Logo,HeadMeta } from 'components/common';
+import { Logo } from 'components/common';
 import useInput from 'hooks/useInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { saveProblemsAction, saveProblemSetTitleAction } from 'store/quiz';
+import { saveProblemsAction, saveProblemSetTitleAction, saveProblemDescriptionAction } from 'store/quiz';
 import Router, { useRouter } from 'next/router';
-import { BsCheck } from 'react-icons/bs';
 import { MdClear } from 'react-icons/md';
 import { useModal } from 'hooks';
 import { MainButton } from 'styles/common';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
+/*
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -32,11 +31,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};
+};*/
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [title, , titleClear, titleHandler] = useInput<string>('');
+  const [description,setDescription] = useState<string>('');
   const { setTitle, problems } = useSelector((state: RootState) => state.quiz);
   const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
     yesTitle: '이어서',
@@ -58,15 +58,18 @@ const Page: NextPageWithLayout = () => {
     ),
   });
 
+  const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  };
   const goQuizCreateMain = () => {
     // 시작하기 클릭해서 제작을 시작할 땐, 무조건 초기화 해줌
     dispatch(saveProblemSetTitleAction({ setTitle: title })); // 제목 저장
+    dispatch(saveProblemDescriptionAction({ description: description })); // 퀴즈세트 설명 저장
     dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
     Router.push('/quiz/create/main');
   };
-  const goHome = () => {
-    Router.push('/');
-  };
+
+
 
   // 기존에 제작하던 문제집의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
@@ -97,7 +100,7 @@ const Page: NextPageWithLayout = () => {
             <S.TitleInput>
               <input
                 type="text"
-                placeholder="제목을 입력해주세요!"
+                placeholder="최대 20자 까지만 가능해요!"
                 value={title}
                 onChange={titleHandler}
                 maxLength={20}
@@ -108,7 +111,7 @@ const Page: NextPageWithLayout = () => {
             </S.TitleInput>
           </div>
         </S.TitleContainer>
-        <ul className="notice">
+        {/* <ul className="notice">
           <li>
             <BsCheck size="20" color="#ff4d57" />
             문제 생성은 <strong>최대 10개</strong> 까지 가능합니다.
@@ -131,7 +134,12 @@ const Page: NextPageWithLayout = () => {
             <BsCheck size="20" color="#ff4d57" />
             생성한 퀴즈는 수정이 불가능 합니다.
           </li>
-        </ul>
+        </ul> */}
+        <S.DescriptionContainer>
+          <div id="title">퀴즈에 대한 설명을 적어보세요! ({description.length}/100)</div>
+          <textarea onChange={_descriptionHandler} id="description-textarea" maxLength={100}></textarea>
+        </S.DescriptionContainer>
+
         <S.ButtonContainer>
           <MainButton onClick={goQuizCreateMain} disabled={title === ''}>
             <span>시작하기</span>

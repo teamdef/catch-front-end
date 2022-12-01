@@ -20,6 +20,12 @@ body {
   user-select: none;
 }
 
+@media (max-width: 400px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+}
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }

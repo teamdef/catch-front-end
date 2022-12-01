@@ -33,7 +33,7 @@ export const Notice = styled.details<noticeProps>`
     }
     #title-container {
       #title {
-        font-size: 18px;
+        font-size: 1.2rem;
         position: relative;
         &:after {
           ${(props) =>
@@ -53,9 +53,10 @@ export const Notice = styled.details<noticeProps>`
         }
       }
       #upload-date {
-        color: #d6d6d6;
-        font-size: 300;
-        margin-top: 4px;
+        color: #888;
+        font-weight: 300;
+        margin-top: 8px;
+        font-size:1rem;
       }
     }
   }

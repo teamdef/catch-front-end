@@ -79,7 +79,7 @@ const Page: NextPageWithLayout = () => {
           <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={false}>
             {isLoggedin &&
               (myQuizList ? (
-                myQuizList?.map((quiz, index) => {
+                myQuizList?.map((quiz) => {
                   return (
                     <SwiperSlide>
                       <S.MyQuizCard key={quiz?.id} url={quiz?.thumbnail}>

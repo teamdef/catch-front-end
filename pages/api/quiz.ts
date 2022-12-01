@@ -32,7 +32,12 @@ export const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> =>
 };
 
 // 생성 - 새로 만든 퀴즈 업로드
-export const QuizUploadApi = (problems: ProblemTypes[], userId: number, setTitle: string): Promise<AxiosResponse> => {
+export const QuizUploadApi = (
+  problems: ProblemTypes[],
+  userId: number,
+  setTitle: string,
+  description:string,
+): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
     const temp = problems.map((problem: ProblemTypes) => {
       if (problem.choiceType === 'img') {
@@ -49,7 +54,7 @@ export const QuizUploadApi = (problems: ProblemTypes[], userId: number, setTitle
       }
     });
 
-    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems: temp, userId });
+    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems: temp, userId, description });
 
     const urlArray = res.data.urlArray;
     const returnSetId = res.data.returnSetId;

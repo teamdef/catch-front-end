@@ -38,10 +38,10 @@ interface ImageCardProps {
 
 export const MyQuizList = styled.div`
   margin-bottom: 1rem;
-  padding-top: 2rem;
+  padding: 1rem;
   background-color: #fff;
   #title {
-    padding: 0 0 1.5rem 1rem;
+    padding: 1rem 0 1.5rem 0rem;
     color: #595959;
     font-weight: bold;
     font-size: 18px;
@@ -77,13 +77,8 @@ export const MyQuizList = styled.div`
 
 export const CustomCard = styled(Card)`
   height: 18rem;
-  border-radius: 30px;
+  border-radius: 12px;
   margin: 0 auto;
-  width: 95%;
-  @media (max-width: 400px) {
-    width: 95%;
-    height: 15rem;
-  }
   display: flex;
 `;
 export const CreateCard = styled(CustomCard)`
@@ -95,7 +90,7 @@ export const CreateCard = styled(CustomCard)`
     position: relative;
     display: block;
     color: #595959;
-    font-size: 18px;
+    font-size: 16px;
   }
   button {
     background-color: #ff4d57;
@@ -139,6 +134,7 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   #quiz-title {
     font-size: 24px;
     font-weight: 500;
+    margin-bottom:8px;
   }
   #quiz-info {
     font-weight: 300;

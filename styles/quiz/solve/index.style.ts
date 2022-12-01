@@ -67,13 +67,13 @@ export const QuizTitle = styled.h1`
   margin-top: 9rem;
   font-family: RixInooAriDuriR;
   font-size: 60px;
-  line-height:70px;
+  line-height: 70px;
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
   text-align: center;
   color: #fff6f7;
   -webkit-text-stroke: 3px #ff4d57;
-  text-shadow: #dca84d 1px 1px, #ff4d57 0px 0px, #ff4d57 1px 1px, #ff4d57 2px 2px, #ff4d57 3px 3px, #ff4d57 4px 4px,
+  text-shadow: #ff4d57 1px 1px, #ff4d57 0px 0px, #ff4d57 1px 1px, #ff4d57 2px 2px, #ff4d57 3px 3px, #ff4d57 4px 4px,
     #ff4d57 5px 5px, #ff4d57 6px 6px, #ff4d57 7px 7px;
 `;
 
@@ -171,4 +171,5 @@ export const ButtonWrap = styled.div`
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  
 `;

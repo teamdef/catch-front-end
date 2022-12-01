@@ -45,7 +45,7 @@ const QuizCard = ({ userName, userProfileImg,quizDate, quizTitle, quizCount, qui
 const QuizCardWrapper = styled.div`
  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);*/
   /*transition: all 0.1s ease-in-out;*/
-  border-radius: 8px;
+  border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;
   border:solid 1px #eee;

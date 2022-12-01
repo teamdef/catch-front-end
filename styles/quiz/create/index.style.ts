@@ -119,6 +119,9 @@ export const TitleInput = styled.div`
     &:disabled {
       display: none;
     }
+    &:hover {
+      cursor: pointer;
+    }
     svg {
       display: flex;
       align-items: center;
@@ -136,4 +139,29 @@ export const ButtonContainer = styled.div`
   position: absolute;
   width: 100%;
   bottom: 0;
+`;
+
+export const DescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position:relative;
+  #title {
+    color: #595959;
+    margin-top: 3rem;
+    margin-top: 3rem;
+  }
+  #description-textarea {
+    background: url('/assets/img/catch_underline.png') no-repeat center center;
+    background-size: contain;
+    width: 90%;
+    height: 300px;
+    line-height: 2.8rem;
+    resize: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 1.5rem 0 1.5rem;
+    border: none;
+  }
 `;
