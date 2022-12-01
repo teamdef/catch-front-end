@@ -30,6 +30,7 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+          <meta name="google-site-verification" content="a4Z71Wfn9SBTmaIDT2fszmWzufGRL99ABDbjxXyOrzY" />
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7873415242511235"
