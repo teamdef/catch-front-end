@@ -5,7 +5,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
   background-color: #fff;
   a {
     position: absolute;
@@ -16,16 +15,6 @@ export const Container = styled.div`
     z-index: 99;
   }
 `;
-export const Logo = styled.div`
-  position: absolute;
-  top: 0;
-  display: block;
-  z-index: 9999;
-  font-size: 1.5rem;
-  padding: 5% 0 0 5%;
-  font-family: 'RixInooAriDuriR';
-  color: #ff4d57;
-`;
 
 interface QuizInfoProps {
   thumbnail?: string;
@@ -34,7 +23,8 @@ export const QuizInfo = styled.div<QuizInfoProps>`
   position: relative;
   display: flex;
   justify-content: center;
-  height: 80%;
+  /* height: 80%; */
+  height:600px;
   width: 100%;
   top: 0;
   left: 0;
@@ -63,10 +53,14 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
-  max-width: 300px;
+  max-width: 400px;
   margin-top: 9rem;
   font-family: RixInooAriDuriR;
   font-size: 60px;
+  @media (max-width: 400px) {
+    max-width: 80%;
+    font-size:50px;
+  }
   line-height: 70px;
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
@@ -80,7 +74,7 @@ export const QuizTitle = styled.h1`
 export const InnerContainer = styled.div`
   position: absolute;
   z-index: 2;
-  top: 320px;
+  top: 350px;
   padding-left: 2rem;
   padding-right: 2rem;
   width: 100%;
@@ -94,7 +88,7 @@ export const Description = styled.div`
   color: #595959;
   line-height: 1.5rem;
   text-align: center;
-  width: 400px;
+  width: 90%;
 `;
 export const QuizMakerBlock = styled.div`
   width: 100%;
@@ -141,15 +135,18 @@ export const QuizInfoContainer = styled.div`
 export const SNSShareContainer = styled.div`
   margin-top: 2rem;
   width: 75%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  @media (max-width: 400px) {
+    width: 90%;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   #explain {
     color: #888;
     display: flex;
     align-items: center;
-    margin-bottom:1rem;
+    margin-bottom: 2rem;
     svg {
       margin-right: 4px;
     }
@@ -167,9 +164,12 @@ export const BestCommentContainer = styled.div`
   }
 `;
 export const ButtonWrap = styled.div`
+/*
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
-  
+  */
+  width:100%;
+  padding-top:2rem;
 `;

@@ -333,7 +333,7 @@ const MenuList = styled.ul`
   justify-content: left;
 
   li {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     font-size: 18px;
     display: flex;
     align-items: center;

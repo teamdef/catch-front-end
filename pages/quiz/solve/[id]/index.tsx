@@ -51,6 +51,15 @@ const Page: NextPageWithLayout = () => {
         </S.QuizInfo>
         <S.InnerContainer>
           <S.Description>{description === '' ? '해당 퀴즈의 설명이 없습니다!' : description}</S.Description>
+          <S.ButtonWrap>
+            <MainButton
+              onClick={() => {
+                router.push(`/quiz/solve/${id}/main`);
+              }}
+            >
+              시작하기
+            </MainButton>
+          </S.ButtonWrap>
           <S.QuizInfoContainer>
             <S.QuizMakerBlock>
               <div>출제자</div>
@@ -76,16 +85,6 @@ const Page: NextPageWithLayout = () => {
             <div id="title">베스트 한줄평 👍</div>
           </S.BestCommentContainer>
         </S.InnerContainer>
-
-        <S.ButtonWrap>
-          <MainButton
-            onClick={() => {
-              router.push(`/quiz/solve/${id}/main`);
-            }}
-          >
-            시작하기
-          </MainButton>
-        </S.ButtonWrap>
       </S.Container>
     </>
   );

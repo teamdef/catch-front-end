@@ -77,7 +77,7 @@ const Profile: NextPageWithLayout = () => {
   };
 
   const saveProfile = async () => {
-    if (tempNickname && (tempNickname.length < 3 || tempNickname.length > 6)) {
+    if (tempNickname && (tempNickname.length < 2 || tempNickname.length > 6)) {
       setError('닉네임은 최소 2글자에서 최대 6글자까지 입력 필수입니다');
     } else {
       setError(null);
