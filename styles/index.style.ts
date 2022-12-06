@@ -132,19 +132,18 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   color: ${(props) => (props.url ? '#fff' : '#595959')};
   padding: 1.5rem;
   #quiz-title {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 500;
     margin-bottom:8px;
   }
   #quiz-info {
-    font-weight: 300;
   }
   #quiz-detail-btn-wrapper {
     display: flex;
     justify-content: flex-end;
     margin-top: 0.5rem;
     button {
-      border-radius: 20px;
+      border-radius: 30px;
       border: none;
       padding: 0.5rem 1rem 0.5rem 1rem;
       color: #595959;

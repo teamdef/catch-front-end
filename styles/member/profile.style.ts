@@ -97,6 +97,7 @@ export const Error = styled.div`
 `;
 export const Info = styled.div`
   color: #888;
-  font-size: 14px;
+  font-size: 0.9rem;
+  line-height:1.2rem;
   text-align: center;
 `;
