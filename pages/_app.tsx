@@ -6,9 +6,11 @@ import { useSelector } from 'react-redux';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { authAxios } from 'utils/customAxios';
+import Script from 'next/script';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
+import * as gtag from '../lib/gtag'
 import { logoutAction } from 'store/user';
 import { useDispatch } from 'react-redux';
 
@@ -58,6 +60,22 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
+      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`} />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
       <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
     </>
   );
@@ -68,7 +86,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 // https://github.com/vercel/next.js/discussions/36832
 
 MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-  
   const cookie = ctx.req ? ctx.req.headers.cookie : null;
   if (cookie) {
     // 정규식으로 쿠키값 추출
@@ -78,7 +95,7 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
       const access_token = match[2]; // RegExp 객체 반환값 참고
       // axios 객체에 인증헤더 추가
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } 
+    }
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 
