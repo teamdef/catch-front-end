@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteToken } from 'utils/token';
-import Router from 'next/router';
+
 // user 스토어 타입 정의
 
 interface UserTypes {

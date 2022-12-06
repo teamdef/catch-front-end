@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { Button,Logo } from 'components/common';
+import { Logo } from 'components/common';
+import { MainButton } from 'styles/common';
 const MatchNote = ({ setOpenMatch }: any) => {
   const { solveAnswers } = useSelector((state: RootState) => state.solve);
   return (
@@ -42,9 +43,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
           );
         }
       })}
-      <Button width="30%" height="50px" bgColor="#ff4d57" fontColor="#fff" onClick={() => setOpenMatch(false)}>
-        닫기
-      </Button>
+      <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
     </MatchEl>
   );
 };

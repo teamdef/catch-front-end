@@ -1,12 +1,14 @@
 import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import theme from 'styles/theme';
 import type { AppProps, AppContext } from 'next/app';
 import type { NextPage } from 'next';
 import { useSelector } from 'react-redux';
+import Script from 'next/script';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { authAxios } from 'utils/customAxios';
-import Script from 'next/script';
+import { authAxios } from 'pages/api/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
@@ -76,7 +78,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           `,
         }}
       />
-      <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      <ThemeProvider theme={theme}>
+        <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      </ThemeProvider>
     </>
   );
 }

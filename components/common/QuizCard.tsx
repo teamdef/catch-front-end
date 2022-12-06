@@ -13,47 +13,52 @@ interface QuizProps {
 }
 const QuizCard = ({ userName, userProfileImg,quizDate, quizTitle, quizCount, quizPlay, quizRoute, quizThumbnail }: QuizProps) => {
   return (
-    <QuizCardWrapper>
-      {quizThumbnail && (
-        <ThumbnailWrapper>
-          <img src={quizThumbnail} />
-        </ThumbnailWrapper>
-      )}
-      <div id="quiz-contents-container">
-        <div id="profile-row">
-          <ProfileImgWrapper>
-            <img src={userProfileImg || '/assets/img/user_default.png'} />
-          </ProfileImgWrapper>
-          <div id="user-name">{userName}</div>
-          <div id="quiz-date">{quizDate}</div>
+    <Link href={quizRoute} passHref>
+      <QuizCardWrapper>
+        {quizThumbnail && (
+          <ThumbnailWrapper>
+            <img src={quizThumbnail} alt="퀴즈 썸네일" />
+          </ThumbnailWrapper>
+        )}
+        <div id="quiz-contents-container">
+          <div id="profile-row">
+            <ProfileImgWrapper>
+              <img src={userProfileImg || '/assets/img/user_default.png'} />
+            </ProfileImgWrapper>
+            <div id="user-name">{userName}</div>
+            <div id="quiz-date">{quizDate}</div>
+          </div>
+          <div id="quiz-title">{quizTitle}</div>
+          <div id="quiz-info">
+            {quizCount}문제 · 참여 {quizPlay}
+          </div>
         </div>
-        <div id="quiz-title">{quizTitle}</div>
-        <div id="quiz-info">
-          {quizCount}문제 · 참여 {quizPlay}
-        </div>
-      </div>
-      <Link href={quizRoute} passHref>
-        <a id="quiz-solve-btn">
-          <MdPlayArrow size={24} />
-          캐치!
-        </a>
-      </Link>
-    </QuizCardWrapper>
+          <a id="quiz-solve-btn">
+            <MdPlayArrow size={24} />
+            캐치!
+          </a>
+      </QuizCardWrapper>
+    </Link>
   );
 };
 
 const QuizCardWrapper = styled.div`
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
-  transition: all 0.1s ease-in-out;
+ /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);*/
+  /*transition: all 0.1s ease-in-out;*/
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;
+  border:solid 1px #eee;
   &:last-child {
     margin: 0;
   }
+  &:hover{
+    cursor:pointer;
+  }
+  /*
   &:hover {
     transform: scale(1.025);
-  }
+  }*/
   width: 100%;
   #quiz-contents-container {
     padding: 1rem;
@@ -74,7 +79,7 @@ const QuizCardWrapper = styled.div`
     #quiz-info {
       font-size: 14px;
       color: #888;
-      margin-top: 4px;
+      margin-top: 0.5rem;
     }
   }
   #quiz-solve-btn {

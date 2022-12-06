@@ -7,12 +7,10 @@ import { saveSolveUserNameAction } from 'store/user_solve';
 import { saveCommentSetAction } from 'store/comment';
 import Router from 'next/router';
 import { RootState } from 'store';
-import axios from 'axios';
+import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/api/quiz'
+
 
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
-interface NickNameProps {
-  onClick: (arg0: string) => void;
-}
 
 const NickNameModal = ({ setLoading }: any) => {
   const { problemSetId } = useSelector((state: RootState) => state.solve);
@@ -25,36 +23,21 @@ const NickNameModal = ({ setLoading }: any) => {
     async function postSolver() {
       // 로그인한 유저의 경우 유저아이디를 추가로 전달
       if (isLoggedin) {
-        await axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
-            nickName: _nickname,
-            score: solveUserScore,
-            probsetId: problemSetId,
-            userId: id,
-          })
-          .then((res) => {
-            dispatch(saveCommentSetAction({ comments: res.data.comments }));
-            setLoading(false);
-            Router.push(`/quiz/solve/${problemSetId}/result/${id}`); //임마 딴데로 좀 보내자..
-          })
-          .catch(function (error) {
-            setLoading(false);
-            console.log(error);
-          });
+        LoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId, id).then((res) => {
+          setLoading(false);
+          Router.push(`/quiz/solve/${problemSetId}/result/${id}`);
+        }).catch((error)=> {
+          setLoading(false);
+          console.log(error);
+        });
       } else {
         // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
-        await axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/solver`, {
-            nickName: _nickname,
-            score: solveUserScore,
-            probsetId: problemSetId,
-          })
-          .then((res) => {
+        NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId)
+          .then((res)=> {
             setLoading(false);
-            dispatch(saveCommentSetAction({ comments: res.data.comments }));
             Router.push(`/quiz/solve/${problemSetId}/result/${res.data.solverId}`);
           })
-          .catch(function (error) {
+          .catch((error)=> {
             setLoading(false);
             console.log(error);
           });

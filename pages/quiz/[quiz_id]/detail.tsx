@@ -1,18 +1,21 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare,HeadMeta } from 'components/common';
-import styled, { keyframes } from 'styled-components';
+import { Title, SNSShare, ThumbnailChange, NotFound } from 'components/common';
+import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/test';
-import { ThumbnailChange, NotFound } from 'components/common';
+import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/quiz';
 import { useModal } from 'hooks';
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import Link from 'next/link';
 
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
+/*
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -30,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};
+};*/
 interface DetailQuizType {
   created_at: string;
   updated_at: string;
@@ -49,7 +52,8 @@ interface RankingType {
 }
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  let { id } = router.query;
+  let { quiz_id } = router.query;
+  const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
   const [quizRankingList, setQuizRankingList] = useState<RankingType[] | null>(null);
@@ -63,7 +67,7 @@ const Page: NextPageWithLayout = () => {
 
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
-    const res = await MyQuizDetailApi(id as string);
+    const res = await MyQuizDetailApi(quiz_id as string);
     let _detail = { ...res?.data[0] };
     _detail.solverCnt = Number(_detail.solverCnt);
     _detail.created_at = _detail.created_at.substring(0, 10);
@@ -73,44 +77,46 @@ const Page: NextPageWithLayout = () => {
     setQuizDetailData(_detail);
   };
 
-
   const getMyQuizRanking = async () => {
-    const res = await QuizRankingListApi(id as string);
+    const res = await QuizRankingListApi(quiz_id as string);
     let _ranking: RankingType[] = res?.data;
     setQuizRankingList(_ranking);
-  }
+  };
 
   const MyQuizDelete = async () => {
-    if (!!id) {
-      const res = await QuizDeleteApi(id as string);
+    if (!!quiz_id) {
+      const res = await QuizDeleteApi(quiz_id as string);
       if (res.status === 200) {
         closeDeleteModal();
         router.push('/');
       }
     }
   };
-  useEffect(() => {
+    useEffect(() => {
+      console.log(quiz_id)
     getMyQuizData();
     getMyQuizRanking();
   }, [router.isReady]);
 
-
   return (
     <>
-      <HeadMeta/> 
-      <Title backRoute="/" title="문제집 자세히보기" subTitle="문제집 정보와 참여자 순위를 확인해보세요 👀" />
-      <Wrapper>
-        <SectionBlock>
-          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <SkeletonTitle />}
+      <Title
+        isBack={true}
+        title="퀴즈 세트 자세히보기"
+        subTitle="퀴즈 세트 정보, 참여자 랭킹, 한줄평 등 다양한 정보를 확인해보세요!👀"
+      />
+      <S.Wrapper>
+        <S.SectionBlock>
+          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <S.SkeletonTitle />}
 
           <div id="section-contents">
             {quizDetailData ? (
-              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={id as string} />
+              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={quiz_id as string} />
             ) : (
-              <SkeletonThunmbnailChange />
+              <S.SkeletonThunmbnailChange />
             )}
             {quizDetailData ? (
-              <StatusContainer>
+              <S.StatusContainer>
                 <div id="status">
                   <div>참여자</div>
                   <div id="count">{quizDetailData?.solverCnt}명</div>
@@ -119,39 +125,48 @@ const Page: NextPageWithLayout = () => {
                   <div>평균점수</div>
                   <div id="count">{quizDetailData?.average}점</div>
                 </div>
-              </StatusContainer>
+              </S.StatusContainer>
             ) : (
-              <SkeletonStatusContainer>
+              <S.SkeletonStatusContainer>
                 <div></div>
                 <div></div>
-              </SkeletonStatusContainer>
+              </S.SkeletonStatusContainer>
             )}
 
-            <DateInfoWrapper>
+            <S.DateInfoWrapper>
               <div>생성 날짜 {quizDetailData?.created_at}</div>
               <div>마지막으로 푼 날짜 {quizDetailData?.updated_at}</div>
-            </DateInfoWrapper>
+            </S.DateInfoWrapper>
           </div>
-        </SectionBlock>
+        </S.SectionBlock>
         {quizDetailData && (
-          <SectionBlock>
+          <S.SectionBlock>
             <div id="section-title">문제집 공유 👋</div>
             <div id="section-contents">
               <div id="quiz-share-contents">
                 <SNSShare
+                  nickName={nickName}
+                  profileImg={profileImg}
                   set_title={quizDetailData?.set_title}
                   url={`quiz/solve/${quizDetailData?.id}`}
                   thumbnail={quizDetailData?.thumbnail}
                 />
               </div>
             </div>
-          </SectionBlock>
+          </S.SectionBlock>
         )}
         {quizRankingList && (
-          <SectionBlock>
-            <div id="section-title">참여자 랭킹 🏆</div>
+          <S.SectionBlock>
+            <div id="section-title">
+              참여자 랭킹 🏆
+              <Link href={`/quiz/${quiz_id}/ranking`} passHref>
+                <a id="more">
+                  더보기 <MdOutlineArrowForwardIos />
+                </a>
+              </Link>
+            </div>
             <div id="section-contents">
-              <RankingBoard>
+              <S.RankingBoard>
                 {quizRankingList.length === 0 ? (
                   <NotFound
                     title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
@@ -160,7 +175,10 @@ const Page: NextPageWithLayout = () => {
                 ) : (
                   quizRankingList.map((userRanking: RankingType, index: number) => {
                     return (
-                      <li key={userRanking.id}  id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}>
+                      <li
+                        key={userRanking.id}
+                        id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}
+                      >
                         <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
                         <strong>{userRanking?.nickname}</strong>
                         <em>{userRanking?.score}점</em>
@@ -168,15 +186,30 @@ const Page: NextPageWithLayout = () => {
                     );
                   })
                 )}
-              </RankingBoard>
+              </S.RankingBoard>
             </div>
-          </SectionBlock>
+          </S.SectionBlock>
         )}
+        <S.SectionBlock>
+          <div id="section-title">
+            베스트 한줄평 ✍️
+            <Link href={`/quiz/${quiz_id}/comment`} passHref>
+              <a id="more">
+                더보기 <MdOutlineArrowForwardIos />
+              </a>
+            </Link>
+          </div>
+          <div id="section-contents">
+            <div>
+              <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
+            </div>
+          </div>
+        </S.SectionBlock>
 
-        <DeleteButton onClick={openDeleteModal}>
+        <S.DeleteButton onClick={openDeleteModal}>
           <AiOutlineDelete size={30} />
-        </DeleteButton>
-      </Wrapper>
+        </S.DeleteButton>
+      </S.Wrapper>
       <RenderDeleteModal />
     </>
   );
@@ -184,179 +217,5 @@ const Page: NextPageWithLayout = () => {
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
-
-const Wrapper = styled.div`
-  width: 85%;
-  margin: 0 auto;
-  margin-top: 2rem;
-  margin-bottom: 7rem;
-`;
-
-const SectionBlock = styled.div`
-  margin-bottom: 2rem;
-  &:last-child {
-    margin-bottom: 0;
-  }
-  #section-title {
-    color: #ff264d;
-    margin-bottom: 0.5rem;
-    font-size: 18px;
-  }
-  #section-contents {
-    margin-top: 1rem;
-    #quiz-share-contents {
-      width: 80%;
-      margin: 0 auto;
-    }
-  }
-`;
-
-const StatusContainer = styled.div`
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr;
-  height: 70px;
-  margin-top: 10px;
-  #status {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    background-color: #fff6f7;
-    border-radius: 12px;
-    #count {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ff264d;
-    }
-  }
-`;
-const DateInfoWrapper = styled.div`
-  margin-top: 10px;
-  font-size: 14px;
-  color: #bcbcbc;
-`;
-
-const DeleteButton = styled.div`
-  width: 65px;
-  height: 65px;
-  border-radius: 50%;
-  background-color: #ff4d57;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  bottom: 20px;
-  right: calc(50% - 32.5px - 190px);
-  @media (max-width: 500px) {
-    bottom: 20px;
-    right: 20px;
-  }
-  z-index: 5;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const RankingBoard = styled.ul`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 0;
-  margin: 0;
-  flex-direction: column;
-  align-items: center;
-  li {
-    position: relative;
-    display: flex;
-    color: #595959;
-    width: 100%;
-    list-style: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    border: solid 1px #f6f6f6;
-    border-radius: 4px;
-    height: 50px;
-    margin: 3px;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      position: relative;
-      width: 44px;
-      height: 44px;
-    }
-    strong {
-      font-weight: normal;
-    }
-    i,
-    em {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-style: normal;
-      width: 50px;
-    }
-    i {
-      color: #ff4d57;
-      font-size: 1rem;
-    }
-  }
-  #first {
-    border: none;
-    background-color: #fff1b4;
-  }
-  #second {
-    border: none;
-    background-color: #ececec;
-  }
-  #third {
-    border: none;
-    background-color: #ffe6d4;
-  }
-`;
-
-// skeleton
-const gradient = keyframes` 
-  0% {background-color: rgba(165, 165, 165, 0.1);}
-  50% {background-color: rgba(165, 165, 165, 0.3);}
-  100% {background-color: rgba(165, 165, 165, 0.1);}
-`;
-
-const Skeleton = styled.div`
-  background-color: #eee;
-  border-radius: 1rem;
-`;
-const SkeletonThunmbnailChange = styled(Skeleton)`
-  width: 100%;
-  height: 200px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-`;
-const SkeletonStatusContainer = styled(StatusContainer)`
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr;
-  height: 70px;
-  margin-top: 10px;
-  div {
-    background-color: #eee;
-    border-radius: 12px;
-    animation: ${gradient} 1.5s linear infinite alternate;
-  }
-`;
-const SkeletonTitle = styled(Skeleton)`
-  width: 250px;
-  height: 24px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-`;
-const SkeletonRanking = styled.div`
-  background-color: #eee;
-  border-radius: 4px;
-  animation: ${gradient} 1.5s linear infinite alternate;
-  width: 100%;
-  height: 50px;
-  margin: 3px;
-  margin-bottom: 7px;
-`;
 
 export default Page;

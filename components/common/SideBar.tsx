@@ -5,7 +5,7 @@ import { HiOutlineEmojiSad } from 'react-icons/hi';
 import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
-import { kakaoLeaveApi } from 'pages/api/test';
+import { kakaoLeaveApi } from 'pages/api/member';
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';
@@ -71,6 +71,9 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   };
   const goOpenChat = () => {
     window.open('https://open.kakao.com/o/sLi3afJe');
+  }
+  const goIntroducePage = () => {
+    window.open('https://teamdef.notion.site/ba4b38482a0d4d359114bf479b169c44');
   }
   const seviceLeave = () => {
     setIsLoading(true);
@@ -151,6 +154,10 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
             <li onClick={goOpenChat}>
               <img src={'/assets/img/kakao_icon.png'} />
               카카오톡 오픈채팅 문의
+            </li>
+            <li onClick={goIntroducePage}>
+              <img src={'/assets/img/catch_logo1.png'} />
+              캐치캐치를 소개합니다
             </li>
             {isLoggedin && (
               <>
@@ -270,6 +277,10 @@ const Profile = styled.div`
   #profile-img {
     width: 75px;
     height: 75px;
+    @media (max-width: 400px) {
+      width:60px;
+      height: 60px;
+    } 
     img {
       width: 100%;
       height: 100%;
@@ -300,6 +311,9 @@ const Profile = styled.div`
         cursor: pointer;
       }
       font-size: 20px;
+      @media (max-width:400px){
+        font-size:18px;
+      }
       font-weight: bold;
       strong {
         font-weight: bold;
@@ -319,7 +333,7 @@ const MenuList = styled.ul`
   justify-content: left;
 
   li {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     font-size: 18px;
     display: flex;
     align-items: center;

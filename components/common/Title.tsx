@@ -1,17 +1,35 @@
 import styled from 'styled-components';
 import { IoIosArrowBack } from 'react-icons/io';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
 interface TitleProps {
-  backRoute?: string;
+  isBack?: boolean;
   title: string;
   subTitle: string;
 }
-const Title = ({ backRoute, title, subTitle }: TitleProps) => {
+const Title = ({ isBack, title, subTitle }: TitleProps) => {
+  const [prevPath, setPrevPath] = useState<string>();
+  useEffect(() => {
+    setPrevPath('/'); // 이전 라우터가 없으면 홈으로 세팅
+    // const storage = globalThis?.sessionStorage;
+    // if (!storage) return;
+    // else {
+    //   console.log(storage.getItem('prevPath'))
+    //   if (storage.getItem('prevPath')) {
+    //     const _prevPath = storage.getItem('prevPath') as string;
+    //     setPrevPath(_prevPath); // 이전 라우터가 있으면 그걸로 세팅
+    //   } else {
+    //     setPrevPath('/'); // 이전 라우터가 없으면 홈으로 세팅
+    //   }
+    // }
+  }, []);
+
   return (
     <Wrapper>
-      {backRoute && (
+      {isBack && (
         <div id="back-btn-wrapper">
-          <Link href={backRoute} passHref>
+          <Link href={prevPath || "/"} passHref>
             <a>
               <IoIosArrowBack size={30} color={'#595959'} />
             </a>
@@ -46,10 +64,10 @@ const Wrapper = styled.div`
     }
     #sub-title {
       color: #888;
+      line-height: 1.5rem;
+      word-break: keep-all;
     }
   }
 `;
 
 export default Title;
-
-// 서비스 footer 작성필요

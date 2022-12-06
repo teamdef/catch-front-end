@@ -12,9 +12,7 @@ const Header = () => {
   
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
   const [resizeHeader, setResizeHeader] = useState<boolean>(false);
-  const goHome = () => {
-    Router.push('/');
-  }
+
   const openSideBar = () => {
     setSideBarOpen(true);
   };
@@ -77,7 +75,7 @@ interface HeaderProps {
 const HeaderContent = styled.div<HeaderProps>`
   display: flex;
   width: 100%;
-  height: ${(props) => (props.resize ? '60px' : '100px')};
+  height: ${(props) => (props.resize ? '60px' : '80px')};
   justify-content: space-between;
   align-items: center;
   transition:ease-in-out 0.2s;

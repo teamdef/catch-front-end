@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { ChangeEvent, useState } from 'react';
-import { ThumbnailChangeApi } from 'pages/api/test';
+import { QuizThumbnailChangeApi } from 'pages/api/quiz';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { MdPhotoCamera, MdDelete } from 'react-icons/md';
 import {Loading} from 'components/common'
@@ -36,7 +36,7 @@ const ThumbnailChange = ({ url, probsetId }: ThumbnailChangeProps) => {
       const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
         type: _compressed.type,
       }); // 압축 이미지 대입
-      if ((await ThumbnailChangeApi(probsetId as string, _imgFile)) === 200) {
+      if ((await QuizThumbnailChangeApi(probsetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
         setIsLoading(false);

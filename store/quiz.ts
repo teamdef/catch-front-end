@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // user스토어의 초기값을 설정
 const initialState: ProblemSetTypes = {
   setTitle: '',
+  description:'',
   problems: [],
 };
 
@@ -18,6 +19,10 @@ const quizSlice = createSlice({
       const { setTitle } = action.payload;
       state.setTitle = setTitle;
     },
+    saveProblemDescriptionAction: (state: ProblemSetTypes, action: PayloadAction<{ description: string }>) => {
+      const { description } = action.payload;
+      state.description = description;
+    },
     saveProblemsAction: (state: ProblemSetTypes, action: PayloadAction<{ problems: ProblemTypes[] }>) => {
       const { problems } = action.payload;
       state.problems = problems;
@@ -25,6 +30,6 @@ const quizSlice = createSlice({
   },
 });
 
-export const { saveProblemSetTitleAction, saveProblemsAction } = quizSlice.actions;
+export const { saveProblemSetTitleAction, saveProblemsAction, saveProblemDescriptionAction } = quizSlice.actions;
 
 export default quizSlice.reducer;
