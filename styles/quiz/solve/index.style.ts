@@ -82,6 +82,7 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #fff;
 `;
 
 export const Description = styled.div`

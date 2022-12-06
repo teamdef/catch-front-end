@@ -7,13 +7,12 @@ import { saveCommentSetAction } from 'store/comment';
 
 
 const Comment = () => {
-  const [text, Setter, clearFunction, textHandler] = useInput<string>('');
+  const [text, , , textHandler] = useInput<string>('');
   const dispatch = useDispatch();
-
+  // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
   const { comments } = useSelector((state: RootState) => state.comment);
-  console.log(comments);
   const postComment = async (_comm: string) => {
     if (_comm) {
       await axios
@@ -23,6 +22,7 @@ const Comment = () => {
           probsetId: problemSetId,
         })
         .then((res) => {
+          console.log(res);
           dispatch(saveCommentSetAction({ comments: res.data }));
         });
     }

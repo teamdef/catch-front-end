@@ -14,7 +14,7 @@ import { saveSolveProblemSetAction } from 'store/quiz_solve';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { solveSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
+  const { solveProblemSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
   const [thumbnail, setThumbnail] = useState('');
   const [maker, setMaker] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const Page: NextPageWithLayout = () => {
       <S.Container>
         <Logo />
         <S.QuizInfo thumbnail={thumbnail}>
-          <S.QuizTitle>{solveSetTitle}</S.QuizTitle>
+          <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
         </S.QuizInfo>
         <S.InnerContainer>
           <S.Description>{description === '' ? '해당 퀴즈의 설명이 없습니다!' : description}</S.Description>
@@ -82,7 +82,7 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare nickName={maker} set_title={solveSetTitle} url={`quiz/solve/${id}`} thumbnail={thumbnail} />
+            <SNSShare nickName={maker} set_title={solveProblemSetTitle} url={`quiz/solve/${id}`} thumbnail={thumbnail} />
           </S.SNSShareContainer>
           <S.BestCommentContainer>
             <div id="title">베스트 한줄평 👍</div>

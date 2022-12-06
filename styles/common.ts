@@ -10,8 +10,6 @@ export const MainButton = styled.button`
   height: 50px;
   border: none;
   border-radius: 2rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
   background-color: #ff4d57;
   color: #fff;
   box-shadow: 0 4px #c4363e;

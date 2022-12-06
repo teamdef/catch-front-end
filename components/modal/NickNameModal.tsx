@@ -24,6 +24,7 @@ const NickNameModal = ({ setLoading }: any) => {
       // 로그인한 유저의 경우 유저아이디를 추가로 전달
       if (isLoggedin) {
         LoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId, id).then((res) => {
+          dispatch(saveCommentSetAction(res.data.comments))
           setLoading(false);
           Router.push(`/quiz/solve/${problemSetId}/result/${id}`);
         }).catch((error)=> {
@@ -34,6 +35,8 @@ const NickNameModal = ({ setLoading }: any) => {
         // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
         NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId)
           .then((res)=> {
+            console.log(res);
+            dispatch(saveCommentSetAction(res.data.comments))
             setLoading(false);
             Router.push(`/quiz/solve/${problemSetId}/result/${res.data.solverId}`);
           })
