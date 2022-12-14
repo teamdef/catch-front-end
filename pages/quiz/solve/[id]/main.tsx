@@ -1,22 +1,17 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
-import * as S from 'styles/quiz/solve/main.style'
+import * as S from 'styles/quiz/solve/main.style';
 import { AppLayout } from 'components/layout';
-import { Loading,Logo, SwipeAniIcon } from 'components/common';
+import { Loading, Logo, SwipeAniIcon } from 'components/common';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { saveSolveAnswersAction } from 'store/quiz_solve';
-import { saveSolveUserScoreAction } from 'store/user_solve'
+import { saveSolveUserScoreAction } from 'store/user_solve';
 import { BiChevronRight } from 'react-icons/bi';
 import { useModal } from 'hooks';
 import { MainButton } from 'styles/common';
 import { NickNameModal } from 'components/modal';
-// swiper
-import { Pagination, EffectFade } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
 
 const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
@@ -51,50 +46,48 @@ const Page: NextPageWithLayout = () => {
   };
 
   const QuizList = solveProblems.map((item: any, i: number) => (
-    <SwiperSlide key={i}>
-      <S.QuizSolveCard>
-        <S.CardTitle>{item.prob_title}</S.CardTitle>
-        {item.is_img ? (
-          <S.ChoiceWrapper id="choice-img-wrapper">
-            {item.choices.map((_choice: any, j: number) => (
-              <S.ChoiceItem key={j} className="choice-item" id="choice-img-item">
-                <input
-                  type="radio"
-                  id={_choice.id}
-                  name={`choice_${i}`}
-                  value={_choice.cho_img}
-                  onChange={() => {
-                    answers[i] = _choice.cho_img;
-                    onChange();
-                  }}
-                />
-                <label htmlFor={_choice.id}>
-                  <img src={_choice.cho_img} />
-                </label>
-              </S.ChoiceItem>
-            ))}
-          </S.ChoiceWrapper>
-        ) : (
-          <S.ChoiceWrapper>
-            {item.choices.map((_choice: any, j: number) => (
-              <S.ChoiceItem key={j} className="choice-item" id="choice-item-txt">
-                <input
-                  type="radio"
-                  id={_choice.id}
-                  name={`choice_${i}`}
-                  value={_choice.cho_txt}
-                  onChange={() => {
-                    answers[i] = _choice.cho_txt;
-                    onChange();
-                  }}
-                />
-                <label htmlFor={_choice.id}>{_choice.cho_txt}</label>
-              </S.ChoiceItem>
-            ))}
-          </S.ChoiceWrapper>
-        )}
-      </S.QuizSolveCard>
-    </SwiperSlide>
+    <S.QuizSolveCard key={i}>
+      <S.CardTitle>{item.prob_title}</S.CardTitle>
+      {item.is_img ? (
+        <S.ChoiceWrapper id="choice-img-wrapper">
+          {item.choices.map((_choice: any, j: number) => (
+            <S.ChoiceItem key={j} className="choice-item" id="choice-img-item">
+              <input
+                type="radio"
+                id={_choice.id}
+                name={`choice_${i}`}
+                value={_choice.cho_img}
+                onChange={() => {
+                  answers[i] = _choice.cho_img;
+                  onChange();
+                }}
+              />
+              <label htmlFor={_choice.id}>
+                <img src={_choice.cho_img} />
+              </label>
+            </S.ChoiceItem>
+          ))}
+        </S.ChoiceWrapper>
+      ) : (
+        <S.ChoiceWrapper>
+          {item.choices.map((_choice: any, j: number) => (
+            <S.ChoiceItem key={j} className="choice-item" id="choice-item-txt">
+              <input
+                type="radio"
+                id={_choice.id}
+                name={`choice_${i}`}
+                value={_choice.cho_txt}
+                onChange={() => {
+                  answers[i] = _choice.cho_txt;
+                  onChange();
+                }}
+              />
+              <label htmlFor={_choice.id}>{_choice.cho_txt}</label>
+            </S.ChoiceItem>
+          ))}
+        </S.ChoiceWrapper>
+      )}
+    </S.QuizSolveCard>
   ));
   const [openModal, closeModal, RenderModal] = useModal({
     escClickable: false,
@@ -104,34 +97,26 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Container>
-      <Logo/>
-      <S.QuizSolveContent>
-        <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
-        <Swiper spaceBetween={0} slidesPerView={1} pagination={true} modules={[Pagination, EffectFade]} effect="fade">
-          {QuizList}
-        </Swiper>
-      </S.QuizSolveContent>
+      <Logo />
+      <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>
-        {choice ? (
-          <MainButton
-          style={{width: '100%', margin:'0'}}
-            onClick={() => {
-              console.log(matchList);
-              dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
-              dispatch(
-                saveSolveUserScoreAction({
-                  solveUserScore: matchList.filter((element: any) => undefined === element).length,
-                }),
-              );
-              openModal();
-            }}
-          >
-            <span>결과 확인</span>
-            <BiChevronRight size="35" />
-          </MainButton>
-        ) : (
-          <SwipeAniIcon />
-        )}
+        <MainButton
+          className={choice ? 'on' : ''}
+          style={{ width: '100%', margin: '0' }}
+          onClick={() => {
+            console.log(matchList);
+            dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));
+            dispatch(
+              saveSolveUserScoreAction({
+                solveUserScore: matchList.filter((element: any) => undefined === element).length,
+              }),
+            );
+            openModal();
+          }}
+        >
+          <span>결과 확인</span>
+          <BiChevronRight size="35" />
+        </MainButton>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
       </S.QuizSolveBottom>
