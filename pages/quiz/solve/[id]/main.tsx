@@ -102,7 +102,7 @@ const Page: NextPageWithLayout = () => {
       <S.QuizSolveBottom>
         <MainButton
           className={choice ? 'on' : ''}
-          style={{ width: '100%', margin: '0' }}
+          style={{ width: '90%', margin: '0' }}
           onClick={() => {
             console.log(matchList);
             dispatch(saveSolveAnswersAction({ solveAnswers: matchList }));

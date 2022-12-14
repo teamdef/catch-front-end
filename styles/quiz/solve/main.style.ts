@@ -148,7 +148,8 @@ export const QuizSolveBottom = styled.div`
     }
   }
   position: fixed;
-  width: 90%;
+  max-width: 500px;
+  width: 100%;
   top: 100%;
   display: flex;
   flex-direction: column;
