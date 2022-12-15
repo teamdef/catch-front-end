@@ -19,3 +19,4 @@ export { default as SkeletonQuizCard } from './SkeletonQuizCard';
 export { default as MatchNote } from './MatchNote';
 export { default as RankBoard } from './RankBoard';
 export { default as Comment } from './Comment';
+export { default as RankingBoard } from './RankingBoard'; 
