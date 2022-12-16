@@ -10,14 +10,12 @@ import type { NextPageWithLayout } from 'pages/_app';
 import { MatchNote, Logo, Comment } from 'components/common';
 
 const Page: NextPageWithLayout = () => {
-  const { comments } = useSelector((state: RootState) => state.comment);
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { solveProblems } = useSelector((state: RootState) => state.solve);
 
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
-  console.log(solveUserName);
-  console.log(comments);
+  
   return (
     <S.Container>
       <Logo />

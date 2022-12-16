@@ -2,29 +2,30 @@ import axios from 'axios';
 import { useInput } from 'hooks';
 import styled from 'styled-components';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { CommentSaveApi,CommentListApi } from 'pages/api/quiz';
+import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import { useEffect, useState } from 'react';
 const Comment = () => {
-  const [text, , , textHandler] = useInput<string>('');
-  const dispatch = useDispatch();
+  const [text, , clearFunction, textHandler] = useInput<string>('');
   // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
-  const [comments, setComments ] = useState<string[]>([]);
-  useEffect(()=> {
-    CommentListApi(problemSetId).then((res)=> {
+  const [comments, setComments] = useState<string[]>([]);
+
+  useEffect(() => {
+    CommentListApi(problemSetId).then((res) => {
       setComments(res.data);
       console.log(res);
     });
-  },[])
+  }, []);
+  
   const saveComment = async (_comm: string) => {
     if (_comm) {
-      CommentSaveApi(solveUserName, text, problemSetId)
-        .then((res) => {
-          setComments(res.data);
-        });
+      clearFunction;
+      CommentSaveApi(solveUserName, text, problemSetId, '').then((res) => {
+        setComments(res.data);
+      });
     }
   };
   console.log(comments);

@@ -17,7 +17,7 @@ const Page: NextPageWithLayout = () => {
   const [choice, setChoice] = useState<Boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const dispatch = useDispatch();
-  const { solveProblemSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
+  const { solveProblems } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
   let answers: string[] = userAnswers;
