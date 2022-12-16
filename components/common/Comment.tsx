@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
-import { saveCommentSetAction } from 'store/comment';
 import { CommentSaveApi,CommentListApi } from 'pages/api/quiz';
 import { useEffect, useState } from 'react';
 const Comment = () => {

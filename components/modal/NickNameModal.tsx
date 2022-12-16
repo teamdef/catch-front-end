@@ -4,7 +4,6 @@ import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
-import { saveCommentSetAction } from 'store/comment';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/api/quiz';
