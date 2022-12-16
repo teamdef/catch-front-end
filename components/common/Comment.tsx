@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { saveCommentSetAction } from 'store/comment';
-
-
+import { CommentPostApi } from 'pages/api/quiz';
 const Comment = () => {
   const [text, , , textHandler] = useInput<string>('');
   const dispatch = useDispatch();
@@ -13,14 +12,10 @@ const Comment = () => {
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
   const { comments } = useSelector((state: RootState) => state.comment);
+  console.log(comments);
   const postComment = async (_comm: string) => {
     if (_comm) {
-      await axios
-        .post(`${process.env.NEXT_PUBLIC_BACKEND}/comment`, {
-          nickname: solveUserName,
-          content: _comm,
-          probsetId: problemSetId,
-        })
+      CommentPostApi(solveUserName, text, problemSetId)
         .then((res) => {
           console.log(res);
           dispatch(saveCommentSetAction({ comments: res.data }));
@@ -29,40 +24,44 @@ const Comment = () => {
   };
   return (
     <Container>
-      <Title>
-        한줄평 남기기 <span style={{ fontSize: '.7rem' }}>{comments.length}</span>
-      </Title>
-      <InputBox>
-        <span>({text.length}/50)</span>
-        <input
-          type="text"
-          value={text}
-          onChange={textHandler}
-          id="comment-input"
-          maxLength={50}
-          placeholder="나도 한마디.."
-        />
-        <button onClick={() => postComment(text)}>등록</button>
-      </InputBox>
-      <CommentBoard>
-        {comments && comments.length !== 0 ? (
-          comments.map((item: any, index: number) => (
-            <CommentBox key={index}>
-              <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
-              <div>
-                <span className="nickname">{item.nickname}</span>
-                <p>{item.content}</p>
+      {comments && (
+        <>
+          <Title>
+            한줄평 남기기 <span style={{ fontSize: '.7rem' }}>{comments.length}</span>
+          </Title>
+          <InputBox>
+            <span>({text.length}/50)</span>
+            <input
+              type="text"
+              value={text}
+              onChange={textHandler}
+              id="comment-input"
+              maxLength={50}
+              placeholder="나도 한마디.."
+            />
+            <button onClick={() => postComment(text)}>등록</button>
+          </InputBox>
+          <CommentBoard>
+            {comments && comments.length !== 0 ? (
+              comments.map((item: any, index: number) => (
+                <CommentBox key={index}>
+                  <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
+                  <div>
+                    <span className="nickname">{item.nickname}</span>
+                    <p>{item.content}</p>
+                  </div>
+                  <span className="date">{item.created_at.substr(0, item.created_at.indexOf('T'))}</span>
+                </CommentBox>
+              ))
+            ) : (
+              <div className="empty">
+                <span>아직 한줄평이 없어요 !</span>
               </div>
-              <span className="date">{item.created_at.substr(0, item.created_at.indexOf('T'))}</span>
-            </CommentBox>
-          ))
-        ) : (
-          <div className="empty">
-            <span>아직 한줄평이 없어요 !</span>
-          </div>
-        )}
-        {/* <button className="more">더보기</button> */}
-      </CommentBoard>
+            )}
+            {/* <button className="more">더보기</button> */}
+          </CommentBoard>
+        </>
+      )}
     </Container>
   );
 };
