@@ -100,8 +100,12 @@ export const QuizDataFetchApi = async (probsetId: string): Promise<AxiosResponse
 // 풀이 - 퀴즈 풀이 정보 저장하기
 export const LoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string,userId:string) => {
     return notAuthAxios.post(`/solver`, { nickName, score, probsetId, userId });
-
 };
+
 export const NotLoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string) => {
   return notAuthAxios.post(`/solver`, { nickName, score, probsetId });
+};
+// 한줄평 등록
+export const CommentPostApi = async (nickName: string, content: string, probsetId: string) => {
+  return notAuthAxios.post(`/comment`, { nickName, content, probsetId });
 };
