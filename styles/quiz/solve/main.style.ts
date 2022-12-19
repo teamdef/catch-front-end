@@ -160,7 +160,7 @@ export const QuizSolveBottom = styled.div`
     transform: translateY(0);
     transition: transform .5s;
     &.on {
-      transform: translateY(-60px);
+      transform: translateY(-70px);
     }
     span {
       padding-left: 10px;

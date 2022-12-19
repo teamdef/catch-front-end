@@ -114,8 +114,7 @@ const Page: NextPageWithLayout = () => {
             openModal();
           }}
         >
-          <span>결과 확인</span>
-          <BiChevronRight size="35" />
+          결과확인
         </MainButton>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
