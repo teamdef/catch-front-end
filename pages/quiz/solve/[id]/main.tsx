@@ -47,7 +47,11 @@ const Page: NextPageWithLayout = () => {
 
   const QuizList = solveProblems.map((item: any, i: number) => (
     <S.QuizSolveCard key={i}>
-      <S.CardTitle>{item.prob_title}</S.CardTitle>
+      <div id="quiz-num-flag">
+        <img id="flag-icon" src="/assets/img/flag_icon.svg" />
+        <div id="quiz-num">{i + 1}</div>
+      </div>
+      <div id="quiz-title">{item.prob_title}</div>
       {item.is_img ? (
         <S.ChoiceWrapper id="choice-img-wrapper">
           {item.choices.map((_choice: any, j: number) => (
@@ -98,7 +102,9 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Logo />
-      <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
+      <S.QuizSolveContent>
+        {QuizList}
+      </S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton
           className={choice ? 'on' : ''}

@@ -17,7 +17,7 @@ import { QuizUploadApi } from 'pages/api/quiz';
 import { Logo, Loading } from 'components/common';
 import { AppLayout } from 'components/layout';
 /* 스타일 코드 */
-import * as S from 'styles/quiz/create/test.style';
+import * as S from 'styles/quiz/create/index.style';
 import { MainButton } from 'styles/common';
 /* react-icons */
 import { MdClear, MdOutlineAdd, MdCheck, MdClose } from 'react-icons/md';
@@ -51,21 +51,21 @@ interface ThumbnailObjectType {
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false); // 로딩중 표시
 
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
   const { setTitle, problems, description } = useSelector((state: RootState) => state.quiz);
   const { id } = useSelector((state: RootState) => state.user);
-  const [_description, _setDescription] = useState<string>('');
-  // 문제를 저장할 배열
+
+  /* 페이지 렌더링 용 input 핸들러 및 state */
+  const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
   const [problemList, setProblemList] = useState<ProblemTypes[]>([]); // 문제 저장 배열
   const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
+  const [_description, _setDescription] = useState<string>('');
 
+  /* 모달 관리 */
   const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
     yesTitle: '이어서',
     noTitle: '새롭게',
-
     noAction: () => {
       resetLocalProblemSet();
     },
@@ -80,15 +80,6 @@ const Page: NextPageWithLayout = () => {
       </div>
     ),
   });
-  // 주사위 버튼 누르면 실행되는 함수
-  /*const randomProblemTitle = (problemIndex: number) => {
-    const randomTitle: string = data.questions[Math.floor(Math.random() * data.questions.length)];
-    let temp = JSON.parse(JSON.stringify(problemList));
-    // spread 연산자와 Object.assign은 1depth 까지만 깊은 복사가 되며, 2depth 부터는 얕은 복사가 된다.
-    // 완전히 복사하기 위해서는 JSON 을 이용하면 된다
-    temp[problemIndex].problemTitle = randomTitle;
-    setProblemList(temp);
-  };*/
 
   // 퀴즈 세트 설명 textarea 핸들러
   const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {

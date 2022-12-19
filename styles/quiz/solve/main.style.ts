@@ -46,40 +46,55 @@ export const QuizSolveContent = styled.div`
     }
   }
   margin-top: 75px;
+  margin-bottom:120px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 export const QuizSolveCard = styled.div`
-  width: 100%;
-  border: 1px solid #ffcaca;
-  border-radius: 25px;
-  background-color: white;
   padding: 0 3%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin: 20% 0;
+  border: solid 1px #ffa5aa50;
+  width: 100%;
+  min-height: 400px;
+  border-radius: 20px;
+  margin-top: 40px;
+  background-color: #fff;
 
   span {
     color: #aaa;
     font-size: 0.8rem;
   }
+  #quiz-num-flag {
+    display: block;
+    position: relative;
+    left: -165px;
+    text-align: center;
+    #quiz-num {
+      position: absolute;
+      width:34px;
+      top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      text-align: center;
+    }
+  }
+  #quiz-title {
+    color: #6a5050;
+    font-family: 'Noto Sans KR';
+    width: 80%;
+    font-size: 1.3rem;
+    text-align: center;
+    margin: 0 auto;
+    line-height: 1.7rem;
+    margin-top: 0.5rem;
+  }
 `;
-export const CardTitle = styled.h2`
-  position: relative;
-  display: block;
-  text-align: center;
-  width: 100%;
-  transform: translateY(-50%);
-  padding: 20px 28px;
-  font-weight: normal;
-  border-radius: 24px;
-  background-color: #ff4d57;
-  font-size: 1rem;
-  color: #fff;
-`;
+
 export const ChoiceWrapper = styled.div`
   position: relative;
   width: 100%;
@@ -111,7 +126,7 @@ export const ChoiceItem = styled.div`
     display: none;
   }
   input:checked + label {
-    color: #fff;
+    color: #244e10;
     background-color: #aad775;
   }
   &#choice-img-item {
@@ -155,10 +170,10 @@ export const QuizSolveBottom = styled.div`
   flex-direction: column;
   justify-content: center;
   button {
-    position:relative;
+    position: relative;
     display: flex;
     transform: translateY(0);
-    transition: transform .5s;
+    transition: transform 0.5s;
     &.on {
       transform: translateY(-70px);
     }
