@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { AppLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import { RootState } from 'store';
 import type { NextPageWithLayout } from 'pages/_app';
 import { MatchNote, Logo, Comment } from 'components/common';

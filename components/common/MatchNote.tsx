@@ -4,45 +4,45 @@ import { useSelector } from 'react-redux';
 import { Logo } from 'components/common';
 import { MainButton } from 'styles/common';
 const MatchNote = ({ setOpenMatch }: any) => {
-  const { solveAnswers } = useSelector((state: RootState) => state.solve);
+  const { solveAnswers, solveProblems } = useSelector((state: RootState) => state.solve);
+
+  console.log('유저 답안지', solveAnswers);
+  console.log('문제집', solveProblems);
   return (
     <MatchEl>
       <Logo />
       <h1>오답노트📝</h1>
-      {solveAnswers.map((item: any, index: number) => {
-        if (item != undefined) {
+      {solveProblems.map((item: any, i: number) => {
+        // 유저 오답정보에 값이 있으면 출력하도록
+        if (solveAnswers[i]) {
           return (
-            <MatchCard key={index}>
-              <h2>
-                <span style={{ fontWeight: 'normal' }}>
-                  {index + 1}. {item.title}
-                </span>
-              </h2>
-              {item.correct_answer.includes('catchmeimages') ? (
-                <MatchImg>
-                  <div className='my-img'>
-                    <span>내가 고른 답</span>
-                    <img src={item.user_answer} />
-                  </div>
-                  <div className='correct-img'>
-                    <span >정답</span>
-                    <img src={item.correct_answer} />
-                  </div>
-                </MatchImg>
+            <QuizSolveCard key={i}>
+              <CardNumber>{i + 1}</CardNumber>
+              <CardTitle>{item.prob_title}</CardTitle>
+              {item.is_img ? (
+                <ChoiceWrapper id="choice-img-wrapper">
+                  {item.choices.map((_choice: any, j: number) => (
+                    <ChoiceItem key={j} className="choice-item" id="choice-img-item">
+                      <img src={_choice.cho_img} />
+                    </ChoiceItem>
+                  ))}
+                </ChoiceWrapper>
               ) : (
-                <MatchTxt>
-                  <span className='my-txt'>
-                    내가 고른 답 : {item.user_answer}
-                  </span>
-                  <span className='correct-txt'>
-                    정답 : {item.correct_answer}
-                  </span>
-                </MatchTxt>
+                <ChoiceWrapper>
+                  {item.choices.map((_choice: any, j: number) => (
+                    <ChoiceItem key={j} className="choice-item" id="choice-item-txt">
+                      <div id={_choice.id}>
+                        <span>{_choice.cho_txt}</span>
+                      </div>
+                    </ChoiceItem>
+                  ))}
+                </ChoiceWrapper>
               )}
-            </MatchCard>
+            </QuizSolveCard>
           );
         }
       })}
+
       <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
     </MatchEl>
   );
@@ -70,82 +70,80 @@ const MatchEl = styled.div`
     bottom: 20px;
   }
 `;
-const MatchCard = styled.div`
+const QuizSolveCard = styled.div`
   position: relative;
+  width: 100%;
+  border: 1px solid #ffcaca;
+  border-radius: 25px;
+  background-color: white;
+  padding: 0 3%;
   display: flex;
-  margin-bottom: 20%;
   flex-direction: column;
-  > div {
-    display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin: 20% 0;
+`;
+const CardNumber = styled.span`
+  position: absolute;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 14px;
+  width: 35px;
+  height: 45px;
+  border: solid 17px #ffa5aa;
+  border-bottom: solid 10px #fff;
+  background-color: #ffa5aa;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+`;
+const CardTitle = styled.h2`
+  position: relative;
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin-top: 15%;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #555;
+`;
+const ChoiceWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10% 0;
+  &#choice-img-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 5px));
+    grid-template-rows: repeat(2, 150px);
+  }
+`;
+const ChoiceItem = styled.div`
+  position: relative;
+  width: 80%;
+  padding: 1.25rem 1.25rem 1.25rem 1.75rem;
+  font-size: 1rem;
+  text-align: center;
+  display: block;
+  border-radius: 20px;
+  background-color: #f4f4f4;
+  &#choice-img-item {
     width: 100%;
-    justify-content: space-around;
-  }
-  h2 {
-    position: relative;
-    margin-top: 10%;
-    margin-bottom: 5%;
-    span {
-      position: relative;
-      display:block;
-      width: 80%;
-      padding: 12px 20px;
-      font-weight: normal;
-      border-radius: 0px 20px 20px 20px;
-      background-color: #ff4d57;
-      font-size: .9rem;
-      color: #fff;
-
-    }
-  }
-`;
-
-const MatchImg = styled.div`
-  position:relative;
-  display:flex;
-  flex-direction: column;
-  align-items: end;
-  gap: 10px;
-  div {
-    width: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-items: top;
-    align-items: center;
-    padding: 10px 0;
-    border-radius: 20px 0px 20px 20px;
-    span {
-      margin-bottom: 5px;
-    }
-    &.my-img {
-      background-color: #FFEFEF;
-      color: #FF4D57;
-    }
-    &.correct-img {
-      background-color: #AAD775;
-      color: #fff;
-    }
+    height: 100%;
+    padding: 0;
+    border-radius: 1rem;
+    overflow: hidden;
     img {
-      display: block;
-      width: 70%;
-      border-radius: 20px;
-    }
-  }
-`;
-const MatchTxt = styled.div`
-  flex-direction: column;
-  align-items: end;
-  gap: 10px;
-  span {
-    padding: 12px 20px;
-    border-radius: 20px 0px 20px 20px;
-    font-size: .9rem;
-    &.my-txt {
-      background-color: #FFEFEF;
-      color: #FF4D57;
-    }
-    &.correct-txt {
-      background-color: #AAD775;
-      color: #fff;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 `;

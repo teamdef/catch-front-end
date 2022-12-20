@@ -23,7 +23,7 @@ const solveSlice = createSlice({
     },
     saveSolveAnswersAction: (
       state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveAnswers: SolveAnswerTypes[] }>,
+      action: PayloadAction<{ solveAnswers: string[] }>,
     ) => {
       const { solveAnswers } = action.payload;
       state.solveAnswers = solveAnswers;
