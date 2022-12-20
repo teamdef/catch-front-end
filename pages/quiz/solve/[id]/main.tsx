@@ -48,8 +48,6 @@ const Page: NextPageWithLayout = () => {
                 value={_choice.cho_img}
                 onChange={() => {
                   answers[i] = _choice.id;
-      console.log(userAnswers);
-
                   onChange();
                 }}
               />

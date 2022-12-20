@@ -135,9 +135,18 @@ export const ChoiceItem = styled.div`
     }
     input:checked + label {
       color: #fff;
-      background-color: #f4f4f4;
-      border: 5px solid #aad775;
-      transform: scale(1.08);
+      transform: scale(1.05);
+      &::after {
+        content: '';
+        position:absolute;
+        display:block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #aad775;
+        opacity: .5;
+      }
     }
     img {
       position: relative;
