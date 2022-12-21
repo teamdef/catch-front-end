@@ -136,6 +136,19 @@ export const ChoiceItem = styled.div`
     input:checked + label {
       color: #fff;
       transform: scale(1.05);
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        display: block;
+        width: 80px;
+        height: 80px;
+        background: url('/assets/img/check-mark.png') center no-repeat;
+        background-size: cover;
+        z-index: 1;
+      }
       &::after {
         content: '';
         position:absolute;
