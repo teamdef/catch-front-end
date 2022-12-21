@@ -11,7 +11,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
   return (
     <MatchEl>
       <Logo />
-      <h1>오답노트📝</h1>
+      <h1>정답 확인📝</h1>
       {solveProblems.map((item: any, i: number) => {
         return (
           <QuizSolveCard key={i} className={solveAnswers[i] ? 'wrong' : ''}>
@@ -83,7 +83,7 @@ const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin: 20% 0;
+  margin-top:40px;
   &.wrong {
     opacity: 1;
   }
@@ -208,6 +208,7 @@ const MatchBottom = styled.div`
   position: relative;
   display: flex;
   padding-bottom: 20px;
+  margin-top:80px;
   gap: 10px;
   button {
     width: 50%;

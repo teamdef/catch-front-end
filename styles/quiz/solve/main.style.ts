@@ -21,12 +21,17 @@ export const Container = styled.div`
   }
 `;
 export const QuizTitle = styled.h1`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
   text-align: center;
   font-weight: normal;
-  font-size: 24px;
+  color: #6a5050;
+  font-family: 'Noto Sans KR';
+  width: 80%;
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  margin: 4rem auto 1rem auto;
 `;
+
+
 export const QuizSolveContent = styled.div`
   @keyframes Bounce {
     0% {
@@ -46,6 +51,7 @@ export const QuizSolveContent = styled.div`
     }
   }
   margin-top: 75px;
+  margin-bottom:120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,34 +67,9 @@ export const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin: 20% 0;
+  margin-top:40px;
 `;
-export const CardNumber = styled.span`
-  position: absolute;
-  left: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 14px;
-  width: 35px;
-  height: 45px;
-  border: solid 17px #FFA5AA;
-  border-bottom: solid 10px #fff;
-  background-color: #FFA5AA;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #fff;
-`;
-export const CardTitle = styled.h2`
-  position: relative;
-  display: block;
-  text-align: center;
-  width: 100%;
-  margin-top: 15%;
-  font-weight: 500;
-  font-size: 1.2rem;
-  color: #555;
-`;
+
 export const ChoiceWrapper = styled.div`
   position: relative;
   width: 100%;
@@ -120,7 +101,8 @@ export const ChoiceItem = styled.div`
     display: none;
   }
   input:checked + label {
-    color: #fff;
+    color: #244e10;
+    font-weight:bold;
     background-color: #aad775;
   }
   &#choice-img-item {
@@ -191,7 +173,7 @@ export const QuizSolveBottom = styled.div`
     transform: translateY(0);
     transition: transform 0.5s;
     &.on {
-      transform: translateY(-60px);
+      transform: translateY(-70px);
     }
     span {
       font-size: 1.2rem;
@@ -199,3 +181,25 @@ export const QuizSolveBottom = styled.div`
     align-items: center;
   }
 `;
+
+
+export const CardNumber = styled.span`
+  position: absolute;
+  left: 30px;
+  @media (max-width: 500px) {
+    left: calc(100vw * 0.125);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 14px;
+  width: 35px;
+  height: 45px;
+  border: solid 17px #ffa5aa;
+  border-bottom: solid 10px #fff;
+  background-color: #ffa5aa;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+`;
+

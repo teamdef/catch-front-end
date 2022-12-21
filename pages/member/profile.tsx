@@ -43,6 +43,7 @@ const Profile: NextPageWithLayout = () => {
   const [error, setError] = useState<string | null>(null);
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  
   const _tempNicknameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTempNickname(e.target.value);
   };

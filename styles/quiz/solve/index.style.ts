@@ -83,6 +83,7 @@ export const InnerContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: #fff;
+  padding-bottom:100px;
 `;
 
 export const Description = styled.div`
@@ -90,6 +91,7 @@ export const Description = styled.div`
   line-height: 1.5rem;
   text-align: center;
   width: 90%;
+  margin-top:2rem;
 `;
 export const QuizMakerBlock = styled.div`
   width: 100%;
@@ -165,12 +167,23 @@ export const BestCommentContainer = styled.div`
   }
 `;
 export const ButtonWrap = styled.div`
-/*
+  /*
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
   */
-  width:100%;
-  padding-top:2rem;
+  position: fixed;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom:30px;
+  width: 450px;
+  z-index:10;
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
+
+  padding-top: 2rem;
 `;

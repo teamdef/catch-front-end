@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
       </S.ScoreArea>
       <S.ButtonArea>
         <FlatButton onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>나도 퀴즈 만들기</FlatButton>
-        <FlatButton onClick={() => setOpenMatch(true)}>오답 노트</FlatButton>
+        <FlatButton onClick={() => setOpenMatch(true)}>정답 확인</FlatButton>
       </S.ButtonArea>
       <Comment />
       {openMatch && <MatchNote setOpenMatch={setOpenMatch} />}

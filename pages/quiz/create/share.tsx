@@ -1,18 +1,24 @@
+/* react, next 관련 */
 import { ReactElement, useState, ChangeEvent, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import * as S from 'styles/quiz/create/share.style';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import { SNSShare} from 'components/common';
-import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
-import { HiOutlineShare } from 'react-icons/hi';
-import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { QuizThumbnailChangeApi } from 'pages/api/quiz';
-import { MainButton } from 'styles/common';
+import { useRouter } from 'next/router';
+/* redux 관련 */
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-// next.js 위한 라이브러리 및 타입
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+/* 라이브러리 */
+import { AppLayout } from 'components/layout';
+import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+/* 통신 */
+import { QuizThumbnailChangeApi } from 'pages/api/quiz';
+/* 컴포넌트 */
+import { SNSShare } from 'components/common';
+/* 스타일 코드 */
+import * as S from 'styles/quiz/create/share.style';
+import { MainButton } from 'styles/common';
+/* react-icons */
+import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
+import { HiOutlineShare } from 'react-icons/hi';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -71,7 +77,7 @@ const Page: NextPageWithLayout = () => {
     //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
-  
+
   useEffect(() => {
     if (!router.isReady) return;
     setThumbnailURL(router?.query?.returnThumb as string);
