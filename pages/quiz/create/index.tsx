@@ -334,7 +334,7 @@ const Page: NextPageWithLayout = () => {
   // 퀴즈 세트 설명 변경 사항 바로 redux에 저장
   useEffect(() => {
     dispatch(saveProblemDescriptionAction({ description: _description }));
-  }, [title]);
+  }, [_description]);
   // 퀴즈 세트 문항 변경 사항 바로 redux에 저장
   useEffect(() => {
     dispatch(saveProblemsAction({ problems: problemList }));
@@ -363,7 +363,7 @@ const Page: NextPageWithLayout = () => {
             </S.TitleInput>
           </div>
           <div id="description-input-wrapper">
-            <div id="title">퀴즈에 대한 설명을 적어보세요! ({description.length}/100)</div>
+            <div id="title">퀴즈에 대한 설명을 적어보세요! ({_description.length}/100)</div>
             <textarea
               value={_description}
               onChange={_descriptionHandler}
@@ -376,10 +376,7 @@ const Page: NextPageWithLayout = () => {
           {problemList.map((problem, problemIndex) => {
             return (
               <S.QuizCreateCard>
-                <div id="quiz-num-flag">
-                  <img id="flag-icon" src="/assets/img/flag_icon.svg" />
-                  <div id="quiz-num">{problemIndex + 1}</div>
-                </div>
+                <S.CardNumber>{problemIndex + 1}</S.CardNumber>
                 <button
                   id="quiz-delete-btn"
                   onClick={() => {

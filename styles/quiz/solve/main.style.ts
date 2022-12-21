@@ -21,12 +21,17 @@ export const Container = styled.div`
   }
 `;
 export const QuizTitle = styled.h1`
-  margin-top: 4rem;
-  margin-bottom: 4rem;
   text-align: center;
   font-weight: normal;
-  font-size: 24px;
+  color: #6a5050;
+  font-family: 'Noto Sans KR';
+  width: 80%;
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  margin: 4rem auto 1rem auto;
 `;
+
+
 export const QuizSolveContent = styled.div`
   @keyframes Bounce {
     0% {
@@ -63,36 +68,6 @@ export const QuizSolveCard = styled.div`
   border-radius: 20px;
   margin-top: 40px;
   background-color: #fff;
-
-  span {
-    color: #aaa;
-    font-size: 0.8rem;
-  }
-  #quiz-num-flag {
-    display: block;
-    position: relative;
-    left: -165px;
-    text-align: center;
-    #quiz-num {
-      position: absolute;
-      width:34px;
-      top: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      text-align: center;
-    }
-  }
-  #quiz-title {
-    color: #6a5050;
-    font-family: 'Noto Sans KR';
-    width: 80%;
-    font-size: 1.3rem;
-    text-align: center;
-    margin: 0 auto;
-    line-height: 1.7rem;
-    margin-top: 0.5rem;
-  }
 `;
 
 export const ChoiceWrapper = styled.div`
@@ -127,6 +102,7 @@ export const ChoiceItem = styled.div`
   }
   input:checked + label {
     color: #244e10;
+    font-weight:bold;
     background-color: #aad775;
   }
   &#choice-img-item {
@@ -184,3 +160,25 @@ export const QuizSolveBottom = styled.div`
     align-items: center;
   }
 `;
+
+
+export const CardNumber = styled.span`
+  position: absolute;
+  left: 60px;
+  @media (max-width: 500px) {
+    left: calc(100vw * 0.125);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 14px;
+  width: 35px;
+  height: 45px;
+  border: solid 17px #ffa5aa;
+  border-bottom: solid 10px #fff;
+  background-color: #ffa5aa;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+`;
+

@@ -47,8 +47,8 @@ export const Title = styled.div`
   margin-bottom: 10%;
 `;
 export const SubTitle = styled.div`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 700;
   text-align: center;
   line-height:1.5rem;
   margin-bottom: 20%;

@@ -148,20 +148,6 @@ export const QuizCreateCard = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  #quiz-num-flag {
-    display: block;
-    position: relative;
-    left: 20px;
-    #quiz-num {
-      position: absolute;
-      width: 34px;
-      top: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #fff;
-      text-align: center;
-    }
-  }
   #quiz-delete-btn {
     position: absolute;
     right: 20px;
@@ -178,6 +164,7 @@ export const QuizTitleInput = styled.input`
   font-size: 1.3rem;
   text-align: center;
   align-self: center;
+  margin-top:4rem;
   border: none;
   border-bottom: solid 1px #d6d6d6;
   outline: none;
@@ -380,3 +367,21 @@ export const InfoContainer = styled.div`
   margin-top: 1rem;
   margin-bottom: 2rem;
 `;
+
+export const CardNumber = styled.span`
+  position: absolute;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 14px;
+  width: 35px;
+  height: 45px;
+  border: solid 17px #ffa5aa;
+  border-bottom: solid 10px #fff;
+  background-color: #ffa5aa;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
+`;
+
