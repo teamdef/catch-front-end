@@ -36,7 +36,7 @@ const Page: NextPageWithLayout = () => {
   const QuizList = solveProblems.map((item: any, i: number) => (
     <S.QuizSolveCard key={i}>
       <S.CardNumber>{i + 1}</S.CardNumber>
-      <S.CardTitle>{item.prob_title}</S.CardTitle>
+      <S.QuizTitle>{item.prob_title}</S.QuizTitle>
       {item.is_img ? (
         <S.ChoiceWrapper id="choice-img-wrapper">
           {item.choices.map((_choice: any, j: number) => (
@@ -103,7 +103,7 @@ const Page: NextPageWithLayout = () => {
             openModal();
           }}
         >
-          <span>결과 확인</span>
+          결과확인
         </MainButton>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}

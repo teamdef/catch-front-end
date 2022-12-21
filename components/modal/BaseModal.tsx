@@ -137,6 +137,7 @@ const ModalBody = styled.div`
   text-align: center;
   padding-top:1.5rem;
   padding-bottom:2rem;
+  line-height:1.5rem;
 `;
 const ActionButtonContainer = styled.div`
   display: flex;

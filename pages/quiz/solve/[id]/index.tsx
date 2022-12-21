@@ -53,16 +53,8 @@ const Page: NextPageWithLayout = () => {
           <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
         </S.QuizInfo>
         <S.InnerContainer>
-          <S.Description>{description === '' ? '해당 퀴즈의 설명이 없습니다!' : description}</S.Description>
-          <S.ButtonWrap>
-            <MainButton
-              onClick={() => {
-                router.push(`/quiz/solve/${id}/main`);
-              }}
-            >
-              시작하기
-            </MainButton>
-          </S.ButtonWrap>
+          <S.Description>{description}</S.Description>
+
           <S.QuizInfoContainer>
             <S.QuizMakerBlock>
               <div>출제자</div>
@@ -82,12 +74,26 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare nickName={maker} set_title={solveProblemSetTitle} url={`quiz/solve/${id}`} thumbnail={thumbnail} />
+            <SNSShare
+              nickName={maker}
+              set_title={solveProblemSetTitle}
+              url={`quiz/solve/${id}`}
+              thumbnail={thumbnail}
+            />
           </S.SNSShareContainer>
           <S.BestCommentContainer>
             <div id="title">베스트 한줄평 👍</div>
           </S.BestCommentContainer>
         </S.InnerContainer>
+        <S.ButtonWrap>
+          <MainButton
+            onClick={() => {
+              router.push(`/quiz/solve/${id}/main`);
+            }}
+          >
+            시작하기
+          </MainButton>
+        </S.ButtonWrap>
       </S.Container>
     </>
   );
