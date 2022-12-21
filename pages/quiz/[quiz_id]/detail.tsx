@@ -68,13 +68,16 @@ const Page: NextPageWithLayout = () => {
   // string string[] undefined 해결방법?
   const getMyQuizData = async () => {
     const res = await MyQuizDetailApi(quiz_id as string);
-    let _detail = { ...res?.data[0] };
+
+    let { bestSolver, bestComment, probset } = res?.data;
+    let _detail = { ...probset[0] };
     _detail.solverCnt = Number(_detail.solverCnt);
     _detail.created_at = _detail.created_at.substring(0, 10);
     _detail.updated_at = _detail.updated_at.substring(0, 10);
     _detail.thumbnail = _detail.thumbnail === '' ? null : _detail.thumbnail;
     _detail.average = Number(_detail.average.substring(0, 3));
     setQuizDetailData(_detail);
+    setQuizRankingList(bestSolver);
   };
 
   const getMyQuizRanking = async () => {
@@ -93,9 +96,8 @@ const Page: NextPageWithLayout = () => {
     }
   };
     useEffect(() => {
-      console.log(quiz_id)
     getMyQuizData();
-    getMyQuizRanking();
+    //getMyQuizRanking();
   }, [router.isReady]);
 
   return (

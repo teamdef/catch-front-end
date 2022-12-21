@@ -14,9 +14,9 @@ const saveToken = (accessToken: string): Promise<boolean> =>
     const cookies = new Cookies(); // 쿠키 생성
 
     const expires_time = new Date();
-    expires_time.setDate(Date.now() + 1000 * 60 * 60 * 24); // 만료 시간 설정
+    expires_time.setDate(Date.now() + 1000 * 60 * 60 * 3); // 만료 시간 3시간
 
-    const max_age = 31536000;
+    const max_age = 60*60*3; // 만료 시간 3시간
     cookies.set('access_token', accessToken, {
       path: '/', // 쿠키에 접근할 수 있는 경로
       httpOnly: false, // document.cookie와 같이 자바스크립트에서 쿠키에 접근하는 것을 방지
