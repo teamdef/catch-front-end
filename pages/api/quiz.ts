@@ -36,7 +36,7 @@ export const QuizUploadApi = (
   problems: ProblemTypes[],
   userId: number,
   setTitle: string,
-  description:string,
+  description: string,
 ): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
     const temp = problems.map((problem: ProblemTypes) => {
@@ -97,15 +97,21 @@ export const QuizDataFetchApi = async (probsetId: string): Promise<AxiosResponse
   return notAuthAxios.get(`/loadprobset/${probsetId}`);
 };
 
-// 풀이 - 퀴즈 풀이 정보 저장하기
-export const LoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string,userId:string) => {
-    return notAuthAxios.post(`/solver`, { nickName, score, probsetId, userId });
+// 풀이 - 퀴즈 풀이 정보 저장하기 (로그인)
+export const LoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string, userId: string) => {
+  return notAuthAxios.post(`/solver`, { nickName, score, probsetId, userId });
 };
-
+// (비로그인)
 export const NotLoginUserQuizSolveSaveApi = async (nickName: string, score: number, probsetId: string) => {
   return notAuthAxios.post(`/solver`, { nickName, score, probsetId });
 };
-// 한줄평 등록
-export const CommentPostApi = async (nickName: string, content: string, probsetId: string) => {
-  return notAuthAxios.post(`/comment`, { nickName, content, probsetId });
+
+// 한줄평 - 목록 불러오기
+export const CommentListApi = async (probsetId: string) => {
+  return notAuthAxios.get(`/comment/${probsetId}`);
+};
+
+// 한줄평 - 등록하기
+export const CommentSaveApi = async (nickname: string, content: string, probsetId: string, userId:string) => {
+  return notAuthAxios.post(`/comment`, { nickname, content, probsetId, userId });
 };

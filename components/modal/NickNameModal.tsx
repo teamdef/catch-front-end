@@ -4,7 +4,6 @@ import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
-import { saveCommentSetAction } from 'store/comment';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/api/quiz';
@@ -15,7 +14,6 @@ const NickNameModal = ({ setLoading }: any) => {
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { isLoggedin, nickName, id } = useSelector((state: RootState) => state.user);
-  const { comments } = useSelector((state: RootState) => state.comment);
   const dispatch = useDispatch();
   const onClick = (_nickname: string) => {
     /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */

@@ -51,6 +51,7 @@ export const QuizSolveContent = styled.div`
   align-items: center;
 `;
 export const QuizSolveCard = styled.div`
+  position:relative;
   width: 100%;
   border: 1px solid #ffcaca;
   border-radius: 25px;
@@ -61,24 +62,32 @@ export const QuizSolveCard = styled.div`
   flex-wrap: nowrap;
   align-items: center;
   margin: 20% 0;
-
-  span {
-    color: #aaa;
-    font-size: 0.8rem;
-  }
+`;
+export const CardNumber = styled.span`
+  position: absolute;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 14px;
+  width: 35px;
+  height: 45px;
+  border: solid 17px #FFA5AA;
+  border-bottom: solid 10px #fff;
+  background-color: #FFA5AA;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #fff;
 `;
 export const CardTitle = styled.h2`
   position: relative;
   display: block;
   text-align: center;
   width: 100%;
-  transform: translateY(-50%);
-  padding: 20px 28px;
-  font-weight: normal;
-  border-radius: 24px;
-  background-color: #ff4d57;
-  font-size: 1rem;
-  color: #fff;
+  margin-top: 15%;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #555;
 `;
 export const ChoiceWrapper = styled.div`
   position: relative;
@@ -119,16 +128,38 @@ export const ChoiceItem = styled.div`
     height: 100%;
     label {
       padding: 0;
-      overflow: hidden;
       border-radius: 1rem;
+      overflow: hidden;
       width: 100%;
       height: 100%;
     }
     input:checked + label {
       color: #fff;
-      background-color: #f4f4f4;
-      border: 5px solid #aad775;
-      transform: scale(1.08);
+      transform: scale(1.05);
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        display: block;
+        width: 80px;
+        height: 80px;
+        background: url('/assets/img/check-mark.png') center no-repeat;
+        background-size: cover;
+        z-index: 1;
+      }
+      &::after {
+        content: '';
+        position:absolute;
+        display:block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #aad775;
+        opacity: .5;
+      }
     }
     img {
       position: relative;
@@ -155,15 +186,14 @@ export const QuizSolveBottom = styled.div`
   flex-direction: column;
   justify-content: center;
   button {
-    position:relative;
+    position: relative;
     display: flex;
     transform: translateY(0);
-    transition: transform .5s;
+    transition: transform 0.5s;
     &.on {
       transform: translateY(-60px);
     }
     span {
-      padding-left: 10px;
       font-size: 1.2rem;
     }
     align-items: center;

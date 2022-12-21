@@ -6,6 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  padding: 0 5%;
   min-height: 100vh;
   background-color: #fff;
   a {
@@ -19,7 +20,7 @@ export const Container = styled.div`
 export const ButtonArea = styled.div`
   position: relative;
   display: flex;
-  width: 70%;
+  width: 100%;
   justify-content: space-evenly;
   align-items: center;
 `;

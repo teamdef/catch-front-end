@@ -1,27 +1,34 @@
 import axios from 'axios';
 import { useInput } from 'hooks';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+
+import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { saveCommentSetAction } from 'store/comment';
-import { CommentPostApi } from 'pages/api/quiz';
+import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
+import { useEffect, useState } from 'react';
 const Comment = () => {
-  const [text, , , textHandler] = useInput<string>('');
-  const dispatch = useDispatch();
+  const [text, , clearFunction, textHandler] = useInput<string>('');
   // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
-  const { comments } = useSelector((state: RootState) => state.comment);
-  console.log(comments);
-  const postComment = async (_comm: string) => {
+  const [comments, setComments] = useState<string[]>([]);
+
+  useEffect(() => {
+    CommentListApi(problemSetId).then((res) => {
+      setComments(res.data);
+      console.log(res);
+    });
+  }, []);
+  
+  const saveComment = async (_comm: string) => {
     if (_comm) {
-      CommentPostApi(solveUserName, text, problemSetId)
-        .then((res) => {
-          console.log(res);
-          dispatch(saveCommentSetAction({ comments: res.data }));
-        });
+      clearFunction;
+      CommentSaveApi(solveUserName, text, problemSetId, '').then((res) => {
+        setComments(res.data);
+      });
     }
   };
+  console.log(comments);
   return (
     <Container>
       {comments && (
@@ -39,7 +46,7 @@ const Comment = () => {
               maxLength={50}
               placeholder="나도 한마디.."
             />
-            <button onClick={() => postComment(text)}>등록</button>
+            <button onClick={() => saveComment(text)}>등록</button>
           </InputBox>
           <CommentBoard>
             {comments && comments.length !== 0 ? (

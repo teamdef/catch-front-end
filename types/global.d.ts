@@ -29,12 +29,6 @@ interface SolveProblemTypes {
   solveProblemTitle: string; // 문제 제목
   solveChoices: string[]; // 객관식 항목 배열
 }
-// 풀이자 오답 노트
-interface SolveAnswerTypes {
-  solveCorrectAnswer: string; // 정답
-  solveProbleTitle: string; // 문제 제목
-  solveUserAnswer: string; // 풀이자 답
-}
 
 // 풀이자 정보
 interface SolveUserTypes {
