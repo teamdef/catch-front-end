@@ -20,7 +20,7 @@ export const Container = styled.div`
 export const ButtonArea = styled.div`
   position: relative;
   display: flex;
-  width: 70%;
+  width: 100%;
   justify-content: space-evenly;
   align-items: center;
 `;

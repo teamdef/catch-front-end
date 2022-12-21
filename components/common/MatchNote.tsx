@@ -3,47 +3,54 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { Logo } from 'components/common';
 import { MainButton } from 'styles/common';
-const MatchNote = ({ setOpenMatch }: any) => {
-  const { solveAnswers, solveProblems } = useSelector((state: RootState) => state.solve);
+import { useRouter } from 'next/router';
 
-  console.log('유저 답안지', solveAnswers);
-  console.log('문제집', solveProblems);
+const MatchNote = ({ setOpenMatch }: any) => {
+  const router = useRouter();
+  const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
   return (
     <MatchEl>
       <Logo />
       <h1>오답노트📝</h1>
       {solveProblems.map((item: any, i: number) => {
-        // 유저 오답정보에 값이 있으면 출력하도록
-        if (solveAnswers[i]) {
-          return (
-            <QuizSolveCard key={i}>
-              <CardNumber>{i + 1}</CardNumber>
-              <CardTitle>{item.prob_title}</CardTitle>
-              {item.is_img ? (
-                <ChoiceWrapper id="choice-img-wrapper">
-                  {item.choices.map((_choice: any, j: number) => (
-                    <ChoiceItem key={j} className="choice-item" id="choice-img-item">
-                      <img src={_choice.cho_img} />
-                    </ChoiceItem>
-                  ))}
-                </ChoiceWrapper>
-              ) : (
-                <ChoiceWrapper>
-                  {item.choices.map((_choice: any, j: number) => (
-                    <ChoiceItem key={j} className="choice-item" id="choice-item-txt">
-                      <div id={_choice.id}>
-                        <span>{_choice.cho_txt}</span>
-                      </div>
-                    </ChoiceItem>
-                  ))}
-                </ChoiceWrapper>
-              )}
-            </QuizSolveCard>
-          );
-        }
+        return (
+          <QuizSolveCard key={i} className={solveAnswers[i] ? 'wrong' : ''}>
+            <CardNumber>{i + 1}</CardNumber>
+            <CardTitle>{item.prob_title}</CardTitle>
+            {item.is_img ? (
+              <ChoiceWrapper id="choice-img-wrapper">
+                {item.choices.map((_choice: any, j: number) => (
+                  <ChoiceItem
+                    key={j}
+                    className={`choice-img-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
+                    id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
+                  >
+                    <img src={_choice.cho_img} />
+                  </ChoiceItem>
+                ))}
+              </ChoiceWrapper>
+            ) : (
+              <ChoiceWrapper>
+                {item.choices.map((_choice: any, j: number) => (
+                  <ChoiceItem
+                    key={j}
+                    className={`choice-txt-item ${item.correct_answer == _choice.id ? 'correct' : ''}`}
+                    id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
+                  >
+                    <div id={_choice.id}>
+                      <span>{_choice.cho_txt}</span>
+                    </div>
+                  </ChoiceItem>
+                ))}
+              </ChoiceWrapper>
+            )}
+          </QuizSolveCard>
+        );
       })}
-
-      <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
+      <MatchBottom>
+        <MainButton onClick={() => router.push(`/quiz/solve/${problemSetId}/main`)}>다시 풀기</MainButton>
+        <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
+      </MatchBottom>
     </MatchEl>
   );
 };
@@ -63,12 +70,6 @@ const MatchEl = styled.div`
     text-align: center;
     font-size: 1.6rem;
   }
-  button {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 20px;
-  }
 `;
 const QuizSolveCard = styled.div`
   position: relative;
@@ -76,12 +77,16 @@ const QuizSolveCard = styled.div`
   border: 1px solid #ffcaca;
   border-radius: 25px;
   background-color: white;
+  opacity: 0.6;
   padding: 0 3%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   margin: 20% 0;
+  &.wrong {
+    opacity: 1;
+  }
 `;
 const CardNumber = styled.span`
   position: absolute;
@@ -133,18 +138,79 @@ const ChoiceItem = styled.div`
   display: block;
   border-radius: 20px;
   background-color: #f4f4f4;
-  &#choice-img-item {
+  &.choice-img-item {
     width: 100%;
     height: 100%;
     padding: 0;
     border-radius: 1rem;
     overflow: hidden;
+    &#my-answer {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        width: 80px;
+        height: 80px;
+        background: url('/assets/img/wrong_check.png') center no-repeat;
+        background-size: cover;
+        z-index: 1;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffa5aa;
+        opacity: 0.5;
+      }
+    }
+    &.correct {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        width: 80px;
+        height: 80px;
+        background: url('/assets/img/circle.png') center no-repeat;
+        background-size: cover;
+        z-index: 1;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #aad775;
+        opacity: 0.5;
+      }
+    }
     img {
       position: relative;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
+  }
+`;
+const MatchBottom = styled.div`
+  position: relative;
+  display: flex;
+  padding-bottom: 20px;
+  gap: 10px;
+  button {
+    width: 50%;
   }
 `;
 export default MatchNote;
