@@ -48,7 +48,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
         );
       })}
       <MatchBottom>
-        <MainButton onClick={() => router.push(`/quiz/solve/${problemSetId}/main`)}>다시 풀기</MainButton>
+        <MainButton onClick={() => router.push(`/quiz/solve/${problemSetId}`)}>다시 풀기</MainButton>
         <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
       </MatchBottom>
     </MatchEl>
