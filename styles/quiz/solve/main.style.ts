@@ -20,6 +20,16 @@ export const Container = styled.div`
     padding: 5%;
   }
 `;
+export const QuizCount = styled.div`
+position: fixed;
+top: 20px;
+right: 5%;
+z-index: 99999;
+span {
+  color: #ff4d57;
+  font-weight: bold;
+}
+`;
 export const QuizTitle = styled.h1`
   text-align: center;
   font-weight: normal;
