@@ -13,7 +13,7 @@ export const RecentQuizListApi = (lastCreatedAt?: string): Promise<AxiosResponse
 
 // 특정 퀴즈 id의 퀴즈 자세히 보기
 export const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`/probset/detail/${probsetId}`);
+  return authAxios.get(`/probset/detail/${probsetId}`);
 };
 
 // 내가 만든 퀴즈 목록
@@ -28,7 +28,7 @@ export const QuizDeleteApi = (probsetId: string): Promise<AxiosResponse> => {
 
 // 특정 퀴즈 id의 랭킹 조회
 export const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`/solver/ranking`, { params: { probsetId, limit: 20 } });
+  return authAxios.get(`/solver/ranking`, { params: { probsetId} });
 };
 
 // 생성 - 새로 만든 퀴즈 업로드
@@ -81,7 +81,7 @@ export const QuizUploadApi = (
     resolve(res);
   });
 };
-// 특정 id의 퀴즈 썸네읿 변경
+// 특정 id의 퀴즈 썸네일 변경
 export const QuizThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     const res: AxiosResponse = await authAxios.post('/thumbnail', { probsetId, thumbnail: imgBlob.name });
