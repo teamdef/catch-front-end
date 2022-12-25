@@ -37,7 +37,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { quiz_id } = router.query;
 
-  const [commentList, setCommentList] = useState<CommentType[]>([]);
+  const [commentList, setCommentList] = useState<CommentType[] | null>(null);
 
   useEffect(() => {
     CommentListApi(quiz_id as string).then((res) => {
@@ -48,15 +48,9 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Wrapper>
       <Title isBack={true} title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
-      <S.Wrapper>
-        {commentList.length === 0 ? (
-          <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
-        ) : (
-          <S.CommentListWrapper>
-            <CommentList commentList={commentList} />
-          </S.CommentListWrapper>
-        )}
-      </S.Wrapper>
+      <S.CommentListWrapper>
+        <CommentList commentList={commentList} />
+      </S.CommentListWrapper>
     </S.Wrapper>
   );
 };

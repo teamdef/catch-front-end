@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare, ThumbnailChange, NotFound, CommentList } from 'components/common';
+import { Title, SNSShare, ThumbnailChange, CommentList, RankingBoard } from 'components/common';
 import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
@@ -42,6 +42,7 @@ interface DetailQuizType {
   solverCnt: number;
   thumbnail: string | null;
   average: number;
+  description: string;
 }
 interface RankingType {
   created_at: string;
@@ -64,7 +65,7 @@ const Page: NextPageWithLayout = () => {
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
   const [quizRankingList, setQuizRankingList] = useState<RankingType[] | null>(null);
-  const [quizCommentList, setQuizCommentList] = useState<CommentType[]>([]);
+  const [quizCommentList, setQuizCommentList] = useState<CommentType[] | null>(null);
   const [openDeleteModal, closeDeleteModal, RenderDeleteModal] = useModal({
     backgroundClickable: true,
     yesTitle: '삭제',
@@ -98,7 +99,7 @@ const Page: NextPageWithLayout = () => {
       }
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     getMyQuizData();
   }, [router.isReady]);
 
@@ -112,7 +113,7 @@ const Page: NextPageWithLayout = () => {
       <S.Wrapper>
         <S.SectionBlock>
           {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <S.SkeletonTitle />}
-
+          <div id="section-description">{quizDetailData?.description}</div>
           <div id="section-contents">
             {quizDetailData ? (
               <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={quiz_id as string} />
@@ -159,8 +160,8 @@ const Page: NextPageWithLayout = () => {
             </div>
           </S.SectionBlock>
         )}
-        {quizRankingList && (
-          <S.SectionBlock>
+        <S.SectionBlock>
+          {quizDetailData && (
             <div id="section-title">
               참여자 랭킹 🏆
               <Link href={`/quiz/${quiz_id}/ranking`} passHref>
@@ -169,57 +170,31 @@ const Page: NextPageWithLayout = () => {
                 </a>
               </Link>
             </div>
-            <div id="section-contents">
-              <S.RankingBoard>
-                {quizRankingList.length === 0 ? (
-                  <NotFound
-                    title={'아직 퀴즈에 참여한 유저가 없습니다 😶'}
-                    subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'}
-                  />
-                ) : (
-                  quizRankingList.map((userRanking: RankingType, index: number) => {
-                    return (
-                      <li
-                        key={userRanking.id}
-                        id={index == 0 ? 'first' : index == 1 ? 'second' : index == 2 ? 'third' : ''}
-                      >
-                        <i>{index == 0 ? '🥇' : index == 1 ? '🥈' : index == 2 ? '🥉' : index + 1}</i>
-                        <strong>{userRanking?.nickname}</strong>
-                        <em>{userRanking?.score}점</em>
-                      </li>
-                    );
-                  })
-                )}
-              </S.RankingBoard>
-            </div>
-          </S.SectionBlock>
-        )}
-        <S.SectionBlock>
-          <div id="section-title">
-            베스트 한줄평 ✍️
-            <Link href={`/quiz/${quiz_id}/comment`} passHref>
-              <a id="more">
-                더보기 <MdOutlineArrowForwardIos />
-              </a>
-            </Link>
-          </div>
+          )}
           <div id="section-contents">
-            <div>
-              {quizCommentList?.length === 0 ? (
-                <NotFound
-                  title={'아직 작성된 한줄평이 없습니다 😶'}
-                  subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'}
-                />
-              ) : (
-                <CommentList commentList={quizCommentList} />
-              )}
-            </div>
+            <RankingBoard rankingList={quizRankingList} />
           </div>
         </S.SectionBlock>
-
-        <S.DeleteButton onClick={openDeleteModal}>
-          <AiOutlineDelete size={30} />
-        </S.DeleteButton>
+        <S.SectionBlock>
+          {quizDetailData && (
+            <div id="section-title">
+              베스트 한줄평 ✍️
+              <Link href={`/quiz/${quiz_id}/comment`} passHref>
+                <a id="more">
+                  더보기 <MdOutlineArrowForwardIos />
+                </a>
+              </Link>
+            </div>
+          )}
+          <div id="section-contents">
+            <CommentList commentList={quizCommentList} />
+          </div>
+        </S.SectionBlock>
+        {quizDetailData && (
+          <S.DeleteButton onClick={openDeleteModal}>
+            <AiOutlineDelete size={30} />
+          </S.DeleteButton>
+        )}
       </S.Wrapper>
       <RenderDeleteModal />
     </>

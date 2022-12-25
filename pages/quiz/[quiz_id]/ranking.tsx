@@ -36,7 +36,7 @@ interface RankingType {
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const [ranking, setRanking] = useState<RankingType[]>([]);
+  const [ranking, setRanking] = useState<RankingType[] | null>(null);
   let { quiz_id } = router.query;
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Page: NextPageWithLayout = () => {
         subTitle="참여자 모두의 랭킹을 확인해보세요! 누가 가장 많이 맞췄을까요?"
       />
       <S.Wrapper>
-        <RankingBoard rankingList={ranking}/>
+        <RankingBoard rankingList={ranking} />
       </S.Wrapper>
     </>
   );

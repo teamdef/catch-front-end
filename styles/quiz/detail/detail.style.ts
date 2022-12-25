@@ -26,10 +26,14 @@ export const SectionBlock = styled.div`
       font-size:14px;
       color:#888;
     }
-
+  }
+  #section-description{
+    color:#595959;
+    font-size:0.9rem;
+    line-height:1.2rem;
   }
   #section-contents {
-    margin-top: 1rem;
+    margin-top: 2rem;
     #quiz-share-contents {
       width: 80%;
       margin: 0 auto;
@@ -84,64 +88,6 @@ export const DeleteButton = styled.div`
   z-index: 5;
   &:hover {
     cursor: pointer;
-  }
-`;
-
-export const RankingBoard = styled.ul`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 0;
-  margin: 0;
-  flex-direction: column;
-  align-items: center;
-  li {
-    position: relative;
-    display: flex;
-    color: #595959;
-    width: 100%;
-    list-style: none;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    border: solid 1px #f6f6f6;
-    border-radius: 4px;
-    height: 50px;
-    margin: 3px;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      position: relative;
-      width: 44px;
-      height: 44px;
-    }
-    strong {
-      font-weight: normal;
-    }
-    i,
-    em {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-style: normal;
-      width: 50px;
-    }
-    i {
-      color: #ff4d57;
-      font-size: 1rem;
-    }
-  }
-  #first {
-    border: none;
-    background-color: #fff1b4;
-  }
-  #second {
-    border: none;
-    background-color: #ececec;
-  }
-  #third {
-    border: none;
-    background-color: #ffe6d4;
   }
 `;
 
