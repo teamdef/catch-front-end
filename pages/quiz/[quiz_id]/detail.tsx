@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, SNSShare, ThumbnailChange, NotFound } from 'components/common';
+import { Title, SNSShare, ThumbnailChange, NotFound, CommentList } from 'components/common';
 import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { useRouter } from 'next/router';
@@ -50,6 +50,13 @@ interface RankingType {
   ranking: string;
   id: string;
 }
+interface CommentType {
+  content: string;
+  created_at: string;
+  nickname: string;
+  user: any;
+}
+
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { quiz_id } = router.query;
@@ -57,6 +64,7 @@ const Page: NextPageWithLayout = () => {
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
   const [quizRankingList, setQuizRankingList] = useState<RankingType[] | null>(null);
+  const [quizCommentList, setQuizCommentList] = useState<CommentType[]>([]);
   const [openDeleteModal, closeDeleteModal, RenderDeleteModal] = useModal({
     backgroundClickable: true,
     yesTitle: '삭제',
@@ -78,12 +86,7 @@ const Page: NextPageWithLayout = () => {
     _detail.average = Number(_detail.average.substring(0, 3));
     setQuizDetailData(_detail);
     setQuizRankingList(bestSolver);
-  };
-
-  const getMyQuizRanking = async () => {
-    const res = await QuizRankingListApi(quiz_id as string);
-    let _ranking: RankingType[] = res?.data;
-    setQuizRankingList(_ranking);
+    setQuizCommentList(bestComment);
   };
 
   const MyQuizDelete = async () => {
@@ -97,7 +100,6 @@ const Page: NextPageWithLayout = () => {
   };
     useEffect(() => {
     getMyQuizData();
-    //getMyQuizRanking();
   }, [router.isReady]);
 
   return (
@@ -203,7 +205,14 @@ const Page: NextPageWithLayout = () => {
           </div>
           <div id="section-contents">
             <div>
-              <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
+              {quizCommentList?.length === 0 ? (
+                <NotFound
+                  title={'아직 작성된 한줄평이 없습니다 😶'}
+                  subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'}
+                />
+              ) : (
+                <CommentList commentList={quizCommentList} />
+              )}
             </div>
           </div>
         </S.SectionBlock>

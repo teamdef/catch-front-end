@@ -11,10 +11,9 @@ export const Container = styled.div`
   background-color: #fff;
   a {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 24px;
+    left: 24px;
     display: block;
-    padding: 5%;
   }
 `;
 export const ButtonArea = styled.div`

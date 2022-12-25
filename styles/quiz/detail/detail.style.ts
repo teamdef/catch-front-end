@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   width: 85%;
   margin: 0 auto;
   margin-top: 2rem;
-  margin-bottom: 7rem;
+  margin-bottom: 8rem;
 `;
 
 export const SectionBlock = styled.div`
@@ -50,7 +50,7 @@ export const StatusContainer = styled.div`
     background-color: #fff6f7;
     border-radius: 12px;
     #count {
-      font-size: 18px;
+      font-size: 1.2rem;
       font-weight: bold;
       color: #ff264d;
     }
@@ -58,7 +58,7 @@ export const StatusContainer = styled.div`
 `;
 export const DateInfoWrapper = styled.div`
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 0.9rem;
   color: #bcbcbc;
   div{
     margin-bottom:4px;
