@@ -96,6 +96,7 @@ const Wrapper = styled.ul`
       align-items: center;
       font-style: normal;
       width: 50px;
+      color: #ff264d;
     }
     i {
       color: #ff4d57;
