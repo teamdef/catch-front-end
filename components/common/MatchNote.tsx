@@ -63,7 +63,7 @@ const MatchEl = styled.div`
   min-height: 100vh;
   background-color: #fff;
   padding: 0 5%;
-  padding-top: 65px;
+  padding-top: 3.4rem;
   h1 {
     margin: 0;
     color: #ff4d57;
@@ -75,7 +75,7 @@ const QuizSolveCard = styled.div`
   position: relative;
   width: 100%;
   border: 1px solid #ffcaca;
-  border-radius: 25px;
+  border-radius: 1.4rem;
   background-color: white;
   opacity: 0.6;
   padding: 0 3%;
@@ -83,22 +83,22 @@ const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-top:40px;
+  margin-top:2rem;
   &.wrong {
     opacity: 1;
   }
 `;
 const CardNumber = styled.span`
   position: absolute;
-  left: 30px;
+  left: 30rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 14px;
-  width: 35px;
-  height: 45px;
+  padding-bottom: .7rem;
+  width: 1.8rem;
+  height: 2.4rem;
   border: solid 17px #ffa5aa;
-  border-bottom: solid 10px #fff;
+  border-bottom: solid .5rem #fff;
   background-color: #ffa5aa;
   font-weight: bold;
   font-size: 1.2rem;
@@ -121,11 +121,11 @@ const ChoiceWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: .5rem;
   margin: 10% 0;
   &#choice-img-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, calc(50% - 5px));
+    grid-template-columns: repeat(2, calc(50% - .25rem));
     grid-template-rows: repeat(2, 150px);
   }
 `;
@@ -136,7 +136,7 @@ const ChoiceItem = styled.div`
   font-size: 1rem;
   text-align: center;
   display: block;
-  border-radius: 20px;
+  border-radius: 1rem;
   background-color: #f4f4f4;
   &.choice-img-item {
     width: 100%;
@@ -152,8 +152,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 80px;
-        height: 80px;
+        width: 4rem;
+        height: 4rem;
         background: url('/assets/img/wrong_check.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -178,8 +178,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 80px;
-        height: 80px;
+        width: 4rem;
+        height: 4rem;
         background: url('/assets/img/circle.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -207,9 +207,9 @@ const ChoiceItem = styled.div`
 const MatchBottom = styled.div`
   position: relative;
   display: flex;
-  padding-bottom: 20px;
-  margin-top:80px;
-  gap: 10px;
+  padding-bottom: 1rem;
+  margin-top: 4rem;
+  gap: .5rem;
   button {
     width: 50%;
   }
