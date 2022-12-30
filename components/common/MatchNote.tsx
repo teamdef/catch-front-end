@@ -1,20 +1,19 @@
 import styled from 'styled-components';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { Logo } from 'components/common';
 import { MainButton } from 'styles/common';
 import { useRouter } from 'next/router';
 
 const MatchNote = ({ setOpenMatch }: any) => {
   const router = useRouter();
   const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
+  console.log(solveAnswers);
   return (
     <MatchEl>
-      <Logo />
       <h1>정답 확인📝</h1>
       {solveProblems.map((item: any, i: number) => {
         return (
-          <QuizSolveCard key={i} className={solveAnswers[i] ? 'wrong' : ''}>
+          <QuizSolveCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
             <CardNumber>{i + 1}</CardNumber>
             <CardTitle>{item.prob_title}</CardTitle>
             {item.is_img ? (
@@ -34,7 +33,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
                 {item.choices.map((_choice: any, j: number) => (
                   <ChoiceItem
                     key={j}
-                    className={`choice-txt-item ${item.correct_answer == _choice.id ? 'correct' : ''}`}
+                    className={`choice-txt-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
                     id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
                   >
                     <div id={_choice.id}>
@@ -90,7 +89,7 @@ const QuizSolveCard = styled.div`
 `;
 const CardNumber = styled.span`
   position: absolute;
-  left: 30rem;
+  left: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -152,8 +151,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 4rem;
-        height: 4rem;
+        width: 5rem;
+        height: 5rem;
         background: url('/assets/img/wrong_check.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -178,8 +177,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 4rem;
-        height: 4rem;
+        width: 5rem;
+        height: 5rem;
         background: url('/assets/img/circle.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -201,6 +200,18 @@ const ChoiceItem = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+  }
+  &.choice-txt-item {
+    &.correct {
+      background-color: #aad775 !important;
+      color: #244E10 !important;
+      font-weight: bold;
+    }
+    &#my-answer {
+      background-color:#ffa5aa;
+      color: #DA4343;
+      font-weight: bold;
     }
   }
 `;

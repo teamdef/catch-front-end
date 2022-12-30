@@ -8,14 +8,8 @@ export const Container = styled.div`
   width: 100%;
   padding: 0 5%;
   min-height: 100vh;
+  margin-top: 150px;
   background-color: #fff;
-  a {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    padding: 5%;
-  }
 `;
 export const ButtonArea = styled.div`
   position: relative;
@@ -24,33 +18,24 @@ export const ButtonArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `;
-export const ScoreArea = styled.div`
+export const ScoreTxt = styled.p`
+  color: #888;
+  margin: 5% 0;
+  span {
+    color: #ff4d57;
+  }
+`;
+export const ScoreTable = styled.table`
   position: relative;
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  color: #595959;
-  margin-top: 4rem;
-  > h1 {
-    font-size: 1rem;
-    font-weight: normal;
-    margin: 0 0 5%;
-    strong {
-      font-weight: bold;
-      font-size: 2rem;
-      color: #ff4d57;
-    }
+  display: block;
+  text-align: center;
+  * {
+    width: 50%;
+    padding: 0 1rem;
+    border: 1px solid #555;
   }
-  > p {
-    color: #888;
-    margin: 5% 0;
-    span {
-      color: #ff4d57;
-    }
-  }
-  button {
-    border: 2px solid #ff4d57;
+  td {
+    padding: .7rem;
   }
 `;
 export const ProgressArea = styled.div`
@@ -177,13 +162,13 @@ export const ScorePostIt = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top:1rem;
+  margin-top: 1rem;
 
   #score {
     font-family: BMEuljiro10yearslater;
     color: #ff4d57;
-    font-size:70px;
-    padding-bottom:0.5rem;
+    font-size: 70px;
+    padding-bottom: 0.5rem;
   }
   #tack-img {
     width: 50px;
@@ -197,6 +182,3 @@ export const ScorePostIt = styled.div`
     width: 150px;
   }
 `;
-
-
-
