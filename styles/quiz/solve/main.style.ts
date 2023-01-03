@@ -38,7 +38,7 @@ export const QuizTitle = styled.h1`
   width: 80%;
   font-size: 1.3rem;
   line-height: 1.7rem;
-  margin: 4rem auto 1rem auto;
+  margin-top: 60px;
 `;
 
 
@@ -60,8 +60,8 @@ export const QuizSolveContent = styled.div`
       transform: translateX(0);
     }
   }
-  margin-top: 75px;
-  margin-bottom:120px;
+  margin-top: 95px;
+  margin-bottom:70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -77,7 +77,7 @@ export const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-top:40px;
+  margin-bottom:40px;
 `;
 
 export const ChoiceWrapper = styled.div`
@@ -88,7 +88,7 @@ export const ChoiceWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 10% 0;
+  margin: 40px 0 30px 0;
   &#choice-img-wrapper {
     display: grid;
     grid-template-columns: repeat(2, calc(50% - 5px));
@@ -96,6 +96,17 @@ export const ChoiceWrapper = styled.div`
   }
 `;
 export const ChoiceItem = styled.div`
+  @keyframes pick {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(.9);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
   position: relative;
   width: 80%;
   label {
@@ -126,8 +137,8 @@ export const ChoiceItem = styled.div`
       height: 100%;
     }
     input:checked + label {
+      animation: pick .2s;
       color: #fff;
-      transform: scale(1.05);
       &::before {
         content: '';
         position: absolute;
@@ -195,10 +206,7 @@ export const QuizSolveBottom = styled.div`
 
 export const CardNumber = styled.span`
   position: absolute;
-  left: 30px;
-  @media (max-width: 500px) {
-    left: calc(100vw * 0.125);
-  }
+  left: 5.43%;
   display: flex;
   align-items: center;
   justify-content: center;
