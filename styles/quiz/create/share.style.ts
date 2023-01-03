@@ -86,7 +86,7 @@ export const ThumbnailSettingContainer = styled.div`
     color: #888;
     text-align: center;
     font-size: 0.9rem;
-    line-height:1.1rem;
+    /*line-height:1.2rem;*/
     strong {
       margin: 0;
     }

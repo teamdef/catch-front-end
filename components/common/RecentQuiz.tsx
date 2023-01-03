@@ -3,7 +3,10 @@ import { QuizCard, SkeletonQuizCard, NotFound,AdsQuizCard } from 'components/com
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-interface RecentQuizType {
+import { BottomUpModal } from 'components/modal';
+import { shareProps } from 'components/common/SNSShare';
+
+export interface RecentQuizType {
   created_at: string;
   id: string;
   profile_img: string;
@@ -17,41 +20,26 @@ const RecentQuizList = () => {
   const [end,setEnd] = useState(false); //모든 글 로드 확인
   const [load, setLoad] = useState(false); //로딩
   const [page, setPage] = useState<number>(0); // 내부 사용용 page 카운트
+  
+  const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false);
+    const [currentShareQuiz, setCurrentShareQuiz] = useState<shareProps | null>(null);
+  const bottomUpOpen = (currentQuiz: RecentQuizType) => {
+    /* 선택한 퀴즈의 공유 정보 세팅 */
+    const obj: shareProps = {
+      thumbnail: currentQuiz.thumbnail,
+      set_title: currentQuiz.set_title,
+      url: currentQuiz.id,
+      profileImg: currentQuiz.profile_img,
+      nickName: currentQuiz.nickname,
+    };
+    setCurrentShareQuiz(obj);
 
-  const timeForToday = (date: string) => {
-    const today = new Date();
-    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
-
-    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-    if (betweenTime < 1) return '방금전';
-    if (betweenTime < 60) {
-      return `${betweenTime}분전`;
-    }
-
-    const betweenTimeHour = Math.floor(betweenTime / 60);
-    if (betweenTimeHour < 24) {
-      return `${betweenTimeHour}시간전`;
-    }
-
-    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
-
-    if (betweenTimeDay < 7) {
-      return `${betweenTimeDay}일전`;
-    }
-    
-    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
-    if (betweenTimeWeek < 4) {
-      return `${betweenTimeWeek}주전`;
-    }
-
-    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
-    if (betweenTimeMonth < 12) {
-      return `${betweenTimeMonth}달전`;
-    }
-
-    const value = today.toISOString().substring(0, 10);
-    return value;
+    setBottomUpIsOpen(true);
   };
+  const bottomUpClose = () => {
+    setBottomUpIsOpen(false);
+  };
+
 
   const getRecentQuizList = useCallback(
     async (lastCreatedAt?: string) => {
@@ -99,21 +87,11 @@ const RecentQuizList = () => {
           recentQuizList.length === 0 ? (
             <NotFound title={'등록된 퀴즈집이 없습니다 😣'} subTitle={'퀴즈집을 만들어주세요 !! '} />
           ) : (
-              <>
-              {recentQuizList.map((quiz,index) => {
+            <>
+              {recentQuizList.map((quiz, index) => {
                 return (
                   <>
-                    <QuizCard
-                      key={quiz.id}
-                      userName={quiz.nickname}
-                      userProfileImg={quiz.profile_img}
-                      quizDate={timeForToday(quiz.created_at)}
-                      quizTitle={quiz.set_title}
-                      quizCount={0}
-                      quizPlay={quiz.solverCnt}
-                      quizRoute={`/quiz/solve/${quiz.id}`}
-                      quizThumbnail={quiz.thumbnail}
-                    />
+                    <QuizCard recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
                   </>
                 );
               })}
@@ -130,7 +108,8 @@ const RecentQuizList = () => {
                     setPage((prev) => prev + 1);
                   }}
                 >
-                    <MdKeyboardArrowDown size={20} />더보기
+                  <MdKeyboardArrowDown size={20} />
+                  더보기
                 </QuizLoad>
               )}
             </>
@@ -143,6 +122,9 @@ const RecentQuizList = () => {
           </>
         )}
       </ListWrapper>
+      {bottomUpisOpen && currentShareQuiz && (
+        <BottomUpModal shareInfo={currentShareQuiz} bottomUpClose={bottomUpClose} />
+      )}
     </Wrapper>
   );
 };

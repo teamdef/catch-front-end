@@ -53,12 +53,15 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
-  position: relative;
-  max-width: 400px;
-  margin-top: 80px;
+  max-width: 390px;
+  margin-top: 9rem;
   font-family: RixInooAriDuriR;
-  font-size: 4rem;
-  line-height: 70px;
+  font-size: 60px;
+  line-height: 1.3;
+  @media (max-width: 390px) {
+    max-width: 90%;
+    font-size: 14vw;
+  }
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
   text-align: center;
@@ -81,6 +84,7 @@ export const InnerContainer = styled.div`
 export const Description = styled.div`
   color: #595959;
   font-size: 1rem;
+  /*line-height: 1.5rem;*/
   text-align: center;
   width: 90%;
   margin-top: 2rem;

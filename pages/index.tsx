@@ -1,13 +1,13 @@
 import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Card, RecentQuiz } from 'components/common';
+import { RecentQuiz } from 'components/common';
 import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { useModal } from 'hooks';
 import { UserQuizListApi } from 'pages/api/quiz';
 import * as S from 'styles/index.style';
+import { FlatButton } from 'styles/common';
 
 // Import Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -27,27 +27,13 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { isLoggedin, id } = useSelector((state: RootState) => state.user);
   const [myQuizList, setMyQuizList] = useState<MyQuizType[] | null>(null);
-  /*
-  const [openLoginModal, _, RenderLoginModal] = useModal({
-    backgroundClickable: true,
-    yesTitle: '로그인',
-    noTitle: '닫기',
-    yesAction: () => router.push('/member/login'),
-    contents: <div>로그인이 필요한 서비스입니다.</div>,
-  });
-*/
-  const checkLogin = () => {
-    isLoggedin ? goQuizCreateIndex() : goLogin();
-  };
+
   const goQuizCreateIndex = () => {
     router.push('/quiz/create');
   };
   const goLogin = () => {
     router.push('/member/login');
-  }
-  // const goLogin = () => {
-  //   openLoginModal();
-  // };
+  };
 
   const getMyQuizList = async () => {
     const res = await UserQuizListApi(id);
@@ -116,13 +102,9 @@ const Page: NextPageWithLayout = () => {
               <S.CreateCard>
                 <span>{isLoggedin ? '퀴즈를 만들어 볼까요 ? ✨' : '퀴즈를 만들려면 로그인이 필요해요! 🤗'}</span>
                 {isLoggedin ? (
-                  <button id="create-btn" onClick={goQuizCreateIndex}>
-                    새로 만들기
-                  </button>
+                  <FlatButton onClick={goQuizCreateIndex}>새로 만들기</FlatButton>
                 ) : (
-                  <button id="create-btn" onClick={goLogin}>
-                    로그인
-                  </button>
+                  <FlatButton onClick={goLogin}>로그인</FlatButton>
                 )}
               </S.CreateCard>
             </SwiperSlide>
@@ -138,8 +120,6 @@ const Page: NextPageWithLayout = () => {
           </div>
         </S.RecentQuizList>
       </S.Background>
-
-      {/* <RenderLoginModal /> */}
     </>
   );
 };

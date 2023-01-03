@@ -19,14 +19,11 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  font-size: 14px; /* 1rem 기준을 14px로 고정 */
+  font-family: 'Noto Sans KR';
+  line-height:1.6; /* 줄간격 160% */
 }
 
-@media (max-width: 400px) {
-  html,
-  body {
-    font-size: 14px;
-  }
-}
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera*/
 }

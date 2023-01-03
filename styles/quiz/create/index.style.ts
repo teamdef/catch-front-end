@@ -59,7 +59,7 @@ export const TitleContainer = styled.div`
         linear-gradient(to left, #ff4d57 10px, transparent 10px),
         repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ccc 30px, #ccc 31px, #ff4d57 31px);
       font-size: 1rem;
-      line-height: 31px;
+      /*line-height: 31px;*/
       padding: 3px 10px;
       margin-top: 2rem;
       border: none;

@@ -7,14 +7,13 @@ export const Background = styled.div`
 `;
 
 export const RecentQuizList = styled.div`
-  padding: 1rem;
   background-color: #fff;
   #section-title {
     /*padding: 1rem 0.5rem 1rem 0.5rem;*/
-    padding-top:1rem;
+    padding-top:4px; /* swiper slide 에서 생기는 padding-bottom 36px 에 4px를 더하여 패딩 40px를 만들어 냄 */
     color: #595959;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.2rem;
     display: flex;
     justify-content: space-between;
     a {
@@ -37,25 +36,25 @@ interface ImageCardProps {
 }
 
 export const MyQuizList = styled.div`
-  margin-bottom: 1rem;
-  padding: 1rem;
   background-color: #fff;
   #title {
-    padding: 1rem 0 1.5rem 0rem;
+    /* padding: 1rem 0 1.5rem 0rem; */
+    padding-bottom: 1rem;
+    padding-top: 40px;
     color: #595959;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.2rem;
     display: flex;
     justify-content: space-between;
   }
   .swiper-wrapper {
-    padding-bottom: 2rem;
+    padding-bottom: 36px; /* 2rem -> 36px 변경*/
   }
   .swiper-pagination {
     position: relative;
     .swiper-pagination-bullet {
-      width: 16px;
-      height: 16px;
+      width: 1rem;
+      height: 1rem;
       &:last-child {
         background-color: #ffa5aa;
         position: relative;
@@ -64,8 +63,8 @@ export const MyQuizList = styled.div`
           color: #fff;
           font-size: 17px;
           position: absolute;
-          top: -1px;
-          right:3px;
+          top: -6.5px;
+          right: 2.5px;
         }
       }
     }
@@ -76,7 +75,7 @@ export const MyQuizList = styled.div`
 `;
 
 export const CustomCard = styled(Card)`
-  height: 18rem;
+  height: 250px; /* 카드 높이 250px 고정 */
   border-radius: 12px;
   margin: 0 auto;
   display: flex;

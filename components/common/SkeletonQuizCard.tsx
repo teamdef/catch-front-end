@@ -28,8 +28,7 @@ const gradient = keyframes`
 `;
 
 const QuizCardWrapper = styled.div`
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
-
+  border:solid 1px #eee;
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;

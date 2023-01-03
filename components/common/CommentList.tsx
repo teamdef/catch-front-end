@@ -105,7 +105,7 @@ const CommentBox = styled.div`
       font-size: 0.9rem;
       background: #f4f4f4;
       border-radius: 0px 15px 15px 15px;
-      line-height: 1.2rem;
+      /*line-height: 1.2rem;*/
 
     }
   }

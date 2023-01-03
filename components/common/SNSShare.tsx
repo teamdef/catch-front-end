@@ -4,7 +4,7 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import {useEffect} from 'react'
 
-interface shareProps {
+export interface shareProps {
   thumbnail: string|null;
   set_title: string;
   url: string;
@@ -64,7 +64,7 @@ const SNSShare = ({ thumbnail, set_title, url,profileImg,nickName }: shareProps)
       <button
         className="share-btn"
         onClick={() => {
-          handleCopyClipBoard(`https://catchcatch.link/${url}`);
+          handleCopyClipBoard(`https://catchcatch.link/quiz/solve/${url}`);
         }}
       >
         <HiLink size={20} />

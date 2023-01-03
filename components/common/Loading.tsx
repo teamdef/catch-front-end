@@ -22,7 +22,10 @@ const Loading = ({ ment }: LoadingProps) => {
 
 const Background = styled.div`
   background-color: #00000085;
-  width: 500px;
+  width: 480px;
+  @media (max-width:480px){
+    width:100%;
+  }
   height: 100vh;
   z-index: 999;
   position: fixed;

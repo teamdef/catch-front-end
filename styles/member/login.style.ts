@@ -50,7 +50,7 @@ export const SubTitle = styled.div`
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
-  line-height:1.5rem;
+  line-height:1.3rem;
   margin-bottom: 20%;
   color:#595959;;
   strong {
