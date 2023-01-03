@@ -14,10 +14,9 @@ export const Container = styled.div`
 
   a {
     position: absolute;
-    top: 0;
-    left: 0;
     display: block;
-    padding: 5%;
+    top: 24px;
+    left: 24px;
   }
 `;
 export const QuizCount = styled.div`

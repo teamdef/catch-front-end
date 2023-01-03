@@ -54,8 +54,8 @@ export const MyQuizList = styled.div`
   .swiper-pagination {
     position: relative;
     .swiper-pagination-bullet {
-      width: 1rem;
-      height: 1rem;
+      width: 16px;
+      height: 16px;
       &:last-child {
         background-color: #ffa5aa;
         position: relative;
@@ -64,8 +64,8 @@ export const MyQuizList = styled.div`
           color: #fff;
           font-size: 17px;
           position: absolute;
-          top: -5px;
-          right: 3px;
+          top: -1px;
+          right:3px;
         }
       }
     }

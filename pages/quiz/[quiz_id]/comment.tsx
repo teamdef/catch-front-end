@@ -1,10 +1,10 @@
-import type { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout } from 'components/layout';
-import { Title, NotFound } from 'components/common';
+import { Title, NotFound, CommentList } from 'components/common';
 import * as S from 'styles/quiz/detail/comment.style';
 import { useRouter } from 'next/router';
-
+import { CommentListApi } from 'pages/api/quiz';
 // next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 /*
@@ -26,18 +26,32 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   }
   return { props: {} };
 };*/
+
+interface CommentType {
+  content: string;
+  created_at: string;
+  nickname: string;
+  user: any;
+}
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { quiz_id } = router.query;
 
+  const [commentList, setCommentList] = useState<CommentType[] | null>(null);
+
+  useEffect(() => {
+    CommentListApi(quiz_id as string).then((res) => {
+      setCommentList(res.data);
+    });
+  }, [router.isReady]);
+
   return (
-    <>
+    <S.Wrapper>
       <Title isBack={true} title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
-      <S.Wrapper>
-        {quiz_id}
-        <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
-      </S.Wrapper>
-    </>
+      <S.CommentListWrapper>
+        <CommentList commentList={commentList} />
+      </S.CommentListWrapper>
+    </S.Wrapper>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {

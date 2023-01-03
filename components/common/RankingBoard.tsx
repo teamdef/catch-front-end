@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { NotFound } from 'components/common';
 interface RankingType {
   created_at: string;
@@ -9,42 +9,50 @@ interface RankingType {
 }
 
 interface PropsType {
-  rankingList: RankingType[];
+  rankingList: RankingType[] | null;
 }
 const RankingBoard = ({ rankingList }: PropsType) => {
   return (
     <Wrapper>
-      {rankingList.length === 0 ? (
-        <NotFound title={'아직 퀴즈에 참여한 유저가 없습니다 😶'} subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'} />
+      {rankingList ? (
+        rankingList.length !== 0 ? (
+          rankingList.map((userRanking: RankingType) => {
+            return (
+              <li
+                key={userRanking.id}
+                id={
+                  userRanking.ranking === '1'
+                    ? 'first'
+                    : userRanking.ranking === '2'
+                    ? 'second'
+                    : userRanking.ranking === '3'
+                    ? 'third'
+                    : ''
+                }
+              >
+                <i>
+                  {userRanking.ranking === '1'
+                    ? '🥇'
+                    : userRanking.ranking === '2'
+                    ? '🥈'
+                    : userRanking.ranking === '3'
+                    ? '🥉'
+                    : userRanking.ranking}
+                </i>
+                <strong>{userRanking?.nickname}</strong>
+                <em>{userRanking?.score}점</em>
+              </li>
+            );
+          })
+        ) : (
+          <NotFound title={'아직 퀴즈에 참여한 유저가 없습니다 😶'} subTitle={'퀴즈집을 공유하여 다같이 풀어보세요!'} />
+        )
       ) : (
-        rankingList.map((userRanking: RankingType) => {
-          return (
-            <li
-              key={userRanking.id}
-              id={
-                userRanking.ranking === '1'
-                  ? 'first'
-                  : userRanking.ranking === '2'
-                  ? 'second'
-                  : userRanking.ranking === '3'
-                  ? 'third'
-                  : ''
-              }
-            >
-              <i>
-                {userRanking.ranking === '1'
-                  ? '🥇'
-                  : userRanking.ranking === '2'
-                  ? '🥈'
-                  : userRanking.ranking === '3'
-                  ? '🥉'
-                  : userRanking.ranking}
-              </i>
-              <strong>{userRanking?.nickname}</strong>
-              <em>{userRanking?.score}점</em>
-            </li>
-          );
-        })
+        <>
+          <SkeletonRankingCard />
+          <SkeletonRankingCard />
+          <SkeletonRankingCard />
+        </>
       )}
     </Wrapper>
   );
@@ -59,7 +67,7 @@ const Wrapper = styled.ul`
   margin: 0;
   flex-direction: column;
   align-items: center;
-  width:100%;
+  width: 100%;
   li {
     position: relative;
     display: flex;
@@ -88,6 +96,7 @@ const Wrapper = styled.ul`
       align-items: center;
       font-style: normal;
       width: 50px;
+      color: #ff264d;
     }
     i {
       color: #ff4d57;
@@ -106,5 +115,19 @@ const Wrapper = styled.ul`
     border: none;
     background-color: #ffe6d4;
   }
+`;
+
+const gradient = keyframes` 
+  0% {background-color: rgba(165, 165, 165, 0.1);}
+  50% {background-color: rgba(165, 165, 165, 0.3);}
+  100% {background-color: rgba(165, 165, 165, 0.1);}
+`;
+
+const SkeletonRankingCard = styled.div`
+  height: 50px;
+  width: 100%;
+  background-color: #d6d6d6;
+  border-radius: 4px;
+  animation: ${gradient} 1.5s linear infinite alternate;
 `;
 export default RankingBoard;

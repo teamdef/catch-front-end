@@ -12,7 +12,8 @@ export const Container = styled.div`
     top: 0;
     left: 0;
     display: block;
-    padding: 5%;
+    top:24px;
+    left:24px;
     z-index: 99;
   }
 `;

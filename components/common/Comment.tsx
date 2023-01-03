@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useInput } from 'hooks';
 import styled from 'styled-components';
 
@@ -6,22 +5,28 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import { useEffect, useState } from 'react';
-const Comment = ({ list }: any) => {
-  // list 파라미터에 정수 값을 넣어주면 해당 정수 값 만큼 댓글을 출력해줌 + 인풋 제거
+
+import { CommentList } from 'components/common';
+
+interface CommentType {
+  content: string;
+  created_at: string;
+  nickname: string;
+  user: any;
+}
+
+const Comment = () => {
   const [text, , clearFunction, textHandler] = useInput<string>('');
   // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
-  const [comments, setComments] = useState<string[]>([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
 
   useEffect(() => {
     CommentListApi(problemSetId).then((res) => {
-      if(list){
-        setComments(res.data.slice(0, list));
-      }
-      else setComments(res.data);
+      setComments(res.data);
     });
-  }, []);
+  }, [problemSetId]);
 
   const saveComment = async (_comm: string) => {
     if (_comm) {
@@ -39,45 +44,22 @@ const Comment = ({ list }: any) => {
             한줄평
             <div>
               <img src="/assets/img/chat.png" />
-              {list ? '' : <span>{comments.length}</span>}
+              <span>{comments.length}</span>
             </div>
           </Title>
-          {list ? (
-            ''
-          ) : (
-            <InputBox>
-              <span>({text.length}/50)</span>
-              <input
-                type="text"
-                value={text}
-                onChange={textHandler}
-                id="comment-input"
-                maxLength={50}
-                placeholder="나도 한마디.."
-              />
-              <button onClick={() => saveComment(text)}>등록</button>
-            </InputBox>
-          )}
-
-          <CommentBoard>
-            {comments && comments.length !== 0 ? (
-              comments.map((item: any, index: number) => (
-                <CommentBox key={index}>
-                  <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
-                  <div>
-                    <span className="nickname">{item.nickname}</span>
-                    <p>{item.content}</p>
-                  </div>
-                  <span className="date">{item.created_at.substr(0, item.created_at.indexOf('T'))}</span>
-                </CommentBox>
-              ))
-            ) : (
-              <div className="empty">
-                <span>아직 한줄평이 없어요 !</span>
-              </div>
-            )}
-            {/* <button className="more">더보기</button> */}
-          </CommentBoard>
+          <InputBox>
+            <span>({text.length}/50)</span>
+            <input
+              type="text"
+              value={text}
+              onChange={textHandler}
+              id="comment-input"
+              maxLength={50}
+              placeholder="나도 한마디.."
+            />
+            <button onClick={() => saveComment(text)}>등록</button>
+          </InputBox>
+          <CommentList commentList={comments} />
         </>
       )}
     </Container>
@@ -123,8 +105,9 @@ const InputBox = styled.div`
   }
   input {
     background-color: #f4f4f4;
+    outline: none;
     flex-grow: 1;
-    height: 40px;
+    height: 60px;
     border: none;
     padding: 0 5%;
     color: #888;
@@ -146,63 +129,13 @@ const InputBox = styled.div`
     right: 0;
   }
 `;
-const CommentBoard = styled.div`
-  position: relative;
-  margin-top: 5%;
-  .empty {
-    margin: 20% 0;
-    text-align: center;
-    span {
-      font-size: 0.9rem;
-      color: #888;
-    }
-  }
-  .more {
-    border: none;
-    width: 100%;
-    padding: 5px;
-    margin: 5% 0;
-    border-radius: 10px;
-    background-color: #fff6f7;
-  }
-`;
-const CommentBox = styled.div`
-  position: relative;
-  display: flex;
-  color: #555;
-  font-size: 0.8rem;
-  margin-bottom: 5%;
-  img {
-    position: relative;
-    display: block;
-    width: 38px;
-    height: 38px;
-    margin-right: 20px;
-    border-radius: 50%;
-  }
-  > div {
-    position: relative;
-    display: block;
-    span {
-      display: block;
-      margin: 4px 0 8px 0;
-    }
-    p {
-      display: block;
-      padding: 15px 18px;
-      font-size: 0.7rem;
-      background: #f4f4f4;
-      border-radius: 0px 15px 15px 15px;
-    }
-  }
-  .date {
-    position: relative;
-    display: block;
+
+const CommentEmpty = styled.div`
+  margin: 20% 0;
+  text-align: center;
+  span {
+    font-size: 0.9rem;
     color: #888;
-    font-size: 0.5rem;
-    white-space: nowrap;
-    align-self: flex-end;
-    padding-left: 5px;
   }
 `;
 export default Comment;

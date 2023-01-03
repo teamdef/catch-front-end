@@ -20,7 +20,7 @@ const RecentQuizList = () => {
 
   const timeForToday = (date: string) => {
     const today = new Date();
-    const timeValue = new Date(date);
+    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
 
     const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
     if (betweenTime < 1) return '방금전';

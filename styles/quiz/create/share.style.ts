@@ -85,7 +85,8 @@ export const ThumbnailSettingContainer = styled.div`
   #explain {
     color: #888;
     text-align: center;
-    font-size: 14px;
+    font-size: 0.9rem;
+    line-height:1.1rem;
     strong {
       margin: 0;
     }

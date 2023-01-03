@@ -10,6 +10,12 @@ export const Container = styled.div`
   min-height: 100vh;
   margin-top: 150px;
   background-color: #fff;
+  a {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    display: block;
+  }
 `;
 export const ButtonArea = styled.div`
   position: relative;

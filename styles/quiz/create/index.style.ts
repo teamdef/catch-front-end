@@ -28,13 +28,15 @@ export const TitleContainer = styled.div`
   height: 370px;
 
   #logo-wrapper {
-    padding: 1.5rem;
     text-align: left;
     position: relative;
     background-color: transparent;
+    top: 24px;
+    left: 24px;
   }
   #title-input-wrapper {
     color: #fff;
+    margin-top: 3rem;
     span {
       text-align: center;
       position: relative;
@@ -186,7 +188,7 @@ export const QuizChoiceTypeRadio = styled.div`
     transition: ease-in-out 0.2s;
     cursor: pointer;
     margin: 0 0.5rem 0 0.5rem;
-    padding: 0.5rem 1rem 0.25rem 1rem;
+    padding: 0.5rem 1.25rem 0.5rem 1.25rem;
     border-radius: 30px;
   }
   input[type='radio'] + label {
@@ -224,10 +226,10 @@ export const TextChoiceItem = styled.li<CorrectProps>`
   background-color: ${({ correct }) => (correct ? '#AAD775' : '#eee')};
   color: ${({ correct }) => (correct ? '#244E10' : '#888')};
   font-weight:${({ correct }) => (correct && 'bold')};
-  padding: 1rem 1rem 1rem 1.5rem;
+  padding: 1.25rem 1rem 1rem 1.75rem;
   border-radius: 25px;
-  margin-top: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   cursor: pointer;
   button {
     width: 40px;
@@ -292,7 +294,7 @@ export const ImgChoiceListContainer = styled.div`
 
 export const ImgWrapper = styled.div<CorrectProps>`
   width: 100%;
-  height: 150px;
+  height: 160px;
   position: relative;
   img {
     width: 100%;
@@ -328,7 +330,7 @@ export const ImgInputContainer = styled.div`
   background-color: #fff6f7;
   border: dashed 1px #ffa5aa;
   border-radius: 1rem;
-  height: 150px;
+  height: 160px;
   input {
     display: none;
   }
@@ -370,13 +372,14 @@ export const InfoContainer = styled.div`
 
 export const CardNumber = styled.span`
   position: absolute;
+  top:-1px;
   left: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 14px;
   width: 35px;
-  height: 45px;
+  height: 50px;
   border: solid 17px #ffa5aa;
   border-bottom: solid 10px #fff;
   background-color: #ffa5aa;

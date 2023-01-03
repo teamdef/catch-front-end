@@ -83,7 +83,12 @@ const Page: NextPageWithLayout = () => {
 
   // 퀴즈 세트 설명 textarea 핸들러
   const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    _setDescription(e.target.value);
+    if (e.target.value.length > 100) {
+      return false;
+    }
+    else {
+      _setDescription(e.target.value);
+    }
   };
 
   // redux store 자체를 초기화
@@ -368,7 +373,6 @@ const Page: NextPageWithLayout = () => {
               value={_description}
               onChange={_descriptionHandler}
               id="description-textarea"
-              maxLength={100}
             ></textarea>
           </div>
         </S.TitleContainer>
@@ -445,26 +449,28 @@ const Page: NextPageWithLayout = () => {
                         );
                       })}
                     </S.TextChoiceList>
-                    <S.TextChoiceCreateBtn>
-                      <input
-                        type="text"
-                        placeholder={'객관식 답안을 입력해주세요!'}
-                        autoComplete="off"
-                        maxLength={30}
-                        value={textChoiceInput}
-                        onChange={textChoiceInputHandler}
-                        onKeyDown={(e) => {
-                          onKeyDown(e, problemIndex);
-                        }}
-                      />
-                      <button
-                        onClick={() => {
-                          addChoiceText(problemIndex);
-                        }}
-                      >
-                        <MdOutlineAdd size={20} />
-                      </button>
-                    </S.TextChoiceCreateBtn>
+                    {problem.choices.length < 4 && (
+                      <S.TextChoiceCreateBtn>
+                        <input
+                          type="text"
+                          placeholder={'객관식 답안을 입력해주세요!'}
+                          autoComplete="off"
+                          maxLength={30}
+                          value={textChoiceInput}
+                          onChange={textChoiceInputHandler}
+                          onKeyDown={(e) => {
+                            onKeyDown(e, problemIndex);
+                          }}
+                        />
+                        <button
+                          onClick={() => {
+                            addChoiceText(problemIndex);
+                          }}
+                        >
+                          <MdOutlineAdd size={20} />
+                        </button>
+                      </S.TextChoiceCreateBtn>
+                    )}
                   </S.TextChoiceContainer>
                 )}
                 {problem.choiceType === 'img' && (
