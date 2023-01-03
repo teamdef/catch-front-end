@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
+  padding: 0 4%;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -23,44 +24,38 @@ export const QuizInfo = styled.div<QuizInfoProps>`
   position: relative;
   display: flex;
   justify-content: center;
-  /* height: 80%; */
-  height:600px;
-  width: 100%;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-  background: ${(props) =>
-      props.thumbnail
-        ? css`linear-gradient(
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 300px;
+    width: 100vw;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${(props) =>
+        props.thumbnail
+          ? css`linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0) 10%,
-      rgba(255, 255, 255, 0.5) 25%,
-      rgba(255, 255, 255, 0.7) 40%,
-      rgba(255, 255, 255, 0.9) 50%,
-      rgba(255, 255, 255, 1) 60%,
-      rgba(255, 255, 255, 1) 70%,
-      rgba(255, 255, 255, 1) 80%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, .5) 70%,
       rgba(255, 255, 255, 1) 90%,
       rgba(255, 255, 255, 1) 100%
     ),
     url(${props.thumbnail})`
-        : 'none'}
-    center;
-  background-size: cover;
-  background-repeat: no-repeat;
+          : 'none'}
+      center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 `;
 
 export const QuizTitle = styled.h1`
+  position: relative;
   max-width: 400px;
-  margin-top: 9rem;
+  margin-top: 80px;
   font-family: RixInooAriDuriR;
-  font-size: 60px;
-  @media (max-width: 400px) {
-    max-width: 80%;
-    font-size:50px;
-  }
+  font-size: 4rem;
   line-height: 70px;
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
@@ -72,49 +67,45 @@ export const QuizTitle = styled.h1`
 `;
 
 export const InnerContainer = styled.div`
-  position: absolute;
-  z-index: 2;
-  top: 350px;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  position: relative;
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fff;
-  padding-bottom:100px;
+  padding-bottom: 70px;
 `;
 
 export const Description = styled.div`
   color: #595959;
-  line-height: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   width: 90%;
-  margin-top:2rem;
+  margin-top: 2rem;
 `;
 export const QuizMakerBlock = styled.div`
   width: 100%;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color:#888;
+  color: #888;
   background-color: #fff6f7;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 1rem;
+  span {
+    font-size: 0.75rem;
+  }
   #maker {
-    margin-top:4px;
-    font-size: 20px;
+    margin-top: 4px;
     font-weight: bold;
     color: #ff264d;
   }
 `;
 export const QuizInfoContainer = styled.div`
-  margin-top: 2rem;
-  display: grid;
-  gap: 15px;
-  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 30px;
+  display: flex;
+  gap: 5%;
   height: 100px;
   width: 100%;
   color: #888;
@@ -125,22 +116,18 @@ export const QuizInfoContainer = styled.div`
     justify-content: center;
     background-color: #fff6f7;
     border-radius: 12px;
-    font-size: 18px;
+    font-size: 1rem;
   }
   strong {
     margin-right: 4px;
-    font-size: 24px;
+    font-size: 1.75rem;
     font-weight: bold;
     color: #ff264d;
   }
 `;
 
 export const SNSShareContainer = styled.div`
-  margin-top: 2rem;
-  width: 75%;
-  @media (max-width: 400px) {
-    width: 90%;
-  }
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -157,33 +144,21 @@ export const SNSShareContainer = styled.div`
 `;
 
 export const BestCommentContainer = styled.div`
-  margin-top: 2rem;
-  width:100% ;
+  margin-top: 40px;
+  width: 100%;
   #title {
     color: #ff4d57;
-    font-size:18px;
-    font-weight:bold;
-    text-align:left;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
   }
 `;
 export const ButtonWrap = styled.div`
-  /*
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  */
   position: fixed;
-  margin: 0 auto;
   left: 0;
-  right: 0;
-  bottom:30px;
-  width: 450px;
-  z-index:10;
-
-  @media (max-width: 500px) {
-    width: 90%;
+  padding: 0 3%;
+  bottom: 30px;
+  width: 100%;
+  button {
   }
-
-  padding-top: 2rem;
 `;

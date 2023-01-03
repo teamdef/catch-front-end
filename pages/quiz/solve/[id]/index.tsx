@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
-import { Loading , Logo, SNSShare} from 'components/common';
-import {AiOutlineShareAlt} from 'react-icons/ai'
+import { Loading, Logo, SNSShare, Comment } from 'components/common';
+import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction } from 'store/quiz_solve';
 
@@ -18,7 +18,7 @@ const Page: NextPageWithLayout = () => {
   const [thumbnail, setThumbnail] = useState('');
   const [maker, setMaker] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>('');
   let { id } = router.query;
   // id 값이 변경될 시
   useEffect(() => {
@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
         );
         setMaker(res?.data?.user?.nickname); // 퀴즈 제작자 닉네임
         setThumbnail(res?.data?.thumbnail); // 퀴즈 썸네일
-        setDescription(res?.data?.description); // 퀴즈 설명 
+        setDescription(res?.data?.description); // 퀴즈 설명
         setLoading(false);
         // 정답 배열 생성
       })
@@ -57,7 +57,7 @@ const Page: NextPageWithLayout = () => {
 
           <S.QuizInfoContainer>
             <S.QuizMakerBlock>
-              <div>출제자</div>
+              <span>출제자</span>
               <div id="maker">{maker}</div>
             </S.QuizMakerBlock>
             <div id="block">
@@ -82,7 +82,7 @@ const Page: NextPageWithLayout = () => {
             />
           </S.SNSShareContainer>
           <S.BestCommentContainer>
-            <div id="title">베스트 한줄평 👍</div>
+            <Comment list={2}/>
           </S.BestCommentContainer>
         </S.InnerContainer>
         <S.ButtonWrap>

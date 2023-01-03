@@ -21,18 +21,19 @@ export const Container = styled.div`
   }
 `;
 export const QuizCount = styled.div`
-position: fixed;
-top: 20px;
-right: 5%;
-z-index: 99999;
-span {
-  color: #ff4d57;
-  font-weight: bold;
-}
+  position: fixed;
+  top: 20px;
+  right: 5%;
+  z-index: 99999;
+  span {
+    color: #ff4d57;
+    font-weight: bold;
+  }
 `;
 export const QuizTitle = styled.h1`
   text-align: center;
   font-weight: normal;
+  word-break: keep-all;
   color: #6a5050;
   font-family: 'Noto Sans KR';
   width: 80%;
@@ -40,7 +41,6 @@ export const QuizTitle = styled.h1`
   line-height: 1.7rem;
   margin-top: 60px;
 `;
-
 
 export const QuizSolveContent = styled.div`
   @keyframes Bounce {
@@ -61,36 +61,37 @@ export const QuizSolveContent = styled.div`
     }
   }
   margin-top: 95px;
-  margin-bottom:70px;
+  margin-bottom: 65px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 export const QuizSolveCard = styled.div`
-  position:relative;
+  position: relative;
   width: 100%;
   border: 1px solid #ffcaca;
-  border-radius: 25px;
+  border-radius: 20px;
   background-color: white;
-  padding: 0 3%;
+  padding: 0 4%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-bottom:40px;
+  margin-bottom: 65px;
 `;
 
 export const ChoiceWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
+  gap: 20px;
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
   margin: 40px 0 30px 0;
   &#choice-img-wrapper {
     display: grid;
+    gap: 10px;
     grid-template-columns: repeat(2, calc(50% - 5px));
     grid-template-rows: repeat(2, 150px);
   }
@@ -101,21 +102,22 @@ export const ChoiceItem = styled.div`
       transform: scale(1);
     }
     50% {
-      transform: scale(.9);
+      transform: scale(0.9);
     }
     100% {
       transform: scale(1);
     }
   }
   position: relative;
-  width: 80%;
+  width: 100%;
   label {
-    padding: 1.25rem 1.25rem 1.25rem 1.75rem;
+    height: 60px;
     position: relative;
     font-size: 1rem;
-    text-align: center;
-    display: block;
-    border-radius: 20px;
+    display: flex;
+    padding-left: 35px;
+    align-items: center;
+    border-radius: 30px;
     background-color: #f4f4f4;
   }
   input {
@@ -123,9 +125,15 @@ export const ChoiceItem = styled.div`
   }
   input:checked + label {
     color: #244e10;
-    font-weight:bold;
+    font-weight: bold;
     background-color: #aad775;
   }
+  &#choice-txt-item {
+    &:last-child {
+      margin-bottom: 10px;
+    }
+  }
+
   &#choice-img-item {
     width: 100%;
     height: 100%;
@@ -137,14 +145,14 @@ export const ChoiceItem = styled.div`
       height: 100%;
     }
     input:checked + label {
-      animation: pick .2s;
+      animation: pick 0.2s;
       color: #fff;
       &::before {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         display: block;
         width: 80px;
         height: 80px;
@@ -154,14 +162,14 @@ export const ChoiceItem = styled.div`
       }
       &::after {
         content: '';
-        position:absolute;
-        display:block;
+        position: absolute;
+        display: block;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         background-color: #aad775;
-        opacity: .5;
+        opacity: 0.5;
       }
     }
     img {
@@ -193,8 +201,9 @@ export const QuizSolveBottom = styled.div`
     display: flex;
     transform: translateY(0);
     transition: transform 0.5s;
+    border-radius: 30px;
     &.on {
-      transform: translateY(-70px);
+      transform: translateY(-80px);
     }
     span {
       font-size: 1.2rem;
@@ -203,21 +212,19 @@ export const QuizSolveBottom = styled.div`
   }
 `;
 
-
 export const CardNumber = styled.span`
   position: absolute;
-  left: 5.43%;
+  left: 4%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 14px;
-  width: 35px;
-  height: 45px;
+  width: 34px;
+  height: 50px;
   border: solid 17px #ffa5aa;
   border-bottom: solid 10px #fff;
-  background-color: #ffa5aa;
+  background-color: #fff;
   font-weight: bold;
   font-size: 1.2rem;
   color: #fff;
 `;
-

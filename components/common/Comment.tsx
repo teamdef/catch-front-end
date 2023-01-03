@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import { useEffect, useState } from 'react';
-const Comment = () => {
+const Comment = ({ list }: any) => {
+  // list 파라미터에 정수 값을 넣어주면 해당 정수 값 만큼 댓글을 출력해줌 + 인풋 제거
   const [text, , clearFunction, textHandler] = useInput<string>('');
   // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
@@ -15,11 +16,13 @@ const Comment = () => {
 
   useEffect(() => {
     CommentListApi(problemSetId).then((res) => {
-      setComments(res.data);
-      console.log(res);
+      if(list){
+        setComments(res.data.slice(0, list));
+      }
+      else setComments(res.data);
     });
   }, []);
-  
+
   const saveComment = async (_comm: string) => {
     if (_comm) {
       clearFunction;
@@ -28,26 +31,34 @@ const Comment = () => {
       });
     }
   };
-  console.log(comments);
   return (
     <Container>
       {comments && (
         <>
           <Title>
-            한줄평 남기기 <span style={{ fontSize: '.7rem' }}>{comments.length}</span>
+            한줄평
+            <div>
+              <img src="/assets/img/chat.png" />
+              {list ? '' : <span>{comments.length}</span>}
+            </div>
           </Title>
-          <InputBox>
-            <span>({text.length}/50)</span>
-            <input
-              type="text"
-              value={text}
-              onChange={textHandler}
-              id="comment-input"
-              maxLength={50}
-              placeholder="나도 한마디.."
-            />
-            <button onClick={() => saveComment(text)}>등록</button>
-          </InputBox>
+          {list ? (
+            ''
+          ) : (
+            <InputBox>
+              <span>({text.length}/50)</span>
+              <input
+                type="text"
+                value={text}
+                onChange={textHandler}
+                id="comment-input"
+                maxLength={50}
+                placeholder="나도 한마디.."
+              />
+              <button onClick={() => saveComment(text)}>등록</button>
+            </InputBox>
+          )}
+
           <CommentBoard>
             {comments && comments.length !== 0 ? (
               comments.map((item: any, index: number) => (
@@ -75,12 +86,29 @@ const Comment = () => {
 const Container = styled.div`
   position: relative;
   width: 100%;
-  margin-top: 10%;
 `;
 const Title = styled.h2`
+  display: flex;
   font-size: 0.9rem;
   color: #ff4d57;
   font-weight: bold;
+  > div {
+    position: relative;
+    span {
+      position: absolute;
+      padding: 2px;
+      border-radius: 50%;
+      color: #ff4d57;
+      top: -7px;
+      font-size: 0.7rem;
+      left: 18px;
+    }
+    img {
+      margin-left: 5px;
+      width: 14px;
+      height: 14px;
+    }
+  }
 `;
 const InputBox = styled.div`
   position: relative;

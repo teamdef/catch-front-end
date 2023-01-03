@@ -77,7 +77,7 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-
+  gap: 20px;
   .share-btn {
     width: 50px;
     height: 50px;

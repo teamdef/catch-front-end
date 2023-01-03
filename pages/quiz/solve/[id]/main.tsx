@@ -62,7 +62,7 @@ const Page: NextPageWithLayout = () => {
       ) : (
         <S.ChoiceWrapper>
           {item.choices.map((_choice: any, j: number) => (
-            <S.ChoiceItem key={j} className="choice-item" id="choice-item-txt">
+            <S.ChoiceItem key={j} className="choice-item" id="choice-txt-item">
               <input
                 type="radio"
                 id={_choice.id}
