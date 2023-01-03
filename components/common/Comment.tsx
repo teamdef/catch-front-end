@@ -6,7 +6,7 @@ import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import { useEffect, useState } from 'react';
 
-import {CommentList} from 'components/common'
+import { CommentList } from 'components/common';
 
 interface CommentType {
   content: string;
@@ -57,13 +57,14 @@ const Comment = () => {
             />
             <button onClick={() => saveComment(text)}>등록</button>
           </InputBox>
-          {comments && comments.length !== 0 ? (
+          <CommentList commentList={comments} />
+          {/* {comments && comments.length !== 0 ? (
             <CommentList commentList={comments} />
           ) : (
             <CommentEmpty>
               <span>아직 한줄평이 없어요 !</span>
             </CommentEmpty>
-          )}
+          )} */}
           {/* <button className="more">더보기</button> */}
         </>
       )}

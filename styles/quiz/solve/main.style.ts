@@ -26,7 +26,7 @@ export const QuizTitle = styled.h1`
   font-family: 'Noto Sans KR';
   width: 80%;
   font-size: 1.3rem;
-  line-height: 1.7rem;
+  /*line-height: 1.6rem;*/
   margin: 4rem auto 1rem auto;
 `;
 

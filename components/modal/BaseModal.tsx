@@ -37,14 +37,14 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
       props.yesAction();
       closeModal();
     }
-  }
+  };
 
   const noActionAndClose = () => {
     if (props.noAction) {
       props.noAction();
       closeModal();
     }
-  }
+  };
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
     body.style.overflowY = 'hidden';
@@ -89,7 +89,10 @@ const Background = styled.div`
   position: fixed;
   left: 50%;
   top: 0;
-  width: 500px;
+  width: 480px;
+  @media (max-width: 480px) {
+    width: 100%;
+  }
   transform: translate(-50%, 0%);
   height: 100vh;
   background: #56565650;
@@ -107,16 +110,13 @@ const ModalWrapper = styled.div`
     0 6px 8px rgba(0, 0, 0, 0.11), 0 8px 16px rgba(0, 0, 0, 0.11);
   border-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
-
-  width: 350px; /* 모달창 기본 사이즈 */
-  @media (max-width: 500px) {
+  width: 384px; /* 480px 의 80% 너비가 384px임. */
+  @media (max-width: 480px) {
     width: 80vw;
   }
   max-height: 50vh;
   overflow: auto;
-
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 1rem;
   color: rgb(59, 59, 59);
 
   .close-button-wrapper {
@@ -135,9 +135,9 @@ const ModalBody = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top:1.5rem;
-  padding-bottom:2rem;
-  line-height:1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  /*line-height:1.5rem;*/
 `;
 const ActionButtonContainer = styled.div`
   display: flex;

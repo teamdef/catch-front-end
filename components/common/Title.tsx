@@ -64,7 +64,7 @@ const Wrapper = styled.div`
     }
     #sub-title {
       color: #888;
-      line-height: 1.5rem;
+      /*line-height: 1.5rem;*/
       word-break: keep-all;
     }
   }

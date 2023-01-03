@@ -30,7 +30,7 @@ export const SectionBlock = styled.div`
   #section-description{
     color:#595959;
     font-size:0.9rem;
-    line-height:1.2rem;
+    /*line-height:1.2rem;*/
   }
   #section-contents {
     margin-top: 2rem;

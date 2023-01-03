@@ -59,15 +59,23 @@ const Wrapper = styled.div`
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   top: 0px;
-  width: 100%;
-  max-width: 500px;
+  width: 480px;
+  @media (max-width: 480px) {
+    width: 100%;
+  }
   z-index: 10;
   border-bottom: solid 1px #eee;
+  height: 80px; /* 변동 헤더 없이 헤더 높이 80px로 고정 */
 `;
 // header
 const HeaderContentWrapper = styled.div`
   display: flex;
-  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+  /*padding: 5% 0.5rem;*/ /* 좌우 패딩 5% 상하 패딩 0.5rem*/
+  padding-left: 5%;
+  padding-right: 5%;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 `;
 interface HeaderProps {
   resize: boolean;
@@ -75,9 +83,7 @@ interface HeaderProps {
 const HeaderContent = styled.div<HeaderProps>`
   display: flex;
   width: 100%;
-  height: ${(props) => (props.resize ? '60px' : '80px')};
   justify-content: space-between;
-  align-items: center;
   transition:ease-in-out 0.2s;
 `;
 const UserProfile = styled.div`

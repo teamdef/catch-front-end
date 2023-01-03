@@ -28,18 +28,18 @@ export const MainButton = styled.button`
 `;
 
 export const FlatButton = styled.button`
-  bottom: 0;
-  font-size: 14px;
+  font-size: 1rem;
   border-radius: 30px;
   border: none;
-  height: 50px;
   font-weight: 500;
   background-color: #ff4d57;
   color: #fff;
-  width: 100%;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
-  word-break:keep-all;
+  width: 200px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: keep-all;
   &:disabled {
     color: #7c7c7c;
     background-color: #ececec;
