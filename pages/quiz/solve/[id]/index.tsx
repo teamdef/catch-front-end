@@ -82,7 +82,7 @@ const Page: NextPageWithLayout = () => {
             />
           </S.SNSShareContainer>
           <S.BestCommentContainer>
-            <Comment list={2}/>
+            <Comment />
           </S.BestCommentContainer>
         </S.InnerContainer>
         <S.ButtonWrap>
