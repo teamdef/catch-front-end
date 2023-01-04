@@ -26,12 +26,15 @@ export const QuizInfo = styled.div<QuizInfoProps>`
   position: relative;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 300px;
   &::before {
     content: '';
     position: absolute;
     display: block;
-    height: 300px;
     width: 100vw;
+    height: 100%;
+    max-width: 480px;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -39,9 +42,9 @@ export const QuizInfo = styled.div<QuizInfoProps>`
         props.thumbnail
           ? css`linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0) 60%,
-      rgba(255, 255, 255, .5) 70%,
-      rgba(255, 255, 255, 1) 90%,
+      rgba(255, 255, 255, 0) 70%,
+      rgba(255, 255, 255, .2) 75%,
+      rgba(255, 255, 255, .9) 90%,
       rgba(255, 255, 255, 1) 100%
     ),
     url(${props.thumbnail})`
@@ -53,11 +56,12 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
+  padding-top: 30px;
   max-width: 390px;
-  margin-top: 9rem;
   font-family: RixInooAriDuriR;
   font-size: 60px;
   line-height: 1.3;
+  z-index: 1;
   @media (max-width: 390px) {
     max-width: 90%;
     font-size: 14vw;
@@ -78,7 +82,7 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 70px;
+  padding-bottom: 100px;
 `;
 
 export const Description = styled.div`
@@ -87,7 +91,6 @@ export const Description = styled.div`
   /*line-height: 1.5rem;*/
   text-align: center;
   width: 90%;
-  margin-top: 2rem;
 `;
 export const QuizMakerBlock = styled.div`
   width: 100%;
@@ -161,10 +164,12 @@ export const BestCommentContainer = styled.div`
 `;
 export const ButtonWrap = styled.div`
   position: fixed;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 0 3%;
   bottom: 30px;
   width: 100%;
+  max-width: 480px;
   button {
   }
 `;
