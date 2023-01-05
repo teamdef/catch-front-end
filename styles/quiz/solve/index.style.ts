@@ -13,8 +13,8 @@ export const Container = styled.div`
     top: 0;
     left: 0;
     display: block;
-    top:24px;
-    left:24px;
+    top: 24px;
+    left: 24px;
     z-index: 99;
   }
 `;
@@ -32,6 +32,7 @@ export const QuizInfo = styled.div<QuizInfoProps>`
     display: block;
     height: 300px;
     width: 100vw;
+    max-width: 480px;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -58,6 +59,7 @@ export const QuizTitle = styled.h1`
   font-family: RixInooAriDuriR;
   font-size: 60px;
   line-height: 1.3;
+  z-index: 9;
   @media (max-width: 390px) {
     max-width: 90%;
     font-size: 14vw;

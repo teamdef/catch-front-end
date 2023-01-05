@@ -54,7 +54,6 @@ const Page: NextPageWithLayout = () => {
         </S.QuizInfo>
         <S.InnerContainer>
           <S.Description>{description}</S.Description>
-
           <S.QuizInfoContainer>
             <S.QuizMakerBlock>
               <span>출제자</span>
