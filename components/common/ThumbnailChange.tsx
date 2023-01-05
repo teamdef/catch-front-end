@@ -1,14 +1,16 @@
 import styled, { keyframes } from 'styled-components';
 import { ChangeEvent, useState } from 'react';
-import { ThumbnailChangeApi } from 'pages/api/test';
+import { QuizThumbnailChangeApi } from 'pages/api/quiz';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { MdPhotoCamera, MdDelete } from 'react-icons/md';
+import {Loading} from 'components/common'
 interface ThumbnailChangeProps {
   url: string | null | undefined;
   probsetId: string;
 }
 const ThumbnailChange = ({ url, probsetId }: ThumbnailChangeProps) => {
   const [thumbnailURL, setThumbnailURL] = useState<string | null | undefined>(url);
+  const [isLoading, setIsLoading] = useState(false);
 
   const options = {
     maxSizeMB: 1, // 원본 이미지 최대 용량
@@ -25,6 +27,7 @@ const ThumbnailChange = ({ url, probsetId }: ThumbnailChangeProps) => {
   };
 
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setIsLoading(true);
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
     // 이미지가 있을 경우
     if (files && files[0]) {
@@ -33,9 +36,10 @@ const ThumbnailChange = ({ url, probsetId }: ThumbnailChangeProps) => {
       const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
         type: _compressed.type,
       }); // 압축 이미지 대입
-      if ((await ThumbnailChangeApi(probsetId as string, _imgFile)) === 200) {
+      if ((await QuizThumbnailChangeApi(probsetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
+        setIsLoading(false);
       }
     }
   };
@@ -45,27 +49,30 @@ const ThumbnailChange = ({ url, probsetId }: ThumbnailChangeProps) => {
   };
 
   return (
-    <ThumbnailChangeWrapper>
-      <input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
-      <label htmlFor="thumbnail-input">
-        {thumbnailURL ? (
-          <>
-            {thumbnailURL && (
-              <>
-                <ThumbnailChangeButton>
-                  <MdPhotoCamera size={20} />
-                </ThumbnailChangeButton>
-                <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
-              </>
-            )}
-          </>
-        ) : (
-          <DefaultThumbnail>
-            <MdPhotoCamera size={40} />
-          </DefaultThumbnail>
-        )}
-      </label>
-    </ThumbnailChangeWrapper>
+    <>
+      {isLoading && <Loading />}
+      <ThumbnailChangeWrapper>
+        <input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
+        <label htmlFor="thumbnail-input">
+          {thumbnailURL ? (
+            <>
+              {thumbnailURL && (
+                <>
+                  <ThumbnailChangeButton>
+                    <MdPhotoCamera size={20} />
+                  </ThumbnailChangeButton>
+                  <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
+                </>
+              )}
+            </>
+          ) : (
+            <DefaultThumbnail>
+              <MdPhotoCamera size={40} />
+            </DefaultThumbnail>
+          )}
+        </label>
+      </ThumbnailChangeWrapper>
+    </>
   );
 };
 

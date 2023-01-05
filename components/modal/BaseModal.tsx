@@ -1,6 +1,6 @@
 import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
 import styled from 'styled-components';
-import ModalPortal from 'components/modal/ModalPortal';
+import ModalPortal from 'components/modal/PortalWrapper';
 import { useOnOutsideClick } from 'hooks/useModal';
 
 export interface BaseModalType {
@@ -32,6 +32,19 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
     e.stopPropagation();
   };
 
+  const yesActionAndClose = () => {
+    if (props.yesAction) {
+      props.yesAction();
+      closeModal();
+    }
+  };
+
+  const noActionAndClose = () => {
+    if (props.noAction) {
+      props.noAction();
+      closeModal();
+    }
+  };
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
     body.style.overflowY = 'hidden';
@@ -49,7 +62,7 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
             {props.yesTitle && (
               <ActionButtonYes
                 onClick={() => {
-                  props.yesAction ? props.yesAction() : closeModal();
+                  props.yesAction ? yesActionAndClose() : closeModal();
                 }}
               >
                 {props.yesTitle || '확인'}
@@ -58,7 +71,7 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
             {props.noTitle && (
               <ActionButtonNo
                 onClick={() => {
-                  props.noAction ? props.noAction() : closeModal();
+                  props.noAction ? noActionAndClose() : closeModal();
                 }}
               >
                 {props.noTitle || '취소'}
@@ -76,7 +89,10 @@ const Background = styled.div`
   position: fixed;
   left: 50%;
   top: 0;
-  width: 500px;
+  width: 480px;
+  @media (max-width: 480px) {
+    width: 100%;
+  }
   transform: translate(-50%, 0%);
   height: 100vh;
   background: #56565650;
@@ -94,18 +110,14 @@ const ModalWrapper = styled.div`
     0 6px 8px rgba(0, 0, 0, 0.11), 0 8px 16px rgba(0, 0, 0, 0.11);
   border-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
-
-  width: 350px; /* 모달창 기본 사이즈 */
-  @media (max-width: 500px) {
+  width: 384px; /* 480px 의 80% 너비가 384px임. */
+  @media (max-width: 480px) {
     width: 80vw;
   }
   max-height: 50vh;
   overflow: auto;
-
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 1rem;
   color: rgb(59, 59, 59);
-  transform: scale(1.15);
 
   .close-button-wrapper {
     display: flex;
@@ -118,15 +130,16 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalBody = styled.div`
-  padding: 1rem 0.5rem 1rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  /*line-height:1.5rem;*/
 `;
 const ActionButtonContainer = styled.div`
-  padding: 0.5rem;
   display: flex;
   justify-content: center;
 `;

@@ -1,147 +1,102 @@
-import styled from 'styled-components';
-import type { ReactElement } from 'react';
+import * as S from 'styles/quiz/solve/index.style';
 import { AppLayout } from 'components/layout';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'components/common';
-import axios from 'axios';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { saveSolveProblemsAction, saveSolveProblemSetAction } from 'store/quiz_solve'
+import { MainButton } from 'styles/common';
+import { Loading, Logo, SNSShare, Comment } from 'components/common';
+import { AiOutlineShareAlt } from 'react-icons/ai';
+import { QuizDataFetchApi } from 'pages/api/quiz';
+import { saveSolveProblemSetAction } from 'store/quiz_solve';
 
-// quiz/solve/1
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { solveSetTitle } = useSelector((state: RootState) => state.solve);
-  const { solveProblems } = useSelector((state: RootState) => state.solve);
-  const [ thumbnail, setThumbnail] = useState('');
+  const { solveProblemSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
+  const [thumbnail, setThumbnail] = useState('');
+  const [maker, setMaker] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>('');
   let { id } = router.query;
-  console.log(id);
   // id 값이 변경될 시
   useEffect(() => {
-    async function getQuiz() {
-      try {
-        const response = await axios.get(
-          `https://api.catchcatch.link/v1/loadprobset/${id}`,
+    setLoading(true);
+    QuizDataFetchApi(id as string)
+      .then((res) => {
+        dispatch(
+          saveSolveProblemSetAction({
+            solveProblemSetTitle: res?.data?.set_title,
+            problemSetId: `${id}`,
+            solveProblems: res?.data?.prob,
+          }),
         );
-        dispatch(saveSolveProblemSetAction({solveSetTitle : response.data[0].set_title}));
-        dispatch(saveSolveProblemsAction({solveProblems : response.data[0].prob}));
-        setThumbnail(response.data[0].thumbnail);
+        setMaker(res?.data?.user?.nickname); // 퀴즈 제작자 닉네임
+        setThumbnail(res?.data?.thumbnail); // 퀴즈 썸네일
+        setDescription(res?.data?.description); // 퀴즈 설명
+        setLoading(false);
         // 정답 배열 생성
-        
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getQuiz();
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [id]);
-  console.log(solveSetTitle);
 
   return (
-    <Container>
-      <Logo>캐치캐치</Logo>
-      <QuizInfo>
-        <Circle>
-          <img src={thumbnail} />
-          <span>
-            총 <em>{solveProblems.length}</em> 문제
-          </span>
-        </Circle>
-        <p>"{solveSetTitle}"</p>
-        <span>출제자 : {}</span>
-      </QuizInfo>
-      <Button
-        width="250px"
-        height="55px"
-        fontSize="1.4rem"
-        bgColor="#ff4d57"
-        fontColor="#fff"
-        id="create-btn"
-        onClick={() => {
-          router.push(`/quiz/solve/${id}/main`);
-        }}
-      >
-        시작하기
-      </Button>
-    </Container>
+    <>
+      {loading ? <Loading /> : ''}
+      <S.Container>
+        <Logo />
+        <S.QuizInfo thumbnail={thumbnail}>
+          <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
+        </S.QuizInfo>
+        <S.InnerContainer>
+          <S.Description>{description}</S.Description>
+          <S.QuizInfoContainer>
+            <S.QuizMakerBlock>
+              <span>출제자</span>
+              <div id="maker">{maker}</div>
+            </S.QuizMakerBlock>
+            <div id="block">
+              <strong>{solveProblems.length}</strong>
+              <div>문제</div>
+            </div>
+            <div id="block">
+              <strong>???</strong>
+              <div>참여</div>
+            </div>
+          </S.QuizInfoContainer>
+          <S.SNSShareContainer>
+            <div id="explain">
+              <AiOutlineShareAlt />
+              <div>퀴즈 세트를 공유해보세요!</div>
+            </div>
+            <SNSShare
+              nickName={maker}
+              set_title={solveProblemSetTitle}
+              url={`quiz/solve/${id}`}
+              thumbnail={thumbnail}
+            />
+          </S.SNSShareContainer>
+          <S.BestCommentContainer>
+            <Comment />
+          </S.BestCommentContainer>
+        </S.InnerContainer>
+        <S.ButtonWrap>
+          <MainButton
+            onClick={() => {
+              router.push(`/quiz/solve/${id}/main`);
+            }}
+          >
+            시작하기
+          </MainButton>
+        </S.ButtonWrap>
+      </S.Container>
+    </>
   );
 };
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-  height: 100vh;
-  background-color: #fff;
-`;
-const Logo = styled.div`
-  position: relative;
-  display: block;
-  font-size: 2.5rem;
-  padding-top: 5%;
-  font-family: 'RixInooAriDuriR';
-  color: #ff4d57;
-`;
-const QuizInfo = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-weight: bold;
-  > p {
-    color: #ff4d57;
-    font-size: 1.5rem;
-    margin: 0;
-    margin-top: 25%;
-    margin-bottom: 10%;
-  }
-  > span {
-    font-size: 1.1rem;
-  }
-`;
-const Circle = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  border: 8px solid #ff4d57;
-  overflow: hidden;
-  span {
-    z-index: 1;
-    font-size: 2rem;
-    color: #fff;
-    
-    em {
-      font-style: normal;
-      color: #ff4d57;
-    }
-    &::before {
-      content: '';
-      position:absolute;
-      top: 0;
-      left: 0;
-      display:block;
-      width: 100%;
-      height: 100%;
-      z-index:-1;
-      background-color: rgba(0,0,0,.5);
-    }
-  }
-  img {
-    position:absolute;
-    object-fit: cover;
-    height: 100%;
-    
-  }
-`;
-
 Page.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };

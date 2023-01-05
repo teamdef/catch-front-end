@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { deleteToken } from 'utils/token';
-import Router from 'next/router';
+
 // user 스토어 타입 정의
 
 interface UserTypes {
@@ -37,7 +37,6 @@ const userSlice = createSlice({
       state.kakaoUid = kakaoUid;
     },
     logoutAction: (state: UserTypes) => {
-      Router.push('/'); // 메인화면으로 이동
       deleteToken(); // 헤더와 쿠키에서 토큰 제거
       state.isLoggedin = false;
       state.id = '';

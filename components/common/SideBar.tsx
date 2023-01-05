@@ -5,10 +5,11 @@ import { HiOutlineEmojiSad } from 'react-icons/hi';
 import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
-import { kakaoLeaveApi } from 'pages/api/test';
+import { kakaoLeaveApi } from 'pages/api/member';
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';
+import { Loading } from 'components/common';
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -19,34 +20,31 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { isLoggedin, profileImg, nickName, kakaoUid } = useSelector((state: RootState) => state.user);
   const [animation, setAnimation] = useState('openAnimation');
+  const [isLoading, setIsLoading] = useState(false);
   const [openLeaveModal, _, RenderLeaveModal] = useModal({
     escClickable: true,
     backgroundClickable: true,
     yesTitle: '탈퇴',
     noTitle: '취소',
     yesAction: () => seviceLeave(),
-    contents: 
+    contents: (
       <div>
         <div>
-          <strong style={{ color: '#ff4d57' }}>탈퇴하시겠습니까? 😥</strong>
+          <strong style={{ color: '#ff4d57',fontSize: '1.2rem' }}>탈퇴하시겠습니까? 😥</strong>
           <br />
           지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
         </div>
-        <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>진행하시겠습니까? ㅜㅜㅜ</div>
+        <div style={{ marginTop: '10px', fontSize: '1rem', color: '#888' }}>진행하시겠습니까? ㅜㅜㅜ</div>
       </div>
-    ,
+    ),
   });
   const [openLogoutModal, closeLogoutModal, RenderLogoutModal] = useModal({
     escClickable: true,
     backgroundClickable: true,
     yesTitle: '로그아웃',
     noTitle: '닫기',
-    yesAction: () => { closeLogoutModal(); logout(); },
-    contents: (
-      <div>
-        로그아웃 하시겠습니까? 다시 로그인 할 수 있습니다.
-      </div>
-    ),
+    yesAction: () => logout(),
+    contents: <div>로그아웃 하시겠습니까? 다시 로그인 할 수 있습니다.</div>,
   });
 
   const close = () => {
@@ -67,11 +65,20 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
       query: { isReqSignUp: false },
     });
   };
+  const goOpenChat = () => {
+    window.open('https://open.kakao.com/o/sLi3afJe');
+  };
+  const goIntroducePage = () => {
+    window.open('https://teamdef.notion.site/ba4b38482a0d4d359114bf479b169c44');
+  };
   const seviceLeave = () => {
+    setIsLoading(true);
     kakaoLeaveApi().then((res) => {
       if (res.status === 200) {
         alert(res.data.message);
         dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+        Router.push('/'); // 메인화면으로 이동
+        setIsLoading(false);
       }
     });
   };
@@ -109,6 +116,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
 
   return (
     <>
+      {isLoading && <Loading ment={'탈퇴 진행중 입니다...'} />}
       <Background>
         <Wrapper id="side-bar" ref={sidebarRef} className={animation}>
           <div id="greeting">
@@ -139,9 +147,13 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
               <AiOutlineNotification />
               공지사항
             </li>
-            <li>
+            <li onClick={goOpenChat}>
               <img src={'/assets/img/kakao_icon.png'} />
               카카오톡 오픈채팅 문의
+            </li>
+            <li onClick={goIntroducePage}>
+              <img src={'/assets/img/catch_logo1.png'} />
+              캐치캐치를 소개합니다
             </li>
             {isLoggedin && (
               <>
@@ -166,7 +178,6 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
             <AiOutlineClose size={24} />
           </CloseButton>
         </Wrapper>
-
         <RenderLeaveModal />
         <RenderLogoutModal />
       </Background>
@@ -177,15 +188,15 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
 const Background = styled.div`
   z-index: 50;
   position: fixed;
-  width: 500px;
-  @media (max-width: 500px) {
+  width: 480px;
+  @media (max-width: 480px) {
     width: 100%;
   }
   height: 100vh;
   right: 50%;
   top: 0;
   transform: translate(50%, 0%);
-  @media (max-width: 500px) {
+  @media (max-width: 390px) {
     right: 0;
     transform: translate(0, 0);
   }
@@ -226,7 +237,7 @@ const Wrapper = styled.div`
   }
   #greeting {
     font-family: 'RixInooAriDuriR';
-    font-size: 28px;
+    font-size: 1.8rem;
     color: #9b9b9b;
   }
   #bottom-info {
@@ -234,7 +245,7 @@ const Wrapper = styled.div`
     bottom: 2rem;
     left: calc(50% - 42px);
     color: #9b9b9b;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
   hr {
     border: none;
@@ -259,8 +270,8 @@ const Profile = styled.div`
   margin-top: 2rem;
   margin-bottom: 2rem;
   #profile-img {
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 60px;
     img {
       width: 100%;
       height: 100%;
@@ -272,7 +283,7 @@ const Profile = styled.div`
     margin-left: 1.5rem;
     #user-nickname {
       color: #000;
-      font-size: 20px;
+      font-size: 1.3rem;
       font-weight: bold;
       display: flex;
       align-items: center;
@@ -290,7 +301,7 @@ const Profile = styled.div`
       &:hover {
         cursor: pointer;
       }
-      font-size: 20px;
+      font-size: 1.2rem;
       font-weight: bold;
       strong {
         font-weight: bold;
@@ -310,8 +321,8 @@ const MenuList = styled.ul`
   justify-content: left;
 
   li {
-    margin-bottom: 1.5rem;
-    font-size: 18px;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     & *:nth-child(1) {
@@ -330,18 +341,6 @@ const MenuList = styled.ul`
   }
   #out {
     color: #d6d6d6;
-  }
-`;
-
-// 임시 변수명, 제작중있음 모달
-const Modal2 = styled.div`
-  strong {
-    color: #ff4d57;
-  }
-  #last-modified {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #999;
   }
 `;
 

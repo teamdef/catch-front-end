@@ -15,9 +15,9 @@ const Centering = styled.div`
   justify-content: center;
 `;
 const FixedWidth = styled.div`
-  max-width: 500px;
+  max-width: 480px; /* 기준 width가 480px */
   width: 100%;
-  min-height: 100vh;;
+  min-height: 100vh;
   background-color: #fff;
 `;
 export default AppLayout;

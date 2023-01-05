@@ -1,26 +1,31 @@
 import styled, { keyframes } from 'styled-components';
-import { SyncLoader } from 'react-spinners';
+import { PortalWrapper } from 'components/modal'
 
 interface LoadingProps {
   ment?: string;
 }
 const Loading = ({ ment }: LoadingProps) => {
   return (
-    <Background>
-      <Title>
-        <span>캐</span>
-        <span>치</span>
-        <span>캐</span>
-        <span>치</span>
-      </Title>
-      {ment && <div id="ment">{ment}</div>}
-    </Background>
+    <PortalWrapper wrapperId="react-portal-loading-container">
+      <Background>
+        <Title>
+          <span>캐</span>
+          <span>치</span>
+          <span>캐</span>
+          <span>치</span>
+        </Title>
+        {ment && <div id="ment">{ment}</div>}
+      </Background>
+    </PortalWrapper>
   );
 };
 
 const Background = styled.div`
   background-color: #00000085;
-  width: 500px;
+  width: 480px;
+  @media (max-width:480px){
+    width:100%;
+  }
   height: 100vh;
   z-index: 999;
   position: fixed;

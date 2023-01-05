@@ -18,32 +18,42 @@ interface ProblemTypes {
 // ProblemSetType - 문제집 정보
 interface ProblemSetTypes {
   setTitle: string; // 문제집 제목
+  description?:string // 퀴즈 세트 설명 
   problems: ProblemTypes[]; // 문제 배열
 }
 
+// 풀이
 
-//----------------------풀이------------------------
 // SolveProblemTypes - 문제(풀이용) 정보
 interface SolveProblemTypes {
   solveProblemTitle: string; // 문제 제목
   solveChoices: string[]; // 객관식 항목 배열
 }
-interface SolveAnswerTypes {
-  solveAnswer: string; // 정답 이름
-  solveAnswerId: string; // 정답 id 값
+
+// 풀이자 정보
+interface SolveUserTypes {
+  solveUserName: string; // 유저 닉네임
+  solveUserScore: Number; // 유저 스코어
+  solveUserId: string; // 유저 아이디
 }
 // SolveProblemSetTypes - 문제집(풀이용) 정보
 interface SolveProblemSetTypes {
-  solveUserName: string; // 유저 닉네임
-  solveUserScore: Number; // 유저 스코어
-  solveSetTitle: string; // 문제집 제목
+  problemSetId: string; // 퀴즈 아이디
+  solveProblemSetTitle: string; // 문제집 제목
   solveProblems: SolveProblemTypes[]; // 문제 배열
   solveAnswers: SolveAnswerTypes[];
 }
-interface SolveUserInfoTypes {
-  
+
+// 한줄평
+interface CommentSetTypes {
+  comments: CommentTypes[];
 }
-// /------------------------------------------------
+interface CommentTypes {
+  nickname: string;
+  content: string;
+  created_at: string;
+  user: string;
+}
 
 // 공지사항 타입
 interface NoticeTypes {
@@ -54,5 +64,6 @@ interface NoticeTypes {
 // 전역 window 객체에 KaKao 라는 객체가 있음을 알린다.
 
 interface Window {
-  Kakao: any;
+  Kakao: any; // 카카오
+  adsbygoogle: any; // 구글 애드센스
 }

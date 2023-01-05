@@ -1,14 +1,18 @@
 import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
+import theme from 'styles/theme';
 import type { AppProps, AppContext } from 'next/app';
 import type { NextPage } from 'next';
 import { useSelector } from 'react-redux';
+import Script from 'next/script';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { authAxios } from 'utils/customAxios';
+import { authAxios } from 'pages/api/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
+import * as gtag from '../lib/gtag'
 import { logoutAction } from 'store/user';
 import { useDispatch } from 'react-redux';
 
@@ -50,10 +54,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (access_token) {
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
     } else {
-      // 로그인 되어 있는 상태라면?
-      // if (isLoggedin) {
-      //   dispatch(logoutAction()); // 로그인 상태에서 쿠키 없으면 로그아웃 시키기
-      // }
+      dispatch(logoutAction());
     }
   }, [router]);
 
@@ -61,7 +62,25 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <>
-      <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`} />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
+      <ThemeProvider theme={theme}>
+        <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+      </ThemeProvider>
     </>
   );
 }
@@ -80,13 +99,6 @@ MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
       const access_token = match[2]; // RegExp 객체 반환값 참고
       // axios 객체에 인증헤더 추가
       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-    } else {
-      // 쿠키가 없다면 비로그인 상태 .
-      if (ctx.res) {
-        ctx.res.statusCode = 302;
-        ctx.res.setHeader('Location', ``); 
-        ctx.res.end();
-      }
     }
   }
   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
