@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MdPlayArrow } from 'react-icons/md';
 import Link from 'next/link';
 import { RecentQuizType } from './RecentQuiz';
 import { shareProps } from 'components/common/SNSShare';
-import {IoShareOutline} from 'react-icons/io5'
+import { IoShareOutline } from 'react-icons/io5';
 interface QuizProps {
   recentQuiz: RecentQuizType;
   bottomUpOpen: (currentQuiz: RecentQuizType) => void;
@@ -50,21 +50,29 @@ const QuizCard = ({ bottomUpOpen, recentQuiz }: QuizProps) => {
     <Link href={`/quiz/solve/${recentQuiz.id}`} passHref>
       <QuizCardWrapper>
         {recentQuiz.thumbnail && (
-          <ThumbnailWrapper>
-            <img src={recentQuiz.thumbnail} alt="퀴즈 썸네일" />
+          <ThumbnailWrapper thumbnailURL={recentQuiz.thumbnail}>
+            {/* <img src={recentQuiz.thumbnail} alt="퀴즈 썸네일" /> */}
+            <QuizInfoChips isThumbnail={!!recentQuiz.thumbnail}>
+              <span className="chip">참여 {recentQuiz.solverCnt}</span>
+            </QuizInfoChips>
           </ThumbnailWrapper>
         )}
         <div id="quiz-contents-container">
           <div id="quiz-contents">
+            <div id="quiz-title">{recentQuiz.set_title}</div>
             <div id="profile-row">
               <ProfileImgWrapper>
                 <img src={recentQuiz.profile_img || '/assets/img/user_default.png'} />
               </ProfileImgWrapper>
-              <div id="user-name">{recentQuiz.nickname}</div>
-              <div id="quiz-date">{timeForToday(recentQuiz.created_at)}</div>
+              <div id="name-and-date">
+                {recentQuiz.nickname} · {timeForToday(recentQuiz.created_at)}
+              </div>
             </div>
-            <div id="quiz-title">{recentQuiz.set_title}</div>
-            <div id="quiz-info">참여 {recentQuiz.solverCnt}</div>
+            {!!recentQuiz.thumbnail === false && (
+              <QuizInfoChips isThumbnail={!!recentQuiz.thumbnail}>
+                <span className="chip">참여 {recentQuiz.solverCnt}</span>
+              </QuizInfoChips>
+            )}
           </div>
           <button
             id="quiz-share-btn"
@@ -107,14 +115,15 @@ const QuizCardWrapper = styled.div`
           color: #888;
           margin-left: 10px;
         }
+        #name-and-date {
+          color: #888;
+          font-size: 0.9rem;
+        }
       }
       #quiz-title {
-        font-size: 1.1rem;
-      }
-
-      #quiz-info {
-        font-size: 0.9rem;
-        color: #888;
+        font-size: 1rem;
+        color: #595959;
+        padding-bottom:5px;
       }
     }
   }
@@ -130,14 +139,14 @@ const QuizCardWrapper = styled.div`
   #quiz-share-btn {
     background-color: transparent;
     border: none;
-    margin:0 auto;
-    color:#595959;
+    margin: 0 auto;
+    color: #595959;
   }
 `;
 
 const ProfileImgWrapper = styled.div`
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 28px;
+  height: 28px;
   margin-right: 10px;
   img {
     width: 100%;
@@ -147,19 +156,83 @@ const ProfileImgWrapper = styled.div`
   }
 `;
 
-const ThumbnailWrapper = styled.div`
-  width: 100%;
-  height: 150px;
-  @media (max-width: 390px) { /* 화면이 작아지는 break-point 로 설정 */
-    height:120px;
-  }
+/* 썸네일 유무에 따라 스타일을 다르게 변경 할 예정 */
+interface QuizInfoChipsProps {
+  isThumbnail: boolean;
+}
+const QuizInfoChips = styled.div<QuizInfoChipsProps>`
+  display: flex;
 
-  img {
+  ${(props) =>
+    props.isThumbnail
+      ? css`
+          align-items: end;
+          justify-content: right;
+          height: inherit;
+          padding-right: 3%;
+          padding-bottom: 2%;
+        `
+      : css`
+          padding-top: 8px;
+        `};
+  .chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    border: ${(props) => (props.isThumbnail ? 'solid 1px #ffffff20' : 'solid 1px #eee')};
+    background-color: ${(props) => (props.isThumbnail ? '#00000070' : '#fff')};
+    color: ${(props) => (props.isThumbnail ? '#fff' : '#888')};
+    font-size: 0.9rem;
+    padding: 4px 12px 4px 12px;
+  }
+`;
+
+/* 썸네일 유무에 따라 스타일을 다르게 변경 할 예정 */
+interface ThumbnailWrapperProps {
+  thumbnailURL: string;
+}
+
+const ThumbnailWrapper = styled.div<ThumbnailWrapperProps>`
+  width: 100%;
+  height: 200px;
+  background-image: ${(props) => css`url(${props.thumbnailURL})`};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  @media (max-width: 390px) {
+    /* 화면이 작아지는 break-point 로 설정 */
+    height: 150px;
+  }
+  #quiz-info-chips {
+    display: flex;
+    position: absolute;
+    right: 2%;
+    top: calc(170px + 2%);
+    @media (max-width: 390px) {
+      /* 화면이 작아지는 break-point 로 설정 */
+      top: calc(120px + 2%);
+    }
+    #quiz-solver {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      border: solid 1px #ffffff20;
+      background-color: #00000070;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 4px 12px 4px 12px;
+    }
+  }
+  /* img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-  }
+  } */
 `;
 export default QuizCard;
