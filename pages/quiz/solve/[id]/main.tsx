@@ -91,13 +91,12 @@ const Page: NextPageWithLayout = () => {
     <S.Container>
       <Logo />
       <S.QuizCount>
-        남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span>
+        <p>남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span></p>
       </S.QuizCount>
       <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton
           className={count == 0 ? 'on' : ''}
-          style={{ width: '90%', margin: '0' }}
           onClick={() => {
             dispatch(saveSolveAnswersAction({ solveAnswers: userAnswers }));
             dispatch(

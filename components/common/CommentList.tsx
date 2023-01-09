@@ -10,6 +10,42 @@ interface CommentBoardProps {
   commentList: CommentType[] | null;
 }
 const CommentList = ({ commentList }: CommentBoardProps) => {
+  const postDate = (_createDate:string) => {
+    let date1 = new Date(); // 현재 일자
+    let date2 = new Date(_createDate); // 파일 생성일자
+    // 일자의 격차 구하기
+    const diffDate = date1.getTime() - date2.getTime();
+    // 분 단위로 변경
+    let diffMin = diffDate / (1000 * 60);
+    let diffDay = diffMin / 1440;
+    let diffWeek = diffDay / 7;
+    let diffMon = diffDay / 30;
+    let diffYear = diffDay / 365;
+    // 게시일자 별 멘트
+    if (diffMin < 1) {
+      return "방금 전";
+    } else if (diffMin < 60) {
+      // 1 시간 이내
+      return diffMin + "분 전";
+    } else if (diffMin > 60 && diffMin < 1440) {
+      // 1시간 ~ 24시간 이내 60m ~ 1440m
+      return diffMin / 60 + "시간 전";
+    } else if (1 <= diffDay && diffDay < 3) {
+      // 하루 전 ~ 이틀 전
+      if (2 <= diffDay) return "이틀 전";
+      else return "하루 전";
+    } else if (3 <= diffDay && 7 > diffDay) {
+      // 3일 전 ~ 1주일 이내
+      return Math.floor(diffDay) + "일 전";
+    } else if (1 <= diffWeek && 4 > diffWeek) {
+      // n주 전
+      return Math.floor(diffWeek) + "주 전";
+    } else if (1 <= diffMon && 12 > diffMon) {
+      // 1년 이내
+      return Math.floor(diffMon)+ "개월 전";
+    }
+    return Math.floor(diffYear) + "년 전";
+  };
   return (
     <CommentBoardWrapper>
       {commentList ? (
@@ -21,7 +57,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
                 <span className="nickname">{item.nickname}</span>
                 <p>{item.content}</p>
               </div>
-              <span className="date">{item.created_at.substr(0, 10)}</span>
+              <span className="date">{postDate(item.created_at)}</span>
             </CommentBox>
           ))
         ) : (
@@ -97,12 +133,13 @@ const CommentBox = styled.div`
     display: block;
     span {
       display: block;
+      font-size: .85rem;
       margin: 4px 0 8px 0;
     }
     p {
       display: block;
       padding: 15px 18px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       background: #f4f4f4;
       border-radius: 0px 15px 15px 15px;
       /*line-height: 1.2rem;*/

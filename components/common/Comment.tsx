@@ -14,8 +14,11 @@ interface CommentType {
   nickname: string;
   user: any;
 }
+interface propsCommentType {
+  hideInput?: boolean;
+}
 
-const Comment = () => {
+const Comment = ({ hideInput }: propsCommentType) => {
   const [text, , clearFunction, textHandler] = useInput<string>('');
   // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
@@ -27,7 +30,6 @@ const Comment = () => {
       setComments(res.data);
     });
   }, [problemSetId]);
-
   const saveComment = async (_comm: string) => {
     if (_comm) {
       clearFunction;
@@ -41,24 +43,25 @@ const Comment = () => {
       {comments && (
         <>
           <Title>
-            한줄평
-            <div>
-              <img src="/assets/img/chat.png" />
-              <span>{comments.length}</span>
-            </div>
+            {hideInput ? '베스트 한줄평' : '한줄평'}
+            <img src="/assets/img/chat.png" />
           </Title>
-          <InputBox>
-            <span>({text.length}/50)</span>
-            <input
-              type="text"
-              value={text}
-              onChange={textHandler}
-              id="comment-input"
-              maxLength={50}
-              placeholder="나도 한마디.."
-            />
-            <button onClick={() => saveComment(text)}>등록</button>
-          </InputBox>
+          {hideInput ? (
+            ''
+          ) : (
+            <InputBox>
+              <span>({text.length}/50)</span>
+              <input
+                type="text"
+                value={text}
+                onChange={textHandler}
+                id="comment-input"
+                maxLength={50}
+                placeholder="나도 한마디.."
+              />
+              <button onClick={() => saveComment(text)}>등록</button>
+            </InputBox>
+          )}
           <CommentList commentList={comments} />
         </>
       )}
@@ -71,25 +74,23 @@ const Container = styled.div`
 `;
 const Title = styled.h2`
   display: flex;
-  font-size: 0.9rem;
+  font-size: 1.25rem;
   color: #ff4d57;
   font-weight: bold;
-  > div {
-    position: relative;
-    span {
-      position: absolute;
-      padding: 2px;
-      border-radius: 50%;
-      color: #ff4d57;
-      top: -7px;
-      font-size: 0.7rem;
-      left: 18px;
-    }
-    img {
-      margin-left: 5px;
-      width: 14px;
-      height: 14px;
-    }
+  align-items: center;
+  span {
+    position: absolute;
+    padding: 2px;
+    border-radius: 50%;
+    color: #ff4d57;
+    top: -7px;
+    font-size: 0.7rem;
+    left: 18px;
+  }
+  img {
+    margin-left: 5px;
+    width: 14px;
+    height: 14px;
   }
 `;
 const InputBox = styled.div`

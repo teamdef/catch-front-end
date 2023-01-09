@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  padding: 0 4%;
+  padding: 0 3%;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -24,9 +24,7 @@ interface QuizInfoProps {
 }
 export const QuizInfo = styled.div<QuizInfoProps>`
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   height: 300px;
   &::before {
     content: '';
@@ -56,12 +54,14 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
-  padding-top: 30px;
+position: relative;
+  padding-top: 80px;
+  margin: 0 auto;
   max-width: 390px;
   font-family: RixInooAriDuriR;
   font-size: 60px;
-  line-height: 1.3;
-  z-index: 9;
+  line-height: 1.1;
+  z-index: 1;
   @media (max-width: 390px) {
     max-width: 90%;
     font-size: 14vw;
@@ -114,8 +114,9 @@ export const QuizMakerBlock = styled.div`
 export const QuizInfoContainer = styled.div`
   margin-top: 30px;
   display: flex;
+  justify-content: space-evenly;
   gap: 5%;
-  height: 100px;
+  height: 120px;
   width: 100%;
   color: #888;
   #block {
@@ -164,12 +165,15 @@ export const BestCommentContainer = styled.div`
 `;
 export const ButtonWrap = styled.div`
   position: fixed;
+  display: flex;
   left: 50%;
   transform: translateX(-50%);
-  padding: 0 3%;
   bottom: 30px;
   width: 100%;
   max-width: 480px;
   button {
+    position: relative;
+    display: flex;
+    margin: 0 3%;
   }
 `;

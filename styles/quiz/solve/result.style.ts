@@ -8,14 +8,8 @@ export const Container = styled.div`
   width: 100%;
   padding: 0 5%;
   min-height: 100vh;
-  margin-top: 150px;
+  margin-top: 130px;
   background-color: #fff;
-  a {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    display: block;
-  }
 `;
 export const ButtonArea = styled.div`
   position: relative;
@@ -24,26 +18,20 @@ export const ButtonArea = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `;
-export const ScoreTxt = styled.p`
+export const ScoreCard = styled.div`
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 200px;
+  /* background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); */
+  border: 3px dashed #d6d6d6;
+  border-radius: 30px;
   color: #888;
-  margin: 5% 0;
   span {
     color: #ff4d57;
   }
 `;
-export const ScoreTable = styled.table`
-  position: relative;
-  display: block;
-  text-align: center;
-  * {
-    width: 50%;
-    padding: 0 1rem;
-    border: 1px solid #555;
-  }
-  td {
-    padding: .7rem;
-  }
-`;
+
 export const ProgressArea = styled.div`
   position: relative;
   display: block;
