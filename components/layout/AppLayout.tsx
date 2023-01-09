@@ -11,13 +11,15 @@ const AppLayout = (props: { children: React.ReactNode }) => {
 };
 
 const Centering = styled.div`
-  display: flex;
+  display: block;
+  margin: 0 auto;
   justify-content: center;
-`;
-const FixedWidth = styled.div`
   max-width: 480px; /* 기준 width가 480px */
   width: 100%;
+`;
+const FixedWidth = styled.div`
   min-height: 100vh;
+  padding: 0 3%;
   background-color: #fff;
 `;
 export default AppLayout;

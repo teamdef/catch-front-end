@@ -12,8 +12,6 @@ const HeaderLayout = (props: { children: React.ReactNode }) => {
 };
 
 const SpaceWrapper = styled.div` 
-  padding-left:3%;
-  padding-right:3%;
-  margin-top:80px; /* 딱 헤더의 높이 만큼 위에 공간을 띄움*/
+  padding-top:80px; /* 딱 헤더의 높이 만큼 위에 공간을 띄움*/
 `
 export default HeaderLayout;

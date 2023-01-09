@@ -58,7 +58,9 @@ const Wrapper = styled.div`
   background-color: #fff;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  top: 0px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
   width: 480px;
   @media (max-width: 480px) {
     width: 100%;
@@ -71,8 +73,7 @@ const Wrapper = styled.div`
 const HeaderContentWrapper = styled.div`
   display: flex;
   /*padding: 5% 0.5rem;*/ /* 좌우 패딩 5% 상하 패딩 0.5rem*/
-  padding-left: 5%;
-  padding-right: 5%;
+  padding:  0 5%;
   align-items: center;
   height: 100%;
   width: 100%;
@@ -89,7 +90,6 @@ const HeaderContent = styled.div<HeaderProps>`
 const UserProfile = styled.div`
   width: 2rem;
   height: 2rem;
-  margin-right: 10px;
   img {
     width: 100%;
     height: 100%;

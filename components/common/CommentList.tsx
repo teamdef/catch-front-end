@@ -10,41 +10,41 @@ interface CommentBoardProps {
   commentList: CommentType[] | null;
 }
 const CommentList = ({ commentList }: CommentBoardProps) => {
-  const postDate = (_createDate:string) => {
-    let date1 = new Date(); // 현재 일자
-    let date2 = new Date(_createDate); // 파일 생성일자
-    // 일자의 격차 구하기
-    const diffDate = date1.getTime() - date2.getTime();
-    // 분 단위로 변경
-    let diffMin = diffDate / (1000 * 60);
-    let diffDay = diffMin / 1440;
-    let diffWeek = diffDay / 7;
-    let diffMon = diffDay / 30;
-    let diffYear = diffDay / 365;
-    // 게시일자 별 멘트
-    if (diffMin < 1) {
-      return "방금 전";
-    } else if (diffMin < 60) {
-      // 1 시간 이내
-      return diffMin + "분 전";
-    } else if (diffMin > 60 && diffMin < 1440) {
-      // 1시간 ~ 24시간 이내 60m ~ 1440m
-      return diffMin / 60 + "시간 전";
-    } else if (1 <= diffDay && diffDay < 3) {
-      // 하루 전 ~ 이틀 전
-      if (2 <= diffDay) return "이틀 전";
-      else return "하루 전";
-    } else if (3 <= diffDay && 7 > diffDay) {
-      // 3일 전 ~ 1주일 이내
-      return Math.floor(diffDay) + "일 전";
-    } else if (1 <= diffWeek && 4 > diffWeek) {
-      // n주 전
-      return Math.floor(diffWeek) + "주 전";
-    } else if (1 <= diffMon && 12 > diffMon) {
-      // 1년 이내
-      return Math.floor(diffMon)+ "개월 전";
+  const timeForToday = (date: string) => {
+    const today = new Date();
+    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+      return `${betweenTime}분전`;
     }
-    return Math.floor(diffYear) + "년 전";
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
+
+    if (betweenTimeDay < 7) {
+      return `${betweenTimeDay}일전`;
+    }
+
+    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
+    if (betweenTimeWeek < 4) {
+      return `${betweenTimeWeek}주전`;
+    }
+
+    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
+    if (betweenTimeMonth === 0) {
+      return `1달전`;
+    }
+    if (betweenTimeMonth < 12) {
+      return `${betweenTimeMonth}달전`;
+    }
+
+    const value = today.toISOString().substring(0, 10);
+    return value;
   };
   return (
     <CommentBoardWrapper>
@@ -57,7 +57,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
                 <span className="nickname">{item.nickname}</span>
                 <p>{item.content}</p>
               </div>
-              <span className="date">{postDate(item.created_at)}</span>
+              <span className="date">{timeForToday(item.created_at)}</span>
             </CommentBox>
           ))
         ) : (
