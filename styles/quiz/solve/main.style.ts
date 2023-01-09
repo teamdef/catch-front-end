@@ -3,11 +3,9 @@ import styled from 'styled-components';
 export const Container = styled.div`
   position: relative;
   display: flex;
-  /*justify-content: space-evenly;*/
   background-color: #fff6f7;
   flex-direction: column;
-  padding: 0 5%;
-  /*padding-top: 5%;*/
+  padding: 0 3%;
   width: 100%;
   color: #555;
   min-height: 100vh;
@@ -21,12 +19,20 @@ export const Container = styled.div`
 `;
 export const QuizCount = styled.div`
   position: fixed;
-  top: 20px;
-  right: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
   z-index: 99999;
-  span {
-    color: #ff4d57;
-    font-weight: bold;
+  p {
+    padding-right: 3%;
+    padding-top: 24px;
+    position: absolute;
+    right: 0;
+    span {
+      color: #ff4d57;
+      font-weight: bold;
+    }
   }
 `;
 export const QuizTitle = styled.h1`
@@ -189,15 +195,17 @@ export const QuizSolveBottom = styled.div`
     }
   }
   position: fixed;
-  max-width: 500px;
+  max-width: 480px;
   width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   top: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  z-index: 1;
   button {
     position: relative;
     display: flex;
+    margin: 0 3%;
     transform: translateY(0);
     transition: transform 0.5s;
     border-radius: 30px;
