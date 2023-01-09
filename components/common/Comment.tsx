@@ -15,7 +15,7 @@ interface CommentType {
   user: any;
 }
 interface propsCommentType {
-  hideInput: boolean;
+  hideInput?: boolean;
 }
 
 const Comment = ({ hideInput }: propsCommentType) => {

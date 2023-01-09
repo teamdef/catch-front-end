@@ -11,7 +11,7 @@ import { MatchNote, Comment, Header } from 'components/common';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { solveProblems, solveProblemSetTitle } = useSelector((state: RootState) => state.solve);
+  const { solveProblems } = useSelector((state: RootState) => state.solve);
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   const [openMatch, setOpenMatch] = useState<Boolean>(false);
   let today = new Date();
@@ -21,39 +21,11 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Header />
-        <S.ScoreTxt>
-          총 <span>{solveProblems.length}</span> 문제 중 <span>{solveUserScore}</span> 문제 맞았어요{' '}
-        </S.ScoreTxt>
-        <S.ScoreTable>
-          <thead>
-            <tr>
-              <th>닉네임</th>
-              <th>일자</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{solveUserName}</td>
-              <td>
-                {year}.{month}.{date}
-              </td>
-            </tr>
-          </tbody>
-          <thead>
-            <tr>
-              <th>퀴즈 제목</th>
-              <th>점수</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{solveProblemSetTitle}</td>
-              <td>
-              {solveUserScore}
-              </td>
-            </tr>
-          </tbody>
-        </S.ScoreTable>
+        <S.ScoreCard>
+        <p><span className='nickname'>{solveUserName}</span> 님</p>
+        <p><span>{solveProblems.length} 문제</span> 중 <span>{solveUserScore}문제</span> 맞추셨어요!</p>
+        <span className='date'>{year}.{month}.{date}</span>
+        </S.ScoreCard>
       <S.ButtonArea>
         <FlatButton onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>나도 퀴즈 만들기</FlatButton>
         <FlatButton onClick={() => setOpenMatch(true)}>정답 확인</FlatButton>
