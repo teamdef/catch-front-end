@@ -435,7 +435,7 @@ const Page: NextPageWithLayout = () => {
                               setCorrectIndex(problemIndex, choiceIndex);
                             }}
                           >
-                            {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />}
+                            {/* {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />} */}
                             <div>{item}</div>
                             <button
                               onClick={(e) => {
@@ -520,7 +520,7 @@ const Page: NextPageWithLayout = () => {
                   </S.ImgChoiceContainer>
                 )}
 
-                <S.InfoContainer>정답 항목을 클릭해주세요!</S.InfoContainer>
+                <S.InfoContainer>정답을 선택해 주세요</S.InfoContainer>
               </S.QuizCreateCard>
             );
           })}
@@ -531,7 +531,7 @@ const Page: NextPageWithLayout = () => {
         </S.QuizCreateContainer>
         <S.ButtonContainer>
           <MainButton onClick={publicationProblemSet} disabled={title === ''}>
-            퀴즈 생성 완료!
+            퀴즈 생성 완료
           </MainButton>
         </S.ButtonContainer>
       </S.Wrapper>
