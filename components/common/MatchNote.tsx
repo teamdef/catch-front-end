@@ -61,7 +61,6 @@ const MatchEl = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
-  padding: 0 5%;
   padding-top: 3.4rem;
   h1 {
     margin: 0;
@@ -77,7 +76,6 @@ const QuizSolveCard = styled.div`
   border-radius: 1.4rem;
   background-color: white;
   opacity: 0.6;
-  padding: 0 3%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;

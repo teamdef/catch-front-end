@@ -2,11 +2,9 @@ import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   position: relative;
-  padding: 0 3%;
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: hidden;
   background-color: #fff;
   a {
     position: absolute;

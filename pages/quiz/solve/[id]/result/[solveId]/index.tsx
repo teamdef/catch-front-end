@@ -2,7 +2,7 @@ import * as S from 'styles/quiz/solve/result.style';
 import { FlatButton } from 'styles/common';
 import { useState } from 'react';
 import type { ReactElement } from 'react';
-import { AppLayout } from 'components/layout';
+import { AppLayout, HeaderLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
@@ -21,11 +21,17 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Header />
-        <S.ScoreCard>
-        <p><span className='nickname'>{solveUserName}</span> 님</p>
-        <p><span>{solveProblems.length} 문제</span> 중 <span>{solveUserScore}문제</span> 맞추셨어요!</p>
-        <span className='date'>{year}.{month}.{date}</span>
-        </S.ScoreCard>
+      <S.ScoreCard>
+        <p>
+          <span className="nickname">{solveUserName}</span> 님
+        </p>
+        <p>
+          <span>{solveProblems.length} 문제</span> 중 <span>{solveUserScore}문제</span> 맞추셨어요!
+        </p>
+        <span className="date">
+          {year}.{month}.{date}
+        </span>
+      </S.ScoreCard>
       <S.ButtonArea>
         <FlatButton onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>나도 퀴즈 만들기</FlatButton>
         <FlatButton onClick={() => setOpenMatch(true)}>정답 확인</FlatButton>
@@ -37,6 +43,10 @@ const Page: NextPageWithLayout = () => {
 };
 
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 export default Page;
