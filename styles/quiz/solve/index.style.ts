@@ -60,13 +60,8 @@ position: relative;
   max-width: 390px;
   font-family: RixInooAriDuriR;
   font-size: 60px;
-<<<<<<< HEAD
   line-height: 1.1;
   z-index: 1;
-=======
-  line-height: 1.3;
-  z-index: 9;
->>>>>>> 4f735a6cfd21eb1e505f4bb3a1aa7f769d154a53
   @media (max-width: 390px) {
     max-width: 90%;
     font-size: 14vw;
