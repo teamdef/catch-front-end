@@ -61,10 +61,9 @@ const Wrapper = styled.div`
   left: 50%;
   top: 0;
   transform: translateX(-50%);
-  width: 480px;
-  @media (max-width: 480px) {
-    width: 100%;
-  }
+  max-width: 480px;
+  width: 100%;
+  
   z-index: 10;
   border-bottom: solid 1px #eee;
   height: 80px; /* 변동 헤더 없이 헤더 높이 80px로 고정 */

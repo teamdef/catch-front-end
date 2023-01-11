@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
       }),
     );
   };
-  console.log(userAnswers);
+  
   const QuizList = solveProblems.map((item: any, i: number) => (
     <S.QuizSolveCard key={i}>
       <S.CardNumber>{i + 1}</S.CardNumber>
@@ -81,7 +81,7 @@ const Page: NextPageWithLayout = () => {
     </S.QuizSolveCard>
   ));
 
-  const [openModal, closeModal, RenderModal] = useModal({
+  const [openModal, , RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
     contents: <NickNameModal setLoading={setLoading} />,
