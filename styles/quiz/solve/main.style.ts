@@ -38,11 +38,9 @@ export const QuizTitle = styled.h1`
   font-weight: normal;
   word-break: keep-all;
   color: #6a5050;
-  font-family: 'Noto Sans KR';
   width: 80%;
   font-size: 1.3rem;
-  /*line-height: 1.6rem;*/
-  margin: 4rem auto 1rem auto;
+  margin-top: 80px;
 `;
 
 export const QuizSolveContent = styled.div`

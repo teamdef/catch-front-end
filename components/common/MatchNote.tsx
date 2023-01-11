@@ -10,7 +10,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
   console.log(solveAnswers);
   return (
     <MatchEl>
-      <h1>정답 확인📝</h1>
+      <h1>오답노트</h1>
       {solveProblems.map((item: any, i: number) => {
         return (
           <QuizSolveCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
@@ -38,6 +38,7 @@ const MatchNote = ({ setOpenMatch }: any) => {
                   >
                     <div id={_choice.id}>
                       <span>{_choice.cho_txt}</span>
+                      {item.correct_choice == _choice.id ? <span>정답</span> : ''}
                     </div>
                   </ChoiceItem>
                 ))}
@@ -61,12 +62,25 @@ const MatchEl = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
-  padding-top: 3.4rem;
+  z-index: 2;
+  text-align: center;
   h1 {
-    margin: 0;
+    position: relative;
+    display: inline-block;
+    font-family: 'RixInooAriDuriR';
     color: #ff4d57;
     text-align: center;
     font-size: 1.6rem;
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      bottom: 0;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background-color: #91ce61;
+    }
   }
 `;
 const QuizSolveCard = styled.div`
@@ -87,29 +101,30 @@ const QuizSolveCard = styled.div`
 `;
 const CardNumber = styled.span`
   position: absolute;
-  left: 30px;
+  left: 4%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: .7rem;
-  width: 1.8rem;
-  height: 2.4rem;
+  padding-bottom: 14px;
+  width: 34px;
+  height: 50px;
   border: solid 17px #ffa5aa;
-  border-bottom: solid .5rem #fff;
-  background-color: #ffa5aa;
+  border-bottom: solid 10px #fff;
+  background-color: #fff;
   font-weight: bold;
   font-size: 1.2rem;
   color: #fff;
 `;
+
 const CardTitle = styled.h2`
-  position: relative;
-  display: block;
   text-align: center;
-  width: 100%;
-  margin-top: 15%;
-  font-weight: 500;
-  font-size: 1.2rem;
-  color: #555;
+  font-weight: normal;
+  word-break: keep-all;
+  color: #6a5050;
+  font-family: 'Noto Sans KR';
+  width: 80%;
+  font-size: 1.3rem;
+  margin: 4rem auto 1rem auto;
 `;
 const ChoiceWrapper = styled.div`
   position: relative;
@@ -119,6 +134,7 @@ const ChoiceWrapper = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: .5rem;
+  padding: 0 4%;
   margin: 10% 0;
   &#choice-img-wrapper {
     display: grid;
@@ -128,12 +144,12 @@ const ChoiceWrapper = styled.div`
 `;
 const ChoiceItem = styled.div`
   position: relative;
-  width: 80%;
-  padding: 1.25rem 1.25rem 1.25rem 1.75rem;
-  font-size: 1rem;
-  text-align: center;
-  display: block;
-  border-radius: 1rem;
+  display: flex;
+  width: 100%;
+  height: 60px;
+  padding-left: 35px;
+  align-items: center;
+  border-radius: 30px;
   background-color: #f4f4f4;
   &.choice-img-item {
     width: 100%;
@@ -205,6 +221,10 @@ const ChoiceItem = styled.div`
       background-color: #aad775 !important;
       color: #244E10 !important;
       font-weight: bold;
+      span + span {
+        position: absolute;
+        right: 3%;
+      }
     }
     &#my-answer {
       background-color:#ffa5aa;
