@@ -1,13 +1,15 @@
+import { AppLayout, HeaderLayout } from 'components/layout';
+import type { NextPageWithLayout } from 'pages/_app';
+import type { ReactElement } from 'react';
 import styled from 'styled-components';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { MainButton } from 'styles/common';
 import { useRouter } from 'next/router';
 
-const MatchNote = ({ setOpenMatch }: any) => {
+const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
-  console.log(solveAnswers);
   return (
     <MatchEl>
       <h1>오답노트</h1>
@@ -36,10 +38,17 @@ const MatchNote = ({ setOpenMatch }: any) => {
                     className={`choice-txt-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
                     id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
                   >
-                    <div id={_choice.id}>
-                      <span>{_choice.cho_txt}</span>
-                      {item.correct_choice == _choice.id ? <span>정답</span> : ''}
-                    </div>
+                    <span>{_choice.cho_txt}</span>
+                    {item.correct_choice == _choice.id ? (
+                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR',fontSize: '2rem' }}>O</span>
+                    ) : (
+                      ''
+                    )}
+                    {_choice.id == solveAnswers[i] ? (
+                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR',fontSize: '2rem' }}>X</span>
+                    ) : (
+                      ''
+                    )}
                   </ChoiceItem>
                 ))}
               </ChoiceWrapper>
@@ -48,16 +57,14 @@ const MatchNote = ({ setOpenMatch }: any) => {
         );
       })}
       <MatchBottom>
-        <MainButton onClick={() => router.push(`/quiz/solve/${problemSetId}`)}>다시 풀기</MainButton>
-        <MainButton onClick={() => setOpenMatch(false)}>닫기</MainButton>
+        <MainButton style={{height: '40px' }} onClick={() => router.push(`/quiz/solve/${problemSetId}`)}>다시 풀기</MainButton>
       </MatchBottom>
     </MatchEl>
   );
 };
 
 const MatchEl = styled.div`
-  position: absolute;
-  top: 0;
+  position: relative;
   display: block;
   width: 100%;
   min-height: 100vh;
@@ -71,6 +78,7 @@ const MatchEl = styled.div`
     color: #ff4d57;
     text-align: center;
     font-size: 1.6rem;
+    margin-top: 40px;
     &::before {
       content: '';
       position: absolute;
@@ -94,7 +102,7 @@ const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-top:2rem;
+  margin-top: 2rem;
   &.wrong {
     opacity: 1;
   }
@@ -124,7 +132,7 @@ const CardTitle = styled.h2`
   font-family: 'Noto Sans KR';
   width: 80%;
   font-size: 1.3rem;
-  margin: 4rem auto 1rem auto;
+  margin-top: 80px;
 `;
 const ChoiceWrapper = styled.div`
   position: relative;
@@ -133,21 +141,22 @@ const ChoiceWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  gap: .5rem;
+  gap: 0.5rem;
   padding: 0 4%;
   margin: 10% 0;
   &#choice-img-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, calc(50% - .25rem));
+    grid-template-columns: repeat(2, calc(50% - 0.25rem));
     grid-template-rows: repeat(2, 150px);
   }
 `;
 const ChoiceItem = styled.div`
   position: relative;
   display: flex;
+  justify-content: space-between;
   width: 100%;
   height: 60px;
-  padding-left: 35px;
+  padding: 0 35px;
   align-items: center;
   border-radius: 30px;
   background-color: #f4f4f4;
@@ -157,6 +166,7 @@ const ChoiceItem = styled.div`
     padding: 0;
     border-radius: 1rem;
     overflow: hidden;
+
     &#my-answer {
       &::before {
         content: '';
@@ -219,16 +229,12 @@ const ChoiceItem = styled.div`
   &.choice-txt-item {
     &.correct {
       background-color: #aad775 !important;
-      color: #244E10 !important;
+      color: #244e10 !important;
       font-weight: bold;
-      span + span {
-        position: absolute;
-        right: 3%;
-      }
     }
     &#my-answer {
-      background-color:#ffa5aa;
-      color: #DA4343;
+      background-color: #ffa5aa;
+      color: #da4343;
       font-weight: bold;
     }
   }
@@ -236,11 +242,16 @@ const ChoiceItem = styled.div`
 const MatchBottom = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column;
   padding-bottom: 1rem;
   margin-top: 4rem;
-  gap: .5rem;
-  button {
-    width: 50%;
-  }
+  gap: 10px;
 `;
-export default MatchNote;
+Page.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
+};
+export default Page;

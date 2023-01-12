@@ -1,21 +1,20 @@
+import { AppLayout, HeaderLayout } from 'components/layout';
+import type { NextPageWithLayout } from 'pages/_app';
+import type { ReactElement } from 'react';
 import * as S from 'styles/quiz/solve/result.style';
 import { MainButton } from 'styles/common';
 import { useState } from 'react';
-import type { ReactElement } from 'react';
-import { AppLayout, HeaderLayout } from 'components/layout';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import type { NextPageWithLayout } from 'pages/_app';
-import { MatchNote, Comment, Header } from 'components/common';
+import { Comment, Header } from 'components/common';
 import { AiTwotoneLike } from 'react-icons/ai';
 import { FiShare } from 'react-icons/fi'
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { solveProblems } = useSelector((state: RootState) => state.solve);
-  const { isLoggedin } = useSelector((state: RootState) => state.user);
-  const [openMatch, setOpenMatch] = useState<Boolean>(false);
+  const { solveProblems,problemSetId } = useSelector((state: RootState) => state.solve);
+  const { isLoggedin, id } = useSelector((state: RootState) => state.user);
   const [like, setLike] = useState<Boolean>(false);
   let today = new Date();
   let year = today.getFullYear(); // 년도
@@ -47,7 +46,7 @@ const Page: NextPageWithLayout = () => {
           <span>퀴즈 공유하기</span>
         <FiShare size={20}/>
         </MainButton>
-        <MainButton id="note" onClick={() => setOpenMatch(true)}>
+        <MainButton id="note" onClick={() => Router.push(`/quiz/solve/${problemSetId}/result/matchnote`)}>
           오답노트
         </MainButton>
         <MainButton id="play" onClick={() => Router.push(`${isLoggedin ? '/quiz/create' : '/'}`)}>
@@ -55,7 +54,6 @@ const Page: NextPageWithLayout = () => {
         </MainButton>
       </S.ButtonArea>
       <Comment />
-      {openMatch && <MatchNote setOpenMatch={setOpenMatch} />}
     </S.Container>
   );
 };
