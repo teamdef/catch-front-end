@@ -8,6 +8,7 @@ export const Container = styled.div`
   min-height: 100vh;
   background-color: #fff;
   padding-top: 40px;
+  padding-bottom: 80px;
 `;
 
 export const ScoreCard = styled.div`
