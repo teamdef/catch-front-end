@@ -12,16 +12,16 @@ import { authAxios } from 'pages/api/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
-import * as gtag from '../lib/gtag'
+import * as gtag from '../lib/gtag';
 import { logoutAction } from 'store/user';
 import { useDispatch } from 'react-redux';
+import TagManager from 'react-gtm-module';
 
 // NextPageWithLayout으로 Page의 타입을 지정하면,
 // getLayout 속성함수를 사용할 수 있게된다. (사용해도 되고 안해도 되고 )
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
-let GTM_ID = 'GTM-M5PGN9B';
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 }; // 기존 AppProps타입에 Layout을 추가한 것.
@@ -32,7 +32,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    TagManager.initialize({ gtmId: gtag.GTM_ID });
+  }, []);
   // Next.js에서는 document.referrer을 사용할 수 없다
   // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.
   // https://velog.io/@deli-ght/Next.js%EC%97%90%EC%84%9C-document.referrer%EA%B0%80-%EC%9E%91%EB%8F%99%ED%95%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EC%9D%B4%EC%9C%A0
@@ -78,11 +80,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           `,
         }}
       />
-      <Script strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer',${GTM_ID});`}}></Script>
       <ThemeProvider theme={theme}>
         <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
       </ThemeProvider>
