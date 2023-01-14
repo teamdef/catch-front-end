@@ -38,11 +38,9 @@ export const QuizTitle = styled.h1`
   font-weight: normal;
   word-break: keep-all;
   color: #6a5050;
-  font-family: 'Noto Sans KR';
   width: 80%;
   font-size: 1.3rem;
-  /*line-height: 1.6rem;*/
-  margin: 4rem auto 1rem auto;
+  margin-top: 80px;
 `;
 
 export const QuizSolveContent = styled.div`
@@ -96,7 +94,6 @@ export const ChoiceWrapper = styled.div`
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(2, calc(50% - 5px));
-    grid-template-rows: repeat(2, 150px);
   }
 `;
 export const ChoiceItem = styled.div`
@@ -139,7 +136,7 @@ export const ChoiceItem = styled.div`
 
   &#choice-img-item {
     width: 100%;
-    height: 100%;
+    height: 150px;
     label {
       padding: 0;
       border-radius: 1rem;

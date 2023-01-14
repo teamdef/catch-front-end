@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const Container = styled.div`
   position: relative;
   display: flex;
@@ -8,6 +9,7 @@ export const Container = styled.div`
   min-height: 100vh;
   background-color: #fff;
   padding-top: 40px;
+  padding-bottom: 80px;
 `;
 
 export const ScoreCard = styled.div`
@@ -51,11 +53,9 @@ export const ScoreCard = styled.div`
 export const ButtonArea = styled.div`
   position: relative;
   margin-top: 60px;
-  margin-bottom: 40px;
   display: grid;
   width: 100%;
   grid-template-columns: repeat(2, 45%);
-  grid-row-gap: 25px;
   justify-content: space-around;
   align-items: center;
   button {
@@ -78,7 +78,7 @@ export const ButtonArea = styled.div`
       box-shadow: 0 4px #DA3942;
     }
   }
-  #share {
+  #replay {
     background-color: rgba(255, 179, 89, 1);
     box-shadow: 0 4px #dd911e;
   }
@@ -86,8 +86,25 @@ export const ButtonArea = styled.div`
     background-color: #91ce61;
     box-shadow: 0 4px #8ba554;
   }
-  #play {
+  /* #replay {
     background-color: #96a584;
     box-shadow: 0 4px #707867;
+  } */
+`;
+
+export const SNSShareContainer = styled.div`
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  #explain {
+    color: #888;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    svg {
+      margin-right: 4px;
+    }
   }
 `;

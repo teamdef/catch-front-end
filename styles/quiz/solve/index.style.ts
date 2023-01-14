@@ -113,12 +113,13 @@ export const QuizInfoContainer = styled.div`
   margin-top: 30px;
   display: flex;
   justify-content: space-evenly;
-  gap: 5%;
-  height: 120px;
+  height: 80px;
   width: 100%;
   color: #888;
+  > div {
+    width: 30%;
+  }
   #block {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
