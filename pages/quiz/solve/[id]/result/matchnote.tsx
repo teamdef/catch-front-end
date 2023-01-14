@@ -8,7 +8,7 @@ import { MainButton } from 'styles/common';
 import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
-  const router = useRouter();
+  const router = useRouter();                                                                                     
   const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
   return (
     <MatchEl>
@@ -94,16 +94,25 @@ const MatchEl = styled.div`
 const QuizSolveCard = styled.div`
   position: relative;
   width: 100%;
-  border: 1px solid #ffcaca;
-  border-radius: 1.4rem;
+  border: 4px solid #aad775;
+  border-radius: 20px;
   background-color: white;
-  opacity: 0.6;
+  opacity: 0.5;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 40px;
+  > span {
+    border-color: #aad775;
+    border-bottom: solid 10px #fff;
+  }
   &.wrong {
+    border: 4px solid #ffcaca;;
+    > span {
+      border: solid 17px #ffa5aa;
+  border-bottom: solid 10px #fff;
+    }
     opacity: 1;
   }
 `;
@@ -141,12 +150,12 @@ const ChoiceWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
   padding: 0 4%;
   margin: 10% 0;
+  gap: 10px;
   &#choice-img-wrapper {
     display: grid;
-    grid-template-columns: repeat(2, calc(50% - 0.25rem));
+    grid-template-columns: repeat(2, calc(50% - 5px));
   }
 `;
 const ChoiceItem = styled.div`
@@ -163,7 +172,7 @@ const ChoiceItem = styled.div`
     width: 100%;
     height: 150px;
     padding: 0;
-    border-radius: 1rem;
+    border-radius: 15px;
     overflow: hidden;
 
     &#my-answer {
@@ -174,8 +183,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 5rem;
-        height: 5rem;
+        width: 80px;
+        height: 80px;
         background: url('/assets/img/wrong_check.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -200,8 +209,8 @@ const ChoiceItem = styled.div`
         left: 50%;
         transform: translate(-50%, -50%);
         display: block;
-        width: 5rem;
-        height: 5rem;
+        width: 80px;
+        height: 80px;
         background: url('/assets/img/circle.png') center no-repeat;
         background-size: cover;
         z-index: 1;
@@ -242,8 +251,8 @@ const MatchBottom = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-bottom: 1rem;
-  margin-top: 4rem;
+  padding-bottom: 30px;
+  margin-top: 40px;
   gap: 10px;
 `;
 Page.getLayout = function getLayout(page: ReactElement) {
