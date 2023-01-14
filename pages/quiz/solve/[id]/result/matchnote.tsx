@@ -147,7 +147,6 @@ const ChoiceWrapper = styled.div`
   &#choice-img-wrapper {
     display: grid;
     grid-template-columns: repeat(2, calc(50% - 0.25rem));
-    grid-template-rows: repeat(2, 150px);
   }
 `;
 const ChoiceItem = styled.div`
@@ -162,7 +161,7 @@ const ChoiceItem = styled.div`
   background-color: #f4f4f4;
   &.choice-img-item {
     width: 100%;
-    height: 100%;
+    height: 150px;
     padding: 0;
     border-radius: 1rem;
     overflow: hidden;
