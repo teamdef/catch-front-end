@@ -1,13 +1,13 @@
-import styled from 'styled-components';
+import styled,{css} from 'styled-components';
 
 export const Wrapper = styled.div`
   position: relative;
   display: block;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   color: #000;
-  background-color: #fff6f7;
+  background-color: #fff;
   #warning {
     position: absolute;
     left: 50%;
@@ -22,8 +22,8 @@ export const TitleContainer = styled.div`
   position: relative;
   display: block;
   width: 100%;
-  border-bottom-right-radius: 20%;
-  border-bottom-left-radius: 20%;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
   background-color: #ff4d57;
   height: 370px;
 
@@ -125,9 +125,9 @@ export const ButtonContainer = styled.div`
   justify-content: center;
   padding: 1rem;
   position: fixed;
-  width: 500px;
-  @media(max-width:500px){
-    width:100%;
+  width: 480px;
+  @media (max-width: 500px) {
+    width: 100%;
   }
   bottom: 0;
 `;
@@ -142,7 +142,6 @@ export const QuizCreateContainer = styled.div`
 
 export const QuizCreateCard = styled.div`
   width: 100%;
-  min-height: 400px;
   border-radius: 20px;
   border: solid 1px #ffa5aa50;
   background-color: #fff;
@@ -150,6 +149,8 @@ export const QuizCreateCard = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  padding-left: 4%;
+  padding-right: 4%;
   #quiz-delete-btn {
     position: absolute;
     right: 20px;
@@ -166,9 +167,9 @@ export const QuizTitleInput = styled.input`
   font-size: 1.3rem;
   text-align: center;
   align-self: center;
-  margin-top:4rem;
+  margin-top: 4rem;
   border: none;
-  border-bottom: solid 1px #d6d6d6;
+  border-bottom: solid 1px #6a5050;
   outline: none;
   padding: 0rem 0.5rem 0.5rem 0.5rem;
   color: #6a5050;
@@ -187,8 +188,13 @@ export const QuizChoiceTypeRadio = styled.div`
   input[type='radio'] + label {
     transition: ease-in-out 0.2s;
     cursor: pointer;
-    margin: 0 0.5rem 0 0.5rem;
-    padding: 0.5rem 1.25rem 0.5rem 1.25rem;
+    margin: 0 4.5px 0 4.5px;
+    /*padding: 0.5rem 1.25rem 0.5rem 1.25rem; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 30px;
     border-radius: 30px;
   }
   input[type='radio'] + label {
@@ -212,25 +218,26 @@ export const TextChoiceContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
-  padding-right: 2rem;
-  margin-top: 1rem;
 `;
 export const TextChoiceList = styled.ul`
-  width: 70%;
+  width: 100%;
 `;
 export const TextChoiceItem = styled.li<CorrectProps>`
   width: 100%;
   display: flex;
   position: relative;
   justify-content: space-between;
+  align-items: center;
   background-color: ${({ correct }) => (correct ? '#AAD775' : '#eee')};
   color: ${({ correct }) => (correct ? '#244E10' : '#888')};
-  font-weight:${({ correct }) => (correct && 'bold')};
-  padding: 1.25rem 1rem 1rem 1.75rem;
-  border-radius: 25px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  font-weight: ${({ correct }) => correct && 'bold'};
+  border-radius: 30px;
+  margin-top: 20px;
+  padding-left: 34px;
+  padding-right: 20px;
+  height: 60px;
   cursor: pointer;
+  font-size: 1rem;
   button {
     width: 40px;
     display: flex;
@@ -240,23 +247,26 @@ export const TextChoiceItem = styled.li<CorrectProps>`
     border: none;
     color: ${({ correct }) => (correct ? '#244E10' : '#888')};
   }
-  #check-icon {
+  /* #check-icon {
     color: #aad775;
     position: absolute;
     left: -40px;
-  }
+  } */
 `;
 export const TextChoiceCreateBtn = styled.div`
-  width: 70%;
+  width: 100%;
   display: flex;
   position: relative;
   justify-content: space-between;
+  align-items: center;
   background-color: #fff6f7;
   color: #ffa5aa;
-  padding: 1rem 1rem 1rem 1.5rem;
+  padding-left: 30px;
+  padding-right: 20px;
   border: dashed 1px #ffa5aa;
-  border-radius: 25px;
-  margin-bottom: 0.75rem;
+  border-radius: 30px;
+  margin-top: 20px;
+  height: 60px;
   cursor: pointer;
   button {
     width: 40px;
@@ -280,8 +290,7 @@ export const TextChoiceCreateBtn = styled.div`
 `;
 
 export const ImgChoiceContainer = styled.div`
-  padding: 1rem;
-  margin-top: 1rem;
+  margin-top: 20px;
 `;
 
 export const ImgChoiceListContainer = styled.div`
@@ -294,16 +303,50 @@ export const ImgChoiceListContainer = styled.div`
 
 export const ImgWrapper = styled.div<CorrectProps>`
   width: 100%;
-  height: 160px;
+  height: 150px;
   position: relative;
+  cursor: pointer;
+  ${({ correct }) =>
+    correct &&
+    css`
+      /* border: solid 3px #aad775; */
+      /* border-radius: 1rem; */
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: block;
+        width: 80px;
+        height: 80px;
+        background: url('/assets/img/check-mark.png') center no-repeat;
+        background-size: cover;
+        z-index: 1;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #aad775;
+        opacity: 0.5;
+        border-radius: 1rem;
+      }
+    `}
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 1rem;
-    border: ${({ correct }) => (correct ? 'solid 5px #AAD775' : 'none')};
+    border: ${({ correct }) => (correct ? 'solid 3px #AAD775' : 'none')};
   }
   #delete-btn {
+    z-index: 9;
+    cursor: pointer;
     display: flex;
     position: absolute;
     width: 25px;
@@ -330,7 +373,7 @@ export const ImgInputContainer = styled.div`
   background-color: #fff6f7;
   border: dashed 1px #ffa5aa;
   border-radius: 1rem;
-  height: 160px;
+  height: 150px;
   input {
     display: none;
   }
@@ -359,20 +402,22 @@ export const QuizCreateBtn = styled.button`
   color: #ff4d57;
   background-color: #fff;
   margin-top: 40px;
+  font-weight: bold;
+  font-size: 1.25rem;
   margin-bottom: 120px;
 `;
 
 export const InfoContainer = styled.div`
-  font-size: 14px;
+  font-size: 1rem;
   color: #999;
   text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-top: 30px;
+  margin-bottom: 40px;
 `;
 
 export const CardNumber = styled.span`
   position: absolute;
-  top:-1px;
+  top: -1px;
   left: 30px;
   display: flex;
   align-items: center;
@@ -387,4 +432,3 @@ export const CardNumber = styled.span`
   font-size: 1.2rem;
   color: #fff;
 `;
-

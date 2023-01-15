@@ -34,7 +34,7 @@ const Page: NextPageWithLayout = () => {
       }),
     );
   };
-  console.log(userAnswers);
+  
   const QuizList = solveProblems.map((item: any, i: number) => (
     <S.QuizSolveCard key={i}>
       <S.CardNumber>{i + 1}</S.CardNumber>
@@ -81,7 +81,7 @@ const Page: NextPageWithLayout = () => {
     </S.QuizSolveCard>
   ));
 
-  const [openModal, closeModal, RenderModal] = useModal({
+  const [openModal, , RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
     contents: <NickNameModal setLoading={setLoading} />,
@@ -91,13 +91,12 @@ const Page: NextPageWithLayout = () => {
     <S.Container>
       <Logo />
       <S.QuizCount>
-        남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span>
+        <p>남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span></p>
       </S.QuizCount>
       <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton
           className={count == 0 ? 'on' : ''}
-          style={{ width: '90%', margin: '0' }}
           onClick={() => {
             dispatch(saveSolveAnswersAction({ solveAnswers: userAnswers }));
             dispatch(

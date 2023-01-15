@@ -10,6 +10,42 @@ interface CommentBoardProps {
   commentList: CommentType[] | null;
 }
 const CommentList = ({ commentList }: CommentBoardProps) => {
+  const timeForToday = (date: string) => {
+    const today = new Date();
+    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
+    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+    if (betweenTime < 1) return '방금전';
+    if (betweenTime < 60) {
+      return `${betweenTime}분전`;
+    }
+
+    const betweenTimeHour = Math.floor(betweenTime / 60);
+    if (betweenTimeHour < 24) {
+      return `${betweenTimeHour}시간전`;
+    }
+
+    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
+
+    if (betweenTimeDay < 7) {
+      return `${betweenTimeDay}일전`;
+    }
+
+    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
+    if (betweenTimeWeek < 4) {
+      return `${betweenTimeWeek}주전`;
+    }
+
+    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
+    if (betweenTimeMonth === 0) {
+      return `1달전`;
+    }
+    if (betweenTimeMonth < 12) {
+      return `${betweenTimeMonth}달전`;
+    }
+
+    const value = today.toISOString().substring(0, 10);
+    return value;
+  };
   return (
     <CommentBoardWrapper>
       {commentList ? (
@@ -21,7 +57,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
                 <span className="nickname">{item.nickname}</span>
                 <p>{item.content}</p>
               </div>
-              <span className="date">{item.created_at.substr(0, 10)}</span>
+              <span className="date">{timeForToday(item.created_at)}</span>
             </CommentBox>
           ))
         ) : (
@@ -61,7 +97,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
 
 const CommentBoardWrapper = styled.div`
   position: relative;
-  margin-top: 5%;
+  margin-top: 16px;
   width: 100%;
 
   .more {
@@ -97,12 +133,13 @@ const CommentBox = styled.div`
     display: block;
     span {
       display: block;
+      font-size: .85rem;
       margin: 4px 0 8px 0;
     }
     p {
       display: block;
       padding: 15px 18px;
-      font-size: 0.9rem;
+      font-size: 1rem;
       background: #f4f4f4;
       border-radius: 0px 15px 15px 15px;
       /*line-height: 1.2rem;*/

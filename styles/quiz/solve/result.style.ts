@@ -6,185 +6,105 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 0 5%;
   min-height: 100vh;
-  margin-top: 150px;
   background-color: #fff;
-  a {
+  padding-top: 40px;
+  padding-bottom: 80px;
+`;
+
+export const ScoreCard = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 6%;
+  width: 100%;
+  height: 200px;
+  /* background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='4' stroke-dasharray='10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e"); */
+  border: 3px dashed #d6d6d6;
+  border-radius: 30px;
+  color: #888;
+  > div {
+    flex-grow: 1;
+    p {
+      word-break: keep-all;
+      font-size: 1.8rem;
+      font-family: 'RixInooAriDuriR';
+      .nickname {
+        color: #595959;
+        padding: 5px 15px;
+        background-color: #d9d9d9;
+        border-radius: 15px;
+      }
+      b {
+        color: #ff4d57;
+      }
+      & + p {
+        margin-top: 10px;
+      }
+    }
+  }
+  img {
     position: absolute;
-    top: 24px;
-    left: 24px;
-    display: block;
+    right: 0%;
+    bottom: -20%;
+    width: 75%;
   }
 `;
 export const ButtonArea = styled.div`
   position: relative;
-  display: flex;
+  margin-top: 60px;
+  display: grid;
   width: 100%;
-  justify-content: space-evenly;
+  grid-template-columns: repeat(2, 45%);
+  justify-content: space-around;
   align-items: center;
-`;
-export const ScoreTxt = styled.p`
-  color: #888;
-  margin: 5% 0;
-  span {
-    color: #ff4d57;
-  }
-`;
-export const ScoreTable = styled.table`
-  position: relative;
-  display: block;
-  text-align: center;
-  * {
-    width: 50%;
-    padding: 0 1rem;
-    border: 1px solid #555;
-  }
-  td {
-    padding: .7rem;
-  }
-`;
-export const ProgressArea = styled.div`
-  position: relative;
-  display: block;
-  width: 80%;
-  span {
-    padding: 0 15px !important;
-    display: none !important;
-  }
-`;
-export const RankingArea = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  > h2 {
-    margin-top: 0;
-    font-weight: normal;
-    color: #888;
+  button {
     font-size: 1rem;
-    strong {
-      font-weight: 500;
-      color: #ff4d57;
+    font-family: 'RixInooAriDuriR';
+    width: 100%;
+    border: 2px solid transparent;
+    span {
+      margin: 0 10px;
     }
   }
-  ul {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 0;
-    gap: 4px;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    li {
-      position: relative;
-      display: block;
-      color: #595959;
-      width: 100%;
-      list-style: none;
-      border-radius: 4px;
-      color: #595959;
-      font-size: 0.9rem;
-      border: 1px solid #f6f6f6;
-      > div {
-        position: relative;
-        height: 44px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #fff;
-      }
-      span {
-        position: relative;
-        width: 44px;
-        height: 44px;
-      }
-      strong {
-        font-weight: normal;
-      }
-      i,
-      em {
-        display: flex;
-        justify-content: center;
-        font-style: normal;
-        width: 50px;
-      }
-      i {
-        color: #ff4d57;
-        font-size: 1rem;
-      }
-      &.rank_1 {
-        border: 1px solid #fff1b4;
-        > div {
-          background-color: #fff1b4;
-        }
-      }
-      &.rank_2 {
-        border: 1px solid #ececec;
-        > div {
-          background-color: #ececec;
-        }
-      }
-      &.rank_3 {
-        border: 1px solid #ffe6d4;
-        > div {
-          background-color: #ffe6d4;
-        }
-      }
-      @keyframes AnimateBG {
-        0% {
-          background-position: 0% 50%;
-        }
-        100% {
-          background-position: -150% 50%;
-        }
-      }
-      &.active {
-        box-shadow: 0px 0px 10px 5px rgba(255, 165, 170, 0.5);
-        background-size: 300% 300%;
-        background-image: linear-gradient(-45deg, #ff4d57 0%, #ff4d57 10%, #fff 20%, #ff4d57 30%, #ff4d57 100%);
-        animation: AnimateBG 2s cubic-bezier(1, 0, 0.2, 0.2) infinite;
-        border: none;
-        > div {
-          margin: 3px;
-        }
-        strong {
-          font-weight: 500;
-        }
-      }
+  #like {
+    box-shadow: 0 4px #888;
+    background-color: #aaa;
+    color: #fff;
+    &.on {
+      background-color: #ff4d57;
+      color: #fff;
+      border: 2px solid #ff4d57;
+      box-shadow: 0 4px #DA3942;
     }
   }
+  #replay {
+    background-color: rgba(255, 179, 89, 1);
+    box-shadow: 0 4px #dd911e;
+  }
+  #note {
+    background-color: #91ce61;
+    box-shadow: 0 4px #8ba554;
+  }
+  /* #replay {
+    background-color: #96a584;
+    box-shadow: 0 4px #707867;
+  } */
 `;
 
-export const ScorePostIt = styled.div`
-  background-color: #ffe896;
-  width: 200px;
-  height: 200px;
-  position: relative;
+export const SNSShareContainer = styled.div`
+  margin: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  margin-top: 1rem;
 
-  #score {
-    font-family: BMEuljiro10yearslater;
-    color: #ff4d57;
-    font-size: 70px;
-    padding-bottom: 0.5rem;
-  }
-  #tack-img {
-    width: 50px;
-    position: absolute;
-    top: -25px;
-    left: 70px;
-  }
-  #red-pencil-img {
+  #explain {
+    color: #888;
     display: flex;
-    justify-content: center;
-    width: 150px;
+    align-items: center;
+    margin-bottom: 20px;
+    svg {
+      margin-right: 4px;
+    }
   }
 `;
