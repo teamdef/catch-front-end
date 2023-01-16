@@ -196,14 +196,12 @@ const Background = styled.div`
   z-index: 50;
   position: fixed;
   width: 480px;
-  @media (max-width: 480px) {
-    width: 100%;
-  }
   height: 100vh;
   right: 50%;
   top: 0;
   transform: translate(50%, 0%);
-  @media (max-width: 390px) {
+  @media (max-width: 480px) {
+    width: 100%;
     right: 0;
     transform: translate(0, 0);
   }
