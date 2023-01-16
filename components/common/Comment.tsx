@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CommentList } from 'components/common';
 
@@ -19,17 +19,23 @@ interface propsCommentType {
 }
 
 const Comment = ({ hideInput }: propsCommentType) => {
+
   const [text, , clearFunction, textHandler] = useInput<string>('');
-  // get 요청 예정 !!!
   const { problemSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
   const [comments, setComments] = useState<CommentType[]>([]);
+  const { profileImg } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     CommentListApi(problemSetId).then((res) => {
       setComments(res.data);
     });
   }, [problemSetId]);
+
+  const userImgError = (e:any) => {
+    e.target.src = '/assets/img/user_default.png';
+  };
+
   const saveComment = async (_comm: string) => {
     if (_comm) {
       clearFunction();
@@ -38,6 +44,7 @@ const Comment = ({ hideInput }: propsCommentType) => {
       });
     }
   };
+
   return (
     <Container>
       {comments && (
@@ -50,7 +57,7 @@ const Comment = ({ hideInput }: propsCommentType) => {
             ''
           ) : (
             <InputBox>
-              <img src="/assets/img/user_default.png" alt="" />
+              <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
               {/* <span>({text.length}/50)</span> */}
               <input
                 type="text"
@@ -60,7 +67,9 @@ const Comment = ({ hideInput }: propsCommentType) => {
                 maxLength={50}
                 placeholder="나도 한마디.."
               />
-              <button className={text ? 'on': ''} onClick={() => saveComment(text)}>등록</button>
+              <button className={text ? 'on' : ''} onClick={() => saveComment(text)}>
+                등록
+              </button>
             </InputBox>
           )}
           <CommentList commentList={comments} />
