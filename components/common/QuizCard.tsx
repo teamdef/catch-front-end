@@ -92,10 +92,9 @@ const QuizCardWrapper = styled.div`
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;
+
   border: solid 1px #eee;
-  &:last-child {
-    margin: 0;
-  }
+
   &:hover {
     cursor: pointer;
   }
@@ -122,7 +121,7 @@ const QuizCardWrapper = styled.div`
       #quiz-title {
         font-size: 1rem;
         color: #595959;
-        padding-bottom:5px;
+        padding-bottom: 5px;
       }
     }
   }

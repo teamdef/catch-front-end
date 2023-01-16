@@ -142,7 +142,8 @@ const QuizLoad = styled.button`
   font-size:14px;
   font-weight:bold;
   color:#595959;
-  padding:1rem;
+  padding-bottom:40px;
+  padding-top:1rem;
   &:hover{
     cursor:pointer;
   }

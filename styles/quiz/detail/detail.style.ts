@@ -79,7 +79,7 @@ export const DeleteButton = styled.div`
   position: fixed;
   bottom: 20px;
   right: calc(50% - 32.5px - 190px);
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     bottom: 20px;
     right: 20px;
   }

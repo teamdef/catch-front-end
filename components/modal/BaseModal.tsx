@@ -151,9 +151,6 @@ const ActionButton = styled.div`
   justify-content: center;
   padding: 0 1.5rem 0 1.5rem;
   margin: 0 0.25rem 0 0.25rem;
-  @media (max-width: 500px) {
-    font-size: 14px;
-  }
   &:hover {
     cursor: pointer;
   }

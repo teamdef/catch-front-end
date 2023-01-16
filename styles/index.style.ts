@@ -122,10 +122,13 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
             ),
             url(${props.url});
           background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
         `
       : css`
           background: url('/assets/img/catch_character4.jpg');
           background-size: cover;
+          background-position: center;
           background-repeat: no-repeat;
         `}
 
@@ -136,7 +139,7 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   #quiz-title {
     font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom:8px;
+    margin-bottom: 8px;
   }
   #quiz-info {
   }
