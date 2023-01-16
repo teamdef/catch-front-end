@@ -117,11 +117,10 @@ const Profile: NextPageWithLayout = () => {
     <>
       {isLoading && <Loading ment={'저장중 입니다...'} />}
       <S.Wrapper>
-        {isRegister && <S.MarginDiv />}
         <Title
           title={isRegister ? '프로필 등록 👧' : '프로필 수정 👧'}
           subTitle={`서비스에서 사용하실 프로필을 ${isRegister ? '등록' : '수정'}해보세요!`}
-          isBack={isRegister ? false : true}
+          // isBack={isRegister ? false : true}
         />
         <S.ProfileContentContainer>
           <S.ProfileImgInputContainer>

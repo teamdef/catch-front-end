@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import { Title,HeadMeta } from 'components/common';
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Title } from 'components/common';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import notice from 'data/notice.json';
-import * as S from 'styles/notice.style'
+import * as S from 'styles/notice.style';
 const Page: NextPageWithLayout = () => {
   const noticeData: NoticeTypes[] = notice.notice;
 
@@ -15,7 +15,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      <Title isBack={true} title="공지사항 📣" subTitle="서비스 이용에 필요한 내용을 확인하세요" />
+      <Title title="공지사항 📣" subTitle="서비스 이용에 필요한 내용을 확인하세요" />
       <S.Wrapper>
         <S.NoticeList>
           {noticeData.map((item: NoticeTypes, index: number) => {
@@ -28,7 +28,7 @@ const Page: NextPageWithLayout = () => {
                   </div>
                   <MdOutlineKeyboardArrowDown size={30} color={'#888'} />
                 </summary>
-                <textarea id="content" readOnly rows={10} value={item.content}/>
+                <textarea id="content" readOnly rows={10} value={item.content} />
               </S.Notice>
             );
           })}
@@ -38,7 +38,11 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;

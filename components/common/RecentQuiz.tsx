@@ -88,10 +88,10 @@ const RecentQuizList = () => {
             <NotFound title={'등록된 퀴즈집이 없습니다 😣'} subTitle={'퀴즈집을 만들어주세요 !! '} />
           ) : (
             <>
-              {recentQuizList.map((quiz, index) => {
+              {recentQuizList.map((quiz) => {
                 return (
                   <>
-                    <QuizCard recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
+                    <QuizCard key={quiz.id} recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
                   </>
                 );
               })}
@@ -142,7 +142,8 @@ const QuizLoad = styled.button`
   font-size:14px;
   font-weight:bold;
   color:#595959;
-  padding:1rem;
+  padding-bottom:40px;
+  padding-top:1rem;
   &:hover{
     cursor:pointer;
   }
