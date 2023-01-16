@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
+import { AppLayout,HeaderLayout } from 'components/layout';
 import { Title, SNSShare, ThumbnailChange, CommentList, RankingBoard } from 'components/common';
 import * as S from 'styles/quiz/detail/detail.style';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -106,7 +106,6 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <Title
-        isBack={true}
         title="퀴즈 세트 자세히보기"
         subTitle="퀴즈 세트 정보, 참여자 랭킹, 한줄평 등 다양한 정보를 확인해보세요!👀"
       />
@@ -201,7 +200,11 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;

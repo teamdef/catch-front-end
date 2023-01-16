@@ -1,7 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import { MdOutlineSettings } from 'react-icons/md';
-import { AiOutlineNotification, AiOutlineLogout, AiOutlineClose } from 'react-icons/ai';
-import { HiOutlineEmojiSad } from 'react-icons/hi';
 import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,6 +7,11 @@ import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';
 import { Loading } from 'components/common';
+
+/* react-icons */
+import { MdOutlineSettings } from 'react-icons/md';
+import { AiOutlineNotification, AiOutlineLogout, AiOutlineClose } from 'react-icons/ai';
+import { HiOutlineEmojiSad } from 'react-icons/hi';
 
 interface SideBarProps {
   closeSideBar: () => void;
@@ -26,11 +28,11 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
     backgroundClickable: true,
     yesTitle: '탈퇴',
     noTitle: '취소',
-    yesAction: () => seviceLeave(),
+    yesAction: () => serviceLeave(),
     contents: (
       <div>
         <div>
-          <strong style={{ color: '#ff4d57',fontSize: '1.2rem' }}>탈퇴하시겠습니까? 😥</strong>
+          <strong style={{ color: '#ff4d57', fontSize: '1.2rem' }}>탈퇴하시겠습니까? 😥</strong>
           <br />
           지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
         </div>
@@ -55,15 +57,18 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   };
   const goNotice = () => {
     Router.push('/notice');
+    close();
   };
   const goLogin = () => {
     Router.push('/member/login');
+
   };
   const goProfile = () => {
     Router.replace({
       pathname: '/member/profile',
       query: { isReqSignUp: false },
     });
+    
   };
   const goOpenChat = () => {
     window.open('https://open.kakao.com/o/sLi3afJe');
@@ -71,7 +76,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const goIntroducePage = () => {
     window.open('https://teamdef.notion.site/ba4b38482a0d4d359114bf479b169c44');
   };
-  const seviceLeave = () => {
+  const serviceLeave = () => {
     setIsLoading(true);
     kakaoLeaveApi().then((res) => {
       if (res.status === 200) {
@@ -85,8 +90,10 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const logout = () => {
     dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
     closeSideBar(); // 사이드바 닫기.
+    Router.push('/'); // 홈으로
   };
   useEffect(() => {
+    
     const body = document.querySelector('body') as HTMLBodyElement;
     body.style.overflowY = 'hidden';
 

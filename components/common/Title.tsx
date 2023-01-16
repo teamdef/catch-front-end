@@ -54,18 +54,17 @@ const Wrapper = styled.div`
     }
   }
   #title-container {
-    width: 85%;
     margin: 0 auto;
     #main-title {
-      font-size: 24px;
-      font-weight: bold;
+      font-size: 1.3rem;
+      font-weight: 500;
       color: #595959;
       margin-bottom: 0.5rem;
     }
     #sub-title {
       color: #888;
-      /*line-height: 1.5rem;*/
       word-break: keep-all;
+      font-size:1rem;
     }
   }
 `;

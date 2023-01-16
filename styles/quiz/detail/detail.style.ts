@@ -1,12 +1,11 @@
 import styled, { keyframes } from 'styled-components';
 
 
-
 export const Wrapper = styled.div`
-  width: 85%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 2rem;
-  margin-bottom: 8rem;
+  padding-bottom: 8rem;
 `;
 
 export const SectionBlock = styled.div`
@@ -30,7 +29,6 @@ export const SectionBlock = styled.div`
   #section-description{
     color:#595959;
     font-size:0.9rem;
-    /*line-height:1.2rem;*/
   }
   #section-contents {
     margin-top: 2rem;
