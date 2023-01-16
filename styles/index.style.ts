@@ -1,5 +1,4 @@
 import styled, { keyframes, css } from 'styled-components';
-import { Card } from 'components/common';
 
 export const Background = styled.div`
   position: relative;
@@ -74,11 +73,15 @@ export const MyQuizList = styled.div`
   }
 `;
 
-export const CustomCard = styled(Card)`
+export const CustomCard = styled.div`
   height: 250px; /* 카드 높이 250px 고정 */
   border-radius: 12px;
   margin: 0 auto;
   display: flex;
+  display: flex;
+  position: relative;
+  border: solid 1px #eee;
+  padding: 1rem;
 `;
 export const CreateCard = styled(CustomCard)`
   text-align: center;

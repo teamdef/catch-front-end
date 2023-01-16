@@ -51,7 +51,6 @@ const QuizCard = ({ bottomUpOpen, recentQuiz }: QuizProps) => {
       <QuizCardWrapper>
         {recentQuiz.thumbnail && (
           <ThumbnailWrapper thumbnailURL={recentQuiz.thumbnail}>
-            {/* <img src={recentQuiz.thumbnail} alt="퀴즈 썸네일" /> */}
             <QuizInfoChips isThumbnail={!!recentQuiz.thumbnail}>
               <span className="chip">참여 {recentQuiz.solverCnt}</span>
             </QuizInfoChips>

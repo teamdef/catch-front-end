@@ -8,7 +8,6 @@ export { default as SNSShare} from './SNSShare'
 export { default as Logo } from './Logo'
 export { default as HeadMeta } from './HeadMeta'
 
-export { default as Card } from './Card';
 export { default as QuizCard } from './QuizCard';
 export { default as RecentQuiz } from './RecentQuiz';
 export { default as AdsQuizCard } from './AdsQuizCard'

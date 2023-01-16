@@ -88,10 +88,10 @@ const RecentQuizList = () => {
             <NotFound title={'등록된 퀴즈집이 없습니다 😣'} subTitle={'퀴즈집을 만들어주세요 !! '} />
           ) : (
             <>
-              {recentQuizList.map((quiz, index) => {
+              {recentQuizList.map((quiz) => {
                 return (
                   <>
-                    <QuizCard recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
+                    <QuizCard key={quiz.id} recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
                   </>
                 );
               })}

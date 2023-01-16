@@ -347,7 +347,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
+      {loading && <Loading ment={'퀴즈 세트를 저장하고 있습니다!'} />}
       <S.Wrapper>
         <S.TitleContainer>
           <div id="logo-wrapper">
@@ -391,7 +391,7 @@ const Page: NextPageWithLayout = () => {
                 </button>
                 <S.QuizTitleInput
                   type="text"
-                  placeholder="문제 제목을 입력해주세요!"
+                  placeholder="퀴즈 제목을 입력해주세요!"
                   value={problem.problemTitle}
                   name="problemTitle"
                   autoComplete="off"
@@ -400,17 +400,6 @@ const Page: NextPageWithLayout = () => {
                   }}
                 />
                 <S.QuizChoiceTypeRadio>
-                  <input
-                    id={`choiceType-img-${problemIndex}`}
-                    checked={problem.choiceType === 'img'}
-                    type="radio"
-                    name={`choiceType-${problemIndex}`}
-                    value="img"
-                    onChange={() => {
-                      setChoiceType(problemIndex, 'img');
-                    }}
-                  />
-                  <label htmlFor={`choiceType-img-${problemIndex}`}>이미지</label>
                   <input
                     id={`choiceType-text-${problemIndex}`}
                     checked={problem.choiceType === 'text'}
@@ -422,6 +411,17 @@ const Page: NextPageWithLayout = () => {
                     }}
                   />
                   <label htmlFor={`choiceType-text-${problemIndex}`}>텍스트</label>
+                  <input
+                    id={`choiceType-img-${problemIndex}`}
+                    checked={problem.choiceType === 'img'}
+                    type="radio"
+                    name={`choiceType-${problemIndex}`}
+                    value="img"
+                    onChange={() => {
+                      setChoiceType(problemIndex, 'img');
+                    }}
+                  />
+                  <label htmlFor={`choiceType-img-${problemIndex}`}>이미지</label>
                 </S.QuizChoiceTypeRadio>
                 {problem.choiceType === 'text' && (
                   <S.TextChoiceContainer>
