@@ -13,7 +13,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <MatchEl>
       <h1>오답노트</h1>
-      {solveProblems.map((item: any, i: number) => {
+      {solveProblems.map((item: SolveProblemTypes, i: number) => {
         return (
           <QuizSolveCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
             <CardNumber>{i + 1}</CardNumber>
@@ -32,7 +32,7 @@ const Page: NextPageWithLayout = () => {
               </ChoiceWrapper>
             ) : (
               <ChoiceWrapper>
-                {item.choices.map((_choice: any, j: number) => (
+                {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
                   <ChoiceItem
                     key={j}
                     className={`choice-txt-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
