@@ -14,9 +14,7 @@ import { saveSolveProblemSetAction } from 'store/quiz_solve';
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { solveProblemSetTitle, solveProblems } = useSelector((state: RootState) => state.solve);
-  const [thumbnail, setThumbnail] = useState('');
-  const [maker, setMaker] = useState('');
+  const { solveProblemSetTitle, solveProblems, maker, thumbnail } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
   let { id } = router.query;
@@ -30,10 +28,10 @@ const Page: NextPageWithLayout = () => {
             solveProblemSetTitle: res?.data?.set_title,
             problemSetId: `${id}`,
             solveProblems: res?.data?.prob,
+            maker: res?.data?.user?.nickname,
+            thumbnail: res?.data?.thumbnail,
           }),
         );
-        setMaker(res?.data?.user?.nickname); // 퀴즈 제작자 닉네임
-        setThumbnail(res?.data?.thumbnail); // 퀴즈 썸네일
         setDescription(res?.data?.description); // 퀴즈 설명
         setLoading(false);
         // 정답 배열 생성
@@ -63,10 +61,10 @@ const Page: NextPageWithLayout = () => {
               <strong>{solveProblems.length}</strong>
               <div>문제</div>
             </div>
-            <div id="block">
+            {/* <div id="block">
               <strong>???</strong>
               <div>참여</div>
-            </div>
+            </div> */}
           </S.QuizInfoContainer>
           <S.SNSShareContainer>
             <div id="explain">
@@ -81,7 +79,7 @@ const Page: NextPageWithLayout = () => {
             />
           </S.SNSShareContainer>
           <S.BestCommentContainer>
-            <Comment hideInput={true}/>
+            <Comment hideInput={true} />
           </S.BestCommentContainer>
         </S.InnerContainer>
         <S.ButtonWrap>

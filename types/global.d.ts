@@ -42,6 +42,8 @@ interface SolveProblemSetTypes {
   solveProblemSetTitle: string; // 문제집 제목
   solveProblems: SolveProblemTypes[]; // 문제 배열
   solveAnswers: SolveAnswerTypes[];
+  maker:string;
+  thumbnail:string;
 }
 
 // 한줄평

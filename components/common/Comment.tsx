@@ -32,7 +32,7 @@ const Comment = ({ hideInput }: propsCommentType) => {
   }, [problemSetId]);
   const saveComment = async (_comm: string) => {
     if (_comm) {
-      clearFunction;
+      clearFunction();
       CommentSaveApi(solveUserName, text, problemSetId, '').then((res) => {
         setComments(res.data);
       });
@@ -50,7 +50,8 @@ const Comment = ({ hideInput }: propsCommentType) => {
             ''
           ) : (
             <InputBox>
-              <span>({text.length}/50)</span>
+              <img src="/assets/img/user_default.png" alt="" />
+              {/* <span>({text.length}/50)</span> */}
               <input
                 type="text"
                 value={text}
@@ -59,7 +60,7 @@ const Comment = ({ hideInput }: propsCommentType) => {
                 maxLength={50}
                 placeholder="나도 한마디.."
               />
-              <button onClick={() => saveComment(text)}>등록</button>
+              <button className={text ? 'on': ''} onClick={() => saveComment(text)}>등록</button>
             </InputBox>
           )}
           <CommentList commentList={comments} />
@@ -94,40 +95,60 @@ const Title = styled.h2`
   }
 `;
 const InputBox = styled.div`
-  position: relative;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  max-width: 480px;
+  width: 100%;
+  height: 80px;
   display: flex;
-  margin-top: 5%;
+  align-items: center;
+  background-color: #fff;
+  z-index: 1;
+  box-shadow: 0px 0px 15px #eee;
+  img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-left: 3%;
+  }
   > span {
     position: absolute;
     font-size: 0.6rem;
     color: #aaa;
-    bottom: 4px;
-    right: 54px;
   }
   input {
     background-color: #f4f4f4;
+    margin-left: 10px;
+    margin-right: 3%;
     outline: none;
     flex-grow: 1;
-    height: 60px;
+    height: 56px;
     border: none;
     padding: 0 5%;
     color: #888;
-    border-radius: 4px 0 0 4px;
+    border-radius: 30px;
+    font-size: 1.25rem;
     ::placeholder {
       color: #aaa;
     }
   }
   button {
-    position: relative;
+    position: absolute;
     word-break: keep-all;
-    width: 50px;
+    height: 40px;
+    right: calc(3% + 8px);
     border: none;
+    padding: 0 20px;
     font-weight: 500;
-    background-color: #ff4d57;
+    font-size: 1.25rem;
+    background-color: #ccc;
     color: #fff;
-    border-radius: 0 4px 4px 0;
-    padding: 0 10px;
-    right: 0;
+    border-radius: 30px;
+    &.on {
+      background-color: #ff4d57;
+    }
   }
 `;
 

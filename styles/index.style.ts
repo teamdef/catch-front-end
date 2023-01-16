@@ -1,5 +1,4 @@
 import styled, { keyframes, css } from 'styled-components';
-import { Card } from 'components/common';
 
 export const Background = styled.div`
   position: relative;
@@ -74,11 +73,15 @@ export const MyQuizList = styled.div`
   }
 `;
 
-export const CustomCard = styled(Card)`
+export const CustomCard = styled.div`
   height: 250px; /* 카드 높이 250px 고정 */
   border-radius: 12px;
   margin: 0 auto;
   display: flex;
+  display: flex;
+  position: relative;
+  border: solid 1px #eee;
+  padding: 1rem;
 `;
 export const CreateCard = styled(CustomCard)`
   text-align: center;
@@ -119,10 +122,13 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
             ),
             url(${props.url});
           background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
         `
       : css`
           background: url('/assets/img/catch_character4.jpg');
           background-size: cover;
+          background-position: center;
           background-repeat: no-repeat;
         `}
 
@@ -133,7 +139,7 @@ export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   #quiz-title {
     font-size: 1.5rem;
     font-weight: 500;
-    margin-bottom:8px;
+    margin-bottom: 8px;
   }
   #quiz-info {
   }

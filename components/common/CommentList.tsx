@@ -97,7 +97,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
 
 const CommentBoardWrapper = styled.div`
   position: relative;
-  margin-top: 5%;
+  margin-top: 16px;
   width: 100%;
 
   .more {

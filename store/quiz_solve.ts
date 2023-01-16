@@ -5,6 +5,8 @@ const initialState: SolveProblemSetTypes = {
   problemSetId: '',
   solveProblemSetTitle: '',
   solveProblems: [],
+  maker: '',
+  thumbnail: '',
   solveAnswers: [],
 };
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
@@ -14,17 +16,22 @@ const solveSlice = createSlice({
   reducers: {
     saveSolveProblemSetAction: (
       state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveProblemSetTitle: string; problemSetId: string; solveProblems: SolveProblemTypes[] }>,
+      action: PayloadAction<{
+        solveProblemSetTitle: string;
+        problemSetId: string;
+        solveProblems: SolveProblemTypes[];
+        maker: string;
+        thumbnail: string;
+      }>,
     ) => {
-      const { solveProblemSetTitle, problemSetId, solveProblems } = action.payload;
+      const { solveProblemSetTitle, problemSetId, solveProblems, maker, thumbnail } = action.payload;
       state.solveProblemSetTitle = solveProblemSetTitle;
       state.problemSetId = problemSetId;
       state.solveProblems = solveProblems;
+      state.maker = maker;
+      state.thumbnail = thumbnail;
     },
-    saveSolveAnswersAction: (
-      state: SolveProblemSetTypes,
-      action: PayloadAction<{ solveAnswers: string[] }>,
-    ) => {
+    saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: string[] }>) => {
       const { solveAnswers } = action.payload;
       state.solveAnswers = solveAnswers;
     },

@@ -51,7 +51,6 @@ const QuizCard = ({ bottomUpOpen, recentQuiz }: QuizProps) => {
       <QuizCardWrapper>
         {recentQuiz.thumbnail && (
           <ThumbnailWrapper thumbnailURL={recentQuiz.thumbnail}>
-            {/* <img src={recentQuiz.thumbnail} alt="퀴즈 썸네일" /> */}
             <QuizInfoChips isThumbnail={!!recentQuiz.thumbnail}>
               <span className="chip">참여 {recentQuiz.solverCnt}</span>
             </QuizInfoChips>
@@ -93,10 +92,9 @@ const QuizCardWrapper = styled.div`
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;
+
   border: solid 1px #eee;
-  &:last-child {
-    margin: 0;
-  }
+
   &:hover {
     cursor: pointer;
   }
@@ -123,7 +121,7 @@ const QuizCardWrapper = styled.div`
       #quiz-title {
         font-size: 1rem;
         color: #595959;
-        padding-bottom:5px;
+        padding-bottom: 5px;
       }
     }
   }

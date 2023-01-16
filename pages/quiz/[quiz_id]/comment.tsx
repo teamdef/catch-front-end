@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import { Title, NotFound, CommentList } from 'components/common';
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Title, CommentList } from 'components/common';
 import * as S from 'styles/quiz/detail/comment.style';
 import { useRouter } from 'next/router';
 import { CommentListApi } from 'pages/api/quiz';
@@ -47,7 +47,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Wrapper>
-      <Title isBack={true} title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
+      <Title title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
       <S.CommentListWrapper>
         <CommentList commentList={commentList} />
       </S.CommentListWrapper>
@@ -55,7 +55,11 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;
