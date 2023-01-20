@@ -145,7 +145,7 @@ const Page: NextPageWithLayout = () => {
         </S.SectionBlock>
         {quizDetailData && (
           <S.SectionBlock>
-            <div id="section-title">문제집 공유 👋</div>
+            <div id="section-title">퀴즈 세트 공유 👋</div>
             <div id="section-contents">
               <div id="quiz-share-contents">
                 <SNSShare
