@@ -74,7 +74,7 @@ const Page: NextPageWithLayout = () => {
         <div>
           제작하던 <strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
           <br />
-          문제집이 있습니다
+          퀴즈 세트가 있습니다
         </div>
         <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>이어서 제작하시겠습니까?</div>
       </div>
@@ -315,7 +315,7 @@ const Page: NextPageWithLayout = () => {
         });
       });
     } else {
-      alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+      alert(`퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `);
     }
   };
 

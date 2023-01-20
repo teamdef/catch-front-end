@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { QuizCard, SkeletonQuizCard, NotFound,AdsQuizCard } from 'components/common';
+import { QuizCard, SkeletonQuizCard, NotFound, AdsQuizCard } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
 import { MdKeyboardArrowDown } from 'react-icons/md';
@@ -17,12 +17,12 @@ export interface RecentQuizType {
 }
 const RecentQuizList = () => {
   const [recentQuizList, setRecentQuizList] = useState<RecentQuizType[] | null>(null);
-  const [end,setEnd] = useState(false); //모든 글 로드 확인
+  const [end, setEnd] = useState(false); //모든 글 로드 확인
   const [load, setLoad] = useState(false); //로딩
   const [page, setPage] = useState<number>(0); // 내부 사용용 page 카운트
-  
+
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false);
-    const [currentShareQuiz, setCurrentShareQuiz] = useState<shareProps | null>(null);
+  const [currentShareQuiz, setCurrentShareQuiz] = useState<shareProps | null>(null);
   const bottomUpOpen = (currentQuiz: RecentQuizType) => {
     /* 선택한 퀴즈의 공유 정보 세팅 */
     const obj: shareProps = {
@@ -40,12 +40,14 @@ const RecentQuizList = () => {
     setBottomUpIsOpen(false);
   };
 
-
   const getRecentQuizList = useCallback(
     async (lastCreatedAt?: string) => {
       setLoad(true);
       const res = await RecentQuizListApi(lastCreatedAt);
       if (res?.data?.length === 0) {
+        if (recentQuizList === null) {
+          setRecentQuizList([]);
+        }
         setEnd(true);
         // 응답 데이터가 없다면. 즉, 마지막 페이지 라면?
       } else {
@@ -55,7 +57,6 @@ const RecentQuizList = () => {
           returnObj.solverCnt = Number(quiz.solverCnt);
           return returnObj;
         });
-        
         if (recentQuizList) {
           setRecentQuizList([...recentQuizList, ..._quizList]);
         } else {
@@ -69,8 +70,8 @@ const RecentQuizList = () => {
 
   useEffect(() => {
     getRecentQuizList();
-  }, [])
-  
+  }, []);
+
   useEffect(() => {
     if (recentQuizList && recentQuizList.length !== 0) {
       const { created_at } = recentQuizList?.slice(-1)[0];
@@ -85,7 +86,9 @@ const RecentQuizList = () => {
       <ListWrapper>
         {recentQuizList ? (
           recentQuizList.length === 0 ? (
-            <NotFound title={'등록된 퀴즈집이 없습니다 😣'} subTitle={'퀴즈집을 만들어주세요 !! '} />
+            <PaddingBottom>
+              <NotFound title={'등록된 퀴즈 세트가 없습니다 😣'} subTitle={'퀴즈 세트를 만들어주세요 !! '} />
+            </PaddingBottom>
           ) : (
             <>
               {recentQuizList.map((quiz) => {
@@ -96,11 +99,11 @@ const RecentQuizList = () => {
                 );
               })}
               {load && (
-                <>
+                <PaddingBottom>
                   <SkeletonQuizCard isthumb={false} />
                   <SkeletonQuizCard isthumb={false} />
                   <SkeletonQuizCard isthumb={false} />
-                </>
+                </PaddingBottom>
               )}
               {!end && (
                 <QuizLoad
@@ -115,11 +118,11 @@ const RecentQuizList = () => {
             </>
           )
         ) : (
-          <>
-            <SkeletonQuizCard isthumb={true} />
+          <PaddingBottom>
             <SkeletonQuizCard isthumb={false} />
             <SkeletonQuizCard isthumb={false} />
-          </>
+            <SkeletonQuizCard isthumb={false} />
+          </PaddingBottom>
         )}
       </ListWrapper>
       {bottomUpisOpen && currentShareQuiz && (
@@ -134,21 +137,20 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
-const QuizLoad = styled.button` 
-  border:none;
-  display:flex;
-  align-items:center;
-  background-color:transparent;
-  font-size:14px;
-  font-weight:bold;
-  color:#595959;
-  padding-bottom:40px;
-  padding-top:1rem;
-  &:hover{
-    cursor:pointer;
+const QuizLoad = styled.button`
+  border: none;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: bold;
+  color: #595959;
+  padding-bottom: 40px;
+  padding-top: 1rem;
+  &:hover {
+    cursor: pointer;
   }
-
-`
+`;
 const ListWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -156,4 +158,8 @@ const ListWrapper = styled.div`
   margin-top: 1.5rem;
 `;
 
+const PaddingBottom = styled.div`
+  padding-bottom: 80px;
+  width:100%;
+`;
 export default RecentQuizList;
