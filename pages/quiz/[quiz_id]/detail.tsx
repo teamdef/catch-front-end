@@ -1,21 +1,24 @@
+/* react, next 관련 */
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout,HeaderLayout } from 'components/layout';
-import { Title, SNSShare, ThumbnailChange, CommentList, RankingBoard } from 'components/common';
-import * as S from 'styles/quiz/detail/detail.style';
-import { AiOutlineDelete } from 'react-icons/ai';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { MyQuizDetailApi, QuizDeleteApi, QuizRankingListApi } from 'pages/api/quiz';
-import { useModal } from 'hooks';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+/* redux 관련 */
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
+/* 컴포넌트 */
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Title, SNSShare, ThumbnailChange, CommentList, RankingBoard } from 'components/common';
+/* react-icons */
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
-import Link from 'next/link';
+import { AiOutlineDelete } from 'react-icons/ai';
 
-// next.js 위한 라이브러리 및 타입
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-/*
+import * as S from 'styles/quiz/detail/detail.style'; /* 컴포넌트 */
+import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/quiz'; /* 통신 */
+import { useModal } from 'hooks'; 
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -33,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 interface DetailQuizType {
   created_at: string;
   updated_at: string;

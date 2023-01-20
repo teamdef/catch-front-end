@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 import Script from 'next/script';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { authAxios } from 'pages/api/customAxios';
 import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
@@ -86,25 +85,5 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-//cookie에서 token을 가져와서 axios의 header에 추가
-// _app 에서 getInitialProps 에서 가져오는 context의 타입은 AppContext임.
-// https://github.com/vercel/next.js/discussions/36832
-
-// MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
-//   const cookie = ctx.req ? ctx.req.headers.cookie : null;
-//   if (cookie) {
-//     // 정규식으로 쿠키값 추출
-//     let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
-//     // 쿠키가 있다면
-//     if (!!match) {
-//       const access_token = match[2]; // RegExp 객체 반환값 참고
-//       // axios 객체에 인증헤더 추가
-//       authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-//     }
-//   }
-//   const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
-//   return { pageProps };
-// };
 
 export default wrapper.withRedux(MyApp);

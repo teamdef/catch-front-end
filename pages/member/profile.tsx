@@ -1,19 +1,22 @@
-import * as S from 'styles/member/profile.style';
+/* react, next 관련 */
 import { ReactElement, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import { Title, Loading } from 'components/common';
-import { MdOutlineSettings } from 'react-icons/md';
 import { useState, ChangeEvent } from 'react';
-import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { ProfileChangeApi } from 'pages/api/member';
+import { useRouter } from 'next/router';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+/* redux 관련 */
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { profileUploadAction } from 'store/user';
-import { useRouter } from 'next/router';
+/* 통신 */
+import { ProfileChangeApi } from 'pages/api/member';
+/* 컴포넌트 */
+import { AppLayout } from 'components/layout';
+import { Title, Loading } from 'components/common';
 
-// next.js 위한 라이브러리 및 타입
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import * as S from 'styles/member/profile.style'; /* 스타일 코드 */
+import imageCompression from 'browser-image-compression'; /* 라이브러리 */
+import { MdOutlineSettings } from 'react-icons/md'; /* react-icons */
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -43,7 +46,7 @@ const Profile: NextPageWithLayout = () => {
   const [error, setError] = useState<string | null>(null);
   const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const _tempNicknameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTempNickname(e.target.value);
   };

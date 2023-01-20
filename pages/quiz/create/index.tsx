@@ -23,7 +23,7 @@ import { MainButton } from 'styles/common';
 import { MdClear, MdOutlineAdd, MdCheck, MdClose } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
-/*
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 
 interface ThumbnailObjectType {
   imgURL: string;

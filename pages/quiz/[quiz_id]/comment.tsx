@@ -1,13 +1,18 @@
+/* react, next 관련 */
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
+import { useRouter } from 'next/router';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+
+/* 컴포넌트 */
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Title, CommentList } from 'components/common';
-import * as S from 'styles/quiz/detail/comment.style';
-import { useRouter } from 'next/router';
-import { CommentListApi } from 'pages/api/quiz';
+
+import * as S from 'styles/quiz/detail/comment.style'; /* 스타일 코드 */
+import { CommentListApi } from 'pages/api/quiz'; /* 통신 */
 // next.js 위한 라이브러리 및 타입
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-/*
+
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -25,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 
 interface CommentType {
   content: string;
