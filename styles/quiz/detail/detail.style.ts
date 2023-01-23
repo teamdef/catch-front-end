@@ -34,10 +34,6 @@ export const SectionBlock = styled.div`
   }
   #section-contents {
     margin-top: 2rem;
-    #quiz-share-contents {
-      width: 80%;
-      margin: 0 auto;
-    }
   }
 `;
 
