@@ -85,14 +85,13 @@ export const ChoiceWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 10px;
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
   margin: 40px 0 30px 0;
   &#choice-img-wrapper {
     display: grid;
-    gap: 10px;
     grid-template-columns: repeat(2, calc(50% - 5px));
   }
 `;
@@ -139,7 +138,7 @@ export const ChoiceItem = styled.div`
     height: 150px;
     label {
       padding: 0;
-      border-radius: 1rem;
+      border-radius: 15px;
       overflow: hidden;
       width: 100%;
       height: 100%;

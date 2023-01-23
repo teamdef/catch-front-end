@@ -23,7 +23,7 @@ import { MainButton } from 'styles/common';
 import { MdClear, MdOutlineAdd, MdCheck, MdClose } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
-/*
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 
 interface ThumbnailObjectType {
   imgURL: string;
@@ -74,7 +74,7 @@ const Page: NextPageWithLayout = () => {
         <div>
           제작하던 <strong style={{ color: '#ff4d57' }}>{setTitle}</strong>
           <br />
-          문제집이 있습니다
+          퀴즈 세트가 있습니다
         </div>
         <div style={{ marginTop: '10px', fontSize: '12px', color: '#999' }}>이어서 제작하시겠습니까?</div>
       </div>
@@ -315,7 +315,7 @@ const Page: NextPageWithLayout = () => {
         });
       });
     } else {
-      alert(`문제 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (문제 제목 작성 및 답안 2개 이상 작성 필수) `);
+      alert(`퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `);
     }
   };
 
@@ -347,7 +347,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      {loading && <Loading ment={'문제집 저장중 입니다!'} />}
+      {loading && <Loading ment={'퀴즈 세트를 저장하고 있습니다!'} />}
       <S.Wrapper>
         <S.TitleContainer>
           <div id="logo-wrapper">
@@ -391,7 +391,7 @@ const Page: NextPageWithLayout = () => {
                 </button>
                 <S.QuizTitleInput
                   type="text"
-                  placeholder="문제 제목을 입력해주세요!"
+                  placeholder="퀴즈 제목을 입력해주세요!"
                   value={problem.problemTitle}
                   name="problemTitle"
                   autoComplete="off"
@@ -400,17 +400,6 @@ const Page: NextPageWithLayout = () => {
                   }}
                 />
                 <S.QuizChoiceTypeRadio>
-                  <input
-                    id={`choiceType-img-${problemIndex}`}
-                    checked={problem.choiceType === 'img'}
-                    type="radio"
-                    name={`choiceType-${problemIndex}`}
-                    value="img"
-                    onChange={() => {
-                      setChoiceType(problemIndex, 'img');
-                    }}
-                  />
-                  <label htmlFor={`choiceType-img-${problemIndex}`}>이미지</label>
                   <input
                     id={`choiceType-text-${problemIndex}`}
                     checked={problem.choiceType === 'text'}
@@ -422,6 +411,17 @@ const Page: NextPageWithLayout = () => {
                     }}
                   />
                   <label htmlFor={`choiceType-text-${problemIndex}`}>텍스트</label>
+                  <input
+                    id={`choiceType-img-${problemIndex}`}
+                    checked={problem.choiceType === 'img'}
+                    type="radio"
+                    name={`choiceType-${problemIndex}`}
+                    value="img"
+                    onChange={() => {
+                      setChoiceType(problemIndex, 'img');
+                    }}
+                  />
+                  <label htmlFor={`choiceType-img-${problemIndex}`}>이미지</label>
                 </S.QuizChoiceTypeRadio>
                 {problem.choiceType === 'text' && (
                   <S.TextChoiceContainer>

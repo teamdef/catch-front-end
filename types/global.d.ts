@@ -8,44 +8,52 @@ interface ChoiceImageTypes {
 interface ChoiceTextTypes {
   choiceText: string; // 답안
 }
-// ProblemType - 문제 정보
+// ProblemType - 퀴즈 정보
 interface ProblemTypes {
-  problemTitle: string; // 문제 제목
+  problemTitle: string; // 퀴즈 제목
   correctIndex: number; // 정답 번호
-  choiceType: 'img' | 'text'; // 이미지형 문제 , 텍스트형 문제
+  choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
   choices: (ChoiceTextTypes | ChoiceImageTypes)[]; // 객관식 답안 배열
 }
-// ProblemSetType - 문제집 정보
+// ProblemSetType - 퀴즈세트 정보
 interface ProblemSetTypes {
-  setTitle: string; // 문제집 제목
+  setTitle: string; // 퀴즈세트 제목
   description?:string // 퀴즈 세트 설명 
-  problems: ProblemTypes[]; // 문제 배열
+  problems: ProblemTypes[]; // 퀴즈 배열
 }
 
 // 풀이
-
-// SolveProblemTypes - 문제(풀이용) 정보
+// SolveChoicesTypes - 퀴즈 항목 타입
+interface SolveChoicesTypes {
+  cho_img: string|undefined // 이미지 항목
+  cho_txt: string|undefined // 텍스트 항목
+  id: string // 항목 아이디
+}
+// SolveProblemTypes - 퀴즈(풀이용) 정보
 interface SolveProblemTypes {
-  solveProblemTitle: string; // 문제 제목
-  solveChoices: string[]; // 객관식 항목 배열
+  choices: SolveChoicesTypes[]; // 객관식 항목 배열
+  correct_choice: string; // 정답 아이디
+  id:string; // 퀴즈별 아이디
+  is_img:boolean; // 이미지형 텍스트형 구분
+  prob_title: string; // 퀴즈 제목
+}
+
+// SolveProblemSetTypes - 퀴즈세트(풀이용) 정보
+interface SolveProblemSetTypes {
+  problemSetId: string; // 퀴즈 아이디
+  solveProblemSetTitle: string; // 퀴즈세트 제목
+  solveProblems: SolveProblemTypes[]; // 퀴즈 배열
+  solveAnswers: string[]; // 유저가 고른 항목(답안지) 배열
+  maker:string;
+  thumbnail:string;
 }
 
 // 풀이자 정보
 interface SolveUserTypes {
   solveUserName: string; // 유저 닉네임
-  solveUserScore: Number; // 유저 스코어
+  solveUserScore: number; // 유저 스코어
   solveUserId: string; // 유저 아이디
 }
-// SolveProblemSetTypes - 문제집(풀이용) 정보
-interface SolveProblemSetTypes {
-  problemSetId: string; // 퀴즈 아이디
-  solveProblemSetTitle: string; // 문제집 제목
-  solveProblems: SolveProblemTypes[]; // 문제 배열
-  solveAnswers: SolveAnswerTypes[];
-  maker:string;
-  thumbnail:string;
-}
-
 // 한줄평
 interface CommentSetTypes {
   comments: CommentTypes[];

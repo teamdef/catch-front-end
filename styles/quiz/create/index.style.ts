@@ -3,25 +3,18 @@ import styled,{css} from 'styled-components';
 export const Wrapper = styled.div`
   position: relative;
   display: block;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  color: #000;
-  background-color: #fff;
-  #warning {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    color: red;
-  }
+  min-height: 100%;
 `;
 
 export const TitleContainer = styled.div`
-  overflow: hidden;
+  /*overflow: hidden;*/
   position: relative;
   display: block;
-  width: 100%;
+  width: 480px;
+  transform:translateX(-3%);
+  @media (max-width:480px){
+    width:100vw;
+  }
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
   background-color: #ff4d57;
@@ -33,6 +26,7 @@ export const TitleContainer = styled.div`
     background-color: transparent;
     top: 24px;
     left: 24px;
+    display:inline-block;
   }
   #title-input-wrapper {
     color: #fff;
@@ -59,7 +53,7 @@ export const TitleContainer = styled.div`
         linear-gradient(to left, #ff4d57 10px, transparent 10px),
         repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ccc 30px, #ccc 31px, #ff4d57 31px);
       font-size: 1rem;
-      /*line-height: 31px;*/
+      line-height: 31px;
       padding: 3px 10px;
       margin-top: 2rem;
       border: none;
@@ -69,7 +63,7 @@ export const TitleContainer = styled.div`
       resize: none;
       overflow-y: hidden;
       font-family: 'Noto Sans KR';
-      font-weight: 300;
+      font-weight: 400;
     }
   }
 `;
@@ -123,20 +117,22 @@ export const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
   position: fixed;
   width: 480px;
-  @media (max-width: 500px) {
+  @media (max-width: 480px) {
     width: 100%;
   }
-  bottom: 0;
+  left:calc(50%);
+  transform:translateX(-50%);
+  padding:0 calc(480px * 0.03);
+  bottom: 20px;
+  z-index:99;
 `;
 
 export const QuizCreateContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
   margin: 0 auto;
 `;
 
@@ -159,6 +155,7 @@ export const QuizCreateCard = styled.div`
     border: none;
     cursor: pointer;
     background-color: transparent;
+    z-index:2;
   }
 `;
 
@@ -282,6 +279,7 @@ export const TextChoiceCreateBtn = styled.div`
     border: none;
     outline: none;
     width: 100%;
+    font-size:1rem;
     color: #ffa5aa;
     &::placeholder {
       color: #ffa5aa90;

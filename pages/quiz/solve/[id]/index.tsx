@@ -23,6 +23,7 @@ const Page: NextPageWithLayout = () => {
     setLoading(true);
     QuizDataFetchApi(id as string)
       .then((res) => {
+        console.log(res);
         dispatch(
           saveSolveProblemSetAction({
             solveProblemSetTitle: res?.data?.set_title,
@@ -74,7 +75,7 @@ const Page: NextPageWithLayout = () => {
             <SNSShare
               nickName={maker}
               set_title={solveProblemSetTitle}
-              url={`quiz/solve/${id}`}
+              url={id as string}
               thumbnail={thumbnail}
             />
           </S.SNSShareContainer>

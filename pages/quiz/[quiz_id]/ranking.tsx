@@ -2,11 +2,12 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useRouter } from 'next/router';
-import { AppLayout } from 'components/layout';
+import { AppLayout,HeaderLayout } from 'components/layout';
 import { Title, RankingBoard } from 'components/common';
-import * as S from 'styles/quiz/detail/ranking.style';
+import * as S from 'styles/quiz/detail/ranking.style'; 
 import { QuizRankingListApi } from 'pages/api/quiz';
-/*
+
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -24,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 
 interface RankingType {
   created_at: string;
@@ -48,7 +49,6 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <Title
-        isBack={true}
         title="참여자 랭킹 🏆"
         subTitle="참여자 모두의 랭킹을 확인해보세요! 누가 가장 많이 맞췄을까요?"
       />
@@ -59,7 +59,11 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;

@@ -8,11 +8,9 @@ export const Container = styled.div`
   background-color: #fff;
   a {
     position: absolute;
-    top: 0;
-    left: 0;
     display: block;
     top: 24px;
-    left: 24px;
+    left: 3%;
     z-index: 99;
   }
 `;

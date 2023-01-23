@@ -22,7 +22,7 @@ export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media (max-width: 400px) {
+    @media (max-width: 390px) {
       width: 100%;
     }
   }

@@ -1,14 +1,12 @@
 import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div`
-  width: 90%;
   margin: 0 auto;
   margin-bottom: 5rem;
 `;
 export const NoticeList = styled.div`
   background-color: white;
-  border-radius: 4px;
-  margin-top: 1.5rem;
+  margin-top: 40px;
 `;
 
 interface noticeProps {
@@ -20,7 +18,6 @@ export const Notice = styled.details<noticeProps>`
   &:nth-last-child(1) {
     border: none;
   }
-  padding: 1rem 1rem 0 1rem;
   #notice {
     padding-bottom: 1rem;
     border-bottom: solid 1px #eee;
@@ -33,7 +30,7 @@ export const Notice = styled.details<noticeProps>`
     }
     #title-container {
       #title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         position: relative;
         &:after {
           ${(props) =>
@@ -42,13 +39,13 @@ export const Notice = styled.details<noticeProps>`
               content: 'N';
               color: #fff;
               background: #ff4d57;
-              border-radius: 6px;
-              font-size: 10px;
+              border-radius: 4px;
+              font-size: 6px;
               font-weight: 100;
               margin-left: 6px;
-              padding: 2px 5px 2px 5px;
+              padding: 1px 5px 1px 4px;
               position: absolute;
-              top: 5px;
+              top: 4px;
             `}
         }
       }
@@ -56,23 +53,33 @@ export const Notice = styled.details<noticeProps>`
         color: #888;
         font-weight: 300;
         margin-top: 8px;
-        font-size:1rem;
+        font-size: 0.9rem;
       }
     }
   }
   &[open] {
     #title {
-      font-weight: bold;
-      color: #000;
+      font-weight: 600;
+      color: #595959;
     }
     svg {
-      transform: rotate(180deg);
+      transform: rotate(-180deg);
+      transition: ease-in-out 0.25s;
+    }
+  }
+  &:not(&[open]) {
+    svg {
+      transform: rotate(0deg);
+      transition: ease-in-out 0.25s;
     }
   }
   #content {
-    font-size: 14px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: 'Noto Sans Kr';
+    font-size: 1rem;
     padding: 1rem;
-    background-color: #f8f8f8;
+    background-color: #f4f4f4;
     border: none;
     resize: none;
     width: 100%;
