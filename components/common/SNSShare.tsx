@@ -62,7 +62,7 @@ const SNSShare = ({ thumbnail, set_title, url,profileImg,nickName }: shareProps)
         <img src={'/assets/img/kakao_icon.png'} />
       </button>
       <button
-        className="share-btn"
+        className="share-btn link-copy"
         onClick={() => {
           handleCopyClipBoard(`https://catchcatch.link/quiz/solve/${url}`);
         }}
@@ -76,7 +76,7 @@ const SNSShare = ({ thumbnail, set_title, url,profileImg,nickName }: shareProps)
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 20px;
   .share-btn {
     width: 50px;

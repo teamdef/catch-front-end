@@ -19,12 +19,12 @@ const Page: NextPageWithLayout = () => {
   const [count, setCount] = useState(solveProblems.length); // 남은 퀴즈 개수
   const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
-  let answers: string[] = userAnswers;
+  let answers:string[] = userAnswers;
   /** 항목 선택 시 작동하는 함수 */
   const onChange = () => {
     setCount(solveProblems.length - answers.filter((element) => element !== undefined).length);
     setUserAnswers(
-      solveProblems.map((prob: any, index: number) => {
+      solveProblems.map((prob: SolveProblemTypes, index: number) => {
         // 정답(correct_choice)의 id 와 일치하는 항목을 찾아내서 정답지 배열을 생성
         if (prob.correct_choice != userAnswers[index]) {
           return answers[index];
@@ -35,13 +35,13 @@ const Page: NextPageWithLayout = () => {
     );
   };
   
-  const QuizList = solveProblems.map((item: any, i: number) => (
+  const QuizList = solveProblems.map((item: SolveProblemTypes, i: number) => (
     <S.QuizSolveCard key={i}>
       <S.CardNumber>{i + 1}</S.CardNumber>
       <S.QuizTitle>{item.prob_title}</S.QuizTitle>
       {item.is_img ? (
         <S.ChoiceWrapper id="choice-img-wrapper">
-          {item.choices.map((_choice: any, j: number) => (
+          {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
             <S.ChoiceItem key={j} className="choice-item" id="choice-img-item">
               <input
                 type="radio"
@@ -61,7 +61,7 @@ const Page: NextPageWithLayout = () => {
         </S.ChoiceWrapper>
       ) : (
         <S.ChoiceWrapper>
-          {item.choices.map((_choice: any, j: number) => (
+          {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
             <S.ChoiceItem key={j} className="choice-item" id="choice-txt-item">
               <input
                 type="radio"
