@@ -23,11 +23,10 @@ const Page: NextPageWithLayout = () => {
     setLoading(true);
     QuizDataFetchApi(id as string)
       .then((res) => {
-        console.log(res);
         dispatch(
           saveSolveProblemSetAction({
             solveProblemSetTitle: res?.data?.set_title,
-            problemSetId: `${id}`,
+            problemSetId: id as string,
             solveProblems: res?.data?.prob,
             maker: res?.data?.user?.nickname,
             thumbnail: res?.data?.thumbnail,
@@ -41,7 +40,7 @@ const Page: NextPageWithLayout = () => {
         console.error(err);
         setLoading(false);
       });
-  }, [id]);
+  }, [router.isReady]);
 
   return (
     <>
