@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
     if (!!access_token === false || !!refresh_token === false) {
       dispatch(logoutAction());
-    } 
+    }
   }, [router]);
 
   useEffect(() => storePathValues, [router.asPath]);
@@ -82,12 +82,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           `,
         }}
       />
+      <Script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></Script>
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7873415242511235"
+        crossOrigin="anonymous"
+      ></Script>
       <ThemeProvider theme={theme}>
         <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
       </ThemeProvider>
     </>
   );
 }
-
 
 export default wrapper.withRedux(MyApp);
