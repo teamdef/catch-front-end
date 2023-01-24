@@ -5,7 +5,7 @@ import { kakaoLoginApi } from 'pages/api/member';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { loginAction } from 'store/user';
-import { saveToken } from 'utils/token';
+import { saveToken,saveRefreshToken } from 'utils/token';
 import { Loading } from 'components/common';
 
 
@@ -15,6 +15,7 @@ interface DataProps {
   nickName: string;
   profileImg: string;
   accessToken: string;
+  refreshToken: string;
   isReqSignUp: boolean;
 }
 
@@ -37,9 +38,12 @@ const redirect: NextPageWithLayout = () => {
     const nickName: string = data?.nickName;
     const profileImg: string = data?.profileImg;
     const accessToken: string = data?.accessToken;
+    const refreshToken: string = data?.refreshToken;
     const isReqSignUp: boolean = data?.isReqSignUp;
     dispatch(loginAction({ id, profileImg, nickName, kakaoUid })); // 개인정보를 redux에 저장
     await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
+    await saveRefreshToken(refreshToken); // 리프레시 토큰을 쿠키에 저장하는 비동기 함수
+    
 
     if (isReqSignUp) {
       Router.replace({

@@ -21,7 +21,12 @@ body {
   user-select: none;
   font-size: 14px; /* 1rem 기준을 14px로 고정 */
   font-family: 'Noto Sans KR';
-  line-height:1.6; /* 줄간격 160% */
+  line-height: 1.6; /* 줄간격 160% */
+}
+
+input {
+  -webkit-appearance: none; /* Safari input 그림자 제거 */
+  -webkit-border-radius: 0; /* Safari input 둥근 모서리 제거 */
 }
 
 body::-webkit-scrollbar {

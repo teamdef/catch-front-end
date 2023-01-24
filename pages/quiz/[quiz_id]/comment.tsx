@@ -1,13 +1,18 @@
+/* react, next 관련 */
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { AppLayout } from 'components/layout';
-import { Title, NotFound, CommentList } from 'components/common';
-import * as S from 'styles/quiz/detail/comment.style';
 import { useRouter } from 'next/router';
-import { CommentListApi } from 'pages/api/quiz';
-// next.js 위한 라이브러리 및 타입
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-/*
+
+/* 컴포넌트 */
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Title, CommentList } from 'components/common';
+
+import * as S from 'styles/quiz/detail/comment.style'; /* 스타일 코드 */
+import { CommentListApi } from 'pages/api/quiz'; /* 통신 */
+// next.js 위한 라이브러리 및 타입
+
+
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -25,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
     res.end();
   }
   return { props: {} };
-};*/
+};
 
 interface CommentType {
   content: string;
@@ -47,7 +52,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Wrapper>
-      <Title isBack={true} title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
+      <Title title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
       <S.CommentListWrapper>
         <CommentList commentList={commentList} />
       </S.CommentListWrapper>
@@ -55,7 +60,11 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;

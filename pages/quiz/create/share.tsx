@@ -111,7 +111,7 @@ const Page: NextPageWithLayout = () => {
                       <MdPhotoCamera size={20} />
                     </div>
                   )}
-                  <img src={thumbnailURL} alt="문제집 썸네일 이미지" />
+                  <img src={thumbnailURL} alt="퀴즈 세트 썸네일 이미지" />
                 </>
               ) : (
                 <S.DefaultThumbnail>
