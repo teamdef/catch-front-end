@@ -30,12 +30,13 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <HeadMeta />
+          <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
         </Head>
         <body>
           <Main />
           <NextScript />
           <div id="react-portal-modal-container" />
-          <div id='react-portal-loading-container' />
+          <div id="react-portal-loading-container" />
         </body>
       </Html>
     );

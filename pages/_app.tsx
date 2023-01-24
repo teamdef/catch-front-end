@@ -33,10 +33,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const dispatch = useDispatch();
   useEffect(() => {
     TagManager.initialize({ gtmId: gtag.GTM_ID });
-    //카카오 sdk 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-    }
+    
   }, []);
   // Next.js에서는 document.referrer을 사용할 수 없다
   // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.
@@ -82,7 +79,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           `,
         }}
       />
-      <Script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></Script>
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7873415242511235"
