@@ -21,25 +21,27 @@ const Page: NextPageWithLayout = () => {
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true);
-    QuizDataFetchApi(id as string)
-      .then((res) => {
-        dispatch(
-          saveSolveProblemSetAction({
-            solveProblemSetTitle: res?.data?.set_title,
-            problemSetId: id as string,
-            solveProblems: res?.data?.prob,
-            maker: res?.data?.user?.nickname,
-            thumbnail: res?.data?.thumbnail,
-          }),
-        );
-        setDescription(res?.data?.description); // 퀴즈 설명
-        setLoading(false);
-        // 정답 배열 생성
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+    if(id) {
+      QuizDataFetchApi(id as string)
+        .then((res) => {
+          dispatch(
+            saveSolveProblemSetAction({
+              solveProblemSetTitle: res?.data?.set_title,
+              problemSetId: id as string,
+              solveProblems: res?.data?.prob,
+              maker: res?.data?.user?.nickname,
+              thumbnail: res?.data?.thumbnail,
+            }),
+          );
+          setDescription(res?.data?.description); // 퀴즈 설명
+          setLoading(false);
+          // 정답 배열 생성
+        })
+        .catch((err) => {
+          console.error(err);
+          setLoading(false);
+        });
+    }
   }, [router.isReady]);
 
   return (
