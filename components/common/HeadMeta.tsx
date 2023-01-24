@@ -19,13 +19,7 @@ const HeadMeta = () => {
       <meta name="google-site-verification" content="a4Z71Wfn9SBTmaIDT2fszmWzufGRL99ABDbjxXyOrzY" />
       <meta name="naver-site-verification" content="5ad1c88273ffa0429165abb4f1b905a060e03b0b" />
 
-      {/* 스크립트 구문  */}
-      <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-      <script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7873415242511235"
-        crossOrigin="anonymous"
-      ></script>
+      
     </>
   );
 };
