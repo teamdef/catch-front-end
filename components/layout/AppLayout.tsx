@@ -7,9 +7,7 @@ const AppLayout = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     //카카오 sdk 초기화
     if (window.Kakao) {
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-      }
+      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
     }
   }, []);
   return (
