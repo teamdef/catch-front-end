@@ -46,12 +46,7 @@ const SNSShare = ({ thumbnail, set_title, url,profileImg,nickName }: shareProps)
     const hashtags =`캐치캐치,퀴즈,나만의퀴즈 `
     window.open(`https://twitter.com/intent/tweet?text=${sendText}&url=${sendUrl}&hashtags=${hashtags}`);
   }
-  //카카오 sdk 초기화
-  useEffect(() => {
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-    }
-  }, []);
+  
   return (
     <Wrapper>
       <img onClick={goTwitter} className='twitter-btn' src={'/assets/img/twitter_icon.webp'}/>
