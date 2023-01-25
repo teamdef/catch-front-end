@@ -61,7 +61,7 @@ const Page: NextPageWithLayout = () => {
         <SNSShare
           nickName={maker}
           set_title={solveProblemSetTitle}
-          url={`quiz/solve/${problemSetId}`}
+          url={problemSetId}
           thumbnail={thumbnail}
         />
       </S.SNSShareContainer>
