@@ -22,7 +22,7 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
         console.log('after init : ', window.Kakao.isInitialized());
       }
     }
-  }, []);
+  }, [window.Kakao]);
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
