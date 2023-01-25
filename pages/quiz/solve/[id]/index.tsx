@@ -19,6 +19,7 @@ const Page: NextPageWithLayout = () => {
   const [description, setDescription] = useState<string>('');
   let { id } = router.query;
   // id 값이 변경될 시
+  console.log(window.Kakao);
   useEffect(() => {
     setLoading(true);
     if(id) {
