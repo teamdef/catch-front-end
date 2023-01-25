@@ -6,8 +6,11 @@ import styled from 'styled-components';
 const AppLayout = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     //카카오 sdk 초기화
+    console.log('test6')
     if (window.Kakao) {
-      window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+      }
     }
   }, []);
   return (
