@@ -31,6 +31,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const dispatch = useDispatch();
+  console.log('_app 렌더링');
   useEffect(() => {
     TagManager.initialize({ gtmId: gtag.GTM_ID });
     
