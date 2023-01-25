@@ -14,10 +14,12 @@ export interface shareProps {
 const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProps) => {
   useEffect(() => {
     //카카오 sdk 초기화
-    console.log('test6')
+    console.log('snsshare : ', window.Kakao);
     if (window.Kakao) {
+      console.log('before init : ', window.Kakao.isInitialized());
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+        console.log('after init : ', window.Kakao.isInitialized());
       }
     }
   }, []);

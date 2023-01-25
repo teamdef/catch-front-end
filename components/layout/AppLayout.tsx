@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 
 const AppLayout = (props: { children: React.ReactNode }) => {
-  
+  console.log('test8')
   return (
     <Centering>
       <FixedWidth>{props.children}</FixedWidth>
