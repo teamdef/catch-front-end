@@ -12,6 +12,15 @@ export interface shareProps {
   nickName: string;
 }
 const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProps) => {
+  useEffect(() => {
+    //카카오 sdk 초기화
+    console.log('test6')
+    if (window.Kakao) {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
+      }
+    }
+  }, []);
   const handleCopyClipBoard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
