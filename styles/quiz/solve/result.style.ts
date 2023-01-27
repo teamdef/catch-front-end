@@ -86,10 +86,6 @@ export const ButtonArea = styled.div`
     background-color: #91ce61;
     box-shadow: 0 4px #8ba554;
   }
-  /* #replay {
-    background-color: #96a584;
-    box-shadow: 0 4px #707867;
-  } */
 `;
 
 export const SNSShareContainer = styled.div`

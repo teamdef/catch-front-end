@@ -14,7 +14,6 @@ export const MainButton = styled.button`
   color: #fff;
   box-shadow: 0 4px #c4363e;
   word-break: keep-all;
-  z-index:13;
   &:disabled {
     color: #7c7c7c;
     background-color: #ececec;
