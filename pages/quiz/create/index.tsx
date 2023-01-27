@@ -85,8 +85,7 @@ const Page: NextPageWithLayout = () => {
   const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 100) {
       return false;
-    }
-    else {
+    } else {
       _setDescription(e.target.value);
     }
   };
@@ -150,15 +149,16 @@ const Page: NextPageWithLayout = () => {
   };
 
   // 텍스트 답안 추가
-  const addChoiceText = useCallback(
-    (problemIndex: number) => {
+  const addChoiceText = (problemIndex: number) => {
+    if (textChoiceInput === '') {
+      alert('빈 값은 추가할 수 없습니다.');
+    } else {
       let temp = JSON.parse(JSON.stringify(problemList));
       temp[problemIndex].choices.push(textChoiceInput);
       setProblemList(temp);
       textChoiceInputClear();
-    },
-    [textChoiceInput],
-  );
+    }
+  };
   // 정답 체크
   const setCorrectIndex = (problemIndex: number, choiceIndex: number) => {
     let temp = JSON.parse(JSON.stringify(problemList));
@@ -315,7 +315,9 @@ const Page: NextPageWithLayout = () => {
         });
       });
     } else {
-      alert(`퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `);
+      alert(
+        `퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `,
+      );
     }
   };
 
@@ -369,11 +371,7 @@ const Page: NextPageWithLayout = () => {
           </div>
           <div id="description-input-wrapper">
             <div id="title">퀴즈에 대한 설명을 적어보세요! ({_description.length}/100)</div>
-            <textarea
-              value={_description}
-              onChange={_descriptionHandler}
-              id="description-textarea"
-            ></textarea>
+            <textarea value={_description} onChange={_descriptionHandler} id="description-textarea"></textarea>
           </div>
         </S.TitleContainer>
         <S.QuizCreateContainer>
