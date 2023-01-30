@@ -32,7 +32,7 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
   };
 
   const goFacebook = () => {
-    window.open(`http://www.facebook.com/sharer.php?u=https://catchcatch.link/${url}/?utm_source=facebook`);
+    window.open(`http://www.facebook.com/sharer.php?u=https://catchcatch.link/${url}/?utm_source=facebook&utm_medium=share&utm_campaign=funnel`);
   };
   const goKakaoTalk = () => {
     if (window.Kakao) {
@@ -44,7 +44,7 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
           NICKNAME: nickName, // 퀴즈 제작자 닉네임 ${NICKNAME}
           QUIZ_THUMB: thumbnail || '/assets/img/catch_share.png', // 퀴즈 썸네일 주소 ${QUIZ_THUMB}
           TITLE: set_title, // 퀴즈 제목 텍스트 ${TITLE}
-          ROUTE: `${url}/?utm_source=kakao`, // 퀴즈 공유 링크
+          ROUTE: `${url}/?utm_source=kakao&utm_medium=share&utm_campaign=funnel`, // 퀴즈 공유 링크
         },
       });
     }
@@ -53,7 +53,7 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
     //"https://twitter.com/intent/tweet?text=" + sendText + "&url=" + sendUrl
     //캐치캐치에 접속해서 해당 퀴즈를 풀어보고 결과를 확인해보세요!
     const sendText = `[📢 캐치캐치] ${nickName}님이 만든 ${set_title} 퀴즈를 풀어보세요!🤔 링크를 클릭하면 캐치캐치 퀴즈 풀이 화면으로 바로 이동됩니다.😊🥰 `;
-    const sendUrl = `https://catchcatch.link/${url}/?utm_source=twitter`;
+    const sendUrl = `https://catchcatch.link/${url}/?utm_source=twitter&utm_medium=share&utm_campaign=funnel`;
     const hashtags = `캐치캐치,퀴즈,나만의퀴즈 `;
     window.open(`https://twitter.com/intent/tweet?text=${sendText}&url=${sendUrl}&hashtags=${hashtags}`);
   };
@@ -70,7 +70,7 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
       <button
         className="share-btn link-copy"
         onClick={() => {
-          handleCopyClipBoard(`https://catchcatch.link/quiz/solve/${url}/?utm_source=link`);
+          handleCopyClipBoard(`https://catchcatch.link/quiz/solve/${url}/?utm_source=link&utm_medium=share&utm_campaign=funnel`);
         }}
       >
         <HiLink size={20} />
