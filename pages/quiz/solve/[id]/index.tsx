@@ -9,7 +9,7 @@ import { MainButton } from 'styles/common';
 import { Loading, Logo, SNSShare, Comment } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
-import { saveSolveProblemSetAction } from 'store/quiz_solve';
+import { saveSolveProblemSetAction,resetSolve } from 'store/quiz_solve';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -18,6 +18,10 @@ const Page: NextPageWithLayout = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
   let { id } = router.query;
+  useEffect(()=> {
+    dispatch(resetSolve())
+  },[])
+  console.log(solveProblemSetTitle);
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true);

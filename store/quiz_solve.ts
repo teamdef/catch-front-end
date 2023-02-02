@@ -31,6 +31,9 @@ const solveSlice = createSlice({
       state.maker = maker;
       state.thumbnail = thumbnail;
     },
+    resetSolve: (state: SolveProblemSetTypes) => {
+      Object.assign(state, initialState)
+    },
     saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: string[] }>) => {
       const { solveAnswers } = action.payload;
       state.solveAnswers = solveAnswers;
@@ -38,6 +41,6 @@ const solveSlice = createSlice({
   },
 });
 
-export const { saveSolveProblemSetAction, saveSolveAnswersAction } = solveSlice.actions;
+export const { saveSolveProblemSetAction, saveSolveAnswersAction, resetSolve } = solveSlice.actions;
 
 export default solveSlice.reducer;

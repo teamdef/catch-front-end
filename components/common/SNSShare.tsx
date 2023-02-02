@@ -15,10 +15,8 @@ const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProp
   useEffect(() => {
     //카카오 sdk 초기화
     if (window.Kakao) {
-      console.log('before init : ', window.Kakao.isInitialized());
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
-        console.log('after init : ', window.Kakao.isInitialized());
       }
     }
   }, [window.Kakao]);
