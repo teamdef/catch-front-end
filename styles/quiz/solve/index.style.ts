@@ -9,8 +9,8 @@ export const Container = styled.div`
   a {
     position: absolute;
     display: block;
-    top: 24px;
-    left: 3%;
+    top: 22px;
+    left: 2%;
     z-index: 99;
   }
 `;
@@ -50,7 +50,7 @@ export const QuizInfo = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
-position: relative;
+  position: relative;
   padding-top: 80px;
   margin: 0 auto;
   max-width: 390px;
@@ -86,7 +86,8 @@ export const Description = styled.div`
   font-size: 1rem;
   /*line-height: 1.5rem;*/
   text-align: center;
-  width: 90%;
+  word-break: keep-all;
+  width: 60%;
 `;
 export const QuizMakerBlock = styled.div`
   width: 100%;

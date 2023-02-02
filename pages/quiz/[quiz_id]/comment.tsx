@@ -12,7 +12,6 @@ import * as S from 'styles/quiz/detail/comment.style'; /* 스타일 코드 */
 import { CommentListApi } from 'pages/api/quiz'; /* 통신 */
 // next.js 위한 라이브러리 및 타입
 
-
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -53,9 +52,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Wrapper>
       <Title title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
-      <S.CommentListWrapper>
-        <CommentList commentList={commentList} />
-      </S.CommentListWrapper>
+      <CommentList commentList={commentList} />
     </S.Wrapper>
   );
 };
