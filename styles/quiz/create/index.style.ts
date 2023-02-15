@@ -1,4 +1,4 @@
-import styled,{css} from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -11,9 +11,9 @@ export const TitleContainer = styled.div`
   position: relative;
   display: block;
   width: 480px;
-  transform:translateX(-3%);
-  @media (max-width:480px){
-    width:100vw;
+  transform: translateX(-3%);
+  @media (max-width: 480px) {
+    width: 100vw;
   }
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
@@ -26,7 +26,7 @@ export const TitleContainer = styled.div`
     background-color: transparent;
     top: 24px;
     left: 24px;
-    display:inline-block;
+    display: inline-block;
   }
   #title-input-wrapper {
     color: #fff;
@@ -122,11 +122,11 @@ export const ButtonContainer = styled.div`
   @media (max-width: 480px) {
     width: 100%;
   }
-  left:calc(50%);
-  transform:translateX(-50%);
-  padding:0 calc(480px * 0.03);
+  left: calc(50%);
+  transform: translateX(-50%);
+  padding: 0 calc(480px * 0.03);
   bottom: 20px;
-  z-index:99;
+  z-index: 99;
 `;
 
 export const QuizCreateContainer = styled.div`
@@ -155,7 +155,31 @@ export const QuizCreateCard = styled.div`
     border: none;
     cursor: pointer;
     background-color: transparent;
-    z-index:2;
+    z-index: 2;
+  }
+`;
+
+export const DeleteButton = styled.button`
+  z-index: 9;
+  cursor: pointer;
+  display: flex;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 8px;
+  right: 8px;
+  border: solid 1px #d6d6d6;
+  background-color: white;
+  padding: 0.25rem;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  font-size: 16px;
+  color: rgb(59, 59, 59);
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: lightgrey;
   }
 `;
 
@@ -279,7 +303,7 @@ export const TextChoiceCreateBtn = styled.div`
     border: none;
     outline: none;
     width: 100%;
-    font-size:1rem;
+    font-size: 1rem;
     color: #ffa5aa;
     &::placeholder {
       color: #ffa5aa90;
@@ -429,4 +453,52 @@ export const CardNumber = styled.span`
   font-weight: bold;
   font-size: 1.2rem;
   color: #fff;
+`;
+
+/* 퀴즈 설명 이미지 */
+export const QuizImageWrapper = styled.div`
+  margin-top: 24px;
+  width: 100%;
+  position: relative;
+  input {
+    display: none;
+  }
+  label {
+    &:hover {
+      cursor: pointer;
+    }
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 1rem;
+    }
+  }
+`;
+
+export const QuizImageUpload = styled.div`
+  height: 140px;
+  background-color: #f4f4f4;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: dashed 1px #d6d6d6;
+  color: grey;
+`;
+
+export const QuizImageDeleteButton = styled.button`
+  position: absolute;
+  color: #00000050;
+  top: 16px;
+  right: 12px;
+  background-color: transparent;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+  svg {
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+  }
 `;
