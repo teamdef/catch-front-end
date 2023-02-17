@@ -60,10 +60,11 @@ export const MyQuizList = styled.div`
         &:after {
           content: '+';
           color: #fff;
-          font-size: 17px;
+          font-size: 18px;
           position: absolute;
-          top: -6.5px;
-          right: 2.5px;
+          top: -7.5px;
+          right: 50%;
+          transform: translateX(50%);
         }
       }
     }
