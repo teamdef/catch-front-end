@@ -5,6 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100vh;
   background-color: #fff;
   a {
     position: absolute;
@@ -18,10 +19,11 @@ export const Container = styled.div`
 interface QuizInfoProps {
   thumbnail?: string;
 }
-export const QuizInfo = styled.div<QuizInfoProps>`
+// 퀴즈 카드 타이틀 컨테이너
+export const QuizTitleContainer = styled.div<QuizInfoProps>`
   position: relative;
   display: block;
-  height: 300px;
+  height: 35%;
   &::before {
     content: '';
     position: absolute;
@@ -32,44 +34,37 @@ export const QuizInfo = styled.div<QuizInfoProps>`
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    background: ${(props) =>
-        props.thumbnail
-          ? css`linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0) 70%,
-      rgba(255, 255, 255, .2) 75%,
-      rgba(255, 255, 255, .9) 90%,
-      rgba(255, 255, 255, 1) 100%
-    ),
-    url(${props.thumbnail})`
-          : 'none'}
-      center;
+    /* Two values, one per background */
+
+    background: ${(props) => (props.thumbnail ? css`url(${props.thumbnail})` : 'none')} center;
+    background-blend-mode: multiply;
+    background-color: #888;
     background-size: cover;
     background-repeat: no-repeat;
   }
 `;
 
 export const QuizTitle = styled.h1`
-  position: relative;
-  padding-top: 80px;
-  margin: 0 auto;
-  max-width: 390px;
-  font-family: RixInooAriDuriR;
-  font-size: 60px;
-  line-height: 1.1;
-  z-index: 1;
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 2.5rem;
+  line-height: 120%;
+  /* identical to box height, or 42px */
+  letter-spacing: -0.02em;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   @media (max-width: 390px) {
-    max-width: 90%;
-    font-size: 14vw;
+    font-size: 2rem;
   }
   /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
   word-break: keep-all;
   text-align: center;
-  color: #fff6f7;
-  -webkit-text-stroke: 3px #ff4d57;
-  text-shadow: #ff4d57 1px 1px, #ff4d57 0px 0px, #ff4d57 1px 1px, #ff4d57 2px 2px, #ff4d57 3px 3px, #ff4d57 4px 4px,
-    #ff4d57 5px 5px, #ff4d57 6px 6px, #ff4d57 7px 7px;
+  color: #fff;
+  z-index: 1;
 `;
+// // 퀴즈카트 타이틀 컨테이너
 
 export const InnerContainer = styled.div`
   position: relative;
@@ -77,65 +72,67 @@ export const InnerContainer = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
-  padding-bottom: 100px;
+  height: 65%;
 `;
 
 export const Description = styled.div`
   color: #595959;
-  font-size: 1rem;
+  margin-top: 30px;
+  font-size: 14px;
+  line-height: 160%;
   /*line-height: 1.5rem;*/
   text-align: center;
   word-break: keep-all;
   width: 60%;
 `;
 export const QuizMakerBlock = styled.div`
-  width: 100%;
+  position: absolute;
+  top: -36px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #888;
-  background-color: #fff6f7;
   border-radius: 12px;
-  font-size: 1rem;
-  span {
-    font-size: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 20px;
+  img {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
   }
   #maker {
-    margin-top: 4px;
-    font-weight: bold;
-    color: #ff264d;
+    margin-top: 5px;
+    font-weight: 500;
+    color: #888;
   }
 `;
-export const QuizInfoContainer = styled.div`
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-evenly;
-  height: 80px;
-  width: 100%;
+export const QuizCountContainer = styled.div`
+  position: relative;
+  font-size: 0.875rem;
   color: #888;
-  > div {
-    width: 30%;
-  }
-  #block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff6f7;
-    border-radius: 12px;
-    font-size: 1rem;
-  }
   strong {
     margin-right: 4px;
-    font-size: 1.75rem;
+    font-size: 1.3rem;
     font-weight: bold;
     color: #ff264d;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 145%;
+    height: 2px;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4d57;
   }
 `;
 
 export const SNSShareContainer = styled.div`
-  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -162,16 +159,19 @@ export const BestCommentContainer = styled.div`
   }
 `;
 export const ButtonWrap = styled.div`
-  position: fixed;
+  position: relative;
   display: flex;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 30px;
-  width: 100%;
-  max-width: 480px;
   button {
     position: relative;
-    display: flex;
-    margin: 0 3%;
+    height: auto;
+    padding: 20px 100px;
+    span {
+      position: relative;
+      display: block;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 28px;
+    }
+    border-radius: 16px;
   }
 `;
