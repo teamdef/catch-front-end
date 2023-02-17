@@ -19,7 +19,7 @@ const Page: NextPageWithLayout = () => {
   const [count, setCount] = useState(solveProblems.length); // 남은 퀴즈 개수
   const [loading, setLoading] = useState<Boolean>(false);
   // 유저가 고른 답 (빈문자열 혹은 꽉찬 배열 : state 로 인해 값이 초기화되는 것을 방지)
-  let answers:string[] = userAnswers;
+  let answers: string[] = userAnswers;
   /** 항목 선택 시 작동하는 함수 */
   const onChange = () => {
     setCount(solveProblems.length - answers.filter((element) => element !== undefined).length);
@@ -34,11 +34,16 @@ const Page: NextPageWithLayout = () => {
       }),
     );
   };
-  
+
   const QuizList = solveProblems.map((item: SolveProblemTypes, i: number) => (
     <S.QuizSolveCard key={i}>
       <S.CardNumber>{i + 1}</S.CardNumber>
       <S.QuizTitle>{item.prob_title}</S.QuizTitle>
+      {item.prob_image && (
+        <S.QuizImageWrapper>
+          <img alt="퀴즈 설명 이미지" src={'https://catchmeimages.s3.ap-northeast-2.amazonaws.com/' + item.prob_image} />
+        </S.QuizImageWrapper>
+      )}
       {item.is_img ? (
         <S.ChoiceWrapper id="choice-img-wrapper">
           {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
@@ -91,7 +96,9 @@ const Page: NextPageWithLayout = () => {
     <S.Container>
       <Logo />
       <S.QuizCount>
-        <p>남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span></p>
+        <p>
+          남은 퀴즈 <span>{solveProblems.length - answers.filter((element) => element !== undefined).length}</span>
+        </p>
       </S.QuizCount>
       <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>

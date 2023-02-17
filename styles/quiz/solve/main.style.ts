@@ -229,3 +229,17 @@ export const CardNumber = styled.span`
   font-size: 1.2rem;
   color: #fff;
 `;
+
+export const QuizImageWrapper = styled.div`
+  width: 100%;
+  min-height: 140px;
+  max-height: 200px;
+  border-radius: 16px;
+  margin-top:40px;
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+`;

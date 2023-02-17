@@ -471,7 +471,7 @@ export const QuizImageWrapper = styled.div`
       width: 100%;
       height: 200px;
       object-fit: cover;
-      border-radius: 1rem;
+      border-radius: 16px;
     }
   }
 `;
