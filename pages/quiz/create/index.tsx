@@ -133,7 +133,6 @@ const Page: NextPageWithLayout = () => {
 
   // 객관식 답안 타입 변경 함수
   const setChoiceType = (problemIndex: number, choiceType: 'img' | 'text') => {
-    console.log(problemIndex);
     let temp = JSON.parse(JSON.stringify(problemList));
     if (problemList[problemIndex].choices.length !== 0) {
       if (choiceType === 'img') {

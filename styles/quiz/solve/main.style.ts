@@ -14,6 +14,7 @@ export const Container = styled.div`
     top: 24px;
     left: 24px;
   }
+  
 `;
 export const QuizCount = styled.div`
   position: fixed;

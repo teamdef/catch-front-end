@@ -41,7 +41,7 @@ const Page: NextPageWithLayout = () => {
       <S.QuizTitle>{item.prob_title}</S.QuizTitle>
       {item.prob_image && (
         <S.QuizImageWrapper>
-          <img alt="퀴즈 설명 이미지" src={'https://catchmeimages.s3.ap-northeast-2.amazonaws.com/' + item.prob_image} />
+          <img alt="퀴즈 설명 이미지" src={item.prob_image} />
         </S.QuizImageWrapper>
       )}
       {item.is_img ? (
