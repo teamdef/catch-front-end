@@ -114,6 +114,7 @@ const ThumbnailChangeWrapper = styled.div`
 const ThumbnailButton = styled.div`
   position: absolute;
   color: white;
+  
   &:hover {
     cursor: pointer;
   }

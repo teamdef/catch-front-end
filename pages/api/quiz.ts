@@ -1,6 +1,7 @@
 // Custom Axios에서 instance만든거 가져와서 사용
 import { authAxios, notAuthAxios } from './customAxios';
 import { AxiosResponse } from 'axios';
+import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 
 // 최근 생성된 퀴즈 목록
 export const RecentQuizListApi = (lastCreatedAt?: string): Promise<AxiosResponse> => {
@@ -28,59 +29,62 @@ export const QuizDeleteApi = (probsetId: string): Promise<AxiosResponse> => {
 
 // 특정 퀴즈 id의 랭킹 조회
 export const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> => {
-  return authAxios.get(`/solver/ranking`, { params: { probsetId} });
+  return authAxios.get(`/solver/ranking`, { params: { probsetId } });
 };
 
+// imageObject 를 Blob으로 변환하여 S3에 전송하는 함수
+const putImageToS3URL = async (urlArray:any, _imageObject: ChoiceImageTypes) => {
+  const _foundUrl = urlArray.find((value: any) => value.fileName === _imageObject.imgName);
+  const _imageFile = await imageCompression.getFilefromDataUrl(_imageObject.imgURL, _imageObject.imgName) as unknown as File;
+  const res = await notAuthAxios.put(_foundUrl.putUrl, _imageFile, {
+    headers: { 'Content-Type': _imageFile.type },
+  });
+};
 // 생성 - 새로 만든 퀴즈 업로드
 export const QuizUploadApi = (
-  problems: ProblemTypes[],
+  problemList: ProblemTypes[],
   userId: number,
   setTitle: string,
   description: string,
 ): Promise<AxiosResponse> => {
   return new Promise(async (resolve, reject) => {
-    const temp = problems.map((problem: ProblemTypes) => {
+    // 이미지 파일의 경우 이름만 전송하여 AWS S3 전송 링크를 받는다
+    let problems = problemList.map((problem: any) => {
+      const _tempProblem = { ...problem };
       if (problem.choiceType === 'img') {
-        let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-        let _choices: string[] = [];
-        problem.choices.forEach((img) => {
-          const tem = img as unknown as File;
-          _choices.push(tem.name);
+        let _imgChoices = problem.choices.map((imgChoice: ChoiceImageTypes) => {
+          return imgChoice.imgName;
         });
-        _problem.choices = _choices;
-        return _problem;
-      } else {
-        return problem;
+        _tempProblem.choices = _imgChoices;
       }
+      if (problem.problemImage) {
+        _tempProblem.problemImage = problem.problemImage.imgName;
+      }
+      return _tempProblem;
     });
 
-    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems: temp, userId, description });
-
+    const res: AxiosResponse = await authAxios.post(`/probset`, { setTitle, problems, userId, description });
+    
     const urlArray = res.data.urlArray;
-    const returnSetId = res.data.returnSetId;
-    const returnThumb = res.data.returnThumb;
-
-    let imageArray: File[] = [];
-    problems.forEach((problem: ProblemTypes) => {
+    // problemList 에서 이미지 객체만 뽑아내기 
+    let imageArray: ChoiceImageTypes[] = [];
+    problemList.forEach((problem: ProblemTypes) => {
       if (problem.choiceType === 'img') {
-        const ttt = problem.choices as unknown as File;
-        imageArray.push(ttt);
+        imageArray.push(...(problem.choices as ChoiceImageTypes[]));
+      }
+      if (problem.problemImage) {
+        imageArray.push(problem.problemImage)
       }
     });
-
-    const flatArr = imageArray.flat();
-    if (flatArr.length !== 0) {
-      flatArr.forEach(async (imgBlob) => {
-        const aaa = urlArray.find((value: any) => value.fileName === imgBlob.name);
-
-        const res2: AxiosResponse = await notAuthAxios.put(aaa.putUrl, imgBlob, {
-          headers: { 'Content-Type': imgBlob.type },
-        });
-      });
-    }
+    // 이미지 객체를 S3 서버에 업로드하기
+    imageArray.forEach(async (image) => {
+      await putImageToS3URL(urlArray,image);
+    })
+    // 모든 작업이 끝난 후 res 값 반환하기
     resolve(res);
   });
 };
+
 // 특정 id의 퀴즈 썸네일 변경
 export const QuizThumbnailChangeApi = async (probsetId: string, imgBlob: File): Promise<number> => {
   return new Promise(async (resolve, reject) => {
@@ -112,6 +116,6 @@ export const CommentListApi = async (probsetId: string) => {
 };
 
 // 한줄평 - 등록하기
-export const CommentSaveApi = async (nickname: string, content: string, probsetId: string, userId:string) => {
+export const CommentSaveApi = async (nickname: string, content: string, probsetId: string, userId: string) => {
   return notAuthAxios.post(`/comment`, { nickname, content, probsetId, userId });
 };
