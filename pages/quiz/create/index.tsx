@@ -20,7 +20,7 @@ import { AppLayout } from 'components/layout';
 import * as S from 'styles/quiz/create/index.style';
 import { MainButton } from 'styles/common';
 /* react-icons */
-import { MdClear, MdOutlineAdd, MdCheck, MdClose } from 'react-icons/md';
+import { MdClear, MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
 
@@ -43,10 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 
-interface ThumbnailObjectType {
-  imgURL: string;
-  imgName: string;
-}
+
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -107,6 +104,7 @@ const Page: NextPageWithLayout = () => {
   const createProblem = () => {
     const obj: ProblemTypes = {
       problemTitle: '',
+      problemImage: undefined,
       choiceType: 'text',
       choices: [],
       correctIndex: 0,
@@ -123,6 +121,7 @@ const Page: NextPageWithLayout = () => {
     },
     [problemList],
   );
+
   // 문제 정보를 변경하는 함수
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -134,7 +133,6 @@ const Page: NextPageWithLayout = () => {
 
   // 객관식 답안 타입 변경 함수
   const setChoiceType = (problemIndex: number, choiceType: 'img' | 'text') => {
-    console.log(problemIndex);
     let temp = JSON.parse(JSON.stringify(problemList));
     if (problemList[problemIndex].choices.length !== 0) {
       if (choiceType === 'img') {
@@ -174,11 +172,16 @@ const Page: NextPageWithLayout = () => {
     fileType: 'images/*', // 파일 타입
   };
 
+  // 랜덤 문자열 생성 함수
   const randomString = (len: number): string => {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
     for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+  };
+  // 오늘 날짜 date객체 -> yyyy/mm/dd 함수
+  const dateString = (): string => {
+    return new Date().toISOString().substring(0, 10).replace(/-/g, '/');
   };
 
   // 이미지 로더. 이미지의 가로세로 크기를 구하기 위함 File Object to Image Object
@@ -192,10 +195,43 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
-  // 이미지 onChange 이벤트 처리 함수
-  const onImgChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
-    const files = e.target.files as FileList; // 입력 받은 파일 리스트
+  // 이미지를 불러온 후 이미지 사이즈에 맞게 압축하는 과정
+  const ReturnFileByImageSize = async (img: HTMLImageElement, file: File): Promise<ChoiceImageTypes> => {
+    let _tempImgFile: File;
+    // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
+    if (img.width < 300 || img.height < 300) {
+      _tempImgFile = file;
+    } else {
+      // 이미지 압축 후 임시 이미지 파일 객체에 대입
+      _tempImgFile = (await imageCompression(file, options)) as File;
+    }
+    const _imgFile = new File(
+      [_tempImgFile],
+      `${dateString()}_${randomString(20)}.${_tempImgFile.type.split('/')[1]}`,
+      {
+        type: _tempImgFile.type,
+      },
+    ); // 파일 객체 이름 변경
+
+    // resize된 , 또는 압축되지 않은 이미지 파일의 썸네일 url을 생성함.
+    const _imgURL = await imageCompression.getDataUrlFromFile(_imgFile);
+    return { imgURL: _imgURL, imgName: _imgFile.name };
+  };
+
+  // File 객체를 ChoiceImageTypes 타입 객체로 변환하는 함수
+  const FileListToImageObject = (_files: FileList) => {
     const _URL = window.URL || window.webkitURL;
+    // FileList -> File Array
+    let _fileArray = Array.from(_files);
+    return _fileArray.map(async (file) => {
+      const _imgElement = await loadImage(_URL.createObjectURL(file)); // 이미지 element 구하기
+      const _thumbnail = await ReturnFileByImageSize(_imgElement, file); // 이미지 파일 url 저장
+      return _thumbnail;
+    });
+  };
+  // 퀴즈 객관식 이미지 onChange 이벤트 처리 함수
+  const onChoiceImgChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
+    const files = e.target.files as FileList; // 입력 받은 파일 리스트
 
     // 이미지가 있을 경우
     if (files && files[0]) {
@@ -204,44 +240,39 @@ const Page: NextPageWithLayout = () => {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
+      const _imgFileTaskList = FileListToImageObject(files);
+      // Promise.all 의 응답값은 filelist의 file객체를 모두 ChoiceImageTypes 타입으로 변경한 것
+      Promise.all(_imgFileTaskList).then((res) => {
+        const _choicesImgThumbnail = res;
+        let temp = JSON.parse(JSON.stringify(problemList));
+        let _choices = [...temp[problemIndex].choices, ..._choicesImgThumbnail];
+        temp[problemIndex].choices = _choices;
+        setProblemList(temp);
+        e.target.value = '';
+      });
+    }
+  };
 
-      let _choicesImgThumbnail: ThumbnailObjectType[] = [];
-
-      // PromiseAll 로 개선하기
-      await Array.from(files).reduce(async (promise, file) => {
-        await promise; // 이전 작업이 종료될때 까지 대기
-        await loadImage(_URL.createObjectURL(file)).then(async (img) => {
-          let _imgFile;
-          let timestamp = new Date().toISOString().substring(0, 10);
-          // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
-
-          if (img.width < 300 || img.height < 300) {
-            _imgFile = new File([file], `${timestamp}_${randomString(20)}.${file.type.split('/')[1]}`, {
-              type: file.type,
-            }); // 원본 이미지 대입
-          } else {
-            // 이미지 압축 과정
-            const _compressed = (await imageCompression(file, options)) as File;
-            _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
-              type: _compressed.type,
-            }); // 압축 이미지 대입
-          }
-
-          // resize된 , 또는 압축되지 않은 이미지 파일의 썸네일 url을 생성함.
-          const _imgURL = await imageCompression.getDataUrlFromFile(_imgFile);
-          let _thumbnail: ThumbnailObjectType = { imgURL: _imgURL, imgName: _imgFile.name };
-
-          // 이미지 파일 url 저장
-          _choicesImgThumbnail.push(_thumbnail);
-        });
-      }, Promise.resolve());
-
+  // 퀴즈 설명 이미지 onChange 이벤트 처리 함수
+  const onQuizImageChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
+    const files = e.target.files as FileList; // 입력 받은 파일 리스트
+    const _URL = window.URL || window.webkitURL;
+    // 이미지가 있을 경우
+    if (files && files[0]) {
+      const _quizImageFile = files[0];
+      const _imgElement = await loadImage(_URL.createObjectURL(_quizImageFile)); // 이미지 element 구하기
+      const _thumbnail = await ReturnFileByImageSize(_imgElement, _quizImageFile); // 이미지 파일 url 저장
       let temp = JSON.parse(JSON.stringify(problemList));
-      let _choices = [...temp[problemIndex].choices, ..._choicesImgThumbnail];
-      temp[problemIndex].choices = _choices;
+      temp[problemIndex].problemImage = _thumbnail;
       setProblemList(temp);
       e.target.value = '';
     }
+  };
+
+  const deleteQuizImage = (problemIndex: number) => {
+    let temp = JSON.parse(JSON.stringify(problemList));
+    temp[problemIndex].problemImage = undefined;
+    setProblemList(temp);
   };
   // 답안 항목 삭제
   const deleteChoice = (problemIndex: number, choiceIndex: number) => {
@@ -279,40 +310,18 @@ const Page: NextPageWithLayout = () => {
     // 문제 저장 조건 체크
     if (await checkProblemSet()) {
       setLoading(true);
-      // url 형태의 이미지를 다시 blob 객체로 변환.
-      let _problems = problemList.map((problem: ProblemTypes) => {
-        if (problem.choiceType === 'img') {
-          let _problem = JSON.parse(JSON.stringify(problem)); // 객체 깊은 복사
-          let _choices: File[] = [];
-          problem.choices.forEach(async (img) => {
-            try {
-              const _temp = img as ChoiceImageTypes;
-              const _file = await imageCompression.getFilefromDataUrl(_temp.imgURL, _temp.imgName);
-              _choices.push(_file);
-            } catch (e) {
-              console.log(e);
-            }
-          });
-          _problem.choices = _choices;
-          return _problem;
-        } else {
-          return problem;
-        }
-      });
-      Promise.all(_problems).then((res) => {
-        QuizUploadApi(res, id, setTitle, description).then((res: AxiosResponse) => {
-          resetReduxProblemSet(); // 문제집 redux 초기화
-          setLoading(false); // 로딩 해제
-          router.push({
-            pathname: '/quiz/create/share',
-            query: {
-              probSetTitle: setTitle,
-              probSetCount: problems.length,
-              returnThumb: res.data.returnThumb,
-              returnSetId: res.data.returnSetId,
-            },
-          }); // 문제집 생성 완료 및 공유 화면으로 이동
-        });
+      QuizUploadApi(problemList, id, setTitle, description).then((res: AxiosResponse) => {
+        resetReduxProblemSet(); // 문제집 redux 초기화
+        setLoading(false); // 로딩 해제
+        router.push({
+          pathname: '/quiz/create/share',
+          query: {
+            probSetTitle: setTitle,
+            probSetCount: problems.length,
+            returnThumb: res.data.returnThumb,
+            returnSetId: res.data.returnSetId,
+          },
+        }); // 문제집 생성 완료 및 공유 화면으로 이동
       });
     } else {
       alert(
@@ -397,6 +406,38 @@ const Page: NextPageWithLayout = () => {
                     onChangeProblem(e, problemIndex);
                   }}
                 />
+                <S.QuizImageWrapper>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      onQuizImageChange(e, problemIndex);
+                    }}
+                    id={`quiz-image-input-${problemIndex}`}
+                    name={`quiz-image-input-${problemIndex}`}
+                  />
+                  <label htmlFor={`quiz-image-input-${problemIndex}`}>
+                    {problem.problemImage ? (
+                      <>
+                        <S.DeleteButton
+                          onClick={(e) => {
+                            e.preventDefault();
+                            deleteQuizImage(problemIndex);
+                          }}
+                        >
+                          <MdClose />
+                        </S.DeleteButton>
+                        <img src={problem.problemImage.imgURL} />
+                      </>
+                    ) : (
+                      <S.QuizImageUpload>
+                        <MdPhotoCamera size={40} />
+                        <p>보기 이미지 추가하기 + </p>
+                        <p>(선택사항)</p>
+                      </S.QuizImageUpload>
+                    )}
+                  </label>
+                </S.QuizImageWrapper>
                 <S.QuizChoiceTypeRadio>
                   <input
                     id={`choiceType-text-${problemIndex}`}
@@ -433,7 +474,6 @@ const Page: NextPageWithLayout = () => {
                               setCorrectIndex(problemIndex, choiceIndex);
                             }}
                           >
-                            {/* {problem.correctIndex === choiceIndex && <MdCheck id="check-icon" size={30} />} */}
                             <div>{item}</div>
                             <button
                               onClick={(e) => {
@@ -484,15 +524,14 @@ const Page: NextPageWithLayout = () => {
                             }}
                           >
                             <img alt="미리보기" src={item.imgURL} />
-                            <button
-                              id="delete-btn"
+                            <S.DeleteButton
                               onClick={(e) => {
                                 e.stopPropagation();
                                 deleteChoice(problemIndex, choiceIndex);
                               }}
                             >
                               <MdClose />
-                            </button>
+                            </S.DeleteButton>
                           </S.ImgWrapper>
                         );
                       })}
@@ -503,12 +542,12 @@ const Page: NextPageWithLayout = () => {
                             accept="image/*"
                             multiple
                             onChange={(e) => {
-                              onImgChange(e, problemIndex);
+                              onChoiceImgChange(e, problemIndex);
                             }}
-                            id={`select_img_${problemIndex}`}
-                            name={`select_img_${problemIndex}`}
+                            id={`choice-image-input-${problemIndex}`}
+                            name={`choice-image-input-${problemIndex}`}
                           />
-                          <label htmlFor={`select_img_${problemIndex}`}>
+                          <label htmlFor={`choice-image-input-${problemIndex}`}>
                             <AiFillCamera size={30} />
                             <span>이미지추가</span>
                           </label>

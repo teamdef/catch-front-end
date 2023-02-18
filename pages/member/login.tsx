@@ -23,9 +23,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 const Page: NextPageWithLayout = () => {
+  const currentDomain = window.location.origin;
   const redirectUri =
     process.env.NODE_ENV === 'development'
-      ? process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI
+      ? process.env.NEXT_PUBLIC_DEV_KAKAO_REDIRECT_URI
+      : currentDomain === 'https://beta.catchcatch.link'
+      ? process.env.NEXT_PUBLIC_BETA_KAKAO_REDIRECT_URI
       : process.env.NEXT_PUBLIC_DEPLOY_KAKAO_REDIRECT_URI;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${redirectUri}&response_type=code`;
 
