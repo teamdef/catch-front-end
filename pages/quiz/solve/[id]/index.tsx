@@ -83,9 +83,9 @@ const Page: NextPageWithLayout = () => {
               thumbnail={thumbnail}
             />
           </S.SNSShareContainer>
-          <S.BestCommentContainer>
+          {/* <S.BestCommentContainer>
             <Comment hideInput={true} />
-          </S.BestCommentContainer>
+          </S.BestCommentContainer> */}
         </S.InnerContainer>
         <S.ButtonWrap>
           <MainButton
