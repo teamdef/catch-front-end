@@ -57,13 +57,11 @@ const Page: NextPageWithLayout = () => {
           <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
         <S.InnerContainer>
-          <S.QuizMakerBlock>
-            <img src="/assets/img/user_default.png"></img>
-            <div id="maker">{maker}</div>
-          </S.QuizMakerBlock>
+          <S.QuizMakerImage src="/assets/img/user_default.png"></S.QuizMakerImage>
+          <S.QuizMakerName>{maker}</S.QuizMakerName>
           <S.Description>{description}</S.Description>
           <S.QuizCountContainer>
-              총 <strong>{solveProblems.length}</strong> 문제
+            총 <strong>{solveProblems.length}</strong> 문제
             {/* <div id="block">
               <strong>???</strong>
               <div>참여</div>

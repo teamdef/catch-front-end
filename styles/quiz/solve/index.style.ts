@@ -49,7 +49,7 @@ export const QuizTitle = styled.h1`
   display: block;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   font-size: 2.5rem;
   line-height: 120%;
   /* identical to box height, or 42px */
@@ -68,47 +68,40 @@ export const QuizTitle = styled.h1`
 
 export const InnerContainer = styled.div`
   position: relative;
+top: -3.58vh;
+
   width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
-  height: 65%;
 `;
 
 export const Description = styled.div`
   color: #595959;
-  margin-top: 30px;
+  margin-top: 2.52vh;
   font-size: 14px;
   line-height: 160%;
+  height: 88px;
   /*line-height: 1.5rem;*/
   text-align: center;
   word-break: keep-all;
   width: 60%;
 `;
-export const QuizMakerBlock = styled.div`
-  position: absolute;
-  top: -36px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+export const QuizMakerImage = styled.img`
+position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+`;
+export const QuizMakerName = styled.div`
+  margin-top: 1.68vh;
+  font-weight: 500;
   color: #888;
-  border-radius: 12px;
   font-size: 0.875rem;
   line-height: 20px;
-  img {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-  }
-  #maker {
-    margin-top: 5px;
-    font-weight: 500;
-    color: #888;
-  }
 `;
+
 export const QuizCountContainer = styled.div`
   position: relative;
   font-size: 0.875rem;
