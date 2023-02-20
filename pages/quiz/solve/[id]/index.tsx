@@ -21,7 +21,6 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     dispatch(resetSolve());
   }, []);
-  console.log(solveProblemSetTitle);
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true);
