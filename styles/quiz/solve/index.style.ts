@@ -68,8 +68,7 @@ export const QuizTitle = styled.h1`
 
 export const InnerContainer = styled.div`
   position: relative;
-top: -3.58vh;
-
+  top: -3.58vh;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -77,9 +76,22 @@ top: -3.58vh;
   align-items: center;
 `;
 
+export const QuizMakerImage = styled.img`
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+`;
+export const QuizMakerName = styled.div`
+  margin-top: 1.25vh;
+  font-weight: 500;
+  color: #888;
+  font-size: 0.875rem;
+  line-height: 20px;
+`;
 export const Description = styled.div`
   color: #595959;
-  margin-top: 2.52vh;
+  margin-top: 5vh;
   font-size: 14px;
   line-height: 160%;
   height: 88px;
@@ -88,23 +100,11 @@ export const Description = styled.div`
   word-break: keep-all;
   width: 60%;
 `;
-export const QuizMakerImage = styled.img`
-position: relative;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-`;
-export const QuizMakerName = styled.div`
-  margin-top: 1.68vh;
-  font-weight: 500;
-  color: #888;
-  font-size: 0.875rem;
-  line-height: 20px;
-`;
-
 export const QuizCountContainer = styled.div`
   position: relative;
   font-size: 0.875rem;
+  margin-top: 2.5vh;
+  padding: 17px 0;
   color: #888;
   strong {
     margin-right: 4px;
@@ -118,10 +118,29 @@ export const QuizCountContainer = styled.div`
     display: block;
     width: 145%;
     height: 2px;
-    bottom: -7px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #ff4d57;
+  }
+`;
+
+export const ButtonWrap = styled.div`
+  position: relative;
+  display: flex;
+  margin-top: 5vh;
+  button {
+    position: relative;
+    height: auto;
+    padding: 20px 100px;
+    span {
+      position: relative;
+      display: block;
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 28px;
+    }
+    border-radius: 16px;
   }
 `;
 
@@ -129,7 +148,7 @@ export const SNSShareContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
+  margin-top: 5vh;
   #explain {
     color: #888;
     display: flex;
@@ -151,20 +170,4 @@ export const BestCommentContainer = styled.div`
     text-align: left;
   }
 `;
-export const ButtonWrap = styled.div`
-  position: relative;
-  display: flex;
-  button {
-    position: relative;
-    height: auto;
-    padding: 20px 100px;
-    span {
-      position: relative;
-      display: block;
-      font-weight: 700;
-      font-size: 19px;
-      line-height: 28px;
-    }
-    border-radius: 16px;
-  }
-`;
+
