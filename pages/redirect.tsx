@@ -41,8 +41,8 @@ const redirect: NextPageWithLayout = () => {
     const refreshToken: string = data?.refreshToken;
     const isReqSignUp: boolean = data?.isReqSignUp;
     dispatch(loginAction({ id, profileImg, nickName, kakaoUid })); // 개인정보를 redux에 저장
-    await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
-    await saveRefreshToken(refreshToken); // 리프레시 토큰을 쿠키에 저장하는 비동기 함수
+    //await saveToken(accessToken); // 토큰을 쿠키에 저장 비동기 함수
+    //await saveRefreshToken(refreshToken); // 리프레시 토큰을 쿠키에 저장하는 비동기 함수
     
 
     if (isReqSignUp) {
