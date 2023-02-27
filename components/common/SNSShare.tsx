@@ -14,6 +14,9 @@ export interface shareProps {
 const SNSShare = ({ thumbnail, set_title, url, profileImg, nickName }: shareProps) => {
   useEffect(() => {
     //카카오 sdk 초기화
+    console.log('window.Kakao : ',window.Kakao)
+    console.log('window.Kakao.Link : ',window.Kakao.Link)
+    // window.Kakao.Link 의 존재 여부 추후 검사 해볼만함!
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
         window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY);
