@@ -51,9 +51,9 @@ export const TitleContainer = styled.div`
       background-attachment: local;
       background-image: linear-gradient(to right, #ff4d57 10px, transparent 10px),
         linear-gradient(to left, #ff4d57 10px, transparent 10px),
-        repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ccc 30px, #ccc 31px, #ff4d57 31px);
+        repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ff373780 30px, #ff373780 32px, #ff4d57 32px);
       font-size: 1rem;
-      line-height: 31px;
+      line-height: 170%;
       padding: 3px 10px;
       margin-top: 2rem;
       border: none;

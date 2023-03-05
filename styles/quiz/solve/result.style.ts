@@ -59,7 +59,7 @@ export const ButtonArea = styled.div`
   justify-content: space-around;
   align-items: center;
   button {
-    font-size: 1rem;
+    font-size: 1.4rem;
     font-family: 'RixInooAriDuriR';
     width: 100%;
     border: 2px solid transparent;
