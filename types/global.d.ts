@@ -44,10 +44,13 @@ interface SolveProblemSetTypes {
   solveProblemSetTitle: string; // 퀴즈세트 제목
   solveProblems: SolveProblemTypes[]; // 퀴즈 배열
   solveAnswers: string[]; // 유저가 고른 항목(답안지) 배열
-  maker:string;
+  maker:makerTypes[];
   thumbnail:string;
 }
-
+interface makerTypes {
+  nickname: string;
+  profile_img: string;
+}
 // 풀이자 정보
 interface SolveUserTypes {
   solveUserName: string; // 유저 닉네임
