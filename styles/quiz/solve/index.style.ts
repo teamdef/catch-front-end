@@ -82,6 +82,7 @@ export const QuizMakerImage = styled.img`
   height: 54px;
   border-radius: 50%;
   object-fit: cover;
+  background-color: #fff;
 `;
 export const QuizMakerName = styled.div`
   margin-top: 1.25vh;
