@@ -36,6 +36,7 @@ interface SolveProblemTypes {
   id:string; // 퀴즈별 아이디
   is_img:boolean; // 이미지형 텍스트형 구분
   prob_title: string; // 퀴즈 제목
+  prob_image: string;
 }
 
 // SolveProblemSetTypes - 퀴즈세트(풀이용) 정보
