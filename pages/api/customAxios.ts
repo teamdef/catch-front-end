@@ -4,7 +4,9 @@ import { getCookie, saveToken, deleteToken } from 'utils/token';
 // https://velog.io/@dkdlel102/React-CORS-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0
 const authAxios: AxiosInstance = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_BACKEND : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_DEV_BACKEND
+      : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
   timeout: 100000000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -12,7 +14,9 @@ const authAxios: AxiosInstance = axios.create({
 authAxios.defaults.withCredentials = false;
 const notAuthAxios: AxiosInstance = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'development' ? process.env.NEXT_PUBLIC_BACKEND : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
+    process.env.NODE_ENV === 'development'
+      ? process.env.NEXT_PUBLIC_DEV_BACKEND
+      : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
   timeout: 100000000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -81,7 +85,7 @@ const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => 
           alert('세션이 만료되어 로그아웃 되었습니다.');
           deleteToken();
           window.location.href = '/'; // next/router 사용이 안되므로 window location으로 화면 전환
-          // 토큰 쿠키 삭제 
+          // 토큰 쿠키 삭제
         }
       }
     }
@@ -90,6 +94,5 @@ const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => 
 };
 
 authAxios.interceptors.response.use(onResponse, onErrorResponse);
-
 
 export { authAxios, notAuthAxios };

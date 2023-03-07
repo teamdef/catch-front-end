@@ -37,7 +37,6 @@ const Page: NextPageWithLayout = () => {
 
   const getMyQuizList = async () => {
     const res = await UserQuizListApi(id);
-    console.log(res);
     const _myQuizList: MyQuizType[] = res?.data?.map((quiz: any) => {
       let _obj: MyQuizType = quiz;
       _obj['average'] = Number(quiz.average.substring(0, 3));

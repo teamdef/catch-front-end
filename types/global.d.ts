@@ -1,4 +1,4 @@
-// ChoiceImageTypes - 이미지 타입 객관식 답안
+// ChoiceImageTypes - 이미지 타입
 interface ChoiceImageTypes {
   imgURL: string; //  최적화 시킨 이미지 파일 url
   imgName: string; // 최적화 시킨 이미지 파일 이름.
@@ -11,6 +11,7 @@ interface ChoiceTextTypes {
 // ProblemType - 퀴즈 정보
 interface ProblemTypes {
   problemTitle: string; // 퀴즈 제목
+  problemImage?:ChoiceImageTypes; // 퀴즈 설명 이미지
   correctIndex: number; // 정답 번호
   choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
   choices: (ChoiceTextTypes | ChoiceImageTypes)[]; // 객관식 답안 배열
@@ -36,6 +37,7 @@ interface SolveProblemTypes {
   id:string; // 퀴즈별 아이디
   is_img:boolean; // 이미지형 텍스트형 구분
   prob_title: string; // 퀴즈 제목
+  prob_image?: string; // 퀴즈 설명 이미지
 }
 
 // SolveProblemSetTypes - 퀴즈세트(풀이용) 정보
