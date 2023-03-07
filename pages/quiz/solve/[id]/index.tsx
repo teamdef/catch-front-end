@@ -17,6 +17,7 @@ const Page: NextPageWithLayout = () => {
   const { solveProblemSetTitle, solveProblems, maker, thumbnail } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
+  console.log(maker);
   let { id } = router.query;
   useEffect(() => {
     dispatch(resetSolve());
@@ -27,12 +28,13 @@ const Page: NextPageWithLayout = () => {
     if (id) {
       QuizDataFetchApi(id as string)
         .then((res) => {
+          console.log(res?.data?.user);
           dispatch(
             saveSolveProblemSetAction({
               solveProblemSetTitle: res?.data?.set_title,
               problemSetId: id as string,
               solveProblems: res?.data?.prob,
-              maker: res?.data?.user?.nickname,
+              maker: res?.data?.user,
               thumbnail: res?.data?.thumbnail,
             }),
           );
@@ -56,8 +58,8 @@ const Page: NextPageWithLayout = () => {
           <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
         <S.InnerContainer>
-          <S.QuizMakerImage src="/assets/img/user_default.png"></S.QuizMakerImage>
-          <S.QuizMakerName>{maker}</S.QuizMakerName>
+          <S.QuizMakerImage src={`${maker.profile_img}`}></S.QuizMakerImage>
+          <S.QuizMakerName>{maker.nickname}</S.QuizMakerName>
           <S.Description>{description}</S.Description>
           <S.QuizCountContainer>
             총 <strong>{solveProblems.length}</strong> 문제

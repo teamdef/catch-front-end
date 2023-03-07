@@ -5,9 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  color: #555;
   min-height: 100vh;
-
   a {
     position: absolute;
     display: block;
@@ -15,6 +13,7 @@ export const Container = styled.div`
     left: 24px;
   }
 `;
+
 export const QuizCount = styled.div`
   position: fixed;
   left: 50%;
@@ -41,6 +40,20 @@ export const QuizTitle = styled.h1`
   width: 80%;
   font-size: 1.3rem;
   margin-top: 80px;
+`;
+
+export const QuizImageWrapper = styled.div`
+  width: 100%;
+  min-height: 140px;
+  max-height: 200px;
+  border-radius: 15px;
+  margin-top:40px;
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+  }
 `;
 
 export const QuizSolveContent = styled.div`

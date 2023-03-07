@@ -81,6 +81,7 @@ export const QuizMakerImage = styled.img`
   width: 54px;
   height: 54px;
   border-radius: 50%;
+  object-fit: cover;
 `;
 export const QuizMakerName = styled.div`
   margin-top: 1.25vh;
@@ -94,7 +95,7 @@ export const Description = styled.div`
   margin-top: 5vh;
   font-size: 14px;
   line-height: 160%;
-  height: 88px;
+  max-height: 88px;
   /*line-height: 1.5rem;*/
   text-align: center;
   word-break: keep-all;

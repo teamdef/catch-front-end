@@ -1,7 +1,8 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
 import type { NextPageWithLayout } from 'pages/_app';
 import type { ReactElement } from 'react';
-import * as S from 'styles/quiz/solve/matchnote.style';
+import * as S from 'styles/quiz/solve/main.style';
+import * as Match from 'styles/quiz/solve/matchnote.style';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { MainButton } from 'styles/common';
@@ -11,30 +12,36 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
   return (
-    <S.MatchEl>
-      <h1>오답노트</h1>
+    <S.Container>
+      <Match.MatchTitle>
+        <span>오답노트</span>
+      </Match.MatchTitle>
       {solveProblems.map((item: SolveProblemTypes, i: number) => {
         return (
-          <S.QuizSolveCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
+          <Match.QuizMatchCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
             <S.CardNumber>{i + 1}</S.CardNumber>
-            <S.CardTitle>{item.prob_title}</S.CardTitle>
-            {/* <CardTitleImg></CardTitleImg> */}
+            <S.QuizTitle>{item.prob_title}</S.QuizTitle>
+            {item.prob_image && (
+              <S.QuizImageWrapper>
+                <img alt="퀴즈 설명 이미지" src={item.prob_image} />
+              </S.QuizImageWrapper>
+            )}
             {item.is_img ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
                 {item.choices.map((_choice: any, j: number) => (
-                  <S.ChoiceItem
+                  <Match.MatchChoiceItem
                     key={j}
                     className={`choice-img-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
                     id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
                   >
                     <img src={_choice.cho_img} />
-                  </S.ChoiceItem>
+                  </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>
             ) : (
               <S.ChoiceWrapper>
                 {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
-                  <S.ChoiceItem
+                  <Match.MatchChoiceItem
                     key={j}
                     className={`choice-txt-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
                     id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
@@ -50,19 +57,19 @@ const Page: NextPageWithLayout = () => {
                     ) : (
                       ''
                     )}
-                  </S.ChoiceItem>
+                  </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>
             )}
-          </S.QuizSolveCard>
+          </Match.QuizMatchCard>
         );
       })}
-      <S.MatchBottom>
+      <Match.MatchBottom>
         <MainButton style={{ height: '40px' }} onClick={() => router.push(`/quiz/solve/${problemSetId}`)}>
           다시 풀기
         </MainButton>
-      </S.MatchBottom>
-    </S.MatchEl>
+      </Match.MatchBottom>
+    </S.Container>
   );
 };
 

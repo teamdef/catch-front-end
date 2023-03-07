@@ -1,25 +1,21 @@
 import styled from 'styled-components';
 
-export const MatchEl = styled.div`
+export const MatchTitle = styled.h1`
   position: relative;
   display: block;
-  width: 100%;
-  min-height: 100vh;
-  background-color: #fff;
-  z-index: 2;
   text-align: center;
-  h1 {
+  margin-top: 40px;
+  span {
     position: relative;
-    display: inline-block;
     font-family: 'RixInooAriDuriR';
     color: #ff4d57;
-    text-align: center;
     font-size: 1.6rem;
-    margin-top: 40px;
+    z-index: 1;
     &::before {
       content: '';
       position: absolute;
       display: block;
+      left: 0;
       bottom: 0;
       width: 100%;
       height: 6px;
@@ -28,7 +24,7 @@ export const MatchEl = styled.div`
     }
   }
 `;
-export const QuizSolveCard = styled.div`
+export const QuizMatchCard = styled.div`
   position: relative;
   width: 100%;
   padding: 0 4%;
@@ -54,54 +50,7 @@ export const QuizSolveCard = styled.div`
     opacity: 1;
   }
 `;
-export const CardNumber = styled.span`
-  position: absolute;
-  left: 4%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 14px;
-  width: 34px;
-  height: 50px;
-  border: solid 17px #ffa5aa;
-  border-bottom: solid 10px #fff;
-  background-color: #fff;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #fff;
-`;
-
-export const CardTitle = styled.h2`
-  text-align: center;
-  font-weight: normal;
-  word-break: keep-all;
-  color: #6a5050;
-  font-family: 'Noto Sans KR';
-  width: 80%;
-  font-size: 1.3rem;
-  margin-top: 80px;
-`;
-export const CardTitleImg = styled.img`
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 200px;
-`;
-export const ChoiceWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 10% 0;
-  gap: 10px;
-  &#choice-img-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, calc(50% - 5px));
-  }
-`;
-export const ChoiceItem = styled.div`
+export const MatchChoiceItem = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
