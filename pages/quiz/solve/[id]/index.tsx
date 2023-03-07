@@ -83,7 +83,7 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare nickName={maker} set_title={solveProblemSetTitle} url={id as string} thumbnail={thumbnail} />
+            <SNSShare nickName={maker.nickname} profileImg={maker.profile_img}set_title={solveProblemSetTitle} url={id as string} thumbnail={thumbnail} />
           </S.SNSShareContainer>
           {/* <S.BestCommentContainer>
             <Comment hideInput={true} />
