@@ -1,4 +1,4 @@
-import styled,{keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { NotFound } from 'components/common';
 interface CommentType {
   content: string;
@@ -56,9 +56,9 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
               <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
               <div>
                 <span className="nickname">{item.nickname}</span>
+                <span className="date">· {timeForToday(item.created_at)}</span>
                 <p>{item.content}</p>
               </div>
-              <span className="date">{timeForToday(item.created_at)}</span>
             </CommentBox>
           ))
         ) : (
@@ -133,9 +133,14 @@ const CommentBox = styled.div`
     position: relative;
     display: block;
     span {
-      display: block;
-      font-size: .85rem;
+      position: relative;
+      display: inline-block;
+      font-size: 0.85rem;
       margin: 4px 0 8px 0;
+      &.date {
+        padding-left: 5px;
+        color: #acacac;
+      }
     }
     p {
       display: block;
@@ -144,17 +149,7 @@ const CommentBox = styled.div`
       background: #f4f4f4;
       border-radius: 0px 15px 15px 15px;
       /*line-height: 1.2rem;*/
-
     }
-  }
-  .date {
-    position: relative;
-    display: block;
-    color: #888;
-    font-size: 0.5rem;
-    white-space: nowrap;
-    align-self: flex-end;
-    padding-left: 5px;
   }
 `;
 

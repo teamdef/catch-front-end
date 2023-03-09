@@ -5,10 +5,11 @@ const initialState: SolveProblemSetTypes = {
   problemSetId: '',
   solveProblemSetTitle: '',
   solveProblems: [],
-  maker: '',
+  maker: [],
   thumbnail: '',
   solveAnswers: [],
 };
+
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
 const solveSlice = createSlice({
   name: 'solve', // 해당 모듈의 이름. store.user 형식으로 추후 접근
@@ -20,7 +21,7 @@ const solveSlice = createSlice({
         solveProblemSetTitle: string;
         problemSetId: string;
         solveProblems: SolveProblemTypes[];
-        maker: string;
+        maker: makerTypes[];
         thumbnail: string;
       }>,
     ) => {
@@ -32,7 +33,7 @@ const solveSlice = createSlice({
       state.thumbnail = thumbnail;
     },
     resetSolve: (state: SolveProblemSetTypes) => {
-      Object.assign(state, initialState)
+      Object.assign(state, initialState);
     },
     saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: string[] }>) => {
       const { solveAnswers } = action.payload;
