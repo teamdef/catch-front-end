@@ -29,7 +29,7 @@ const Page: NextPageWithLayout = () => {
     if (id) {
       QuizDataFetchApi(id as string)
         .then((res) => {
-          console.log(res?.data?.user);
+          console.log(res);
           dispatch(
             saveSolveProblemSetAction({
               solveProblemSetTitle: res?.data?.set_title,
