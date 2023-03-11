@@ -17,18 +17,18 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    // proxy 설정
-    return [
-      {
-        source: '/:path*', // 원래 보내려 했떤 요청 주소
-        destination: 'https://catchcatch.link/:path*',
-        // process.env.NODE_ENV === 'development'
-        //   ? 'https://dev.catchcatch.link/:path*'
-        //   : 'https://api.catchcatch.link/:path*', // 실제로 보내진 요청 주소
-      },
-    ];
-  },
+  // async rewrites() {
+  //   // proxy 설정
+  //   return [
+  //     {
+  //       source: '/:path*', // 원래 보내려 했떤 요청 주소
+  //       destination: 'https://catchcatch.link/:path*',
+  //       // process.env.NODE_ENV === 'development'
+  //       //   ? 'https://dev.catchcatch.link/:path*'
+  //       //   : 'https://api.catchcatch.link/:path*', // 실제로 보내진 요청 주소
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;
