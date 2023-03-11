@@ -9,8 +9,8 @@ export const Container = styled.div`
   a {
     position: absolute;
     display: block;
-    top: 24px;
-    left: 24px;
+    top: 22px;
+    left: 2%;
   }
   
 `;

@@ -68,7 +68,7 @@ export const QuizTitle = styled.h1`
 
 export const InnerContainer = styled.div`
   position: relative;
-  top: -3.58vh;
+  top: -37px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -78,8 +78,8 @@ export const InnerContainer = styled.div`
 
 export const QuizMakerImage = styled.img`
   position: relative;
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
   background-color: #fff;
