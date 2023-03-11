@@ -8,7 +8,7 @@ const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 
 const saveToken = (accessToken: string): Promise<boolean> =>
   new Promise<boolean>((resolve, reject) => {
-    // authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+    authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
 
     const cookies = new Cookies(); // 쿠키 생성
 
