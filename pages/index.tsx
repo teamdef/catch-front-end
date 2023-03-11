@@ -65,19 +65,19 @@ const Page: NextPageWithLayout = () => {
           <Swiper spaceBetween={0} pagination={{ clickable: true }} modules={[Pagination]} loop={false}>
             {isLoggedin &&
               (myQuizList ? (
-                myQuizList?.map((quiz) => {
+                myQuizList.map((quiz) => {
                   return (
                     <SwiperSlide>
-                      <S.MyQuizCard key={quiz?.id} url={quiz?.thumbnail}>
-                        <div id="quiz-title">{quiz?.set_title}</div>
+                      <S.MyQuizCard key={quiz.id} url={quiz.thumbnail}>
+                        <div id="quiz-title">{quiz.set_title}</div>
                         <div id="quiz-info">
-                          참여 {quiz?.solverCnt} · 평균점수 {quiz?.average}점
+                          참여 {quiz.solverCnt} · 평균점수 {quiz.average}점
                         </div>
                         <div id="quiz-detail-btn-wrapper">
                           <button
                             id="quiz-detail-btn"
                             onClick={() => {
-                              router.push(`/quiz/${quiz?.id}/detail`);
+                              router.push(`/quiz/${quiz.id}/detail`);
                             }}
                           >
                             자세히 보기
