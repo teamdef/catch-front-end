@@ -59,10 +59,11 @@ const Page: NextPageWithLayout = () => {
           <div>퀴즈 세트를 공유해보세요!</div>
         </div>
         <SNSShare
-          nickName={maker}
+          nickName={maker.nickname}
           set_title={solveProblemSetTitle}
-          url={problemSetId}
+          id={problemSetId}
           thumbnail={thumbnail}
+          profileImg={maker.profile_img}
         />
       </S.SNSShareContainer>
       <Comment />
