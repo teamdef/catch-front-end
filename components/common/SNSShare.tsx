@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import { HiLink } from 'react-icons/hi';
-import { RootState } from 'store';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 export interface shareProps {
@@ -36,8 +34,7 @@ const SNSShare = ({ thumbnail, set_title, id, profileImg, nickName }: shareProps
   };
   const goKakaoTalk = () => {
     if (window.Kakao) {
-      console.log(profileImg, nickName, thumbnail, set_title);
-      const kakaoShareUrl = `/quiz/solve/${id}/?utm_source=kakao&utm_medium=share&utm_campaign=funnel`;
+      const kakaoShareUrl = `quiz/solve/${id}/?utm_source=kakao&utm_medium=share&utm_campaign=funnel`;
       window.Kakao.Link.sendScrap({
         requestUrl: 'https://catchcatch.link/', // 요청 페이지 url 카카오 developer 에 등록된 도메인
         templateId: 83714, // 메시지템플릿 번호 카카오 developer 에 있음

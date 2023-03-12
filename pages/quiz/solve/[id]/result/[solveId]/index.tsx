@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { Comment, Header, SNSShare } from 'components/common';
-import { AiTwotoneLike,AiOutlineShareAlt } from 'react-icons/ai';
+import { AiOutlineShareAlt } from 'react-icons/ai';
 // import { FiShare } from 'react-icons/fi';
 
 const Page: NextPageWithLayout = () => {
@@ -20,6 +20,8 @@ const Page: NextPageWithLayout = () => {
   let year = today.getFullYear(); // 년도
   let month = today.getMonth() + 1; // 월
   let date = today.getDate(); //일
+
+
   return (
     <S.Container>
       <Header />
