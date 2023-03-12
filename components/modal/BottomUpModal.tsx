@@ -32,7 +32,7 @@ const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
               profileImg={shareInfo.profileImg}
               thumbnail={shareInfo.thumbnail}
               set_title={shareInfo.set_title}
-              url={shareInfo.url}
+              id={shareInfo.id}
             />
           </SNSShareWrapper>
         </ModalWrapper>
