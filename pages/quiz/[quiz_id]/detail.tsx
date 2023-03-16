@@ -155,7 +155,7 @@ const Page: NextPageWithLayout = () => {
                   nickName={nickName}
                   profileImg={profileImg}
                   set_title={quizDetailData?.set_title}
-                  url={quizDetailData?.id}
+                  id={quizDetailData?.id}
                   thumbnail={quizDetailData?.thumbnail}
                 />
               </div>

@@ -1,44 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { QuizCard, SkeletonQuizCard, NotFound, AdsQuizCard } from 'components/common';
+import { QuizCard, SkeletonQuizCard, NotFound } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-import { BottomUpModal } from 'components/modal';
-import { shareProps } from 'components/common/SNSShare';
 
-export interface RecentQuizType {
-  created_at: string;
-  id: string;
-  profile_img: string;
-  nickname: string;
-  set_title: string;
-  solverCnt: number;
-  thumbnail: string | null;
-}
 const RecentQuizList = () => {
-  const [recentQuizList, setRecentQuizList] = useState<RecentQuizType[] | null>(null);
+  const [recentQuizList, setRecentQuizList] = useState<QuizCardType[] | null>(null);
   const [end, setEnd] = useState(false); //모든 글 로드 확인
   const [load, setLoad] = useState(false); //로딩
   const [page, setPage] = useState<number>(0); // 내부 사용용 page 카운트
-
-  const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false);
-  const [currentShareQuiz, setCurrentShareQuiz] = useState<shareProps | null>(null);
-  const bottomUpOpen = (currentQuiz: RecentQuizType) => {
-    /* 선택한 퀴즈의 공유 정보 세팅 */
-    const obj: shareProps = {
-      thumbnail: currentQuiz.thumbnail,
-      set_title: currentQuiz.set_title,
-      url: currentQuiz.id,
-      profileImg: currentQuiz.profile_img,
-      nickName: currentQuiz.nickname,
-    };
-    setCurrentShareQuiz(obj);
-
-    setBottomUpIsOpen(true);
-  };
-  const bottomUpClose = () => {
-    setBottomUpIsOpen(false);
-  };
 
   const getRecentQuizList = useCallback(
     async (lastCreatedAt?: string) => {
@@ -51,17 +21,8 @@ const RecentQuizList = () => {
         setEnd(true);
         // 응답 데이터가 없다면. 즉, 마지막 페이지 라면?
       } else {
-        let _quizList = res.data.map((quiz: RecentQuizType) => {
-          let returnObj = { ...quiz };
-          returnObj.thumbnail = quiz.thumbnail === '' ? null : quiz.thumbnail;
-          returnObj.solverCnt = Number(quiz.solverCnt);
-          return returnObj;
-        });
-        if (recentQuizList) {
-          setRecentQuizList([...recentQuizList, ..._quizList]);
-        } else {
-          setRecentQuizList(_quizList);
-        }
+        const _quizList = res.data;
+        setRecentQuizList(recentQuizList ? [...recentQuizList, ..._quizList] : _quizList);
       }
       setLoad(false); //로딩 종료
     },
@@ -94,7 +55,7 @@ const RecentQuizList = () => {
               {recentQuizList.map((quiz) => {
                 return (
                   <>
-                    <QuizCard key={quiz.id} recentQuiz={quiz} bottomUpOpen={bottomUpOpen} />
+                    <QuizCard key={quiz.id} recentQuiz={quiz}  />
                   </>
                 );
               })}
@@ -125,9 +86,6 @@ const RecentQuizList = () => {
           </PaddingBottom>
         )}
       </ListWrapper>
-      {bottomUpisOpen && currentShareQuiz && (
-        <BottomUpModal shareInfo={currentShareQuiz} bottomUpClose={bottomUpClose} />
-      )}
     </Wrapper>
   );
 };

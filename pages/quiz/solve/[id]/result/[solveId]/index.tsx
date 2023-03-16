@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { Comment, Header, SNSShare } from 'components/common';
-import { AiTwotoneLike,AiOutlineShareAlt } from 'react-icons/ai';
+import { AiOutlineShareAlt } from 'react-icons/ai';
 // import { FiShare } from 'react-icons/fi';
 
 const Page: NextPageWithLayout = () => {
@@ -20,6 +20,8 @@ const Page: NextPageWithLayout = () => {
   let year = today.getFullYear(); // 년도
   let month = today.getMonth() + 1; // 월
   let date = today.getDate(); //일
+
+
   return (
     <S.Container>
       <Header />
@@ -58,7 +60,13 @@ const Page: NextPageWithLayout = () => {
           <AiOutlineShareAlt />
           <div>퀴즈 세트를 공유해보세요!</div>
         </div>
-        <SNSShare nickName={maker.nickname} profileImg={maker.profile_img}set_title={solveProblemSetTitle} url={problemSetId} thumbnail={thumbnail} />
+        <SNSShare
+          nickName={maker.nickname}
+          set_title={solveProblemSetTitle}
+          id={problemSetId}
+          thumbnail={thumbnail}
+          profileImg={maker.profile_img}
+        />
       </S.SNSShareContainer>
       <Comment />
     </S.Container>

@@ -132,7 +132,7 @@ const Page: NextPageWithLayout = () => {
               profileImg={profileImg}
               thumbnail={thumbnailURL}
               set_title={probSetTitle as string}
-              url={returnSetId as string}
+              id={returnSetId as string}
             />
           </div>
         </S.ShareContainer>
