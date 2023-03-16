@@ -82,3 +82,19 @@ interface Window {
   Kakao: any; // 카카오
   adsbygoogle: any; // 구글 애드센스
 }
+
+
+
+
+/* 퀴즈 카드 타입 */
+
+interface QuizCardType {
+  id: string;
+  created_at: string;
+  profile_img: string;
+  nickname: string;
+  set_title: string;
+  solverCnt: number;
+  thumbnail: string | null;
+}
+

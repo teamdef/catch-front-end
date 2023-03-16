@@ -17,7 +17,7 @@ const Page: NextPageWithLayout = () => {
   const { solveProblemSetTitle, solveProblems, maker, thumbnail } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
-  console.log(maker);
+  
   let { id } = router.query;
   useEffect(() => {
     dispatch(resetSolve());
@@ -59,7 +59,7 @@ const Page: NextPageWithLayout = () => {
           <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
         <S.InnerContainer>
-          <S.QuizMakerImage src={`${maker.profile_img}`}></S.QuizMakerImage>
+          <S.QuizMakerImage src={`${maker?.profile_img}`}></S.QuizMakerImage>
           <S.QuizMakerName>{maker.nickname}</S.QuizMakerName>
           <S.Description>{description}</S.Description>
           <S.QuizCountContainer>
@@ -83,7 +83,7 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare nickName={maker.nickname} profileImg={maker.profile_img}set_title={solveProblemSetTitle} url={id as string} thumbnail={thumbnail} />
+            <SNSShare nickName={maker.nickname} profileImg={maker.profile_img}set_title={solveProblemSetTitle} id={id as string} thumbnail={thumbnail} />
           </S.SNSShareContainer>
           {/* <S.BestCommentContainer>
             <Comment hideInput={true} />
