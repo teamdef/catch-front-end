@@ -24,6 +24,7 @@ export const QuizTitleContainer = styled.div<QuizInfoProps>`
   position: relative;
   display: block;
   height: 35%;
+  flex: none;
   &::before {
     content: '';
     position: absolute;
