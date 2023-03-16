@@ -23,7 +23,7 @@ interface QuizInfoProps {
 export const QuizTitleContainer = styled.div<QuizInfoProps>`
   position: relative;
   display: block;
-  height: 40%;
+  height: 35%;
   flex: none;
   &::before {
     content: '';
@@ -75,7 +75,6 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 10%;
 `;
 
 export const QuizMakerImage = styled.img`
@@ -95,7 +94,7 @@ export const QuizMakerName = styled.div`
 `;
 export const Description = styled.div`
   color: #595959;
-  margin-top: 4.5vh;
+  margin-top: 5vh;
   font-size: 14px;
   line-height: 160%;
   max-height: 88px;
@@ -132,7 +131,7 @@ export const QuizCountContainer = styled.div`
 export const ButtonWrap = styled.div`
   position: relative;
   display: flex;
-  margin-top: 4.5vh;
+  margin-top: 5vh;
   button {
     position: relative;
     height: auto;
