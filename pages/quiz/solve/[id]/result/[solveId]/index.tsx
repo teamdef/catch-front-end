@@ -31,7 +31,7 @@ const Page: NextPageWithLayout = () => {
             <span className="nickname">{solveUserName}</span> 님
           </p>
           <p>
-            <b>{solveProblems.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞추셨어요!
+            <b>{solveProblems.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
           </p>
         </div>
         <span className="date">
