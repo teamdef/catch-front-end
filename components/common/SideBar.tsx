@@ -80,7 +80,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
     setIsLoading(true);
     kakaoLeaveApi().then((res) => {
       if (res.status === 200) {
-        alert(res.data.message);
+        alert('성공적으로 회원 탈퇴 되었습니다.');
         dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
         Router.push('/'); // 메인화면으로 이동
         setIsLoading(false);
