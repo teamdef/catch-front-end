@@ -8,7 +8,6 @@ import { AppLayout } from 'components/layout'; /* 컴포넌트 */
 import * as S from 'styles/member/login.style'; /* 스타일 코드 */
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
-  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
   if (cookie) {
     let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
@@ -23,11 +22,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 const Page: NextPageWithLayout = () => {
-  const redirectUri =
+  const redirectURI =
     process.env.NODE_ENV === 'development'
       ? process.env.NEXT_PUBLIC_DEV_KAKAO_REDIRECT_URI
       : process.env.NEXT_PUBLIC_DEPLOY_KAKAO_REDIRECT_URI;
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${redirectUri}&response_type=code`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY}&redirect_uri=${redirectURI}&response_type=code`;
 
   const goKakaoLogin = () => {
     Router.push(KAKAO_AUTH_URL);

@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 };
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { probSetTitle, probSetCount, returnSetId, returnThumb } = router?.query;
+  const { quizSetTitle, quizSetCount, quizSetThumb, quizSetId } = router?.query;
   const [thumbnailURL, setThumbnailURL] = useState<string>('');
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
@@ -64,7 +64,7 @@ const Page: NextPageWithLayout = () => {
       const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
         type: _compressed.type,
       }); // 압축 이미지 대입
-      if ((await QuizThumbnailChangeApi(returnSetId as string, _imgFile)) === 200) {
+      if ((await QuizThumbnailChangeApi(quizSetId as string, _imgFile)) === 200) {
         const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
         setThumbnailURL(_imgURL);
       }
@@ -80,16 +80,16 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (!router.isReady) return;
-    setThumbnailURL(router?.query?.returnThumb as string);
+    setThumbnailURL(router?.query?.quizSetThumb as string);
   }, [router.isReady]);
   return (
     <S.Wrapper>
       <div id="inner-wrapper">
         <S.Complete>퀴즈 완성 !!!</S.Complete>
         <S.QuizInfoContainer>
-          <div id="top">{probSetTitle}</div>
+          <div id="top">{quizSetTitle}</div>
           <div id="bottom">
-            총<strong>{probSetCount}</strong>문제
+            총<strong>{quizSetCount}</strong>문제
           </div>
         </S.QuizInfoContainer>
         <S.ThumbnailSettingContainer>
@@ -131,8 +131,8 @@ const Page: NextPageWithLayout = () => {
               nickName={nickName}
               profileImg={profileImg}
               thumbnail={thumbnailURL}
-              set_title={probSetTitle as string}
-              id={returnSetId as string}
+              set_title={quizSetTitle as string}
+              id={quizSetId as string}
             />
           </div>
         </S.ShareContainer>

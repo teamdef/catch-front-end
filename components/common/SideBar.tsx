@@ -66,7 +66,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const goProfile = () => {
     Router.replace({
       pathname: '/member/profile',
-      query: { isReqSignUp: false },
+      query: { isSignUp: false },
     });
     
   };

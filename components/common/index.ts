@@ -9,6 +9,7 @@ export { default as Logo } from './Logo'
 export { default as HeadMeta } from './HeadMeta'
 
 export { default as QuizCard } from './QuizCard';
+export { default as MyQuizCard } from './MyQuizCard';
 export { default as RecentQuiz } from './RecentQuiz';
 export { default as AdsQuizCard } from './AdsQuizCard'
 export { default as SkeletonQuizCard } from './SkeletonQuizCard';

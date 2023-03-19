@@ -11,19 +11,19 @@ import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/a
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
 
 const NickNameModal = ({ setLoading }: any) => {
-  const { problemSetId } = useSelector((state: RootState) => state.solve);
+  const { quizSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { isLoggedin, nickName, id } = useSelector((state: RootState) => state.user);
+  const { isLoggedin, nickName, userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const onClick = (_nickname: string) => {
     /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
     async function postSolver() {
       // 로그인한 유저의 경우 유저아이디를 추가로 전달
       if (isLoggedin) {
-        LoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId, id)
+        LoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizSetId, userId)
           .then((res) => {
             setLoading(false);
-            Router.push(`/quiz/solve/${problemSetId}/result/${id}`);
+            Router.push(`/quiz/solve/${quizSetId}/result/${userId}`);
           })
           .catch((error) => {
             setLoading(false);
@@ -31,10 +31,10 @@ const NickNameModal = ({ setLoading }: any) => {
           });
       } else {
         // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
-        NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId)
+        NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizSetId)
           .then((res) => {
             setLoading(false);
-            Router.push(`/quiz/solve/${problemSetId}/result/${res.data.solverId}`);
+            Router.push(`/quiz/solve/${quizSetId}/result/${res.data.solverId}`);
           })
           .catch((error) => {
             setLoading(false);

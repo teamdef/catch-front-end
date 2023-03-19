@@ -72,12 +72,10 @@ const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => 
           {}, // 백엔드에서 빈 객체 body를 받을 수 있도록 수정 요청
           { headers: { Refresh: `Bearer ${refresh_token}`, Authorization: `Bearer ${access_token}` } },
         );
-        if (res) {
-          const _newAccessToken = res?.data?.newAccessToken;
-          // 응답값이 있을 경우 새로 발급 받은 토큰을 저장한다.
-          await saveToken(_newAccessToken); // 토큰을 쿠키에 저장 비동기 함수
-          return await authAxios.request(originalConfig);
-        }
+        const _newAccessToken = res.data.access_token;
+        // 응답값이 있을 경우 새로 발급 받은 토큰을 저장한다.
+        await saveToken(_newAccessToken); // 토큰을 쿠키에 저장 비동기 함수
+        return await authAxios.request(originalConfig);
       } catch (err) {
         const _err = err as unknown as AxiosError;
         console.log(_err?.response?.status);

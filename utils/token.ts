@@ -1,5 +1,6 @@
 import { authAxios } from 'pages/api/customAxios';
 import Cookies from 'universal-cookie';
+
 // react-cookies는 범용성이 낮음. react-cookie 업그레이드 버전인 universal-cookie
 const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 
@@ -70,4 +71,5 @@ const getCookie = (name: string) => {
   return cookies.get(name);
 };
 
-export { saveToken, saveRefreshToken, deleteToken, getCookie };
+
+export { saveToken, saveRefreshToken, deleteToken, getCookie};

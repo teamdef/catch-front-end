@@ -18,7 +18,7 @@ import * as S from 'styles/member/profile.style'; /* 스타일 코드 */
 import imageCompression from 'browser-image-compression'; /* 라이브러리 */
 import { MdOutlineSettings } from 'react-icons/md'; /* react-icons */
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res}: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
   if (cookie) {
@@ -39,8 +39,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 const Profile: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  let { isReqSignUp } = router.query;
-  const { id, nickName, profileImg } = useSelector((state: RootState) => state.user);
+  let { isSignUp } = router.query;
+  const { userId, nickName, profileImg } = useSelector((state: RootState) => state.user);
   const [tempProfileImg, setTempProfileImg] = useState<string>(profileImg);
   const [tempNickname, setTempNickname] = useState<string>(nickName);
   const [error, setError] = useState<string | null>(null);
@@ -88,7 +88,7 @@ const Profile: NextPageWithLayout = () => {
       setIsLoading(true);
       // 기존 등록된 닉네임이랑 변경하고자 하는 닉네임이 다를 경우에만 변경 진행
       let _obj: any = {};
-      _obj['id'] = id;
+      _obj['id'] = userId;
       if (tempNickname !== nickName) {
         _obj['nickname'] = tempNickname;
       }
@@ -112,9 +112,7 @@ const Profile: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (isReqSignUp) {
-      isReqSignUp === 'true' ? setIsRegister(true) : setIsRegister(false);
-    }
+    setIsRegister(isSignUp === 'true');
   }, [router.isReady]);
   return (
     <>
@@ -129,7 +127,7 @@ const Profile: NextPageWithLayout = () => {
           <S.ProfileImgInputContainer>
             <S.ProfileThumbnail>
               <img src={profileImg ? tempProfileImg : '/assets/img/user_default.png'} />
-              {id && (
+              {userId && (
                 <S.ProfileSetting>
                   <input
                     type="file"

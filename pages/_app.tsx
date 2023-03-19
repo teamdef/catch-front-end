@@ -27,7 +27,6 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // 페이지 단위에서 정의한 레이아웃이 있다면 해당 레이아웃을 적용한다.
-  const { isLoggedin } = useSelector((state: RootState) => state.user);
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const dispatch = useDispatch();
