@@ -303,10 +303,25 @@ const Page: NextPageWithLayout = () => {
     });
   };
 
+  /* 문제 저장 조건 체크 함수 2 */
+  const checkQuizSet = ():boolean => {
+    if (_quizList.length === 0) return false;
+    _quizList.forEach((quiz: QuizType) => {
+      if (quiz.quizTitle === '') {
+        return false;
+      }
+      if (quiz.choices.length < 2) {
+        return false;
+      }
+    });
+    return true;
+  }
+
+
   // 문제집 생성하기 ( 서버에 저장하기 )
   const publicationProblemSet = async () => {
     // 문제 저장 조건 체크
-    if (await checkProblemSet()) {
+    if (checkQuizSet()) {
       setLoading(true);
       QuizUploadApi(_quizList, userId, setTitle, description).then((res: AxiosResponse) => {
         resetReduxProblemSet(); // 문제집 redux 초기화
@@ -323,7 +338,7 @@ const Page: NextPageWithLayout = () => {
       });
     } else {
       alert(
-        `퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `,
+        `퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다!\r\n1. 퀴즈 제목 작성 필수\r\n2. 문제 최소 1개 이상 생성\r\n3. 답안 2개 이상 작성 필수`,
       );
     }
   };

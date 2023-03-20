@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import ModalPortal from 'components/modal/PortalWrapper';
 import { SNSShare } from 'components/common';
-import { shareProps }  from 'components/common/SNSShare';
+import { shareProps } from 'components/common/SNSShare';
 interface BottomUpProps {
   bottomUpClose: () => void;
   shareInfo: shareProps;
