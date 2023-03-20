@@ -6,7 +6,7 @@ import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import { Comment, Header, SNSShare } from 'components/common';
+import { Comment, Header, SNSShare, PopularQuiz } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 
 const Page: NextPageWithLayout = () => {
@@ -52,6 +52,7 @@ const Page: NextPageWithLayout = () => {
         />
       </S.SNSShareContainer>
       <Comment />
+      <PopularQuiz/>
     </S.Container>
   );
 };

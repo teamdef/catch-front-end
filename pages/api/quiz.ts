@@ -127,6 +127,10 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
+export const QuizSolveSaveApi = async (nickname: string, score: number, quizset_id: string, user_id: string) => {
+  return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id });
+};
+
 // 한줄평 - 목록 불러오기
 export const CommentListApi = async (quizSetId: string) => {
   return notAuthAxios.get(`/comment/${quizSetId}`);
