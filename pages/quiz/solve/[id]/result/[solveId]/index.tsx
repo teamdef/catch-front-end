@@ -45,7 +45,7 @@ const Page: NextPageWithLayout = () => {
         </div>
         <SNSShare
           nickName={quizMaker.nickname}
-          set_title={setTitle}
+          setTitle={setTitle}
           id={quizSetId}
           thumbnail={quizSetThumbnail}
           profileImg={quizMaker.profileImg}

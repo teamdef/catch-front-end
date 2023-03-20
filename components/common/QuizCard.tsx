@@ -12,7 +12,7 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
   const snsShareObj: shareProps = {
     thumbnail: recentQuiz.thumbnail,
-    set_title: recentQuiz.setTitle,
+    setTitle: recentQuiz.setTitle,
     id: recentQuiz.id,
     profileImg: recentQuiz.user.profileImg,
     nickName: recentQuiz.user.nickname,

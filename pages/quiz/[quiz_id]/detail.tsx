@@ -168,7 +168,7 @@ const Page: NextPageWithLayout = () => {
                 <SNSShare
                   nickName={nickName}
                   profileImg={profileImg}
-                  set_title={quizDetailData.setTitle}
+                  setTitle={quizDetailData.setTitle}
                   id={quizDetailData.quizSetId}
                   thumbnail={quizDetailData?.quizSetThumbnail}
                 />
