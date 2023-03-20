@@ -2,11 +2,9 @@ import styled, { keyframes } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
-import { kakaoLeaveApi } from 'pages/api/member';
 import { logoutAction } from 'store/user';
 import Router from 'next/router';
 import { useModal } from 'hooks';
-import { Loading } from 'components/common';
 
 /* react-icons */
 import { MdOutlineSettings } from 'react-icons/md';
@@ -22,24 +20,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { isLoggedin, profileImg, nickName, kakaoUid } = useSelector((state: RootState) => state.user);
   const [animation, setAnimation] = useState('openAnimation');
-  const [isLoading, setIsLoading] = useState(false);
-  const [openLeaveModal, _, RenderLeaveModal] = useModal({
-    escClickable: true,
-    backgroundClickable: true,
-    yesTitle: '탈퇴',
-    noTitle: '취소',
-    yesAction: () => serviceLeave(),
-    contents: (
-      <div>
-        <div>
-          <strong style={{ color: '#ff4d57', fontSize: '1.2rem' }}>탈퇴하시겠습니까? 😥</strong>
-          <br />
-          지금 탈퇴하시면 등록된 회원정보 및 관련 게시글은 모두 삭제됩니다.
-        </div>
-        <div style={{ marginTop: '10px', fontSize: '1rem', color: '#888' }}>진행하시겠습니까? ㅜㅜㅜ</div>
-      </div>
-    ),
-  });
+
   const [openLogoutModal, closeLogoutModal, RenderLogoutModal] = useModal({
     escClickable: true,
     backgroundClickable: true,
@@ -76,17 +57,10 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
   const goIntroducePage = () => {
     window.open('https://teamdef.notion.site/ba4b38482a0d4d359114bf479b169c44');
   };
-  const serviceLeave = () => {
-    setIsLoading(true);
-    kakaoLeaveApi().then((res) => {
-      if (res.status === 200) {
-        alert('성공적으로 회원 탈퇴 되었습니다.');
-        dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
-        Router.push('/'); // 메인화면으로 이동
-        setIsLoading(false);
-      }
-    });
-  };
+  const goServiceLeave = () => {
+    closeSideBar(); // 사이드바 닫기.
+    Router.push('/member/signout'); // 홈으로
+  }
   const logout = () => {
     dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
     closeSideBar(); // 사이드바 닫기.
@@ -123,7 +97,6 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
 
   return (
     <>
-      {isLoading && <Loading ment={'탈퇴 진행중 입니다...'} />}
       <Background>
         <Wrapper id="side-bar" ref={sidebarRef} className={animation}>
           <div id="greeting">
@@ -168,12 +141,7 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
                   <AiOutlineLogout />
                   로그아웃
                 </li>
-                <li
-                  id="out"
-                  onClick={() => {
-                    openLeaveModal();
-                  }}
-                >
+                <li id="out" onClick={goServiceLeave}>
                   <HiOutlineEmojiSad />
                   회원탈퇴
                 </li>
@@ -185,7 +153,6 @@ const SideBar = ({ closeSideBar }: SideBarProps) => {
             <AiOutlineClose size={24} />
           </CloseButton>
         </Wrapper>
-        <RenderLeaveModal />
         <RenderLogoutModal />
       </Background>
     </>
