@@ -1,7 +1,7 @@
 import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { RecentQuiz } from 'components/common';
+import { RecentQuiz,MyQuizCard } from 'components/common';
 import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
@@ -15,17 +15,11 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-interface MyQuizType {
-  average: number;
-  id: string;
-  solverCnt: number;
-  thumbnail: string | null;
-  set_title: string;
-}
+
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { isLoggedin, id } = useSelector((state: RootState) => state.user);
+  const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
   const [myQuizList, setMyQuizList] = useState<MyQuizType[] | null>(null);
 
   const goQuizCreateIndex = () => {
@@ -35,24 +29,31 @@ const Page: NextPageWithLayout = () => {
     router.push('/member/login');
   };
 
-  const getMyQuizList = async () => {
-    const res = await UserQuizListApi(id);
-    const _myQuizList: MyQuizType[] = res?.data?.map((quiz: any) => {
-      let _obj: MyQuizType = quiz;
-      _obj['average'] = Number(quiz.average.substring(0, 3));
-      _obj['id'] = quiz?.id;
-      _obj['set_title'] = quiz?.set_title;
-      _obj['thumbnail'] = quiz?.thumbnail === '' ? null : quiz.thumbnail;
-      _obj['solverCnt'] = Number(quiz?.solverCnt);
-      return _obj;
-    });
-    setMyQuizList(_myQuizList);
+  const fetchMyQuizSetList = async () => {
+    try {
+      const res = await UserQuizListApi(userId);
+      parseMyQuizSetList(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  const parseMyQuizSetList = (data: any) => {
+    const _myQuizSetList: MyQuizType[] = data.map((quiz: any) => {
+      const { id, average, set_title, thumbnail, solver_cnt } = quiz;
+      const _myQuiz: MyQuizType = {
+        id,
+        set_title,
+        solver_cnt,
+        average: average.toFixed(2), // 소수점 둘째자리 기준 반올림
+        thumbnail: thumbnail ?? null, // 썸네일이 없을 경우 서버에서 "" 반환
+      };
+      return _myQuiz;
+    });
+    setMyQuizList(_myQuizSetList);
+  };
   useEffect(() => {
-    if (isLoggedin) {
-      getMyQuizList();
-    }
+    if (isLoggedin) fetchMyQuizSetList();
   }, []);
 
   return (
@@ -68,22 +69,7 @@ const Page: NextPageWithLayout = () => {
                 myQuizList.map((quiz) => {
                   return (
                     <SwiperSlide>
-                      <S.MyQuizCard key={quiz.id} url={quiz.thumbnail}>
-                        <div id="quiz-title">{quiz.set_title}</div>
-                        <div id="quiz-info">
-                          참여 {quiz.solverCnt} · 평균점수 {quiz.average}점
-                        </div>
-                        <div id="quiz-detail-btn-wrapper">
-                          <button
-                            id="quiz-detail-btn"
-                            onClick={() => {
-                              router.push(`/quiz/${quiz.id}/detail`);
-                            }}
-                          >
-                            자세히 보기
-                          </button>
-                        </div>
-                      </S.MyQuizCard>
+                      <MyQuizCard key={quiz.id} myQuiz={quiz} />
                     </SwiperSlide>
                   );
                 })

@@ -1,12 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 import { NotFound } from 'components/common';
-interface RankingType {
-  created_at: string;
-  nickname: string;
-  score: number;
-  ranking: string;
-  id: string;
-}
 
 interface PropsType {
   rankingList: RankingType[] | null;
@@ -16,31 +9,17 @@ const RankingBoard = ({ rankingList }: PropsType) => {
     <Wrapper>
       {rankingList ? (
         rankingList.length !== 0 ? (
-          rankingList.map((userRanking: RankingType) => {
+          rankingList.map((user: RankingType, idx: number) => {
             return (
               <li
-                key={userRanking.id}
-                id={
-                  userRanking.ranking === '1'
-                    ? 'first'
-                    : userRanking.ranking === '2'
-                    ? 'second'
-                    : userRanking.ranking === '3'
-                    ? 'third'
-                    : ''
-                }
+                key={idx}
+                id={user.ranking === 1 ? 'first' : user.ranking === 2 ? 'second' : user.ranking === 3 ? 'third' : ''}
               >
                 <i>
-                  {userRanking.ranking === '1'
-                    ? '🥇'
-                    : userRanking.ranking === '2'
-                    ? '🥈'
-                    : userRanking.ranking === '3'
-                    ? '🥉'
-                    : userRanking.ranking}
+                  {user.ranking === 1 ? '🥇' : user.ranking === 2 ? '🥈' : user.ranking === 3 ? '🥉' : user.ranking}
                 </i>
-                <strong>{userRanking?.nickname}</strong>
-                <em>{userRanking?.score}점</em>
+                <strong>{user.nickname}</strong>
+                <em>{user.score}점</em>
               </li>
             );
           })

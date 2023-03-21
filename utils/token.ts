@@ -1,5 +1,6 @@
 import { authAxios } from 'pages/api/customAxios';
 import Cookies from 'universal-cookie';
+
 // react-cookies는 범용성이 낮음. react-cookie 업그레이드 버전인 universal-cookie
 const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 
@@ -9,7 +10,7 @@ const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 const saveToken = (accessToken: string): Promise<boolean> =>
   new Promise<boolean>((resolve, reject) => {
     authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-
+    
     const cookies = new Cookies(); // 쿠키 생성
 
     const expires_time = new Date();
@@ -32,7 +33,7 @@ const saveRefreshToken = (refreshToken: string): Promise<boolean> =>
   new Promise<boolean>((resolve, reject) => {
     const cookies = new Cookies(); // 쿠키 생성
     const expires_time = new Date();
-    expires_time.setDate(Date.now() + 1000 * 60 * 60 * 3);
+    expires_time.setDate(Date.now() + 1000 * 60 * 60 * 24 * 15); /* 만료 시간 15일 */
     const max_age = 60 * 60 * 3;
     cookies.set('refresh_token', refreshToken, {
       path: '/', // 쿠키에 접근할 수 있는 경로
@@ -70,4 +71,5 @@ const getCookie = (name: string) => {
   return cookies.get(name);
 };
 
-export { saveToken, saveRefreshToken, deleteToken, getCookie };
+
+export { saveToken, saveRefreshToken, deleteToken, getCookie};

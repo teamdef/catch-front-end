@@ -31,22 +31,31 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 
-interface CommentType {
-  content: string;
-  created_at: string;
-  nickname: string;
-  user: any;
-}
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   let { quiz_id } = router.query;
 
   const [commentList, setCommentList] = useState<CommentType[] | null>(null);
 
-  useEffect(() => {
-    CommentListApi(quiz_id as string).then((res) => {
-      setCommentList(res.data);
+  const fetchCommentList = async () => {
+    const res = await CommentListApi(quiz_id as string);
+    parseCommentList(res.data);
+  };
+
+  const parseCommentList = (data: any) => {
+    const _commentList = data.map((comment: any) => {
+      const _comment: CommentType = {
+        nickname: comment.nickname,
+        content: comment.content,
+        createdAt: comment.created_at,
+        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
+      };
+      return _comment;
     });
+    setCommentList(_commentList);
+  };
+  useEffect(() => {
+    fetchCommentList();
   }, [router.isReady]);
 
   return (

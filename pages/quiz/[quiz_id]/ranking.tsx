@@ -2,11 +2,10 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useRouter } from 'next/router';
-import { AppLayout,HeaderLayout } from 'components/layout';
+import { AppLayout, HeaderLayout } from 'components/layout';
 import { Title, RankingBoard } from 'components/common';
-import * as S from 'styles/quiz/detail/ranking.style'; 
+import * as S from 'styles/quiz/detail/ranking.style';
 import { QuizRankingListApi } from 'pages/api/quiz';
-
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -27,33 +26,40 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 
-interface RankingType {
-  created_at: string;
-  nickname: string;
-  score: number;
-  ranking: string;
-  id: string;
-}
-
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const [ranking, setRanking] = useState<RankingType[] | null>(null);
+  const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
   let { quiz_id } = router.query;
 
-  useEffect(() => {
-    QuizRankingListApi(quiz_id as string).then((res) => {
-      setRanking(res?.data);
+  const fetchRankingList = async () => {
+    try {
+      const res = await QuizRankingListApi(quiz_id as string);
+      parseRankingList(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const parseRankingList = (data: any) => {
+    const _rankingList = data.map((ranking: any) => {
+      const _ranking: RankingType = {
+        nickname: ranking.nickname,
+        score: ranking.score,
+        ranking: ranking.ranking,
+      };
+      return _ranking;
     });
+    setRankingList(_rankingList);
+  };
+  useEffect(() => {
+    fetchRankingList();
   }, [router.isReady]);
 
   return (
     <>
-      <Title
-        title="참여자 랭킹 🏆"
-        subTitle="참여자 모두의 랭킹을 확인해보세요! 누가 가장 많이 맞췄을까요?"
-      />
+      <Title title="참여자 랭킹 🏆" subTitle="참여자 모두의 랭킹을 확인해보세요! 누가 가장 많이 맞췄을까요?" />
       <S.Wrapper>
-        <RankingBoard rankingList={ranking} />
+        <RankingBoard rankingList={rankingList} />
       </S.Wrapper>
     </>
   );

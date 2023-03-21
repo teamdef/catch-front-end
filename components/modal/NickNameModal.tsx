@@ -6,43 +6,56 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
 import Router from 'next/router';
 import { RootState } from 'store';
-import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi } from 'pages/api/quiz';
+import { LoginUserQuizSolveSaveApi, NotLoginUserQuizSolveSaveApi, QuizSolveSaveApi } from 'pages/api/quiz';
 
 /* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
 
 const NickNameModal = ({ setLoading }: any) => {
-  const { problemSetId } = useSelector((state: RootState) => state.solve);
-  const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { isLoggedin, nickName, id } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  const onClick = (_nickname: string) => {
-    /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
-    async function postSolver() {
-      // 로그인한 유저의 경우 유저아이디를 추가로 전달
-      if (isLoggedin) {
-        LoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId, id)
-          .then((res) => {
-            setLoading(false);
-            Router.push(`/quiz/solve/${problemSetId}/result/${id}`);
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.log(error);
-          });
-      } else {
-        // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
-        NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, problemSetId)
-          .then((res) => {
-            setLoading(false);
-            Router.push(`/quiz/solve/${problemSetId}/result/${res.data.solverId}`);
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.log(error);
-          });
-      }
-    }
 
+  const { quizSetId } = useSelector((state: RootState) => state.solve);
+  const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
+  const { isLoggedin, nickName, userId } = useSelector((state: RootState) => state.user);
+
+  const [_nickname, _nicknameSetter, _nicknameClearFunction, _nicknameHandler] = useInput<string>('');
+
+  /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
+  const postSolver = async () => {
+    // 로그인한 유저의 경우 유저아이디를 추가로 전달
+    // if (isLoggedin) {
+    //   LoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizSetId, userId)
+    //     .then((res) => {
+    //       setLoading(false);
+    //       Router.push(`/quiz/solve/${quizSetId}/result/${userId}`);
+    //     })
+    //     .catch((error) => {
+    //       setLoading(false);
+    //       console.log(error);
+    //     });
+    // } else {
+    //   // 로그인하지 않은 유저의 경우 서버 저장 후 유저아이디를 응답 받음
+    //   NotLoginUserQuizSolveSaveApi(_nickname, solveUserScore, quizSetId)
+    //     .then((res) => {
+    //       setLoading(false);
+    //       console.log(res.data);
+    //       Router.push(`/quiz/solve/${quizSetId}/result/${res.data.solverId}`);
+    //     })
+    //     .catch((error) => {
+    //       setLoading(false);
+    //       console.log(error);
+    //     });
+    // }
+    try {
+      const res = await QuizSolveSaveApi(_nickname, solveUserScore, quizSetId, isLoggedin ? userId:undefined);
+      setLoading(false);
+      Router.push(`/quiz/solve/${quizSetId}/result/0`);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+    }
+  };
+
+  const checkNickname = () => {
     if (_nickname && _nickname.length <= 12) {
       postSolver();
       dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
@@ -51,27 +64,26 @@ const NickNameModal = ({ setLoading }: any) => {
       alert('닉네임이 너무 길어요 !');
     }
   };
-  const [text, Setter, clearFunction, textHandler] = useInput<string>('');
 
   // 로그인 환경일 경우 닉네임 default 넣어주기
   useEffect(() => {
-    if (isLoggedin) Setter(nickName);
+    if (isLoggedin) _nicknameSetter(nickName);
   }, []);
 
   return (
     <NickNameModalEl>
       <h1>닉네임을 입력해주세요</h1>
       <div>
-        <input type="text" value={text} onChange={textHandler} placeholder="한글 최대 6자, 영어 최대 12자, 중복가능" />
-        {text && <AiOutlineClose color="#bcbcbc" onClick={clearFunction} />}
+        <input
+          type="text"
+          value={_nickname}
+          onChange={_nicknameHandler}
+          placeholder="한글 최대 6자, 영어 최대 12자, 중복가능"
+        />
+        {_nickname && <AiOutlineClose color="#bcbcbc" onClick={_nicknameClearFunction} />}
       </div>
 
-      <button
-        style={text == '' ? { backgroundColor: '#aaa' } : {}}
-        onClick={() => {
-          onClick(text);
-        }}
-      >
+      <button disabled={_nickname === ''} onClick={checkNickname}>
         확인
       </button>
     </NickNameModalEl>
@@ -82,25 +94,31 @@ const NickNameModalEl = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   h1 {
     margin: 0;
     font-weight: normal;
-    font-size: 1rem;
+    font-size: 1.25rem;
   }
 
   > div {
     position: relative;
     display: flex;
     justify-content: space-between;
-    margin: 15% 0 10%;
+    align-items: center;
+    margin: 5% 0 10%;
     padding: 10px 20px;
-    padding-right: 10px;
+    padding-right: 15px;
     border-radius: 25px;
     border: 1px solid #cdcdcd;
-    width: 225px;
+    width: 80%;
+    @media (max-width: 390px) {
+      width: 95%;
+    }
+    height: 40px;
     input {
       position: relative;
-      font-size: 0.6rem;
+      font-size: 1rem;
       width: 100%;
       &::placeholder {
         color: #bcbcbc;
@@ -117,6 +135,12 @@ const NickNameModalEl = styled.div`
     color: #fff;
     border: 0;
     border-radius: 30px;
+    &:disabled {
+      background: #aaa;
+    }
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
