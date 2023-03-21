@@ -8,7 +8,7 @@ interface ChoiceImageType {
 interface ChoiceTextType {
   choiceText: string; // 답안
 }
-// ProblemType - 퀴즈 정보
+// QuizType - 퀴즈 정보
 interface QuizType {
   quizTitle: string; // 퀴즈 제목
   quizThumbnail?:ChoiceImageType; // 퀴즈 설명 이미지
@@ -16,12 +16,14 @@ interface QuizType {
   choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
   choices: (ChoiceTextType | ChoiceImageType)[]; // 객관식 답안 배열
 }
-// ProblemSetType - 퀴즈세트 정보
+// QuizSetType - 퀴즈세트 정보
 interface QuizSetType {
   setTitle: string; // 퀴즈세트 제목
   description?: string; // 퀴즈 세트 설명
   quizList: QuizType[]; // 퀴즈 배열
 }
+
+
 
 
 // ---------- 퀴즈 풀이 관련 타입 ----------------------- //
@@ -36,6 +38,7 @@ interface SolveQuizSetType {
   quizList: SolveQuizType[]; // 퀴즈 배열
   answerList?: number[]; // 유저가 고른 항목(답안지) 배열
 }
+
 
 // SolveProblemType - 풀이용 퀴즈 문항 정보
 interface SolveQuizType {
