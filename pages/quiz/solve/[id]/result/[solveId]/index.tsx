@@ -2,57 +2,81 @@ import { AppLayout, HeaderLayout } from 'components/layout';
 import type { NextPageWithLayout } from 'pages/_app';
 import type { ReactElement } from 'react';
 import * as S from 'styles/quiz/solve/result.style';
+import { useState, useEffect } from 'react';
 import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import { Comment, Header, SNSShare, PopularQuiz } from 'components/common';
+import { Comment, SNSShare, PopularQuiz, RankingBoard } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
+import { QuizRankingListApi } from 'pages/api/quiz';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
-  const today = new Date().toISOString().replace('T', ' ').substring(0, 10);
 
+    const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+ 
+  const fetchRankingList = async () => {
+    try {
+      const res = await QuizRankingListApi(quizSetId);
+      parseRankingList(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const parseRankingList = (data: any) => {
+    const _rankingList = data.map((ranking: any) => {
+      const _ranking: RankingType = {
+        nickname: ranking.nickname,
+        score: ranking.score,
+        ranking: ranking.ranking,
+      };
+      return _ranking;
+    });
+    const _sliceRankingList = _rankingList.slice(0, 3);
+    setRankingList(_sliceRankingList);
+  };
+  useEffect(() => {
+    fetchRankingList();
+  }, []);
 
   return (
     <S.Container>
-      <Header />
-      <S.ScoreCard>
-        <div>
+      <S.QuizResultCard>
+        <S.ScoreContainer>
           <p>
             <span className="nickname">{solveUserName}</span> 님
           </p>
           <p>
             <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
           </p>
-        </div>
-        <span className="date">{today}</span>
-        <img src="/assets/img/catch_character3.png" alt="캐릭터 이미지" />
-      </S.ScoreCard>
-      <S.ButtonArea>
-        <MainButton id="replay" onClick={() => Router.push(`/quiz/solve/${quizSetId}`)}>
-          다시 풀기
-        </MainButton>
-        <MainButton id="note" onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>
-          오답노트
-        </MainButton>
-      </S.ButtonArea>
-      <S.SNSShareContainer>
-        <div id="explain">
-          <AiOutlineShareAlt />
-          <div>퀴즈 세트를 공유해보세요!</div>
-        </div>
-        <SNSShare
-          nickName={quizMaker.nickname}
-          setTitle={setTitle}
-          id={quizSetId}
-          thumbnail={quizSetThumbnail}
-          profileImg={quizMaker.profileImg}
-        />
-      </S.SNSShareContainer>
-      <Comment />
-      <PopularQuiz/>
+        </S.ScoreContainer>
+        <S.ButtonWrapper>
+          <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
+        </S.ButtonWrapper>
+        <S.RankingBoardWrapper>
+          <h3>현재 랭킹 🏆</h3>
+          <RankingBoard rankingList={rankingList} />
+        </S.RankingBoardWrapper>
+        <S.SNSShareContainer>
+          <div id="explain">
+            <AiOutlineShareAlt />
+            <div>친구에게 퀴즈를 공유해보세요!</div>
+          </div>
+          <SNSShare
+            nickName={quizMaker.nickname}
+            setTitle={setTitle}
+            id={quizSetId}
+            thumbnail={quizSetThumbnail}
+            profileImg={quizMaker.profileImg}
+          />
+        </S.SNSShareContainer>
+      </S.QuizResultCard>
+
+      {/* <Comment /> */}
+      {/* <PopularQuiz /> */}
     </S.Container>
   );
 };

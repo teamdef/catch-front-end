@@ -5,6 +5,7 @@ interface PropsType {
   rankingList: RankingType[] | null;
 }
 const RankingBoard = ({ rankingList }: PropsType) => {
+  
   return (
     <Wrapper>
       {rankingList ? (
@@ -75,24 +76,36 @@ const Wrapper = styled.ul`
       align-items: center;
       font-style: normal;
       width: 50px;
-      color: #ff264d;
+      color: #757575;
     }
     i {
-      color: #ff4d57;
+      color: #757575;
       font-size: 1rem;
     }
   }
   #first {
     border: none;
-    background-color: #fff1b4;
+    background-color: #fe747b;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #second {
     border: none;
-    background-color: #ececec;
+    background-color: #ffa5aa;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #third {
     border: none;
-    background-color: #ffe6d4;
+    background-color: #fff6f7;
   }
 `;
 
