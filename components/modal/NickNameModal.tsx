@@ -48,7 +48,7 @@ const NickNameModal = ({ setLoading }: any) => {
     try {
       const res = await QuizSolveSaveApi(_nickname, solveUserScore, quizSetId, isLoggedin ? userId:undefined);
       setLoading(false);
-      Router.push(`/quiz/solve/${quizSetId}/result/0`);
+      Router.push(`/quiz/solve/${quizSetId}/result`);
     } catch (err) {
       setLoading(false);
       console.log(err);
