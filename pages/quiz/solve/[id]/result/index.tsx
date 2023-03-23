@@ -18,7 +18,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Header />
-      <S.ScoreCard>
+      {/* <S.ScoreCard>
         <div>
           <p>
             <span className="nickname">{solveUserName}</span> 님
@@ -50,8 +50,8 @@ const Page: NextPageWithLayout = () => {
           thumbnail={quizSetThumbnail}
           profileImg={quizMaker.profileImg}
         />
-      </S.SNSShareContainer>
-      <Comment />
+      </S.SNSShareContainer> */}
+      {/* <Comment /> */}
       <PopularQuiz/>
     </S.Container>
   );
