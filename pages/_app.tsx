@@ -2,13 +2,11 @@ import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
-import type { AppProps, AppContext } from 'next/app';
+import type { AppProps} from 'next/app';
 import type { NextPage } from 'next';
-import { useSelector } from 'react-redux';
 import Script from 'next/script';
 import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
-import { RootState } from 'store';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
 import * as gtag from '../lib/gtag';
@@ -27,7 +25,6 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // 페이지 단위에서 정의한 레이아웃이 있다면 해당 레이아웃을 적용한다.
-  const { isLoggedin } = useSelector((state: RootState) => state.user);
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const dispatch = useDispatch();

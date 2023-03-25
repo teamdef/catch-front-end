@@ -10,49 +10,49 @@ import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { solveAnswers, solveProblems, problemSetId } = useSelector((state: RootState) => state.solve);
+  const { answerList, quizList, quizSetId } = useSelector((state: RootState) => state.solve);
   return (
     <S.Container>
       <Match.MatchTitle>
         <span>오답노트</span>
       </Match.MatchTitle>
-      {solveProblems.map((item: SolveProblemTypes, i: number) => {
+      {quizList.map((item: SolveQuizType, i: number) => {
         return (
-          <Match.QuizMatchCard key={i} className={solveAnswers[i] != 'catch' ? 'wrong' : ''}>
+          <Match.QuizMatchCard key={i} className={answerList[i] != 'catch' ? 'wrong' : ''}>
             <S.CardNumber>{i + 1}</S.CardNumber>
-            <S.QuizTitle>{item.prob_title}</S.QuizTitle>
-            {item.prob_image && (
+            <S.QuizTitle>{item.quizTitle}</S.QuizTitle>
+            {item.quizThumbnail && (
               <S.QuizImageWrapper>
-                <img alt="퀴즈 설명 이미지" src={item.prob_image} />
+                <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
               </S.QuizImageWrapper>
             )}
-            {item.is_img ? (
+            {item.choiceType==='img' ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
-                {item.choices.map((_choice: any, j: number) => (
+                {item.choices.map((choice: any, j: number) => (
                   <Match.MatchChoiceItem
                     key={j}
-                    className={`choice-img-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
-                    id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
+                    className={`choice-img-item ${item.correctIndex === j ? 'correct' : ''}`}
+                    id={j === answerList[i] ? 'my-answer' : ''}
                   >
-                    <img src={_choice.cho_img} />
+                    <img src={choice} />
                   </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>
             ) : (
               <S.ChoiceWrapper>
-                {item.choices.map((_choice: SolveChoicesTypes, j: number) => (
+                {item.choices.map((choice: string, j: number) => (
                   <Match.MatchChoiceItem
                     key={j}
-                    className={`choice-txt-item ${item.correct_choice == _choice.id ? 'correct' : ''}`}
-                    id={_choice.id == solveAnswers[i] ? 'my-answer' : ''}
+                    className={`choice-txt-item ${item.correctIndex === j ? 'correct' : ''}`}
+                    id={j == answerList[i] ? 'my-answer' : ''}
                   >
-                    <span>{_choice.cho_txt}</span>
-                    {item.correct_choice == _choice.id ? (
+                    <span>{choice}</span>
+                    {item.correctIndex === j ? (
                       <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>O</span>
                     ) : (
                       ''
                     )}
-                    {_choice.id == solveAnswers[i] ? (
+                    {j == answerList[i] ? (
                       <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>X</span>
                     ) : (
                       ''
@@ -65,7 +65,7 @@ const Page: NextPageWithLayout = () => {
         );
       })}
       <Match.MatchBottom>
-        <MainButton style={{ height: '40px' }} onClick={() => router.push(`/quiz/solve/${problemSetId}`)}>
+        <MainButton style={{ height: '40px' }} onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
           다시 풀기
         </MainButton>
       </Match.MatchBottom>

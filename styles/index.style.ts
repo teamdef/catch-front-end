@@ -94,20 +94,9 @@ export const CreateCard = styled(CustomCard)`
     display: block;
     color: #595959;
     font-size: 16px;
+    margin-bottom:40px;
   }
-  button {
-    background-color: #ff4d57;
-    border: none;
-    border-radius: 2rem;
-    font-size: 1rem;
-    color: #fff;
-    font-weight: 500;
-    padding: 0.75rem 1.75rem 0.75rem 1.75rem;
-    margin-top: 50px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
+
 `;
 export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   ${(props) =>

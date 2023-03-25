@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // user스토어의 초기값을 설정
-const initialState: SolveProblemSetTypes = {
-  problemSetId: '',
-  solveProblemSetTitle: '',
-  solveProblems: [],
-  maker: [],
-  thumbnail: '',
-  solveAnswers: [],
+const initialState: SolveQuizSetType = {
+  quizSetId: '',
+  setTitle: '',
+  quizList: [],
+  quizMaker: { nickname: '', profileImg: '' },
+  quizSetThumbnail: '',
+  answerList: [],
+  description:'',
 };
 
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
@@ -16,28 +17,30 @@ const solveSlice = createSlice({
   initialState,
   reducers: {
     saveSolveProblemSetAction: (
-      state: SolveProblemSetTypes,
+      state: SolveQuizSetType,
       action: PayloadAction<{
-        solveProblemSetTitle: string;
-        problemSetId: string;
-        solveProblems: SolveProblemTypes[];
-        maker: makerTypes[];
-        thumbnail: string;
+        quizSetId: string;
+        setTitle: string;
+        quizList: SolveQuizType[];
+        quizMaker: UserType;
+        quizSetThumbnail: string;
+        description: string;
       }>,
     ) => {
-      const { solveProblemSetTitle, problemSetId, solveProblems, maker, thumbnail } = action.payload;
-      state.solveProblemSetTitle = solveProblemSetTitle;
-      state.problemSetId = problemSetId;
-      state.solveProblems = solveProblems;
-      state.maker = maker;
-      state.thumbnail = thumbnail;
+      const { quizSetId, setTitle, quizList, quizMaker, quizSetThumbnail, description } = action.payload;
+      state.setTitle = setTitle;
+      state.quizSetId = quizSetId;
+      state.quizList = quizList;
+      state.quizMaker = quizMaker;
+      state.quizSetThumbnail = quizSetThumbnail;
+      state.description = description;
     },
-    resetSolve: (state: SolveProblemSetTypes) => {
+    resetSolve: (state: SolveQuizSetType) => {
       Object.assign(state, initialState);
     },
-    saveSolveAnswersAction: (state: SolveProblemSetTypes, action: PayloadAction<{ solveAnswers: string[] }>) => {
-      const { solveAnswers } = action.payload;
-      state.solveAnswers = solveAnswers;
+    saveSolveAnswersAction: (state: SolveQuizSetType, action: PayloadAction<{ answerList: number[] }>) => {
+      const { answerList } = action.payload;
+      state.answerList = answerList;
     },
   },
 });

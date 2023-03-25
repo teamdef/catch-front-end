@@ -61,7 +61,7 @@ const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => 
     const refresh_token = getCookie('refresh_token'); // 리프레시 토큰이 있을 경우 가져온다.
     if (!!refresh_token === false) {
       // refresh token이 쿠키에서 삭제 또는 만료 되었을 경우
-      alert('세션이 만료되어 로그아웃 되었습니다.');
+      alert('RefreshToken이 없거나 변조되었습니다.');
       deleteToken();
       window.location.href = '/'; // next/router 사용이 안되므로 window location으로 화면 전환
     } else {
@@ -70,19 +70,16 @@ const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => 
         const res = await notAuthAxios.put(
           `/refresh`,
           {}, // 백엔드에서 빈 객체 body를 받을 수 있도록 수정 요청
-          { headers: { Refresh: `Bearer ${refresh_token}`, Authorization: `Bearer ${access_token}` } },
+          { headers: { Refresh: refresh_token, Authorization: `Bearer ${access_token}` } },
         );
-        if (res) {
-          const _newAccessToken = res?.data?.newAccessToken;
-          // 응답값이 있을 경우 새로 발급 받은 토큰을 저장한다.
-          await saveToken(_newAccessToken); // 토큰을 쿠키에 저장 비동기 함수
-          return await authAxios.request(originalConfig);
-        }
+        const _newAccessToken = res.data.access_token;
+        // 응답값이 있을 경우 새로 발급 받은 토큰을 저장한다.
+        await saveToken(_newAccessToken); // 토큰을 쿠키에 저장 비동기 함수
+        return await authAxios.request(originalConfig);
       } catch (err) {
         const _err = err as unknown as AxiosError;
-        console.log(_err?.response?.status);
-        if (_err?.response?.status === 401) {
-          alert('세션이 만료되어 로그아웃 되었습니다.');
+        if (_err.response?.status === 401) {
+          alert('로그인 세션이 만료되어 로그아웃 되었습니다.');
           deleteToken();
           window.location.href = '/'; // next/router 사용이 안되므로 window location으로 화면 전환
           // 토큰 쿠키 삭제

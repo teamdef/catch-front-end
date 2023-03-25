@@ -8,57 +8,70 @@ import React, { useEffect, useState } from 'react';
 
 import { CommentList } from 'components/common';
 
-interface CommentType {
-  content: string;
-  created_at: string;
-  nickname: string;
-  user: any;
-}
 interface propsCommentType {
   hideInput?: boolean;
 }
 
 const Comment = ({ hideInput }: propsCommentType) => {
-
-  const [text, , clearFunction, textHandler] = useInput<string>('');
-  const { problemSetId } = useSelector((state: RootState) => state.solve);
+  const [text, , textClear, textHandler] = useInput<string>('');
+  const { quizSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
-  const [comments, setComments] = useState<CommentType[]>([]);
-  const { profileImg } = useSelector((state: RootState) => state.user);
+  const [commentList, setCommentList] = useState<CommentType[]>([]);
+  const { isLoggedin, profileImg, userId } = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    CommentListApi(problemSetId).then((res) => {
-      setComments(res.data);
-    });
-  }, [problemSetId]);
-
-  const userImgError = (e:any) => {
+  const userImgError = (e: any) => {
     e.target.src = '/assets/img/user_default.png';
   };
 
-  const saveComment = async (_comm: string) => {
-    if (_comm) {
-      clearFunction();
-      CommentSaveApi(solveUserName, text, problemSetId, '').then((res) => {
-        setComments(res.data);
-      });
+  const fetchCommentList = async () => {
+    try {
+      const res = await CommentListApi(quizSetId);
+      parseCommentList(res.data);
+    } catch (err) {
+      console.log(err);
     }
   };
 
+  const parseCommentList = (data: any) => {
+    const _commentList = data.map((comment: any) => {
+      const _comment: CommentType = {
+        nickname: comment.nickname,
+        content: comment.content,
+        createdAt: comment.created_at,
+        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
+      };
+      return _comment;
+    });
+    setCommentList(_commentList);
+  };
+
+  const saveComment = async (_comm: string) => {
+    if (!!_comm) {
+      try {
+        const res = await CommentSaveApi(solveUserName, text, quizSetId, isLoggedin ? userId : null);
+        parseCommentList(res.data);
+        textClear();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchCommentList();
+  }, [quizSetId]);
+
   return (
     <Container>
-      {comments && (
+      {commentList && (
         <>
           <Title>
             {hideInput ? '베스트 한줄평' : '한줄평'}
             <img src="/assets/img/chat.png" />
           </Title>
-          {hideInput ? (
-            ''
-          ) : (
+          {!hideInput && (
             <InputBox>
               <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
-              {/* <span>({text.length}/50)</span> */}
               <input
                 type="text"
                 value={text}
@@ -67,12 +80,12 @@ const Comment = ({ hideInput }: propsCommentType) => {
                 maxLength={50}
                 placeholder="나도 한마디.."
               />
-              <button className={text ? 'on' : ''} onClick={() => saveComment(text)}>
+              <button className={text && 'on'} onClick={() => saveComment(text)}>
                 등록
               </button>
             </InputBox>
           )}
-          <CommentList commentList={comments} />
+          <CommentList commentList={commentList} />
         </>
       )}
     </Container>
@@ -81,6 +94,7 @@ const Comment = ({ hideInput }: propsCommentType) => {
 const Container = styled.div`
   position: relative;
   width: 100%;
+  padding-bottom: 40px;
 `;
 const Title = styled.h2`
   display: flex;
@@ -121,6 +135,7 @@ const InputBox = styled.div`
     height: 36px;
     border-radius: 50%;
     margin-left: 3%;
+    object-fit: cover;
   }
   > span {
     position: absolute;
@@ -138,7 +153,7 @@ const InputBox = styled.div`
     padding: 0 5%;
     color: #888;
     border-radius: 30px;
-    font-size: 1.25rem;
+    font-size: 1rem;
     ::placeholder {
       color: #aaa;
     }
@@ -151,7 +166,7 @@ const InputBox = styled.div`
     border: none;
     padding: 0 20px;
     font-weight: 500;
-    font-size: 1.25rem;
+    font-size: 1rem;
     background-color: #ccc;
     color: #fff;
     border-radius: 30px;
