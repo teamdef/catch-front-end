@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quiz_id } = router.query;
+  const { quizset_id } = router.query;
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
@@ -57,7 +57,7 @@ const Page: NextPageWithLayout = () => {
   // string string[] undefined 해결방법?
   const fetchDetailQuizData = async () => {
     try {
-      const res = await MyQuizDetailApi(quiz_id as string);
+      const res = await MyQuizDetailApi(quizset_id as string);
       const { quizset, best_solver, best_comment } = res.data;
       parseBestRankingList(best_solver);
       parseBestCommentList(best_comment);
@@ -108,7 +108,7 @@ const Page: NextPageWithLayout = () => {
 
   const MyQuizDelete = async () => {
     try {
-      await QuizDeleteApi(quiz_id as string);
+      await QuizDeleteApi(quizset_id as string);
       alert('성공적으로 삭제되었습니다.');
       closeDeleteModal();
       router.push('/');
@@ -132,7 +132,7 @@ const Page: NextPageWithLayout = () => {
           <div id="section-description">{quizDetailData?.description}</div>
           <div id="section-contents">
             {quizDetailData ? (
-              <ThumbnailChange url={quizDetailData?.quizSetThumbnail} probsetId={quiz_id as string} />
+              <ThumbnailChange url={quizDetailData?.quizSetThumbnail} probsetId={quizset_id as string} />
             ) : (
               <S.SkeletonThunmbnailChange />
             )}
@@ -180,7 +180,7 @@ const Page: NextPageWithLayout = () => {
           {quizDetailData && (
             <div id="section-title">
               참여자 랭킹 🏆
-              <Link href={`/quiz/${quiz_id}/ranking`} passHref>
+              <Link href={`/quiz/${quizset_id}/ranking`} passHref>
                 <a id="more">
                   더보기 <MdOutlineArrowForwardIos />
                 </a>
@@ -195,7 +195,7 @@ const Page: NextPageWithLayout = () => {
           {quizDetailData && (
             <div id="section-title">
               베스트 한줄평 ✍️
-              <Link href={`/quiz/${quiz_id}/comment`} passHref>
+              <Link href={`/quiz/${quizset_id}/comment`} passHref>
                 <a id="more">
                   더보기 <MdOutlineArrowForwardIos />
                 </a>

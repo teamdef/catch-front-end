@@ -84,7 +84,7 @@ export const QuizSolveContent = styled.div`
 export const QuizSolveCard = styled.div`
   position: relative;
   width: 100%;
-  border: 1px solid #ffcaca;
+  border: 1px solid #ffa5aa;
   border-radius: 20px;
   background-color: white;
   padding: 0 4%;

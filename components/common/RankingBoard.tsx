@@ -19,7 +19,9 @@ const RankingBoard = ({ rankingList }: PropsType) => {
                 <i>
                   {user.ranking === 1 ? '🥇' : user.ranking === 2 ? '🥈' : user.ranking === 3 ? '🥉' : user.ranking}
                 </i>
-                <strong>{user.nickname}</strong>
+                <div>
+                  <strong>{user.nickname}</strong>
+                </div>
                 <em>{user.score}점</em>
               </li>
             );
@@ -75,12 +77,17 @@ const Wrapper = styled.ul`
       justify-content: center;
       align-items: center;
       font-style: normal;
-      width: 50px;
+      width: 120px;
       color: #757575;
     }
     i {
       color: #757575;
       font-size: 1rem;
+      width: 100px;
+    }
+    > div {
+      text-align: left;
+      width:100%;
     }
   }
   #first {

@@ -53,13 +53,14 @@ const Page: NextPageWithLayout = () => {
             <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
           </p>
         </S.ScoreContainer>
-        <S.ButtonWrapper>
-          <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
-        </S.ButtonWrapper>
+
         <S.RankingBoardWrapper>
           <h3>현재 랭킹 🏆</h3>
           <RankingBoard rankingList={rankingList} />
         </S.RankingBoardWrapper>
+        <S.ButtonWrapper>
+          <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
+        </S.ButtonWrapper>
         <S.SNSShareContainer>
           <div id="explain">
             <AiOutlineShareAlt />
@@ -76,11 +77,12 @@ const Page: NextPageWithLayout = () => {
       </S.QuizResultCard>
 
       {/* <Comment /> */}
-      {/* <PopularQuiz /> */}
+      <PopularQuiz />
     </S.Container>
   );
 };
 
+      
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout>

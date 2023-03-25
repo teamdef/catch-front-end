@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { QuizCard, SkeletonQuizCard, NotFound } from 'components/common';
+import { QuizMiniCard, SkeletonQuizCard, NotFound } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
 
@@ -28,8 +28,10 @@ const PopularQuizList = () => {
       };
       return _quizObj;
     });
-    let _sortPopularQuizList = _popularQuizList.slice(0, 10);
-    _sortPopularQuizList = _sortPopularQuizList.filter((item: RecentQuizType) => item.solverCnt !== 0);  /* 풀이자가 0명인데 인기있을리가 .. */
+    let _sortPopularQuizList = _popularQuizList.slice(0, 5);
+    _sortPopularQuizList = _sortPopularQuizList.filter(
+      (item: RecentQuizType) => item.solverCnt !== 0,
+    ); /* 풀이자가 0명인데 인기있을리가 .. */
     _sortPopularQuizList.sort((a: RecentQuizType, b: RecentQuizType) => {
       return b.solverCnt - a.solverCnt;
     });
@@ -46,13 +48,18 @@ const PopularQuizList = () => {
     <>
       {popularQuizList && (
         <Wrapper>
-          <Title>인기있는 퀴즈에요 !</Title>
+          <Title>
+            <h2>추천 퀴즈</h2>
+            <span>참여율이 높은 퀴즈들을 추천해드려요!</span>
+            <button>
+              <img src="/assets/img/arrow_right.svg" alt="추천퀴즈더보기버튼" />
+            </button>
+          </Title>
+
           <ListWrapper>
-            <PaddingBottom>
-              {popularQuizList.map((quiz) => {
-                return <QuizCard key={quiz.id} recentQuiz={quiz} />;
-              })}
-            </PaddingBottom>
+            {popularQuizList.map((quiz) => {
+              return <QuizMiniCard key={quiz.id} recentQuiz={quiz} />;
+            })}
           </ListWrapper>
         </Wrapper>
       )}
@@ -62,28 +69,55 @@ const PopularQuizList = () => {
 
 
 const Wrapper = styled.div`
+  position: relative;
   width: 100%;
   margin: 0 auto;
+  border: 1px solid #ffa5aa;
+  border-radius: 16px;
+  margin-bottom:40px;
 `;
 
-const Title = styled.h2`
+const Title = styled.div`
+  position: relative;
   display: flex;
-  font-size: 1.25rem;
-  color: #ff4d57;
-  font-weight: bold;
-  align-items: center;
-  text-align:left;
+  flex-direction: column;
+  margin-top: 25px;
+  padding: 0 6.75%;
+  text-align: left;
+  h2 {
+    font-size: 1.4rem;
+    color: #212121;
+    font-weight: 600;
+  }
+  span {
+    margin-top: 5px;
+    color: #616161;
+    font-size: 0.85rem;
+  }
+  button {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    right: 3%;
+    top: 0;
+    border: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: none;
+  }
 `;
-
 const ListWrapper = styled.div`
-  display: flex;
+  display: grid;
   align-items: center;
   flex-direction: column;
-  margin-top: 1.5rem;
+  padding: 24px 16px 40px;
+  column-gap: 14px;
+  row-gap: 16px;
+  grid-template-columns: repeat(2, calc(50% - 7px));
+  grid-template-rows: repeat(2, 50%);
 `;
 
-const PaddingBottom = styled.div`
-  padding-bottom: 80px;
-  width: 100%;
-`;
 export default PopularQuizList;

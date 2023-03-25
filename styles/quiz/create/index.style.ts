@@ -139,7 +139,7 @@ export const QuizCreateContainer = styled.div`
 export const QuizCreateCard = styled.div`
   width: 100%;
   border-radius: 20px;
-  border: solid 1px #ffa5aa50;
+  border: solid 1px #ffa5aa;
   background-color: #fff;
   margin-top: 40px;
   position: relative;
@@ -268,11 +268,6 @@ export const TextChoiceItem = styled.li<CorrectProps>`
     border: none;
     color: ${({ correct }) => (correct ? '#244E10' : '#888')};
   }
-  /* #check-icon {
-    color: #aad775;
-    position: absolute;
-    left: -40px;
-  } */
 `;
 export const TextChoiceCreateBtn = styled.div`
   width: 100%;
@@ -331,8 +326,6 @@ export const ImgWrapper = styled.div<CorrectProps>`
   ${({ correct }) =>
     correct &&
     css`
-      /* border: solid 3px #aad775; */
-      /* border-radius: 1rem; */
       &::before {
         content: '';
         position: absolute;
@@ -417,7 +410,7 @@ export const QuizCreateBtn = styled.button`
   width: 100%;
   height: 60px;
   border-radius: 20px;
-  border: dashed 1px #ffa5aa70;
+  border: dashed 1px #ffa5aa;
   display: flex;
   align-items: center;
   justify-content: center;

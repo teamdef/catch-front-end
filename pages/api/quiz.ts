@@ -11,23 +11,23 @@ export const RecentQuizListApi = (pagination_key?: any): Promise<AxiosResponse> 
 };
 
 // 특정 퀴즈 id의 퀴즈 자세히 보기
-export const MyQuizDetailApi = (probsetId: string): Promise<AxiosResponse> => {
-  return authAxios.get(`/probset/detail/${probsetId}`);
+export const MyQuizDetailApi = (quizset_id: string): Promise<AxiosResponse> => {
+  return authAxios.get(`/probset/detail/${quizset_id}`);
 };
 
 // 내가 만든 퀴즈 목록
-export const UserQuizListApi = (userId: string): Promise<AxiosResponse> => {
-  return authAxios.get(`/userprobset/${userId}`);
+export const UserQuizListApi = (user_id: string): Promise<AxiosResponse> => {
+  return authAxios.get(`/userprobset/${user_id}`);
 };
 
 // 특정 퀴즈 id의 퀴즈 삭제
-export const QuizDeleteApi = (probsetId: string): Promise<AxiosResponse> => {
-  return authAxios.delete(`/probset/${probsetId}`);
+export const QuizDeleteApi = (quizset_id: string): Promise<AxiosResponse> => {
+  return authAxios.delete(`/probset/${quizset_id}`);
 };
 
 // 특정 퀴즈 id의 랭킹 조회
-export const QuizRankingListApi = (probsetId: string): Promise<AxiosResponse> => {
-  return authAxios.get(`/solver/ranking`, { params: { probsetId } });
+export const QuizRankingListApi = (quizset_id: string): Promise<AxiosResponse> => {
+  return notAuthAxios.get(`/solver/ranking`, { params: { quizset_id } });
 };
 
 // imageObject 를 Blob으로 변환하여 S3에 전송하는 함수
@@ -108,8 +108,8 @@ export const QuizThumbnailChangeApi = async (quizset_id: string, imgBlob: File):
 };
 
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
-export const QuizDataFetchApi = async (probsetId: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`/loadprobset/${probsetId}`);
+export const QuizDataFetchApi = async (quizset_id: string): Promise<AxiosResponse> => {
+  return notAuthAxios.get(`/loadprobset/${quizset_id}`);
 };
 
 /* snake case 로 변경하기 */
@@ -127,13 +127,13 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const QuizSolveSaveApi = async (nickname: string, score: number, quizset_id: string, user_id: string) => {
-  return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id });
+export const QuizSolveSaveApi = async (nickname: string, score: number, quizset_id: string, user_id: string, quiz_count:number) => {
+  return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id, quiz_count });
 };
 
 // 한줄평 - 목록 불러오기
-export const CommentListApi = async (quizSetId: string) => {
-  return notAuthAxios.get(`/comment/${quizSetId}`);
+export const CommentListApi = async (quizset_id: string) => {
+  return notAuthAxios.get(`/comment/${quizset_id}`);
 };
 
 // 한줄평 - 등록하기

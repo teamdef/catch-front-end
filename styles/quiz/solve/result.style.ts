@@ -5,32 +5,36 @@ export const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
-  margin-top:40px;
+  margin-top: 40px;
 `;
 
 export const QuizResultCard = styled.div`
   border-radius: 16px;
   border: solid 1px #ffa5aa;
   padding: 0 3%;
-  padding:40px 6%;
-
+  padding: 40px 0;
+  margin-bottom: 30px;
 `;
-export const RankingBoardWrapper = styled.div` 
-  margin-top:40px;
-  h3{
-    color:#424242;
-    font-weight:800;
-    font-size:1.2rem;
-    margin-bottom:14px;
+export const RankingBoardWrapper = styled.div`
+  h3 {
+    padding: 0 6.75%;
+    color: #424242;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
   }
-`
+  >ul{
+      padding:0 6%;
+  }
+`;
 export const ScoreContainer = styled.div`
   display: block;
   width: 100%;
+  padding:0 6%;
   border-radius: 30px;
   color: #424242;
   flex-grow: 1;
-  margin-bottom:40px;
+  margin-bottom: 40px;
   p {
     word-break: keep-all;
     font-size: 1.4rem;
@@ -46,12 +50,11 @@ export const ScoreContainer = styled.div`
   }
 `;
 
-
 export const SNSShareContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top:60px;
+  margin-top: 60px;
   #explain {
     color: #888;
     display: flex;
@@ -63,10 +66,10 @@ export const SNSShareContainer = styled.div`
   }
 `;
 
-
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
+    margin-top: 40px;
   button {
     width: 137px;
     height: 40px;

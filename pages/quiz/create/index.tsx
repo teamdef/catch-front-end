@@ -287,22 +287,6 @@ const Page: NextPageWithLayout = () => {
     if (e.key === 'Enter') addChoiceText(quizIndex);
   };
 
-  // 문제 저장 조건 체크 함수
-  const checkProblemSet = (): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      let status: boolean = true;
-      _quizList.forEach((quiz: QuizType) => {
-        if (quiz.quizTitle === '') {
-          status = false;
-        }
-        if (quiz.choices.length < 2) {
-          status = false;
-        }
-      });
-      resolve(status);
-    });
-  };
-
   /* 문제 저장 조건 체크 함수 2 */
   const checkQuizSet = ():boolean => {
     if (_quizList.length === 0) return false;
