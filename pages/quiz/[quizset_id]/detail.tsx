@@ -192,7 +192,7 @@ const Page: NextPageWithLayout = () => {
             <RankingBoard rankingList={quizRankingList} />
           </div>
         </S.SectionBlock>
-        <S.SectionBlock>
+        {/* <S.SectionBlock>
           {quizDetailData && (
             <div id="section-title">
               베스트 한줄평 ✍️
@@ -206,7 +206,7 @@ const Page: NextPageWithLayout = () => {
           <div id="section-contents">
             <CommentList commentList={quizCommentList} />
           </div>
-        </S.SectionBlock>
+        </S.SectionBlock> */}
         {quizDetailData && (
           <S.DeleteButton onClick={openDeleteModal}>
             <AiOutlineDelete size={30} />
