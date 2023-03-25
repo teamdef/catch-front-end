@@ -558,7 +558,7 @@ const Page: NextPageWithLayout = () => {
             );
           })}
           <S.QuizCreateBtn onClick={createProblem}>
-            <span>새 퀴즈 추가</span>
+            <span>퀴즈 추가하기</span>
             <MdOutlineAdd size={20} />
           </S.QuizCreateBtn>
         </S.QuizCreateContainer>

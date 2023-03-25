@@ -53,7 +53,7 @@ export const TitleContainer = styled.div`
         linear-gradient(to left, #ff4d57 10px, transparent 10px),
         repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ff373780 30px, #ff373780 32px, #ff4d57 32px);
       font-size: 1rem;
-      line-height: 170%;
+      line-height: 220%;
       padding: 3px 10px;
       margin-top: 2rem;
       border: none;
@@ -408,8 +408,8 @@ export const ImgInputContainer = styled.div`
 
 export const QuizCreateBtn = styled.button`
   width: 100%;
-  height: 60px;
-  border-radius: 20px;
+  height: 64px;
+  border-radius: 16px;
   border: dashed 1px #ffa5aa;
   display: flex;
   align-items: center;
@@ -420,6 +420,12 @@ export const QuizCreateBtn = styled.button`
   font-weight: bold;
   font-size: 1.25rem;
   margin-bottom: 120px;
+  span{
+    margin-right:8px;
+  }
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 export const InfoContainer = styled.div`

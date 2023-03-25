@@ -216,7 +216,6 @@ export const QuizSolveBottom = styled.div`
     margin: 0 3%;
     transform: translateY(0);
     transition: transform 0.5s;
-    border-radius: 30px;
     &.on {
       transform: translateY(-80px);
     }

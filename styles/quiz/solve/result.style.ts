@@ -74,5 +74,6 @@ export const ButtonWrapper = styled.div`
     width: 137px;
     height: 40px;
     border-radius: 8px;
+    font-size:1rem;
   }
 `;
