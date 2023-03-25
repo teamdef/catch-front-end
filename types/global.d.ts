@@ -71,6 +71,7 @@ interface RankingType {
   nickname: string;
   score: number;
   ranking: number;
+  quizCount: number;
 }
 
 

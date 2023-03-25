@@ -51,9 +51,9 @@ const PopularQuizList = () => {
           <Title>
             <h2>추천 퀴즈</h2>
             <span>참여율이 높은 퀴즈들을 추천해드려요!</span>
-            <button>
+            {/* <button>
               <img src="/assets/img/arrow_right.svg" alt="추천퀴즈더보기버튼" />
-            </button>
+            </button> */}
           </Title>
 
           <ListWrapper>

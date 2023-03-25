@@ -22,7 +22,7 @@ const RankingBoard = ({ rankingList }: PropsType) => {
                 <div>
                   <strong>{user.nickname}</strong>
                 </div>
-                <em>{user.score}점</em>
+                <em>{user.score}/{user.quizCount}</em>
               </li>
             );
           })
