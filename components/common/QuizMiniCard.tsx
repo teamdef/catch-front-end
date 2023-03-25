@@ -32,7 +32,7 @@ const QuizCardWrapper = styled.a`
 `;
 const ThumbnailWrapper = styled.div`
   width: 100%;
-  height: 178px;
+  height: 65%;
   background-color: #eee;
   img {
     width: 100%;
@@ -41,11 +41,15 @@ const ThumbnailWrapper = styled.div`
   }
 `;
 const QuizTextWrapper = styled.div`
-  padding: 12px 3%;
+  padding: 12px 4%;
   font-size: 0.75rem;
   color: #9e9e9e;
   #quiz-title {
     position: relative;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: #212121;
     font-size: 1rem;
     font-weight: bold;

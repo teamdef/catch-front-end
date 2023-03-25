@@ -80,7 +80,7 @@ const Title = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 25px;
-  margin-left: 6.75%;
+  padding: 0 6.75%;
   text-align: left;
   h2 {
     font-size: 1.4rem;
@@ -115,7 +115,7 @@ const ListWrapper = styled.div`
   column-gap: 14px;
   row-gap: 16px;
   grid-template-columns: repeat(2, calc(50% - 7px));
-  grid-template-rows: repeat(2, 268px);
+  grid-template-rows: repeat(2, 50%);
 `;
 
 export default PopularQuizList;
