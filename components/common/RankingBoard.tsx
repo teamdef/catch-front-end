@@ -5,6 +5,7 @@ interface PropsType {
   rankingList: RankingType[] | null;
 }
 const RankingBoard = ({ rankingList }: PropsType) => {
+  
   return (
     <Wrapper>
       {rankingList ? (
@@ -18,8 +19,10 @@ const RankingBoard = ({ rankingList }: PropsType) => {
                 <i>
                   {user.ranking === 1 ? '🥇' : user.ranking === 2 ? '🥈' : user.ranking === 3 ? '🥉' : user.ranking}
                 </i>
-                <strong>{user.nickname}</strong>
-                <em>{user.score}점</em>
+                <div>
+                  <strong>{user.nickname}</strong>
+                </div>
+                <em>{user.score}/{user.quizCount}</em>
               </li>
             );
           })
@@ -74,25 +77,42 @@ const Wrapper = styled.ul`
       justify-content: center;
       align-items: center;
       font-style: normal;
-      width: 50px;
-      color: #ff264d;
+      width: 120px;
+      color: #757575;
     }
     i {
-      color: #ff4d57;
+      color: #757575;
       font-size: 1rem;
+      width: 100px;
+    }
+    > div {
+      text-align: left;
+      width:100%;
     }
   }
   #first {
     border: none;
-    background-color: #fff1b4;
+    background-color: #fe747b;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #second {
     border: none;
-    background-color: #ececec;
+    background-color: #ffa5aa;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #third {
     border: none;
-    background-color: #ffe6d4;
+    background-color: #fff6f7;
   }
 `;
 

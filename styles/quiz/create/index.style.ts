@@ -53,7 +53,7 @@ export const TitleContainer = styled.div`
         linear-gradient(to left, #ff4d57 10px, transparent 10px),
         repeating-linear-gradient(#ff4d57, #ff4d57 30px, #ff373780 30px, #ff373780 32px, #ff4d57 32px);
       font-size: 1rem;
-      line-height: 170%;
+      line-height: 220%;
       padding: 3px 10px;
       margin-top: 2rem;
       border: none;
@@ -139,7 +139,7 @@ export const QuizCreateContainer = styled.div`
 export const QuizCreateCard = styled.div`
   width: 100%;
   border-radius: 20px;
-  border: solid 1px #ffa5aa50;
+  border: solid 1px #ffa5aa;
   background-color: #fff;
   margin-top: 40px;
   position: relative;
@@ -268,11 +268,6 @@ export const TextChoiceItem = styled.li<CorrectProps>`
     border: none;
     color: ${({ correct }) => (correct ? '#244E10' : '#888')};
   }
-  /* #check-icon {
-    color: #aad775;
-    position: absolute;
-    left: -40px;
-  } */
 `;
 export const TextChoiceCreateBtn = styled.div`
   width: 100%;
@@ -331,8 +326,6 @@ export const ImgWrapper = styled.div<CorrectProps>`
   ${({ correct }) =>
     correct &&
     css`
-      /* border: solid 3px #aad775; */
-      /* border-radius: 1rem; */
       &::before {
         content: '';
         position: absolute;
@@ -415,9 +408,9 @@ export const ImgInputContainer = styled.div`
 
 export const QuizCreateBtn = styled.button`
   width: 100%;
-  height: 60px;
-  border-radius: 20px;
-  border: dashed 1px #ffa5aa70;
+  height: 64px;
+  border-radius: 16px;
+  border: dashed 1px #ffa5aa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -427,6 +420,12 @@ export const QuizCreateBtn = styled.button`
   font-weight: bold;
   font-size: 1.25rem;
   margin-bottom: 120px;
+  span{
+    margin-right:8px;
+  }
+  &:hover{
+    cursor:pointer;
+  }
 `;
 
 export const InfoContainer = styled.div`

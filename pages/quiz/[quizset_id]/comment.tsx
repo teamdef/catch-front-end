@@ -33,12 +33,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  let { quiz_id } = router.query;
+  let { quizset_id } = router.query;
 
   const [commentList, setCommentList] = useState<CommentType[] | null>(null);
 
   const fetchCommentList = async () => {
-    const res = await CommentListApi(quiz_id as string);
+    const res = await CommentListApi(quizset_id as string);
     parseCommentList(res.data);
   };
 

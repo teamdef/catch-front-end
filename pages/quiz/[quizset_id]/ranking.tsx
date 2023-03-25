@@ -29,11 +29,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
-  let { quiz_id } = router.query;
+  let { quizset_id } = router.query;
 
   const fetchRankingList = async () => {
     try {
-      const res = await QuizRankingListApi(quiz_id as string);
+      const res = await QuizRankingListApi(quizset_id as string);
       parseRankingList(res.data);
     } catch (err) {
       console.log(err);
@@ -46,6 +46,7 @@ const Page: NextPageWithLayout = () => {
         nickname: ranking.nickname,
         score: ranking.score,
         ranking: ranking.ranking,
+        quizCount:ranking.quiz_count
       };
       return _ranking;
     });

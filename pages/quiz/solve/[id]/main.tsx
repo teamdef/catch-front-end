@@ -112,7 +112,7 @@ const Page: NextPageWithLayout = () => {
             openModal();
           }}
         >
-          결과확인
+          결과 확인하기
         </MainButton>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
