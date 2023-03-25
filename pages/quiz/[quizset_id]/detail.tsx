@@ -100,6 +100,7 @@ const Page: NextPageWithLayout = () => {
         nickname: ranking.nickname,
         score: ranking.score,
         ranking: ranking.ranking,
+        quizCount:ranking.quiz_count,
       };
       return _ranking;
     });
