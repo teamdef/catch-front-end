@@ -17,7 +17,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 
 import * as S from 'styles/quiz/detail/detail.style'; /* 컴포넌트 */
 import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/quiz'; /* 통신 */
-import { useModal } from 'hooks'; 
+import { useModal } from 'hooks';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -37,33 +37,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   }
   return { props: {} };
 };
-interface DetailQuizType {
-  created_at: string;
-  updated_at: string;
-  id: string;
-  set_title: string;
-  solverCnt: number;
-  thumbnail: string | null;
-  average: number;
-  description: string;
-}
-interface RankingType {
-  created_at: string;
-  nickname: string;
-  score: number;
-  ranking: string;
-  id: string;
-}
-interface CommentType {
-  content: string;
-  created_at: string;
-  nickname: string;
-  user: any;
-}
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  let { quiz_id } = router.query;
+  const { quizset_id } = router.query;
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   const [quizDetailData, setQuizDetailData] = useState<DetailQuizType | null>(null);
@@ -78,32 +55,70 @@ const Page: NextPageWithLayout = () => {
   });
 
   // string string[] undefined 해결방법?
-  const getMyQuizData = async () => {
-    const res = await MyQuizDetailApi(quiz_id as string);
+  const fetchDetailQuizData = async () => {
+    try {
+      const res = await MyQuizDetailApi(quizset_id as string);
+      const { quizset, best_solver, best_comment } = res.data;
+      parseBestRankingList(best_solver);
+      parseBestCommentList(best_comment);
+      parseDetailQuiz(quizset);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    let { bestSolver, bestComment, probset } = res?.data;
-    let _detail = { ...probset[0] };
-    _detail.solverCnt = Number(_detail.solverCnt);
-    _detail.created_at = _detail.created_at.substring(0, 10);
-    _detail.updated_at = _detail.updated_at.substring(0, 10);
-    _detail.thumbnail = _detail.thumbnail === '' ? null : _detail.thumbnail;
-    _detail.average = Number(_detail.average.substring(0, 3));
-    setQuizDetailData(_detail);
-    setQuizRankingList(bestSolver);
-    setQuizCommentList(bestComment);
+  const parseDetailQuiz = (data: any) => {
+    const _detailQuiz: DetailQuizType = {
+      solverCnt: data.solver_cnt,
+      createdAt: data.created_at.substring(0, 10),
+      updatedAt: data.updated_at.substring(0, 10),
+      quizSetId: data.id,
+      setTitle: data.set_title,
+      average: data.average.toFixed(2),
+      description: data.description,
+      quizSetThumbnail: data.thumbnail ?? null,
+    };
+    setQuizDetailData(_detailQuiz);
+  };
+
+  const parseBestCommentList = (data: any) => {
+    const _bestCommentList = data.map((comment: any) => {
+      const _comment: CommentType = {
+        nickname: comment.nickname,
+        content: comment.content,
+        createdAt: comment.created_at,
+        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
+      };
+      return _comment;
+    });
+    setQuizCommentList(_bestCommentList);
+  };
+
+  const parseBestRankingList = (data: any) => {
+    const _bestRankingList = data.map((ranking: any) => {
+      const _ranking: RankingType = {
+        nickname: ranking.nickname,
+        score: ranking.score,
+        ranking: ranking.ranking,
+        quizCount:ranking.quiz_count,
+      };
+      return _ranking;
+    });
+    setQuizRankingList(_bestRankingList);
   };
 
   const MyQuizDelete = async () => {
-    if (!!quiz_id) {
-      const res = await QuizDeleteApi(quiz_id as string);
-      if (res.status === 200) {
-        closeDeleteModal();
-        router.push('/');
-      }
+    try {
+      await QuizDeleteApi(quizset_id as string);
+      alert('성공적으로 삭제되었습니다.');
+      closeDeleteModal();
+      router.push('/');
+    } catch (err) {
+      console.log(err);
     }
   };
   useEffect(() => {
-    getMyQuizData();
+    fetchDetailQuizData();
   }, [router.isReady]);
 
   return (
@@ -114,11 +129,11 @@ const Page: NextPageWithLayout = () => {
       />
       <S.Wrapper>
         <S.SectionBlock>
-          {quizDetailData ? <div id="section-title">{quizDetailData?.set_title}</div> : <S.SkeletonTitle />}
+          {quizDetailData ? <div id="section-title">{quizDetailData.setTitle}</div> : <S.SkeletonTitle />}
           <div id="section-description">{quizDetailData?.description}</div>
           <div id="section-contents">
             {quizDetailData ? (
-              <ThumbnailChange url={quizDetailData?.thumbnail} probsetId={quiz_id as string} />
+              <ThumbnailChange url={quizDetailData?.quizSetThumbnail} probsetId={quizset_id as string} />
             ) : (
               <S.SkeletonThunmbnailChange />
             )}
@@ -141,8 +156,8 @@ const Page: NextPageWithLayout = () => {
             )}
 
             <S.DateInfoWrapper>
-              <div>생성 날짜 {quizDetailData?.created_at}</div>
-              <div>마지막으로 푼 날짜 {quizDetailData?.updated_at}</div>
+              <div>생성 날짜 {quizDetailData?.createdAt}</div>
+              <div>마지막으로 푼 날짜 {quizDetailData?.updatedAt}</div>
             </S.DateInfoWrapper>
           </div>
         </S.SectionBlock>
@@ -154,9 +169,9 @@ const Page: NextPageWithLayout = () => {
                 <SNSShare
                   nickName={nickName}
                   profileImg={profileImg}
-                  set_title={quizDetailData?.set_title}
-                  id={quizDetailData?.id}
-                  thumbnail={quizDetailData?.thumbnail}
+                  setTitle={quizDetailData.setTitle}
+                  id={quizDetailData.quizSetId}
+                  thumbnail={quizDetailData?.quizSetThumbnail}
                 />
               </div>
             </div>
@@ -166,7 +181,7 @@ const Page: NextPageWithLayout = () => {
           {quizDetailData && (
             <div id="section-title">
               참여자 랭킹 🏆
-              <Link href={`/quiz/${quiz_id}/ranking`} passHref>
+              <Link href={`/quiz/${quizset_id}/ranking`} passHref>
                 <a id="more">
                   더보기 <MdOutlineArrowForwardIos />
                 </a>
@@ -177,11 +192,11 @@ const Page: NextPageWithLayout = () => {
             <RankingBoard rankingList={quizRankingList} />
           </div>
         </S.SectionBlock>
-        <S.SectionBlock>
+        {/* <S.SectionBlock>
           {quizDetailData && (
             <div id="section-title">
               베스트 한줄평 ✍️
-              <Link href={`/quiz/${quiz_id}/comment`} passHref>
+              <Link href={`/quiz/${quizset_id}/comment`} passHref>
                 <a id="more">
                   더보기 <MdOutlineArrowForwardIos />
                 </a>
@@ -191,7 +206,7 @@ const Page: NextPageWithLayout = () => {
           <div id="section-contents">
             <CommentList commentList={quizCommentList} />
           </div>
-        </S.SectionBlock>
+        </S.SectionBlock> */}
         {quizDetailData && (
           <S.DeleteButton onClick={openDeleteModal}>
             <AiOutlineDelete size={30} />

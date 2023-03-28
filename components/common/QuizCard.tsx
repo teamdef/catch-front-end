@@ -4,54 +4,24 @@ import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
 import { shareProps } from 'components/common/SNSShare';
+import { timeForToday } from 'utils/date';
 interface QuizProps {
-  recentQuiz: QuizCardType;
+  recentQuiz: RecentQuizType;
 }
 const QuizCard = ({ recentQuiz }: QuizProps) => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
   const snsShareObj: shareProps = {
     thumbnail: recentQuiz.thumbnail,
-    set_title: recentQuiz.set_title,
+    setTitle: recentQuiz.setTitle,
     id: recentQuiz.id,
-    profileImg: recentQuiz.profile_img,
-    nickName: recentQuiz.nickname,
+    profileImg: recentQuiz.user.profileImg,
+    nickName: recentQuiz.user.nickname,
   };
   const bottomUpOpen = () => {
     setBottomUpIsOpen(true);
   };
   const bottomUpClose = () => {
     setBottomUpIsOpen(false);
-  };
-
-  const timeForToday = (date: string) => {
-    const today = new Date();
-    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
-    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-    if (betweenTime < 1) return '방금 전';
-    if (betweenTime < 60) {
-      return `${betweenTime}분 전`;
-    }
-    const betweenTimeHour = Math.floor(betweenTime / 60);
-    if (betweenTimeHour < 24) {
-      return `${betweenTimeHour}시간 전`;
-    }
-    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
-    if (betweenTimeDay < 7) {
-      return `${betweenTimeDay}일 전`;
-    }
-    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
-    if (betweenTimeWeek < 4) {
-      return `${betweenTimeWeek}주 전`;
-    }
-    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
-    if (betweenTimeMonth === 0) {
-      return `1달 전`;
-    }
-    if (betweenTimeMonth < 12) {
-      return `${betweenTimeMonth}달 전`;
-    }
-    const value = today.toISOString().substring(0, 10);
-    return value;
   };
 
   return (
@@ -67,13 +37,13 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
           )}
           <div id="quiz-contents-container">
             <div id="quiz-contents">
-              <div id="quiz-title">{recentQuiz.set_title}</div>
+              <div id="quiz-title">{recentQuiz.setTitle}</div>
               <div id="profile-row">
                 <ProfileImgWrapper>
-                  <img src={recentQuiz.profile_img || '/assets/img/user_default.png'} />
+                  <img src={recentQuiz.user.profileImg || '/assets/img/user_default.png'} />
                 </ProfileImgWrapper>
                 <div id="name-and-date">
-                  {recentQuiz.nickname} · {timeForToday(recentQuiz.created_at)}
+                  {recentQuiz.user.nickname || '탈퇴한 사용자'} · {timeForToday(recentQuiz.createdAt)}
                 </div>
               </div>
               {!!recentQuiz.thumbnail === false && (

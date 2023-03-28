@@ -1,16 +1,11 @@
-/* react, next 관련 */
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useRouter } from 'next/router';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
-/* 컴포넌트 */
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, CommentList } from 'components/common';
-
-import * as S from 'styles/quiz/detail/comment.style'; /* 스타일 코드 */
-import { CommentListApi } from 'pages/api/quiz'; /* 통신 */
-// next.js 위한 라이브러리 및 타입
+import { Title, RankingBoard } from 'components/common';
+import * as S from 'styles/quiz/detail/ranking.style';
+import { QuizRankingListApi } from 'pages/api/quiz';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -31,29 +26,43 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 
-interface CommentType {
-  content: string;
-  created_at: string;
-  nickname: string;
-  user: any;
-}
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  let { quiz_id } = router.query;
+  const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+  let { quizset_id } = router.query;
 
-  const [commentList, setCommentList] = useState<CommentType[] | null>(null);
+  const fetchRankingList = async () => {
+    try {
+      const res = await QuizRankingListApi(quizset_id as string);
+      parseRankingList(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  useEffect(() => {
-    CommentListApi(quiz_id as string).then((res) => {
-      setCommentList(res.data);
+  const parseRankingList = (data: any) => {
+    const _rankingList = data.map((ranking: any) => {
+      const _ranking: RankingType = {
+        nickname: ranking.nickname,
+        score: ranking.score,
+        ranking: ranking.ranking,
+        quizCount:ranking.quiz_count
+      };
+      return _ranking;
     });
+    setRankingList(_rankingList);
+  };
+  useEffect(() => {
+    fetchRankingList();
   }, [router.isReady]);
 
   return (
-    <S.Wrapper>
-      <Title title="참여자 한줄평 ✍️" subTitle="참여자들이 남긴 퀴즈 한줄평은 어떨까요?👀" />
-      <CommentList commentList={commentList} />
-    </S.Wrapper>
+    <>
+      <Title title="참여자 랭킹 🏆" subTitle="참여자 모두의 랭킹을 확인해보세요! 누가 가장 많이 맞췄을까요?" />
+      <S.Wrapper>
+        <RankingBoard rankingList={rankingList} />
+      </S.Wrapper>
+    </>
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {

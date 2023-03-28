@@ -6,19 +6,53 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
-import { Loading, Logo, SNSShare, Comment } from 'components/common';
+import { Loading, Logo, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolve } from 'store/quiz_solve';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
-  const { solveProblemSetTitle, solveProblems, maker, thumbnail } = useSelector((state: RootState) => state.solve);
+  const { setTitle, quizList, quizMaker, quizSetThumbnail, description } = useSelector(
+    (state: RootState) => state.solve,
+  );
   const [loading, setLoading] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>('');
-  
-  let { id } = router.query;
+
+  const fetchSolveQuizSet = async () => {
+    try {
+      const res = await QuizDataFetchApi(id as string);
+      parseSolveQuizSet(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const parseSolveQuizSet = (data: any) => {
+    const { id, set_title, thumbnail, description, quiz, user } = data;
+    const solveQuizSet: SolveQuizSetType = {
+      quizSetId: id,
+      setTitle: set_title,
+      quizSetThumbnail: thumbnail,
+      description,
+      quizList: quiz.map((q: any) => {
+        const _q: SolveQuizType = {
+          quizId: q.id,
+          quizThumbnail: q.quiz_thumbnail ?? null,
+          quizTitle: q.quiz_title,
+          choiceType: q.choice_type,
+          choices: q.choices,
+          correctIndex: q.correct_idx,
+        };
+        return _q;
+      }),
+      quizMaker: user,
+    };
+    dispatch(saveSolveProblemSetAction(solveQuizSet));
+  };
+
   useEffect(() => {
     dispatch(resetSolve());
   }, []);
@@ -26,48 +60,23 @@ const Page: NextPageWithLayout = () => {
   // id 값이 변경될 시
   useEffect(() => {
     setLoading(true);
-    if (id) {
-      QuizDataFetchApi(id as string)
-        .then((res) => {
-          console.log(res);
-          dispatch(
-            saveSolveProblemSetAction({
-              solveProblemSetTitle: res?.data?.set_title,
-              problemSetId: id as string,
-              solveProblems: res?.data?.prob,
-              maker: res?.data?.user,
-              thumbnail: res?.data?.thumbnail,
-            }),
-          );
-          setDescription(res?.data?.description); // 퀴즈 설명
-          setLoading(false);
-          // 정답 배열 생성
-        })
-        .catch((err) => {
-          console.error(err);
-          setLoading(false);
-        });
-    }
+    if (!!id) fetchSolveQuizSet();
   }, [router.isReady]);
 
   return (
     <>
-      {loading ? <Loading /> : ''}
+      {loading && <Loading />}
       <S.Container>
         <Logo />
-        <S.QuizTitleContainer thumbnail={thumbnail}>
-          <S.QuizTitle>{solveProblemSetTitle}</S.QuizTitle>
+        <S.QuizTitleContainer thumbnail={quizSetThumbnail}>
+          <S.QuizTitle>{setTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
         <S.InnerContainer>
-          <S.QuizMakerImage src={`${maker?.profile_img}`}></S.QuizMakerImage>
-          <S.QuizMakerName>{maker.nickname}</S.QuizMakerName>
+          <S.QuizMakerImage src={quizMaker?.profile_img ?? '/assets/img/user_default.png'}></S.QuizMakerImage>
+          <S.QuizMakerName>{quizMaker?.nickname ?? '탈퇴한 사용자'}</S.QuizMakerName>
           <S.Description>{description}</S.Description>
           <S.QuizCountContainer>
-            총 <strong>{solveProblems.length}</strong> 문제
-            {/* <div id="block">
-              <strong>???</strong>
-              <div>참여</div>
-            </div> */}
+            총 <strong>{quizList?.length}</strong> 문제
           </S.QuizCountContainer>
           <S.ButtonWrap>
             <MainButton
@@ -83,11 +92,14 @@ const Page: NextPageWithLayout = () => {
               <AiOutlineShareAlt />
               <div>퀴즈 세트를 공유해보세요!</div>
             </div>
-            <SNSShare nickName={maker.nickname} profileImg={maker.profile_img}set_title={solveProblemSetTitle} id={id as string} thumbnail={thumbnail} />
+            <SNSShare
+              nickName={quizMaker?.nickname}
+              profileImg={quizMaker?.profile_img}
+              setTitle={setTitle}
+              id={id as string}
+              thumbnail={quizSetThumbnail}
+            />
           </S.SNSShareContainer>
-          {/* <S.BestCommentContainer>
-            <Comment hideInput={true} />
-          </S.BestCommentContainer> */}
         </S.InnerContainer>
       </S.Container>
     </>

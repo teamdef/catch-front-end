@@ -43,21 +43,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
   return { props: {} };
 };
 
-
-
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false); // 로딩중 표시
 
-  const { setTitle, problems, description } = useSelector((state: RootState) => state.quiz);
-  const { id } = useSelector((state: RootState) => state.user);
+  const { setTitle, quizList, description } = useSelector((state: RootState) => state.quiz);
+  const { userId } = useSelector((state: RootState) => state.user);
 
   /* 페이지 렌더링 용 input 핸들러 및 state */
-  const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
-  const [problemList, setProblemList] = useState<ProblemTypes[]>([]); // 문제 저장 배열
-  const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
+  const [_quizList, _setQuizList] = useState<QuizType[]>([]); // 문제 내부 저장 배열
   const [_description, _setDescription] = useState<string>('');
+  const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
+  const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
 
   /* 모달 관리 */
   const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
@@ -91,77 +89,77 @@ const Page: NextPageWithLayout = () => {
   const resetReduxProblemSet = () => {
     dispatch(saveProblemDescriptionAction({ description: '' })); // 설명 저장
     dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
-    dispatch(saveProblemsAction({ problems: [] })); // 빈 배열로 초기화
+    dispatch(saveProblemsAction({ quizList: [] })); // 빈 배열로 초기화
   };
 
   const resetLocalProblemSet = () => {
     _setDescription('');
-    setProblemList([]);
+    _setQuizList([]);
     titleClear();
   };
 
   // 새로운 퀴즈 문항 추가 함수
   const createProblem = () => {
-    const obj: ProblemTypes = {
-      problemTitle: '',
-      problemImage: undefined,
+    const obj: QuizType = {
+      quizTitle: '',
+      quizThumbnail: undefined,
       choiceType: 'text',
       choices: [],
       correctIndex: 0,
     };
     //prev => [...prev, obj]
-    setProblemList((prev) => [...prev, obj]);
+    _setQuizList((prev) => [...prev, obj]);
   };
   // 퀴즈 문항 삭제 함수
   const deleteProblem = useCallback(
-    (problemIndex: number) => {
-      let temp = [...problemList];
-      temp.splice(problemIndex, 1);
-      setProblemList(temp);
+    (quizIndex: number) => {
+      let temp = [..._quizList];
+      temp.splice(quizIndex, 1);
+      _setQuizList(temp);
     },
-    [problemList],
+    [_quizList],
   );
 
   // 문제 정보를 변경하는 함수
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    const problem = { ...problemList[index], [name]: value };
-    let temp = [...problemList];
+    const problem = { ..._quizList[index], [name]: value };
+    let temp = [..._quizList];
     temp[index] = problem;
-    setProblemList(temp);
+    _setQuizList(temp);
   };
 
   // 객관식 답안 타입 변경 함수
-  const setChoiceType = (problemIndex: number, choiceType: 'img' | 'text') => {
-    let temp = JSON.parse(JSON.stringify(problemList));
-    if (problemList[problemIndex].choices.length !== 0) {
+  const setChoiceType = (quizIndex: number, choiceType: 'img' | 'text') => {
+    let temp = JSON.parse(JSON.stringify(_quizList));
+    if (_quizList[quizIndex].choices.length !== 0) {
       if (choiceType === 'img') {
-        temp[problemIndex].choices = [] as ChoiceImageTypes[];
+        temp[quizIndex].choices = [] as ChoiceImageType[];
       } else {
-        temp[problemIndex].choices = [] as ChoiceTextTypes[];
+        temp[quizIndex].choices = [] as ChoiceTextType[];
       }
     }
-    temp[problemIndex].choiceType = choiceType;
-    temp[problemIndex].correctIndex = 0;
-    setProblemList(temp);
+    temp[quizIndex].choiceType = choiceType;
+    temp[quizIndex].correctIndex = 0;
+    _setQuizList(temp);
   };
 
   // 텍스트 답안 추가
-  const addChoiceText = (problemIndex: number) => {
+  const addChoiceText = (quizIndex: number) => {
     if (textChoiceInput === '') {
       alert('빈 값은 추가할 수 없습니다.');
     } else {
-      let temp = JSON.parse(JSON.stringify(problemList));
-      temp[problemIndex].choices.push(textChoiceInput);
-      setProblemList(temp);
+      let temp = JSON.parse(JSON.stringify(_quizList));
+      temp[quizIndex].choices.push(textChoiceInput);
+      _setQuizList(temp);
       textChoiceInputClear();
     }
   };
   // 정답 체크
-  const setCorrectIndex = (problemIndex: number, choiceIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(problemList));
-    temp[problemIndex].correctIndex = choiceIndex;
-    setProblemList(temp);
+  const setCorrectIndex = (quizIndex: number, choiceIndex: number) => {
+    let temp = JSON.parse(JSON.stringify(_quizList));
+    temp[quizIndex].correctIndex = choiceIndex;
+    _setQuizList(temp);
   };
 
   // 이미지 압축을 위한 옵션
@@ -196,7 +194,7 @@ const Page: NextPageWithLayout = () => {
   };
 
   // 이미지를 불러온 후 이미지 사이즈에 맞게 압축하는 과정
-  const ReturnFileByImageSize = async (img: HTMLImageElement, file: File): Promise<ChoiceImageTypes> => {
+  const ReturnFileByImageSize = async (img: HTMLImageElement, file: File): Promise<ChoiceImageType> => {
     let _tempImgFile: File;
     // 이미지의 가로 또는 세로 길이가 300px 이하일 경우에는 압축하지 않음
     if (img.width < 300 || img.height < 300) {
@@ -230,13 +228,13 @@ const Page: NextPageWithLayout = () => {
     });
   };
   // 퀴즈 객관식 이미지 onChange 이벤트 처리 함수
-  const onChoiceImgChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
+  const onChoiceImgChange = async (e: ChangeEvent<HTMLInputElement>, quizIndex: number) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
 
     // 이미지가 있을 경우
     if (files && files[0]) {
       // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
-      if (files.length + problemList[problemIndex].choices.length > 4) {
+      if (files.length + _quizList[quizIndex].choices.length > 4) {
         alert('이미지는 최대 4장까지 업로드 가능합니다');
         return;
       }
@@ -244,17 +242,17 @@ const Page: NextPageWithLayout = () => {
       // Promise.all 의 응답값은 filelist의 file객체를 모두 ChoiceImageTypes 타입으로 변경한 것
       Promise.all(_imgFileTaskList).then((res) => {
         const _choicesImgThumbnail = res;
-        let temp = JSON.parse(JSON.stringify(problemList));
-        let _choices = [...temp[problemIndex].choices, ..._choicesImgThumbnail];
-        temp[problemIndex].choices = _choices;
-        setProblemList(temp);
+        let temp = JSON.parse(JSON.stringify(_quizList));
+        let _choices = [...temp[quizIndex].choices, ..._choicesImgThumbnail];
+        temp[quizIndex].choices = _choices;
+        _setQuizList(temp);
         e.target.value = '';
       });
     }
   };
 
   // 퀴즈 설명 이미지 onChange 이벤트 처리 함수
-  const onQuizImageChange = async (e: ChangeEvent<HTMLInputElement>, problemIndex: number) => {
+  const onQuizImageChange = async (e: ChangeEvent<HTMLInputElement>, quizIndex: number) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
     const _URL = window.URL || window.webkitURL;
     // 이미지가 있을 경우
@@ -262,82 +260,81 @@ const Page: NextPageWithLayout = () => {
       const _quizImageFile = files[0];
       const _imgElement = await loadImage(_URL.createObjectURL(_quizImageFile)); // 이미지 element 구하기
       const _thumbnail = await ReturnFileByImageSize(_imgElement, _quizImageFile); // 이미지 파일 url 저장
-      let temp = JSON.parse(JSON.stringify(problemList));
-      temp[problemIndex].problemImage = _thumbnail;
-      setProblemList(temp);
+      let temp = JSON.parse(JSON.stringify(_quizList));
+      temp[quizIndex].quizThumbnail = _thumbnail;
+      _setQuizList(temp);
       e.target.value = '';
     }
   };
 
-  const deleteQuizImage = (problemIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(problemList));
-    temp[problemIndex].problemImage = undefined;
-    setProblemList(temp);
+  const deleteQuizImage = (quizIndex: number) => {
+    let temp = JSON.parse(JSON.stringify(_quizList));
+    temp[quizIndex].quizThumbnail = undefined;
+    _setQuizList(temp);
   };
   // 답안 항목 삭제
-  const deleteChoice = (problemIndex: number, choiceIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(problemList));
-    temp[problemIndex].choices.splice(choiceIndex, 1);
-    if (temp[problemIndex].correctIndex > temp[problemIndex].choices.length - 1) {
-      temp[problemIndex].correctIndex = 0;
+  const deleteChoice = (quizIndex: number, choiceIndex: number) => {
+    let temp = JSON.parse(JSON.stringify(_quizList));
+    temp[quizIndex].choices.splice(choiceIndex, 1);
+    if (temp[quizIndex].correctIndex > temp[quizIndex].choices.length - 1) {
+      temp[quizIndex].correctIndex = 0;
     }
-    setProblemList(temp);
+    _setQuizList(temp);
   };
 
   // 엔터키 클릭시 답안 등록
-  const onKeyDown = (e: KeyboardEvent<HTMLElement>, problemIndex: number): void => {
-    if (e.key === 'Enter') addChoiceText(problemIndex);
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>, quizIndex: number): void => {
+    if (e.key === 'Enter') addChoiceText(quizIndex);
   };
 
-  // 문제 저장 조건 체크 함수
-  const checkProblemSet = (): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      let status: boolean = true;
-      problemList.forEach((problem: ProblemTypes) => {
-        if (problem.problemTitle === '') {
-          status = false;
-        }
-        if (problem.choices.length < 2) {
-          status = false;
-        }
-      });
-      resolve(status);
+  /* 문제 저장 조건 체크 함수 2 */
+  const checkQuizSet = ():boolean => {
+    if (_quizList.length === 0) return false;
+    _quizList.forEach((quiz: QuizType) => {
+      if (quiz.quizTitle === '') {
+        return false;
+      }
+      if (quiz.choices.length < 2) {
+        return false;
+      }
     });
-  };
+    return true;
+  }
+
 
   // 문제집 생성하기 ( 서버에 저장하기 )
   const publicationProblemSet = async () => {
     // 문제 저장 조건 체크
-    if (await checkProblemSet()) {
+    if (checkQuizSet()) {
       setLoading(true);
-      QuizUploadApi(problemList, id, setTitle, description).then((res: AxiosResponse) => {
+      QuizUploadApi(_quizList, userId, setTitle, description).then((res: AxiosResponse) => {
         resetReduxProblemSet(); // 문제집 redux 초기화
         setLoading(false); // 로딩 해제
         router.push({
           pathname: '/quiz/create/share',
           query: {
-            probSetTitle: setTitle,
-            probSetCount: problems.length,
-            returnThumb: res.data.returnThumb,
-            returnSetId: res.data.returnSetId,
+            quizSetTitle: setTitle,
+            quizSetCount: quizList.length,
+            quizSetThumb: res.data.quizset_thumb,
+            quizSetId: res.data.quizset_id,
           },
         }); // 문제집 생성 완료 및 공유 화면으로 이동
       });
     } else {
       alert(
-        `퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다! \r\n (퀴즈 제목 작성 및 답안 2개 이상 작성 필수) `,
+        `퀴즈 세트 저장 조건이 맞지 않습니다. 다시 확인 바랍니다!\r\n1. 퀴즈 제목 작성 필수\r\n2. 문제 최소 1개 이상 생성\r\n3. 답안 2개 이상 작성 필수`,
       );
     }
   };
 
   // 기존에 제작하던 퀴즈 세트의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
-    if (problems.length !== 0) {
+    if (quizList.length !== 0) {
       // 제작 중이던 문제가 있을 경우
       open제작중있음Modal();
     }
-    if (problems) {
-      setProblemList(problems);
+    if (quizList) {
+      _setQuizList(quizList);
     }
     titleSetter(setTitle); // 퀴즈 세트 제목 세팅
     _setDescription(description); // 퀴즈 세트 설명 세팅
@@ -353,8 +350,8 @@ const Page: NextPageWithLayout = () => {
   }, [_description]);
   // 퀴즈 세트 문항 변경 사항 바로 redux에 저장
   useEffect(() => {
-    dispatch(saveProblemsAction({ problems: problemList }));
-  }, [problemList]);
+    dispatch(saveProblemsAction({ quizList: _quizList }));
+  }, [_quizList]);
 
   return (
     <>
@@ -384,14 +381,14 @@ const Page: NextPageWithLayout = () => {
           </div>
         </S.TitleContainer>
         <S.QuizCreateContainer>
-          {problemList.map((problem, problemIndex) => {
+          {_quizList.map((quiz, quizIndex) => {
             return (
               <S.QuizCreateCard>
-                <S.CardNumber>{problemIndex + 1}</S.CardNumber>
+                <S.CardNumber>{quizIndex + 1}</S.CardNumber>
                 <button
                   id="quiz-delete-btn"
                   onClick={() => {
-                    deleteProblem(problemIndex);
+                    deleteProblem(quizIndex);
                   }}
                 >
                   <MdClose size={28} />
@@ -399,11 +396,11 @@ const Page: NextPageWithLayout = () => {
                 <S.QuizTitleInput
                   type="text"
                   placeholder="퀴즈 제목을 입력해주세요!"
-                  value={problem.problemTitle}
-                  name="problemTitle"
+                  value={quiz.quizTitle}
+                  name="quizTitle"
                   autoComplete="off"
                   onChange={(e) => {
-                    onChangeProblem(e, problemIndex);
+                    onChangeProblem(e, quizIndex);
                   }}
                 />
                 <S.QuizImageWrapper>
@@ -411,23 +408,23 @@ const Page: NextPageWithLayout = () => {
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
-                      onQuizImageChange(e, problemIndex);
+                      onQuizImageChange(e, quizIndex);
                     }}
-                    id={`quiz-image-input-${problemIndex}`}
-                    name={`quiz-image-input-${problemIndex}`}
+                    id={`quiz-image-input-${quizIndex}`}
+                    name={`quiz-image-input-${quizIndex}`}
                   />
-                  <label htmlFor={`quiz-image-input-${problemIndex}`}>
-                    {problem.problemImage ? (
+                  <label htmlFor={`quiz-image-input-${quizIndex}`}>
+                    {quiz.quizThumbnail ? (
                       <>
                         <S.DeleteButton
                           onClick={(e) => {
                             e.preventDefault();
-                            deleteQuizImage(problemIndex);
+                            deleteQuizImage(quizIndex);
                           }}
                         >
                           <MdClose />
                         </S.DeleteButton>
-                        <img src={problem.problemImage.imgURL} />
+                        <img src={quiz.quizThumbnail.imgURL} />
                       </>
                     ) : (
                       <S.QuizImageUpload>
@@ -440,45 +437,45 @@ const Page: NextPageWithLayout = () => {
                 </S.QuizImageWrapper>
                 <S.QuizChoiceTypeRadio>
                   <input
-                    id={`choiceType-text-${problemIndex}`}
-                    checked={problem.choiceType === 'text'}
+                    id={`choiceType-text-${quizIndex}`}
+                    checked={quiz.choiceType === 'text'}
                     type="radio"
-                    name={`choiceType-${problemIndex}`}
+                    name={`choiceType-${quizIndex}`}
                     value="text"
                     onChange={() => {
-                      setChoiceType(problemIndex, 'text');
+                      setChoiceType(quizIndex, 'text');
                     }}
                   />
-                  <label htmlFor={`choiceType-text-${problemIndex}`}>텍스트</label>
+                  <label htmlFor={`choiceType-text-${quizIndex}`}>텍스트</label>
                   <input
-                    id={`choiceType-img-${problemIndex}`}
-                    checked={problem.choiceType === 'img'}
+                    id={`choiceType-img-${quizIndex}`}
+                    checked={quiz.choiceType === 'img'}
                     type="radio"
-                    name={`choiceType-${problemIndex}`}
+                    name={`choiceType-${quizIndex}`}
                     value="img"
                     onChange={() => {
-                      setChoiceType(problemIndex, 'img');
+                      setChoiceType(quizIndex, 'img');
                     }}
                   />
-                  <label htmlFor={`choiceType-img-${problemIndex}`}>이미지</label>
+                  <label htmlFor={`choiceType-img-${quizIndex}`}>이미지</label>
                 </S.QuizChoiceTypeRadio>
-                {problem.choiceType === 'text' && (
+                {quiz.choiceType === 'text' && (
                   <S.TextChoiceContainer>
                     <S.TextChoiceList>
-                      {problem.choices.map((item: any, choiceIndex: number) => {
+                      {quiz.choices.map((item: any, choiceIndex: number) => {
                         return (
                           <S.TextChoiceItem
-                            correct={problem.correctIndex === choiceIndex}
-                            key={`${problem.choiceType} ${problemIndex + choiceIndex}`}
+                            correct={quiz.correctIndex === choiceIndex}
+                            key={`${quiz.choiceType} ${quizIndex + choiceIndex}`}
                             onClick={() => {
-                              setCorrectIndex(problemIndex, choiceIndex);
+                              setCorrectIndex(quizIndex, choiceIndex);
                             }}
                           >
                             <div>{item}</div>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                deleteChoice(problemIndex, choiceIndex);
+                                deleteChoice(quizIndex, choiceIndex);
                               }}
                             >
                               <VscChromeClose size={20} />
@@ -487,7 +484,7 @@ const Page: NextPageWithLayout = () => {
                         );
                       })}
                     </S.TextChoiceList>
-                    {problem.choices.length < 4 && (
+                    {quiz.choices.length < 4 && (
                       <S.TextChoiceCreateBtn>
                         <input
                           type="text"
@@ -497,12 +494,12 @@ const Page: NextPageWithLayout = () => {
                           value={textChoiceInput}
                           onChange={textChoiceInputHandler}
                           onKeyDown={(e) => {
-                            onKeyDown(e, problemIndex);
+                            onKeyDown(e, quizIndex);
                           }}
                         />
                         <button
                           onClick={() => {
-                            addChoiceText(problemIndex);
+                            addChoiceText(quizIndex);
                           }}
                         >
                           <MdOutlineAdd size={20} />
@@ -511,23 +508,23 @@ const Page: NextPageWithLayout = () => {
                     )}
                   </S.TextChoiceContainer>
                 )}
-                {problem.choiceType === 'img' && (
+                {quiz.choiceType === 'img' && (
                   <S.ImgChoiceContainer>
                     <S.ImgChoiceListContainer>
-                      {problem.choices.map((item: any, choiceIndex: number) => {
+                      {quiz.choices.map((item: any, choiceIndex: number) => {
                         return (
                           <S.ImgWrapper
-                            correct={problem.correctIndex === choiceIndex}
-                            key={`${problem.choiceType} ${problemIndex + choiceIndex}`}
+                            correct={quiz.correctIndex === choiceIndex}
+                            key={`${quiz.choiceType} ${quizIndex + choiceIndex}`}
                             onClick={() => {
-                              setCorrectIndex(problemIndex, choiceIndex);
+                              setCorrectIndex(quizIndex, choiceIndex);
                             }}
                           >
                             <img alt="미리보기" src={item.imgURL} />
                             <S.DeleteButton
                               onClick={(e) => {
                                 e.stopPropagation();
-                                deleteChoice(problemIndex, choiceIndex);
+                                deleteChoice(quizIndex, choiceIndex);
                               }}
                             >
                               <MdClose />
@@ -535,19 +532,19 @@ const Page: NextPageWithLayout = () => {
                           </S.ImgWrapper>
                         );
                       })}
-                      {problem.choices.length < 4 && (
+                      {quiz.choices.length < 4 && (
                         <S.ImgInputContainer>
                           <input
                             type="file"
                             accept="image/*"
                             multiple
                             onChange={(e) => {
-                              onChoiceImgChange(e, problemIndex);
+                              onChoiceImgChange(e, quizIndex);
                             }}
-                            id={`choice-image-input-${problemIndex}`}
-                            name={`choice-image-input-${problemIndex}`}
+                            id={`choice-image-input-${quizIndex}`}
+                            name={`choice-image-input-${quizIndex}`}
                           />
-                          <label htmlFor={`choice-image-input-${problemIndex}`}>
+                          <label htmlFor={`choice-image-input-${quizIndex}`}>
                             <AiFillCamera size={30} />
                             <span>이미지추가</span>
                           </label>
@@ -556,13 +553,12 @@ const Page: NextPageWithLayout = () => {
                     </S.ImgChoiceListContainer>
                   </S.ImgChoiceContainer>
                 )}
-
                 <S.InfoContainer>정답을 선택해 주세요</S.InfoContainer>
               </S.QuizCreateCard>
             );
           })}
           <S.QuizCreateBtn onClick={createProblem}>
-            <span>새 퀴즈 추가</span>
+            <span>퀴즈 추가하기</span>
             <MdOutlineAdd size={20} />
           </S.QuizCreateBtn>
         </S.QuizCreateContainer>

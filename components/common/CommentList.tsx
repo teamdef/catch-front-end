@@ -1,63 +1,22 @@
 import styled, { keyframes } from 'styled-components';
 import { NotFound } from 'components/common';
-interface CommentType {
-  content: string;
-  created_at: string;
-  nickname: string;
-  user: any;
-  img?: string;
-}
+import { timeForToday } from 'utils/date';
+
 interface CommentBoardProps {
   commentList: CommentType[] | null;
 }
 const CommentList = ({ commentList }: CommentBoardProps) => {
-  const timeForToday = (date: string) => {
-    const today = new Date();
-    const timeValue = new Date(date.replace(/ /g, 'T')); // ios safari 크로스 브라우징 이슈로 인해 yyyy-mm-ddThh:mm:ss 로 변경
-    const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
-    if (betweenTime < 1) return '방금 전';
-    if (betweenTime < 60) {
-      return `${betweenTime}분 전`;
-    }
-
-    const betweenTimeHour = Math.floor(betweenTime / 60);
-    if (betweenTimeHour < 24) {
-      return `${betweenTimeHour}시간 전`;
-    }
-
-    const betweenTimeDay = Math.floor(betweenTimeHour / 24);
-
-    if (betweenTimeDay < 7) {
-      return `${betweenTimeDay}일 전`;
-    }
-
-    const betweenTimeWeek = Math.floor(betweenTimeDay / 7);
-    if (betweenTimeWeek < 4) {
-      return `${betweenTimeWeek}주 전`;
-    }
-
-    const betweenTimeMonth = Math.floor(betweenTimeDay / 30);
-    if (betweenTimeMonth === 0) {
-      return `1달 전`;
-    }
-    if (betweenTimeMonth < 12) {
-      return `${betweenTimeMonth}달 전`;
-    }
-
-    const value = today.toISOString().substring(0, 10);
-    return value;
-  };
   return (
     <CommentBoardWrapper>
       {commentList ? (
         commentList.length !== 0 ? (
-          commentList.map((item: CommentType, index: number) => (
+          commentList.map((comment: CommentType, index: number) => (
             <CommentBox key={index}>
-              <img src={item.img ? item.img : '/assets/img/user_default.png'}></img>
+              <img src={comment.user ? comment.user.profileImg : '/assets/img/user_default.png'}></img>
               <div>
-                <span className="nickname">{item.nickname}</span>
-                <span className="date">· {timeForToday(item.created_at)}</span>
-                <p>{item.content}</p>
+                <span className="nickname">{comment.nickname}</span>
+                <span className="date">· {timeForToday(comment.createdAt)}</span>
+                <p>{comment.content}</p>
               </div>
             </CommentBox>
           ))
@@ -128,6 +87,7 @@ const CommentBox = styled.div`
     height: 38px;
     margin-right: 20px;
     border-radius: 50%;
+    object-fit:cover;
   }
   > div {
     position: relative;

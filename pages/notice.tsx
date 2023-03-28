@@ -5,9 +5,9 @@ import { Title } from 'components/common';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import notice from 'data/notice.json';
 import * as S from 'styles/notice.style';
+
 const Page: NextPageWithLayout = () => {
   const noticeData: NoticeTypes[] = notice.notice;
-
   const newUploadCheck = (date: string): boolean => {
     const _days = (new Date().getTime() - new Date(date).getTime()) / (1000 * 60 * 60 * 24);
     return _days < 7;

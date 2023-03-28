@@ -1,46 +1,28 @@
 import styled, { keyframes } from 'styled-components';
 import { NotFound } from 'components/common';
-interface RankingType {
-  created_at: string;
-  nickname: string;
-  score: number;
-  ranking: string;
-  id: string;
-}
 
 interface PropsType {
   rankingList: RankingType[] | null;
 }
 const RankingBoard = ({ rankingList }: PropsType) => {
+  
   return (
     <Wrapper>
       {rankingList ? (
         rankingList.length !== 0 ? (
-          rankingList.map((userRanking: RankingType) => {
+          rankingList.map((user: RankingType, idx: number) => {
             return (
               <li
-                key={userRanking.id}
-                id={
-                  userRanking.ranking === '1'
-                    ? 'first'
-                    : userRanking.ranking === '2'
-                    ? 'second'
-                    : userRanking.ranking === '3'
-                    ? 'third'
-                    : ''
-                }
+                key={idx}
+                id={user.ranking === 1 ? 'first' : user.ranking === 2 ? 'second' : user.ranking === 3 ? 'third' : ''}
               >
                 <i>
-                  {userRanking.ranking === '1'
-                    ? '🥇'
-                    : userRanking.ranking === '2'
-                    ? '🥈'
-                    : userRanking.ranking === '3'
-                    ? '🥉'
-                    : userRanking.ranking}
+                  {user.ranking === 1 ? '🥇' : user.ranking === 2 ? '🥈' : user.ranking === 3 ? '🥉' : user.ranking}
                 </i>
-                <strong>{userRanking?.nickname}</strong>
-                <em>{userRanking?.score}점</em>
+                <div>
+                  <strong>{user.nickname}</strong>
+                </div>
+                <em>{user.score}/{user.quizCount}</em>
               </li>
             );
           })
@@ -95,25 +77,42 @@ const Wrapper = styled.ul`
       justify-content: center;
       align-items: center;
       font-style: normal;
-      width: 50px;
-      color: #ff264d;
+      width: 120px;
+      color: #757575;
     }
     i {
-      color: #ff4d57;
+      color: #757575;
       font-size: 1rem;
+      width: 100px;
+    }
+    > div {
+      text-align: left;
+      width:100%;
     }
   }
   #first {
     border: none;
-    background-color: #fff1b4;
+    background-color: #fe747b;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #second {
     border: none;
-    background-color: #ececec;
+    background-color: #ffa5aa;
+    strong {
+      color: white;
+    }
+    em {
+      color: #212121;
+    }
   }
   #third {
     border: none;
-    background-color: #ffe6d4;
+    background-color: #fff6f7;
   }
 `;
 

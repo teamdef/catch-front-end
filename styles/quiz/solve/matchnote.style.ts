@@ -42,7 +42,7 @@ export const QuizMatchCard = styled.div`
     border-bottom: solid 10px #fff;
   }
   &.wrong {
-    border: 4px solid #ffcaca;
+    border: 4px solid #ffa5aa;
     > span {
       border: solid 17px #ffa5aa;
       border-bottom: solid 10px #fff;

@@ -5,7 +5,7 @@ import { deleteToken } from 'utils/token';
 
 interface UserTypes {
   isLoggedin: boolean;
-  id: string;
+  userId: string;
   profileImg: string;
   nickName: string;
   kakaoUid: number;
@@ -14,7 +14,7 @@ interface UserTypes {
 // user스토어의 초기값을 설정
 const initialState: UserTypes = {
   isLoggedin: false,
-  id: '',
+  userId: '',
   profileImg: '/assets/img/user_default.png', // 디폴트 이미지
   nickName: '',
   kakaoUid: -1,
@@ -31,7 +31,7 @@ const userSlice = createSlice({
     ) => {
       const { id, profileImg, nickName, kakaoUid } = action.payload;
       state.isLoggedin = true;
-      state.id = id;
+      state.userId = id;
       state.profileImg = profileImg;
       state.nickName = nickName;
       state.kakaoUid = kakaoUid;
@@ -39,7 +39,7 @@ const userSlice = createSlice({
     logoutAction: (state: UserTypes) => {
       deleteToken(); // 헤더와 쿠키에서 토큰 제거
       state.isLoggedin = false;
-      state.id = '';
+      state.userId = '';
       state.profileImg = '/assets/img/user_default.png'; // 디폴트 이미지
       state.nickName = '';
       state.kakaoUid = -1;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import ModalPortal from 'components/modal/PortalWrapper';
 import { SNSShare } from 'components/common';
-import { shareProps }  from 'components/common/SNSShare';
+import { shareProps } from 'components/common/SNSShare';
 interface BottomUpProps {
   bottomUpClose: () => void;
   shareInfo: shareProps;
@@ -23,7 +23,7 @@ const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
         <ModalWrapper onClick={(e) => e.stopPropagation()} className={animation}>
           <GrabBar />
           <QuizTitleAndShareInfo>
-            <div id="title">{shareInfo.set_title}</div>
+            <div id="title">{shareInfo.setTitle}</div>
             <div id="info">퀴즈를 공유하고 다같이 즐겨보세요 ❤️</div>
           </QuizTitleAndShareInfo>
           <SNSShareWrapper>
@@ -31,7 +31,7 @@ const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
               nickName={shareInfo.nickName}
               profileImg={shareInfo.profileImg}
               thumbnail={shareInfo.thumbnail}
-              set_title={shareInfo.set_title}
+              setTitle={shareInfo.setTitle}
               id={shareInfo.id}
             />
           </SNSShareWrapper>
