@@ -71,6 +71,8 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   margin-top: 40px;
   button {
+    width:137px;
+    height:40px;
     border-radius: 8px;
     font-size: 1rem;
   }
