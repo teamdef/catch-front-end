@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 import { HeadMeta } from 'components/common';
-import Script from 'next/script'
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const sheet = new ServerStyleSheet();
@@ -32,11 +31,11 @@ export default class MyDocument extends Document {
         <Head>
           <HeadMeta />
           <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-          <Script
+          <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2471989735930976"
             crossOrigin="anonymous"
-          ></Script>
+          ></script>
         </Head>
         <body>
           <Main />
