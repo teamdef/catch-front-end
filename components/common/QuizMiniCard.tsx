@@ -25,14 +25,13 @@ const QuizMiniCard = ({ recentQuiz }: QuizProps) => {
 };
 const QuizCardWrapper = styled.a`
   position: relative;
-  height: 100%;
   border-radius: 4px;
   overflow: hidden;
   border: 1px solid #e8e7e7;
 `;
 const ThumbnailWrapper = styled.div`
   width: 100%;
-  height: 65%;
+  height: 180px;
   background-color: #eee;
   img {
     width: 100%;
