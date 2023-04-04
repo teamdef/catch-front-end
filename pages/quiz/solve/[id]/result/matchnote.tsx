@@ -26,7 +26,7 @@ const Page: NextPageWithLayout = () => {
                 <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
               </S.QuizImageWrapper>
             )}
-            {item.choiceType==='img' ? (
+            {item.choiceType === 'img' ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
                 {item.choices.map((choice: any, j: number) => (
                   <Match.MatchChoiceItem
@@ -47,16 +47,7 @@ const Page: NextPageWithLayout = () => {
                     id={j == answerList[i] ? 'my-answer' : ''}
                   >
                     <span>{choice}</span>
-                    {item.correctIndex === j ? (
-                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>O</span>
-                    ) : (
-                      ''
-                    )}
-                    {j == answerList[i] ? (
-                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>X</span>
-                    ) : (
-                      ''
-                    )}
+                    {item.correctIndex === j ? <img src="/assets/img/O.svg" /> : <img src="/assets/img/X.svg" />}
                   </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>
@@ -65,9 +56,10 @@ const Page: NextPageWithLayout = () => {
         );
       })}
       <Match.MatchBottom>
-        <MainButton style={{ height: '40px' }} onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
-          다시 풀기
-        </MainButton>
+        <button onClick={() => router.push(`/`)}>
+          퀴즈 둘러보기
+          <img src="/assets/img/match_arrow.svg" />
+        </button>
       </Match.MatchBottom>
     </S.Container>
   );

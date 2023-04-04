@@ -31,8 +31,8 @@ const QuizCardWrapper = styled.a`
 `;
 const ThumbnailWrapper = styled.div`
   width: 100%;
-  height: 180px;
-  background-color: #eee;
+  height: 65%;
+  background-color: #FFA5AA;
   img {
     width: 100%;
     object-fit: cover;
