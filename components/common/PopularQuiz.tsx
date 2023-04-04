@@ -38,7 +38,7 @@ const PopularQuizList = () => {
 
     setPopularQuizList(_sortPopularQuizList);
   };
-
+  console.log(popularQuizList);
   useEffect(() => {
     fetchPopularQuizList();
   }, []);
@@ -57,7 +57,7 @@ const PopularQuizList = () => {
           </Title>
 
           <ListWrapper>
-            {popularQuizList.map((quiz) => {
+            {popularQuizList.slice(0,4).map((quiz) => {
               return <QuizMiniCard key={quiz.id} recentQuiz={quiz} />;
             })}
           </ListWrapper>
@@ -117,7 +117,7 @@ const ListWrapper = styled.div`
   column-gap: 14px;
   row-gap: 16px;
   grid-template-columns: repeat(2, calc(50% - 7px));
-  grid-template-rows: repeat(2, 50%);
+  grid-template-rows: repeat(2, 1fr);
 `;
 
 export default PopularQuizList;
