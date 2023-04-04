@@ -16,31 +16,19 @@ export const QuizMatchCard = styled.div`
   position: relative;
   width: 100%;
   padding: 0 4%;
-  border: 1px solid #aad775;
+  border: 1px solid #ff4d57;
   border-radius: 20px;
   background-color: white;
-  opacity: 0.5;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   margin-top: 44px;
   > span {
-    border-color: #aad775;
+    border-color: #ff4d57;
     border-bottom: solid 10px #fff;
   }
   &.wrong {
-    border: 1px solid #ffcaca;
-    > span {
-      border: solid 17px #ffa5aa;
-      border-bottom: solid 10px #fff;
-    }
-    opacity: 1;
-    .choice-txt-item.correct {
-      color: #fff;
-      background-color: #ff4d57;
-      border: 1px solid #ff4d57;
-    }
   }
 `;
 export const MatchChoiceItem = styled.div`
@@ -53,11 +41,12 @@ export const MatchChoiceItem = styled.div`
   align-items: center;
   border-radius: 8px;
   color: #999;
-  border: 1px dashed #ffa5aa;
   &.choice-txt-item {
+    border: 1px dashed #ffa5aa;
     &.correct {
-      background-color: #aad775;
-      color: #244e10;
+      border: 1px solid #ff4d57;
+      background-color: #ff4d57;
+      color: #fff;
     }
     &#my-answer {
       background-color: #fff6f7;
@@ -70,8 +59,20 @@ export const MatchChoiceItem = styled.div`
     padding: 0;
     border-radius: 15px;
     overflow: hidden;
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      opacity: 0.45;
+    }
 
     &#my-answer {
+      opacity: 1;
       &::before {
         content: '';
         position: absolute;
@@ -93,8 +94,8 @@ export const MatchChoiceItem = styled.div`
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #ffa5aa;
-        opacity: 0.5;
+        background-color: #ff0000;
+        opacity: 0.15;
       }
     }
     &.correct {
@@ -110,17 +111,6 @@ export const MatchChoiceItem = styled.div`
         background: url('/assets/img/circle.png') center no-repeat;
         background-size: cover;
         z-index: 1;
-      }
-      &::after {
-        content: '';
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #aad775;
-        opacity: 0.5;
       }
     }
     img {
