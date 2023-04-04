@@ -28,15 +28,12 @@ const PopularQuizList = () => {
       };
       return _quizObj;
     });
-    let _sortPopularQuizList = _popularQuizList.slice(0, 5);
-    _sortPopularQuizList = _sortPopularQuizList.filter(
-      (item: RecentQuizType) => item.solverCnt !== 0,
-    ); /* 풀이자가 0명인데 인기있을리가 .. */
+    const _sortPopularQuizList = _popularQuizList.filter((item: RecentQuizType) => item.solverCnt !== 0); /* 풀이자가 0명인데 인기있을리가 .. */
     _sortPopularQuizList.sort((a: RecentQuizType, b: RecentQuizType) => {
       return b.solverCnt - a.solverCnt;
     });
-
-    setPopularQuizList(_sortPopularQuizList);
+    const _slicePopularQuizList = _sortPopularQuizList.slice(0, 4);
+    setPopularQuizList(_slicePopularQuizList);
   };
   console.log(popularQuizList);
   useEffect(() => {

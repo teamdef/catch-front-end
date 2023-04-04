@@ -31,6 +31,11 @@ export default class MyDocument extends Document {
         <Head>
           <HeadMeta />
           <script async defer src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2471989735930976"
+            crossOrigin="anonymous"
+          ></script>
         </Head>
         <body>
           <Main />
