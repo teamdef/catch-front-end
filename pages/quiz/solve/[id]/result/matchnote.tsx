@@ -19,8 +19,7 @@ const Page: NextPageWithLayout = () => {
       {quizList.map((item: SolveQuizType, i: number) => {
         return (
           <Match.QuizMatchCard key={i} className={answerList[i] != 'catch' ? 'wrong' : ''}>
-            <S.CardNumber>{i + 1}</S.CardNumber>
-            <S.QuizTitle>{item.quizTitle}</S.QuizTitle>
+            <S.QuizTitle>{i + 1}. {item.quizTitle}</S.QuizTitle>
             {item.quizThumbnail && (
               <S.QuizImageWrapper>
                 <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
