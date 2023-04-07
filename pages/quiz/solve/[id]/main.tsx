@@ -41,6 +41,7 @@ const Page: NextPageWithLayout = () => {
 
   const QuizList = quizList.map((item: SolveQuizType, i: number) => (
     <S.QuizSolveCard key={i}>
+      <S.QuizCount>{i + 1} / {quizList.length}</S.QuizCount>
       <S.QuizTitle>{i + 1}. {item.quizTitle}</S.QuizTitle>
       {item.quizThumbnail && (
         <S.QuizImageWrapper>
@@ -92,11 +93,11 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Logo />
-      <S.QuizCount>
+      {/* <S.QuizUnsolved>
         <p>
           남은 퀴즈 <span>{remainingQuizCount}</span>
         </p>
-      </S.QuizCount>
+      </S.QuizUnsolved> */}
       <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton

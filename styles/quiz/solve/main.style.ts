@@ -14,8 +14,13 @@ export const Container = styled.div`
   }
   
 `;
-
-export const QuizCount = styled.div`
+export const QuizCount = styled.span`
+  position: absolute;
+  right: 17px;
+  top: 17px;
+  display: flex;
+`;
+export const QuizUnsolved = styled.div`
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -48,7 +53,7 @@ export const QuizImageWrapper = styled.div`
   min-height: 140px;
   max-height: 200px;
   border-radius: 15px;
-  margin-top:40px;
+  margin-top:52px;
   img {
     width: 100%;
     height: 200px;
@@ -92,7 +97,7 @@ export const QuizSolveCard = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
-  margin-bottom: 65px;
+  margin-bottom: 20px;
 `;
 
 export const ChoiceWrapper = styled.div`
@@ -103,7 +108,7 @@ export const ChoiceWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
-  margin: 40px 0 30px 0;
+  margin: 52px 0 55px 0;
   &#choice-img-wrapper {
     display: grid;
     grid-template-columns: repeat(2, calc(50% - 5px));
@@ -132,9 +137,18 @@ export const ChoiceItem = styled.div`
     padding: 0 35px;
     align-items: center;
     border-radius: 8px;
-    border: 1px solid #ffa5aa;
     color: #999;
   }
+  &#choice-txt-item {
+    
+    label {
+      border: 1px solid #ffa5aa;
+    }
+    & input:checked + label {
+      border: 1px solid #ff4d57;
+    }
+  }
+    
   input {
     display: none;
   }
@@ -149,15 +163,10 @@ export const ChoiceItem = styled.div`
       background-image: url(/assets/img/checked.svg);
     }
   }
-  &#choice-txt-item {
-    &:last-child {
-      margin-bottom: 10px;
-    }
-  }
-
   &#choice-img-item {
     width: 100%;
     height: 150px;
+    border: none;
     label {
       padding: 0;
       border-radius: 15px;

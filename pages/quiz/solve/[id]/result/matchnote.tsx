@@ -59,6 +59,7 @@ const Page: NextPageWithLayout = () => {
           퀴즈 둘러보기
           <img src="/assets/img/match_arrow.svg" />
         </button>
+        <button onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>다시 풀기</button>
       </Match.MatchBottom>
     </S.Container>
   );
