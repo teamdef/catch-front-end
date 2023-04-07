@@ -27,6 +27,7 @@ const QuizCardWrapper = styled.a`
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  height: 100%;
   border: 1px solid #e8e7e7;
 `;
 const ThumbnailWrapper = styled.div`
