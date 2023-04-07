@@ -8,15 +8,32 @@ import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { Comment, SNSShare, PopularQuiz, RankingBoard } from 'components/common';
+import { BottomUpModal } from 'components/modal';
+import { shareProps } from 'components/common/SNSShare';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizRankingListApi } from 'pages/api/quiz';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+  const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
 
-    const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
- 
+  const snsShareObj: shareProps = {
+    thumbnail: quizSetThumbnail,
+    setTitle: setTitle,
+    id: quizSetId,
+    profileImg: quizMaker.profileImg,
+    nickName: quizMaker.nickname,
+  };
+
+  const bottomUpOpen = () => {
+    setBottomUpIsOpen(true);
+  };
+  const bottomUpClose = () => {
+    setBottomUpIsOpen(false);
+  };
+  const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+
   const fetchRankingList = async () => {
     try {
       const res = await QuizRankingListApi(quizSetId);
@@ -32,7 +49,7 @@ const Page: NextPageWithLayout = () => {
         nickname: ranking.nickname,
         score: ranking.score,
         ranking: ranking.ranking,
-        quizCount:ranking.quiz_count
+        quizCount: ranking.quiz_count,
       };
       return _ranking;
     });
@@ -59,31 +76,35 @@ const Page: NextPageWithLayout = () => {
           <h3>현재 랭킹 🏆</h3>
           <RankingBoard rankingList={rankingList} />
         </S.RankingBoardWrapper>
+
         <S.ButtonWrapper>
           <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
         </S.ButtonWrapper>
-        <S.SNSShareContainer>
-          <div id="explain">
-            <AiOutlineShareAlt />
-            <div>친구에게 퀴즈를 공유해보세요!</div>
-          </div>
-          <SNSShare
-            nickName={quizMaker.nickname}
-            setTitle={setTitle}
-            id={quizSetId}
-            thumbnail={quizSetThumbnail}
-            profileImg={quizMaker.profileImg}
-          />
-        </S.SNSShareContainer>
+
+        <S.ResponseContainer>
+          <span>퀴즈는 어떠셨나요?</span>
+          <span>여러분의 의견을 알려주세요!</span>
+        </S.ResponseContainer>
+
+        <S.ShareButton
+          id="quiz-share-btn"
+          onClick={(e) => {
+            bottomUpOpen();
+            e.stopPropagation(); /* 이벤트 전파 방지 */
+          }}
+        >
+          <img src="/assets/img/share2.svg" alt="" />
+          퀴즈 공유하기
+        </S.ShareButton>
       </S.QuizResultCard>
 
       {/* <Comment /> */}
       <PopularQuiz />
+      {bottomUpisOpen && <BottomUpModal shareInfo={snsShareObj} bottomUpClose={bottomUpClose} />}
     </S.Container>
   );
 };
 
-      
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout>

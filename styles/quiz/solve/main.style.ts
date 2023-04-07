@@ -12,7 +12,6 @@ export const Container = styled.div`
     top: 22px;
     left: 2%;
   }
-  
 `;
 export const QuizCount = styled.span`
   position: absolute;
@@ -53,7 +52,7 @@ export const QuizImageWrapper = styled.div`
   min-height: 140px;
   max-height: 200px;
   border-radius: 15px;
-  margin-top:52px;
+  margin-top: 52px;
   img {
     width: 100%;
     height: 200px;
@@ -140,29 +139,27 @@ export const ChoiceItem = styled.div`
     color: #999;
   }
   &#choice-txt-item {
-    
     label {
       border: 1px solid #ffa5aa;
     }
-    & input:checked + label {
+    input:checked + label {
       border: 1px solid #ff4d57;
+      color: #fff;
+      background-color: #ff4d57;
+      &::after {
+        content: '';
+        position: relative;
+        width: 18px;
+        height: 14px;
+        background-image: url(/assets/img/checked.svg);
+      }
     }
   }
-    
+
   input {
     display: none;
   }
-  input:checked + label {
-    color: #fff;
-    background-color: #ff4d57;
-    &::after {
-      content: '';
-      position: relative;
-      width: 18px;
-      height: 14px;
-      background-image: url(/assets/img/checked.svg);
-    }
-  }
+
   &#choice-img-item {
     width: 100%;
     height: 150px;
@@ -189,17 +186,6 @@ export const ChoiceItem = styled.div`
         background: url('/assets/img/check-mark.png') center no-repeat;
         background-size: cover;
         z-index: 1;
-      }
-      &::after {
-        content: '';
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #aad775;
-        opacity: 0.5;
       }
     }
     img {
@@ -242,4 +228,3 @@ export const QuizSolveBottom = styled.div`
     align-items: center;
   }
 `;
-

@@ -49,21 +49,29 @@ export const ScoreContainer = styled.div`
     }
   }
 `;
-
-export const SNSShareContainer = styled.div`
+export const ResponseContainer = styled.div`
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  margin-top: 60px;
-  #explain {
-    color: #888;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    svg {
-      margin-right: 4px;
-    }
+  margin-top: 40px;
+  span {
+    text-align: center;
   }
+`;
+export const ShareButton = styled.button`
+  margin: auto;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 40px;
+  font-size: 14px;
+  gap: 12px;
+  background-color: transparent;
+  color: #9e9e9e;
+  border: 1px solid #9e9e9e;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -71,8 +79,8 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   margin-top: 40px;
   button {
-    width:137px;
-    height:40px;
+    width: 137px;
+    height: 40px;
     border-radius: 8px;
     font-size: 1rem;
   }
