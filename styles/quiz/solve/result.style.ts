@@ -49,30 +49,6 @@ export const ScoreContainer = styled.div`
     }
   }
 `;
-export const ResponseContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-top: 40px;
-  span {
-    text-align: center;
-  }
-`;
-export const ShareButton = styled.button`
-  margin: auto;
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 40px;
-  font-size: 14px;
-  gap: 12px;
-  background-color: transparent;
-  color: #9e9e9e;
-  border: 1px solid #9e9e9e;
-  border-radius: 8px;
-  cursor: pointer;
-`;
 
 export const ButtonWrapper = styled.div`
   display: flex;

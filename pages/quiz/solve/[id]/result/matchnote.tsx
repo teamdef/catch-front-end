@@ -5,8 +5,8 @@ import * as S from 'styles/quiz/solve/main.style';
 import * as Match from 'styles/quiz/solve/matchnote.style';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { MainButton } from 'styles/common';
 import { useRouter } from 'next/router';
+import EmotionShare from 'components/common/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -19,7 +19,9 @@ const Page: NextPageWithLayout = () => {
       {quizList.map((item: SolveQuizType, i: number) => {
         return (
           <Match.QuizMatchCard key={i} className={answerList[i] != 'catch' ? 'wrong' : ''}>
-            <S.QuizTitle>{i + 1}. {item.quizTitle}</S.QuizTitle>
+            <S.QuizTitle>
+              {i + 1}. {item.quizTitle}
+            </S.QuizTitle>
             {item.quizThumbnail && (
               <S.QuizImageWrapper>
                 <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
@@ -54,12 +56,15 @@ const Page: NextPageWithLayout = () => {
           </Match.QuizMatchCard>
         );
       })}
+      <EmotionShare />
       <Match.MatchBottom>
+        <button onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
+          <img src='/assets/img/replay_icon.svg'/>
+          다시 풀기</button>
         <button onClick={() => router.push(`/`)}>
           퀴즈 둘러보기
           <img src="/assets/img/match_arrow.svg" />
         </button>
-        <button onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>다시 풀기</button>
       </Match.MatchBottom>
     </S.Container>
   );

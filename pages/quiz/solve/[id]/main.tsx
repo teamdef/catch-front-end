@@ -93,11 +93,6 @@ const Page: NextPageWithLayout = () => {
   return (
     <S.Container>
       <Logo />
-      {/* <S.QuizUnsolved>
-        <p>
-          남은 퀴즈 <span>{remainingQuizCount}</span>
-        </p>
-      </S.QuizUnsolved> */}
       <S.QuizSolveContent>{QuizList}</S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton
