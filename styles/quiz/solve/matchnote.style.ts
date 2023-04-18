@@ -123,15 +123,14 @@ export const MatchChoiceItem = styled.div`
 `;
 export const MatchBottom = styled.div`
   position: relative;
-  display: block;
-  flex-direction: column;
+  display: flex;
   padding-bottom: 48px;
+  justify-content: center;
   text-align: center;
   margin-top: 50px;
-  gap: 10px;
+  gap: 16px;
   button {
     display: flex;
-    margin: 0 auto;
     padding: 8px;
     cursor: pointer;
     border: none;

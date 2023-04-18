@@ -27,16 +27,17 @@ const QuizCardWrapper = styled.a`
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  height: 100%;
   border: 1px solid #e8e7e7;
 `;
 const ThumbnailWrapper = styled.div`
   width: 100%;
-  height: 65%;
+  height:178px;
   background-color: #FFA5AA;
   img {
     width: 100%;
-    object-fit: cover;
     height: 100%;
+    object-fit: cover;
   }
 `;
 const QuizTextWrapper = styled.div`

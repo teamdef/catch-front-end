@@ -50,29 +50,13 @@ export const ScoreContainer = styled.div`
   }
 `;
 
-export const SNSShareContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 60px;
-  #explain {
-    color: #888;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    svg {
-      margin-right: 4px;
-    }
-  }
-`;
-
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 40px;
   button {
-    width:137px;
-    height:40px;
+    width: 137px;
+    height: 40px;
     border-radius: 8px;
     font-size: 1rem;
   }

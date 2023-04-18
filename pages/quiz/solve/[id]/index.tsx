@@ -18,10 +18,13 @@ const Page: NextPageWithLayout = () => {
   const { setTitle, quizList, quizMaker, quizSetThumbnail, description } = useSelector(
     (state: RootState) => state.solve,
   );
+
   const [loading, setLoading] = useState<boolean>(false);
 
+  // 퀴즈 정보를 불러오는 api를 실행하는 함수
   const fetchSolveQuizSet = async () => {
     try {
+      // 퀴즈 id를 통해 정보를 불러오는 custom axios 
       const res = await QuizDataFetchApi(id as string);
       parseSolveQuizSet(res.data);
       setLoading(false);
@@ -29,7 +32,7 @@ const Page: NextPageWithLayout = () => {
       console.log(err);
     }
   };
-
+  // response 를 이용하여 redux 에 퀴즈 정보를 저장
   const parseSolveQuizSet = (data: any) => {
     const { id, set_title, thumbnail, description, quiz, user } = data;
     const solveQuizSet: SolveQuizSetType = {
@@ -53,11 +56,12 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveSolveProblemSetAction(solveQuizSet));
   };
 
+  // 페이지 진입 시 redux state를 초기화 시켜줌.
   useEffect(() => {
     dispatch(resetSolve());
   }, []);
 
-  // id 값이 변경될 시
+  // id 값이 변경될 시 퀴즈 정보를 갱신한다.
   useEffect(() => {
     setLoading(true);
     if (!!id) fetchSolveQuizSet();
