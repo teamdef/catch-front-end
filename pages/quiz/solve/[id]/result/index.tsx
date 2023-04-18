@@ -7,14 +7,14 @@ import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import { PopularQuiz, RankingBoard } from 'components/common';
+import { Comment, PopularQuiz, RankingBoard } from 'components/common';
 import { QuizRankingListApi } from 'pages/api/quiz';
 import EmotionShare from 'components/common/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
-  
+  const [isOpen, setIsOpen] = useState(false);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
 
   const fetchRankingList = async () => {
@@ -42,7 +42,15 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     fetchRankingList();
   }, []);
-
+  if (isOpen) {
+    document.body.style.cssText = `
+      overflow: hidden;
+      `;
+    window.scrollTo(0, 0);
+  } else {
+    document.body.style.cssText = `
+      overflow: scroll;`;
+  }
   return (
     <S.Container>
       <S.QuizResultCard>
@@ -62,13 +70,13 @@ const Page: NextPageWithLayout = () => {
 
         <S.ButtonWrapper>
           <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
+          <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
         </S.ButtonWrapper>
 
         <EmotionShare />
-        
       </S.QuizResultCard>
 
-      {/* <Comment /> */}
+      {isOpen ? <Comment setIsOpen={setIsOpen} /> : ''}
       <PopularQuiz />
     </S.Container>
   );

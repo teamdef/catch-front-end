@@ -21,7 +21,7 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
             </CommentBox>
           ))
         ) : (
-          <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'} />
+          <NotFound title={'아직 작성된 한줄평이 없습니다 😶'} subTitle={'한줄평이 작성될 때 까지 기다려볼까요?'}/>
         )
       ) : (
         <div>
@@ -57,9 +57,13 @@ const CommentList = ({ commentList }: CommentBoardProps) => {
 
 const CommentBoardWrapper = styled.div`
   position: relative;
-  margin-top: 16px;
+  display:block;
+  background-color: #fff;
   width: 100%;
-
+  overflow-y:scroll;
+  height: 60vh;
+  padding-top: 20px;
+  margin-bottom: 80px;
   .more {
     border: none;
     width: 100%;
