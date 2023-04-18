@@ -1,6 +1,6 @@
 import { useInput } from 'hooks';
 import styled from 'styled-components';
-
+import ModalPortal from 'components/modal/PortalWrapper';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
@@ -63,37 +63,39 @@ const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
   }, [quizSetId]);
 
   return (
-    <Container>
-      {commentList && (
-        <>
-          <Bg onClick={() => setIsOpen(false)} />
-          <Wrapper>
-            {/* <Title>
+    <ModalPortal wrapperId="react-portal-modal-container">
+      <Container>
+        {commentList && (
+          <>
+            <Bg onClick={() => setIsOpen(false)} />
+            <Wrapper>
+              {/* <Title>
                 {hideInput ? '베스트 한줄평' : '한줄평'}
                 <img src="/assets/img/chat.png" />
               </Title> */}
-            <CloseButton onClick={() => setIsOpen(false)}>▾</CloseButton>
-            <CommentList commentList={commentList} />
-            {!hideInput && (
-              <InputBox>
-                <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
-                <input
-                  type="text"
-                  value={text}
-                  onChange={textHandler}
-                  id="comment-input"
-                  maxLength={50}
-                  placeholder="나도 한마디.."
-                />
-                <button className={text && 'on'} onClick={() => saveComment(text)}>
-                  등록
-                </button>
-              </InputBox>
-            )}
-          </Wrapper>
-        </>
-      )}
-    </Container>
+              <CloseButton onClick={() => setIsOpen(false)}>▾</CloseButton>
+              <CommentList commentList={commentList} />
+              {!hideInput && (
+                <InputBox>
+                  <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
+                  <input
+                    type="text"
+                    value={text}
+                    onChange={textHandler}
+                    id="comment-input"
+                    maxLength={50}
+                    placeholder="나도 한마디.."
+                  />
+                  <button className={text && 'on'} onClick={() => saveComment(text)}>
+                    등록
+                  </button>
+                </InputBox>
+              )}
+            </Wrapper>
+          </>
+        )}
+      </Container>
+    </ModalPortal>
   );
 };
 const Container = styled.div`
@@ -101,7 +103,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
+  left: 50%;
+  transform: translateX(-50%);
   top: 0;
+  max-width: 480px;
   width: 100%;
   height: 100vh;
   z-index: 9999;
@@ -173,7 +178,6 @@ const InputBox = styled.div`
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  max-width: 480px;
   width: 100%;
   height: 80px;
   display: flex;
