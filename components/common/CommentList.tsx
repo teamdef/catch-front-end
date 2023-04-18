@@ -62,7 +62,7 @@ const CommentBoardWrapper = styled.div`
   width: 100%;
   overflow-y:scroll;
   height: 60vh;
-  padding-top: 20px;
+  padding: 20px 4% 0;
   margin-bottom: 80px;
   .more {
     border: none;
