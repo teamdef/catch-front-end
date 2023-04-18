@@ -54,6 +54,7 @@ export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 40px;
+  gap: 5%;
   button {
     width: 137px;
     height: 40px;
