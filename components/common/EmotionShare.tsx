@@ -25,12 +25,11 @@ const EmotionShare = () => {
   return (
     <Wrapper>
       <Content>
-        <TextBox>
+        {/* <TextBox>
           <span>퀴즈는 어떠셨나요?</span>
           <span>여러분의 의견을 알려주세요!</span>
         </TextBox>
         <EmotionBox>
-          {/* select box 로 변경 가능성 있음 */}
           <button>
             <img src="/assets/img/emotion1.svg" alt="이모티콘이미지" />
             <p>재밌어요</p>
@@ -51,7 +50,7 @@ const EmotionShare = () => {
             <p>어려워요</p>
             <span>11</span>
           </button>
-        </EmotionBox>
+        </EmotionBox> */}
         <ShareButton
           id="quiz-share-btn"
           onClick={(e) => {
@@ -74,6 +73,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  margin-top: 30px;
 `;
 const Content = styled.div`
 display: inline-block;
@@ -115,16 +115,17 @@ const EmotionBox = styled.div`
       font-size: 14px;
     }
   }
-  margin: 16px 0 10px;
+  margin-top: 16px;
 `;
 
 const ShareButton = styled.button`
   margin: auto;
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 14px 0;
+  min-width: 200px;
   width: 100%;
   font-size: 14px;
   gap: 12px;
