@@ -7,7 +7,7 @@ import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
-import { Comment, PopularQuiz, RankingBoard } from 'components/common';
+import { Comment, NotFound, PopularQuiz, RankingBoard } from 'components/common';
 import { QuizRankingListApi } from 'pages/api/quiz';
 import EmotionShare from 'components/common/EmotionShare';
 
@@ -16,7 +16,6 @@ const Page: NextPageWithLayout = () => {
   const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
   const [isOpen, setIsOpen] = useState(false);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
-
   const fetchRankingList = async () => {
     try {
       const res = await QuizRankingListApi(quizSetId);
@@ -53,28 +52,34 @@ const Page: NextPageWithLayout = () => {
   }
   return (
     <S.Container>
-      <S.QuizResultCard>
-        <S.ScoreContainer>
-          <p>
-            <span className="nickname">{solveUserName}</span> 님
-          </p>
-          <p>
-            <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
-          </p>
-        </S.ScoreContainer>
+      {solveUserScore !== undefined ? (
+        <S.QuizResultCard>
+          <S.ScoreContainer>
+            <p>
+              <span className="nickname">{solveUserName}</span> 님
+            </p>
+            <p>
+              <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
+            </p>
+          </S.ScoreContainer>
 
-        <S.RankingBoardWrapper>
-          <h3>현재 랭킹 🏆</h3>
-          <RankingBoard rankingList={rankingList} />
-        </S.RankingBoardWrapper>
+          <S.RankingBoardWrapper>
+            <h3>현재 랭킹 🏆</h3>
+            <RankingBoard rankingList={rankingList} />
+          </S.RankingBoardWrapper>
 
-        <S.ButtonWrapper>
-          <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
-          <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
-        </S.ButtonWrapper>
+          <S.ButtonWrapper>
+            <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
+            <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
+          </S.ButtonWrapper>
 
-        <EmotionShare />
-      </S.QuizResultCard>
+          <EmotionShare />
+        </S.QuizResultCard>
+      ) : (
+        <S.ErrorWrapper>
+          <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />
+        </S.ErrorWrapper>
+      )}
 
       {isOpen ? <Comment setIsOpen={setIsOpen} /> : ''}
       <PopularQuiz />

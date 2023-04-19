@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  position: block;
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
@@ -61,4 +60,7 @@ export const ButtonWrapper = styled.div`
     border-radius: 8px;
     font-size: 1rem;
   }
+`;
+export const ErrorWrapper = styled.div`
+padding-bottom: 40px;
 `;

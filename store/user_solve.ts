@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState: SolveUserType = {
   solveUserId: '',
   solveUserName: '',
-  solveUserScore: 0,
+  solveUserScore: undefined,
 };
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.
 const solveUserSlice = createSlice({
@@ -23,6 +23,9 @@ const solveUserSlice = createSlice({
       const { solveUserScore } = action.payload;
       state.solveUserScore = solveUserScore;
     },
+    resetUserDataAction: (state: SolveUserType) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
@@ -30,6 +33,7 @@ export const {
   saveSolveUserNameAction,
   saveSolveUserIdAction,
   saveSolveUserScoreAction,
+  resetUserDataAction,
 } = solveUserSlice.actions;
 
 export default solveUserSlice.reducer;
