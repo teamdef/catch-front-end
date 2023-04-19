@@ -1,6 +1,6 @@
 import { useInput } from 'hooks';
 import styled from 'styled-components';
-
+import ModalPortal from 'components/modal/PortalWrapper';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
@@ -10,9 +10,10 @@ import { CommentList } from 'components/common';
 
 interface propsCommentType {
   hideInput?: boolean;
+  setIsOpen?: any;
 }
 
-const Comment = ({ hideInput }: propsCommentType) => {
+const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
   const [text, , textClear, textHandler] = useInput<string>('');
   const { quizSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
@@ -62,51 +63,106 @@ const Comment = ({ hideInput }: propsCommentType) => {
   }, [quizSetId]);
 
   return (
-    <Container>
-      {commentList && (
-        <>
-          <Title>
-            {hideInput ? '베스트 한줄평' : '한줄평'}
-            <img src="/assets/img/chat.png" />
-          </Title>
-          {!hideInput && (
-            <InputBox>
-              <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
-              <input
-                type="text"
-                value={text}
-                onChange={textHandler}
-                id="comment-input"
-                maxLength={50}
-                placeholder="나도 한마디.."
-              />
-              <button className={text && 'on'} onClick={() => saveComment(text)}>
-                등록
-              </button>
-            </InputBox>
-          )}
-          <CommentList commentList={commentList} />
-        </>
-      )}
-    </Container>
+    <ModalPortal wrapperId="react-portal-modal-container">
+      <Container>
+        {commentList && (
+          <>
+            <Bg onClick={() => setIsOpen(false)} />
+            <Wrapper>
+              {/* <Title>
+                {hideInput ? '베스트 한줄평' : '한줄평'}
+                <img src="/assets/img/chat.png" />
+              </Title> */}
+              <CloseButton onClick={() => setIsOpen(false)}>▾</CloseButton>
+              <CommentList commentList={commentList} />
+              {!hideInput && (
+                <InputBox>
+                  <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
+                  <input
+                    type="text"
+                    value={text}
+                    onChange={textHandler}
+                    id="comment-input"
+                    maxLength={50}
+                    placeholder="나도 한마디.."
+                  />
+                  <button className={text && 'on'} onClick={() => saveComment(text)}>
+                    등록
+                  </button>
+                </InputBox>
+              )}
+            </Wrapper>
+          </>
+        )}
+      </Container>
+    </ModalPortal>
   );
 };
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  padding-bottom: 40px;
-`;
-const Title = styled.h2`
+  position: absolute;
   display: flex;
+  flex-direction: column;
+  justify-content: end;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  max-width: 480px;
+  width: 100%;
+  height: 100vh;
+  z-index: 9999;
+`;
+const Bg = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: #000;
+  opacity: 0.5;
+`;
+const Wrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  @keyframes ani {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  animation: ani 0.5s;
+`;
+const CloseButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  height: 20px;
+  background-color: #ff4d57;
+  color: #fff;
+  font-size: 1.5rem;
+  border: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 0;
+`;
+
+const Title = styled.h2`
+  position: relative;
+  display: block;
   font-size: 1.25rem;
   color: #ff4d57;
   font-weight: bold;
+  width: 100%;
   align-items: center;
   span {
     position: absolute;
     padding: 2px;
     border-radius: 50%;
-    color: #ff4d57;
+    color: #fff;
     top: -7px;
     font-size: 0.7rem;
     left: 18px;
@@ -118,11 +174,10 @@ const Title = styled.h2`
   }
 `;
 const InputBox = styled.div`
-  position: fixed;
+  position: absolute;
   left: 50%;
   bottom: 0;
   transform: translateX(-50%);
-  max-width: 480px;
   width: 100%;
   height: 80px;
   display: flex;
