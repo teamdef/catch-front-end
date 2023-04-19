@@ -54,7 +54,7 @@ interface SolveQuizType {
 // 풀이자 정보
 interface SolveUserType {
   solveUserName: string; // 유저 닉네임
-  solveUserScore: number; // 유저 스코어
+  solveUserScore: undefined|number; // 유저 스코어
   solveUserId: string; // 유저 아이디
 }
 

@@ -9,7 +9,12 @@ const QuizMiniCard = ({ recentQuiz }: QuizProps) => {
     <>
       <Link href={`/quiz/solve/${recentQuiz.id}`} passHref>
         <QuizCardWrapper>
-          <ThumbnailWrapper>{recentQuiz.thumbnail ? <img src={recentQuiz.thumbnail} alt="" /> : ''}</ThumbnailWrapper>
+          <ThumbnailWrapper>
+            <img
+              src={'/assets/img/quiz_card_default.png'}
+              alt="추천퀴즈썸네일이미지"
+            />
+          </ThumbnailWrapper>
           <QuizTextWrapper>
             <span id="quiz-title">{recentQuiz.setTitle}</span>
             <span id="nickname">{recentQuiz.user.nickname || '탈퇴한 사용자'}</span>
@@ -32,8 +37,8 @@ const QuizCardWrapper = styled.a`
 `;
 const ThumbnailWrapper = styled.div`
   width: 100%;
-  height:178px;
-  background-color: #FFA5AA;
+  height: 178px;
+  background-color: #ffa5aa;
   img {
     width: 100%;
     height: 100%;

@@ -35,7 +35,7 @@ const PopularQuizList = () => {
     const _slicePopularQuizList = _sortPopularQuizList.slice(0, 4);
     setPopularQuizList(_slicePopularQuizList);
   };
-  console.log(popularQuizList);
+  
   useEffect(() => {
     fetchPopularQuizList();
   }, []);

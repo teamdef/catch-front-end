@@ -9,7 +9,8 @@ import { MainButton } from 'styles/common';
 import { Loading, Logo, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
-import { saveSolveProblemSetAction, resetSolve } from 'store/quiz_solve';
+import { saveSolveProblemSetAction, resetSolveAction } from 'store/quiz_solve';
+import { resetUserDataAction } from 'store/user_solve';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -58,7 +59,8 @@ const Page: NextPageWithLayout = () => {
 
   // 페이지 진입 시 redux state를 초기화 시켜줌.
   useEffect(() => {
-    dispatch(resetSolve());
+    dispatch(resetSolveAction());
+    dispatch(resetUserDataAction());
   }, []);
 
   // id 값이 변경될 시 퀴즈 정보를 갱신한다.

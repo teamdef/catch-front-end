@@ -35,7 +35,7 @@ const solveSlice = createSlice({
       state.quizSetThumbnail = quizSetThumbnail;
       state.description = description;
     },
-    resetSolve: (state: SolveQuizSetType) => {
+    resetSolveAction: (state: SolveQuizSetType) => {
       Object.assign(state, initialState);
     },
     saveSolveAnswersAction: (state: SolveQuizSetType, action: PayloadAction<{ answerList: number[] }>) => {
@@ -45,6 +45,6 @@ const solveSlice = createSlice({
   },
 });
 
-export const { saveSolveProblemSetAction, saveSolveAnswersAction, resetSolve } = solveSlice.actions;
+export const { saveSolveProblemSetAction, saveSolveAnswersAction, resetSolveAction } = solveSlice.actions;
 
 export default solveSlice.reducer;
