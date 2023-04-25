@@ -44,6 +44,7 @@ const Page: NextPageWithLayout = () => {
   if (isOpen) {
     document.body.style.cssText = `
       overflow-y: hidden;
+      touch-action: none;
       `;
     window.scrollTo(0, 0);
   } else {
