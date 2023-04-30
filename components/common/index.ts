@@ -21,3 +21,4 @@ export { default as MatchNote } from '../../pages/quiz/solve/[id]/result/matchno
 export { default as Comment } from './Comment';
 export { default as CommentList } from './CommentList';
 export { default as RankingBoard } from './RankingBoard'; 
+export { default as EmotionShare } from './EmotionShare'

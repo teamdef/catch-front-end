@@ -1,21 +1,21 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
 import type { NextPageWithLayout } from 'pages/_app';
 import type { ReactElement } from 'react';
-import * as S from 'styles/quiz/solve/result.style';
 import { useState, useEffect } from 'react';
+import Router from 'next/router';
+import * as S from 'styles/quiz/solve/result.style';
 import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
-import Router from 'next/router';
 import { RootState } from 'store';
-import { Comment, NotFound, PopularQuiz, RankingBoard } from 'components/common';
+import { Comment, NotFound, PopularQuiz, RankingBoard, EmotionShare } from 'components/common';
 import { QuizRankingListApi } from 'pages/api/quiz';
-import EmotionShare from 'components/common/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+  const { quizList, quizSetId } = useSelector((state: RootState) => state.solve);
   const [isOpen, setIsOpen] = useState(false);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+
   const fetchRankingList = async () => {
     try {
       const res = await QuizRankingListApi(quizSetId);
@@ -35,22 +35,30 @@ const Page: NextPageWithLayout = () => {
       };
       return _ranking;
     });
+
     const _sliceRankingList = _rankingList.slice(0, 3);
     setRankingList(_sliceRankingList);
   };
-  useEffect(() => {
-    fetchRankingList();
-  }, []);
-  if (isOpen) {
-    document.body.style.cssText = `
+  
+  const OpenComment = () => {
+    // 한줄평 모달 오픈 시 부모 컴포넌트 스크롤 막기
+    if (isOpen) {
+      document.body.style.cssText = `
       overflow-y: hidden;
       touch-action: none;
       `;
-    window.scrollTo(0, 0);
-  } else {
-    document.body.style.cssText = `
+      window.scrollTo(0, 0);
+    } else {
+      document.body.style.cssText = `
       overflow-y: auto;`;
-  }
+    }
+    setIsOpen((current) => !current);
+  };
+  
+  useEffect(() => {
+    fetchRankingList();
+  }, []);
+  
   return (
     <S.Container>
       {solveUserScore !== undefined ? (
@@ -71,7 +79,7 @@ const Page: NextPageWithLayout = () => {
 
           <S.ButtonWrapper>
             <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
-            <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
+            <MainButton onClick={() => OpenComment}>한줄평</MainButton>
           </S.ButtonWrapper>
 
           <EmotionShare />

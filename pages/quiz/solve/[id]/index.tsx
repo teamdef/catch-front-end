@@ -33,7 +33,8 @@ const Page: NextPageWithLayout = () => {
       console.log(err);
     }
   };
-  // response 를 이용하여 redux 에 퀴즈 정보를 저장
+
+  // response 파싱 후 redux에 퀴즈 정보를 저장
   const parseSolveQuizSet = (data: any) => {
     const { id, set_title, thumbnail, description, quiz, user } = data;
     const solveQuizSet: SolveQuizSetType = {
@@ -57,7 +58,7 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveSolveProblemSetAction(solveQuizSet));
   };
 
-  // 페이지 진입 시 redux state를 초기화 시켜줌.
+  // 페이지 진입 시 퀴즈 정보와 유저 데이터 초기화
   useEffect(() => {
     dispatch(resetSolveAction());
     dispatch(resetUserDataAction());
