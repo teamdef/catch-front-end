@@ -99,7 +99,7 @@ const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
   );
 };
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: end;
@@ -108,7 +108,7 @@ const Container = styled.div`
   top: 0;
   max-width: 480px;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 9999;
 `;
 const Bg = styled.div`

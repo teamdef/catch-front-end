@@ -43,12 +43,13 @@ const Page: NextPageWithLayout = () => {
   }, []);
   if (isOpen) {
     document.body.style.cssText = `
-      overflow: hidden;
+      overflow-y: hidden;
+      touch-action: none;
       `;
     window.scrollTo(0, 0);
   } else {
     document.body.style.cssText = `
-      overflow: scroll;`;
+      overflow-y: auto;`;
   }
   return (
     <S.Container>
