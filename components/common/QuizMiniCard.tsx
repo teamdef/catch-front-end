@@ -11,7 +11,7 @@ const QuizMiniCard = ({ recentQuiz }: QuizProps) => {
         <QuizCardWrapper>
           <ThumbnailWrapper>
             <img
-              src={'/assets/img/quiz_card_default.png'}
+              src={recentQuiz.thumbnail ? recentQuiz.thumbnail : '/assets/img/quiz_card_default.png'}
               alt="추천퀴즈썸네일이미지"
             />
           </ThumbnailWrapper>
