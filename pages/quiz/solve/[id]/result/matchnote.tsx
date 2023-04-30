@@ -5,8 +5,8 @@ import * as S from 'styles/quiz/solve/main.style';
 import * as Match from 'styles/quiz/solve/matchnote.style';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import { MainButton } from 'styles/common';
 import { useRouter } from 'next/router';
+import EmotionShare from 'components/common/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -19,14 +19,15 @@ const Page: NextPageWithLayout = () => {
       {quizList.map((item: SolveQuizType, i: number) => {
         return (
           <Match.QuizMatchCard key={i} className={answerList[i] != 'catch' ? 'wrong' : ''}>
-            <S.CardNumber>{i + 1}</S.CardNumber>
-            <S.QuizTitle>{item.quizTitle}</S.QuizTitle>
+            <S.QuizTitle>
+              {i + 1}. {item.quizTitle}
+            </S.QuizTitle>
             {item.quizThumbnail && (
               <S.QuizImageWrapper>
                 <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
               </S.QuizImageWrapper>
             )}
-            {item.choiceType==='img' ? (
+            {item.choiceType === 'img' ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
                 {item.choices.map((choice: any, j: number) => (
                   <Match.MatchChoiceItem
@@ -47,16 +48,7 @@ const Page: NextPageWithLayout = () => {
                     id={j == answerList[i] ? 'my-answer' : ''}
                   >
                     <span>{choice}</span>
-                    {item.correctIndex === j ? (
-                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>O</span>
-                    ) : (
-                      ''
-                    )}
-                    {j == answerList[i] ? (
-                      <span style={{ color: '#fff', fontFamily: 'RixInooAriDuriR', fontSize: '2rem' }}>X</span>
-                    ) : (
-                      ''
-                    )}
+                    {item.correctIndex === j ? <img src="/assets/img/O.svg" /> : <img src="/assets/img/X.svg" />}
                   </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>
@@ -64,10 +56,15 @@ const Page: NextPageWithLayout = () => {
           </Match.QuizMatchCard>
         );
       })}
+      <EmotionShare />
       <Match.MatchBottom>
-        <MainButton style={{ height: '40px' }} onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
-          다시 풀기
-        </MainButton>
+        <button onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
+          <img src='/assets/img/replay_icon.svg'/>
+          다시 풀기</button>
+        <button onClick={() => router.push(`/`)}>
+          퀴즈 둘러보기
+          <img src="/assets/img/match_arrow.svg" />
+        </button>
       </Match.MatchBottom>
     </S.Container>
   );

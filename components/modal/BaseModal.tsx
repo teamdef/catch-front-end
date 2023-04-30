@@ -88,12 +88,12 @@ const Background = styled.div`
   z-index: 100;
   position: fixed;
   left: 50%;
+  transform: translateX(-50%);
   top: 0;
   width: 480px;
   @media (max-width: 480px) {
     width: 100%;
   }
-  transform: translate(-50%, 0%);
   height: 100vh;
   background: #56565650;
   backdrop-filter: blur(4px);
