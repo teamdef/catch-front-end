@@ -4,10 +4,10 @@ import { MakeStore, createWrapper, HYDRATE } from 'next-redux-wrapper';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import userReducer from 'store/user';
 import quizReducer from 'store/quiz';
-import solveUserReducer from 'store/user_solve'
+import solveUserReducer from 'store/user_solve';
 import solveReducer from 'store/quiz_solve';
+import emotionReducer from 'store/emotion';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
-
 
 // https://devsner.tistory.com/143 참고
 // https://velog.io/@junho0956/redux-toolkit-%EC%B4%88%EA%B8%B0%EC%84%A4%EC%A0%95-with-NextJS-hydration
@@ -25,8 +25,6 @@ const createNoopStorage = () => {
     },
   };
 };
-
-
 
 // redux-persist v6 이후에는 react-native의 경우 asyncstorage를 쓰는것이 맞고,
 // redux-persist 에서 noop 에러가 발생한다면 윈도우 객체의 존재 여부를 파악하여 알맞는 스토리지를 생성하고 대입할 것.
@@ -50,6 +48,7 @@ const rootReducer = (state: any, action: AnyAction): CombinedState<any> => {
         quiz: quizReducer,
         solve: solveReducer,
         user_solve: solveUserReducer,
+        emotion: emotionReducer,
       });
       return combinedReducer(state, action);
     }

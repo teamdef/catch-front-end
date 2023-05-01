@@ -8,17 +8,21 @@ import { useSelector } from 'react-redux';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { Comment, NotFound, PopularQuiz, RankingBoard } from 'components/common';
-import { QuizRankingListApi } from 'pages/api/quiz';
-import EmotionShare from 'components/common/EmotionShare';
+import { QuizRankingListApi, QuizSolverResultApi } from 'pages/api/quiz';
+import { EmotionShare } from 'components/EmotionShare';
+import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList, quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
   const [isOpen, setIsOpen] = useState(false);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+  const router = useRouter();
+  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
+
   const fetchRankingList = async () => {
     try {
-      const res = await QuizRankingListApi(quizSetId);
+      const res = await QuizRankingListApi(quizset_id as string);
       parseRankingList(res.data);
     } catch (err) {
       console.log(err);
@@ -39,8 +43,9 @@ const Page: NextPageWithLayout = () => {
     setRankingList(_sliceRankingList);
   };
   useEffect(() => {
-    fetchRankingList();
-  }, []);
+    if (!!quizset_id) fetchRankingList();
+  }, [router.isReady]);
+
   if (isOpen) {
     document.body.style.cssText = `
       overflow-y: hidden;
@@ -70,7 +75,9 @@ const Page: NextPageWithLayout = () => {
           </S.RankingBoardWrapper>
 
           <S.ButtonWrapper>
-            <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
+            <MainButton onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}>
+              정답확인
+            </MainButton>
             <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
           </S.ButtonWrapper>
 

@@ -118,7 +118,7 @@ const Page: NextPageWithLayout = () => {
     }
   };
   useEffect(() => {
-    fetchDetailQuizData();
+    if(!!quizset_id) fetchDetailQuizData();
   }, [router.isReady]);
 
   return (
