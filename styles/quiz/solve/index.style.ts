@@ -102,6 +102,7 @@ export const Description = styled.div`
   /*line-height: 1.5rem;*/
   text-align: center;
   word-break: keep-all;
+  word-wrap:break-word;
   width: 60%;
 `;
 export const QuizCountContainer = styled.div`

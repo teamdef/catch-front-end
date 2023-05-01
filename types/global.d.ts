@@ -109,6 +109,12 @@ interface UserType{
   profileImg: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
 }
 
+/* 감정표현 타입 */
+type EmotionType = 'FUNNY' | 'EASY' | 'HARD' | 'ANGRY';
+type QuizSetEmotionType = {
+  [x in EmotionValueType]: number;
+};
+
 // 공지사항 타입
 interface NoticeTypes {
   title: string;

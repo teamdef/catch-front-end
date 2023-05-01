@@ -4,7 +4,6 @@ import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
-import { saveEmotionCount } from 'store/emotion';
 import Router from 'next/router';
 import { RootState } from 'store';
 import { QuizSolveSaveApi } from 'pages/api/quiz';
@@ -14,7 +13,7 @@ import { QuizSolveSaveApi } from 'pages/api/quiz';
 const NickNameModal = ({ setLoading }: any) => {
   const dispatch = useDispatch();
 
-  const { quizSetId, quizList } = useSelector((state: RootState) => state.solve);
+  const { quizSetId,quizList } = useSelector((state: RootState) => state.solve);
   const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { isLoggedin, nickName, userId } = useSelector((state: RootState) => state.user);
 
@@ -30,17 +29,14 @@ const NickNameModal = ({ setLoading }: any) => {
         isLoggedin ? userId : undefined,
         quizList.length,
       );
-      const { quizset_emotion,solver_id } = res.data;
-      dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
-      Router.push(`/quiz/solve/${quizSetId}/result/${solver_id}`);
-    } catch (err) {
-      console.log(err);
-    } finally {
       setLoading(false);
+      Router.push(`/quiz/solve/${quizSetId}/result`);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
     }
   };
 
-  
   const checkNickname = () => {
     if (_nickname && _nickname.length <= 12) {
       postSolver();

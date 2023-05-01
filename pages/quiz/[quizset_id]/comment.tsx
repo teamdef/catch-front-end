@@ -55,7 +55,7 @@ const Page: NextPageWithLayout = () => {
     setCommentList(_commentList);
   };
   useEffect(() => {
-    fetchCommentList();
+    if(!!quizset_id) fetchCommentList();
   }, [router.isReady]);
 
   return (
