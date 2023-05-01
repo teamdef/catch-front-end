@@ -7,26 +7,18 @@ import * as S from 'styles/quiz/solve/result.style';
 import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-<<<<<<< HEAD:pages/quiz/solve/[quizset_id]/result/[solver_id]/index.tsx
 import { Comment, NotFound, PopularQuiz, RankingBoard } from 'components/common';
-import { QuizRankingListApi, QuizSolverResultApi } from 'pages/api/quiz';
+import { QuizRankingListApi } from 'pages/api/quiz';
 import { EmotionShare } from 'components/EmotionShare';
 import { useRouter } from 'next/router';
-=======
-import { Comment, NotFound, PopularQuiz, RankingBoard, EmotionShare } from 'components/common';
-import { QuizRankingListApi } from 'pages/api/quiz';
->>>>>>> 0fdecd451c14d525bf0f21b99680bc2e2eac0461:pages/quiz/solve/[id]/result/index.tsx
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList, quizSetId } = useSelector((state: RootState) => state.solve);
   const [isOpen, setIsOpen] = useState(false);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
-<<<<<<< HEAD:pages/quiz/solve/[quizset_id]/result/[solver_id]/index.tsx
   const router = useRouter();
   const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
-=======
->>>>>>> 0fdecd451c14d525bf0f21b99680bc2e2eac0461:pages/quiz/solve/[id]/result/index.tsx
 
   const fetchRankingList = async () => {
     try {
@@ -51,20 +43,16 @@ const Page: NextPageWithLayout = () => {
     const _sliceRankingList = _rankingList.slice(0, 3);
     setRankingList(_sliceRankingList);
   };
-<<<<<<< HEAD:pages/quiz/solve/[quizset_id]/result/[solver_id]/index.tsx
   useEffect(() => {
     if (!!quizset_id) fetchRankingList();
   }, [router.isReady]);
 
-  if (isOpen) {
-    document.body.style.cssText = `
-=======
+
   
   const OpenComment = () => {
     // 한줄평 모달 오픈 시 부모 컴포넌트 스크롤 막기
     if (isOpen) {
       document.body.style.cssText = `
->>>>>>> 0fdecd451c14d525bf0f21b99680bc2e2eac0461:pages/quiz/solve/[id]/result/index.tsx
       overflow-y: hidden;
       touch-action: none;
       `;
@@ -99,15 +87,10 @@ const Page: NextPageWithLayout = () => {
           </S.RankingBoardWrapper>
 
           <S.ButtonWrapper>
-<<<<<<< HEAD:pages/quiz/solve/[quizset_id]/result/[solver_id]/index.tsx
             <MainButton onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}>
               정답확인
             </MainButton>
-            <MainButton onClick={() => setIsOpen((current) => !current)}>한줄평</MainButton>
-=======
-            <MainButton onClick={() => Router.push(`/quiz/solve/${quizSetId}/result/matchnote`)}>정답확인</MainButton>
-            <MainButton onClick={() => OpenComment}>한줄평</MainButton>
->>>>>>> 0fdecd451c14d525bf0f21b99680bc2e2eac0461:pages/quiz/solve/[id]/result/index.tsx
+            <MainButton onClick={OpenComment}>한줄평</MainButton>
           </S.ButtonWrapper>
 
           <EmotionShare />
