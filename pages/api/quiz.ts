@@ -30,6 +30,11 @@ export const QuizRankingListApi = (quizset_id: string): Promise<AxiosResponse> =
   return notAuthAxios.get(`/solver/ranking`, { params: { quizset_id } });
 };
 
+// 풀이 결과 불러오기
+export const QuizSolverResultApi = (quizset_id: string, solver_id: string): Promise<AxiosResponse> => {
+  return notAuthAxios.get(`/solver`, { params: { quizset_id, solver_id } });
+};
+
 // imageObject 를 Blob으로 변환하여 S3에 전송하는 함수
 const putImageToS3URL = async (urlArray: any, _imageObject: ChoiceImageType) => {
   const _foundUrl = urlArray.find((value: any) => value.filename === _imageObject.imgName);
@@ -127,7 +132,13 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const QuizSolveSaveApi = async (nickname: string, score: number, quizset_id: string, user_id: string, quiz_count:number) => {
+export const QuizSolveSaveApi = async (
+  nickname: string,
+  score: number,
+  quizset_id: string,
+  user_id: string,
+  quiz_count: number,
+) => {
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id, quiz_count });
 };
 
@@ -139,4 +150,9 @@ export const CommentListApi = async (quizset_id: string) => {
 // 한줄평 - 등록하기
 export const CommentSaveApi = async (nickname: string, content: string, quizset_id: string, user_id: string | null) => {
   return notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
+};
+
+// 감정표현
+export const EmotionClickApi = async (emotion: EmotionType, quizset_id: string, solver_id: string) => {
+  return notAuthAxios.put(`/solver/emotion`, { emotion, quizset_id, solver_id });
 };

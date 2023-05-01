@@ -14,7 +14,7 @@ import { resetUserDataAction } from 'store/user_solve';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { quizset_id } = router.query;
   const dispatch = useDispatch();
   const { setTitle, quizList, quizMaker, quizSetThumbnail, description } = useSelector(
     (state: RootState) => state.solve,
@@ -26,14 +26,15 @@ const Page: NextPageWithLayout = () => {
   const fetchSolveQuizSet = async () => {
     try {
       // 퀴즈 id를 통해 정보를 불러오는 custom axios 
-      const res = await QuizDataFetchApi(id as string);
+      const res = await QuizDataFetchApi(quizset_id as string);
       parseSolveQuizSet(res.data);
       setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
-  // response 를 이용하여 redux 에 퀴즈 정보를 저장
+
+  // response 파싱 후 redux에 퀴즈 정보를 저장
   const parseSolveQuizSet = (data: any) => {
     const { id, set_title, thumbnail, description, quiz, user } = data;
     const solveQuizSet: SolveQuizSetType = {
@@ -57,7 +58,7 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveSolveProblemSetAction(solveQuizSet));
   };
 
-  // 페이지 진입 시 redux state를 초기화 시켜줌.
+  // 페이지 진입 시 퀴즈 정보와 유저 데이터 초기화
   useEffect(() => {
     dispatch(resetSolveAction());
     dispatch(resetUserDataAction());
@@ -66,7 +67,7 @@ const Page: NextPageWithLayout = () => {
   // id 값이 변경될 시 퀴즈 정보를 갱신한다.
   useEffect(() => {
     setLoading(true);
-    if (!!id) fetchSolveQuizSet();
+    if (!!quizset_id) fetchSolveQuizSet();
   }, [router.isReady]);
 
   return (
@@ -87,7 +88,7 @@ const Page: NextPageWithLayout = () => {
           <S.ButtonWrap>
             <MainButton
               onClick={() => {
-                router.push(`/quiz/solve/${id}/main`);
+                router.push(`/quiz/solve/${quizset_id}/main`);
               }}
             >
               <span>시작하기</span>
@@ -102,7 +103,7 @@ const Page: NextPageWithLayout = () => {
               nickName={quizMaker?.nickname}
               profileImg={quizMaker?.profile_img}
               setTitle={setTitle}
-              id={id as string}
+              id={quizset_id as string}
               thumbnail={quizSetThumbnail}
             />
           </S.SNSShareContainer>
