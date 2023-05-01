@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { QuizMiniCard, SkeletonQuizCard, NotFound } from 'components/common';
+import { QuizMiniCard } from 'components/common';
 import styled from 'styled-components';
 import { RecentQuizListApi } from 'pages/api/quiz';
 

@@ -18,6 +18,11 @@ export { default as SkeletonQuizCard } from './SkeletonQuizCard';
 export { default as MatchNote } from '../../pages/quiz/solve/[quizset_id]/result/[solver_id]/matchnote';
 export { default as Comment } from './Comment';
 export { default as CommentList } from './CommentList';
+<<<<<<< HEAD
 export { default as RankingBoard } from './RankingBoard';
 
 export { default as Emotion } from '../EmotionShare/Emotion';
+=======
+export { default as RankingBoard } from './RankingBoard'; 
+export { default as EmotionShare } from './EmotionShare'
+>>>>>>> 0fdecd451c14d525bf0f21b99680bc2e2eac0461
