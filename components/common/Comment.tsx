@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import React, { useEffect, useState } from 'react';
-
 import { CommentList } from 'components/common';
 
 interface propsCommentType {
