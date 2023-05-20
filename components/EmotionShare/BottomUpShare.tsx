@@ -8,6 +8,7 @@ import styled from 'styled-components';
 const BottomUpShare = () => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
   const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+ 
   const snsShareObj: shareProps = {
     thumbnail: quizSetThumbnail,
     setTitle: setTitle,

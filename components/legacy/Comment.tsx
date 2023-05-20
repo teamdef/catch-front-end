@@ -5,15 +5,17 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import React, { useEffect, useState } from 'react';
-import { CommentList } from 'components/common';
+import CommentList  from 'components/comment/CommentList';
 
 interface propsCommentType {
   hideInput?: boolean;
-  setIsOpen?: any;
+  setIsOpen?: ()=>void;
 }
 
 const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
-  const [text, , textClear, textHandler] = useInput<string>('');
+
+  const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
+
   const { quizSetId } = useSelector((state: RootState) => state.solve);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
   const [commentList, setCommentList] = useState<CommentType[]>([]);
@@ -45,16 +47,14 @@ const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
     setCommentList(_commentList);
   };
 
-  const saveComment = async (_comm: string) => {
-    if (!!_comm) {
+  const saveComment = async() => {
       try {
-        const res = await CommentSaveApi(solveUserName, text, quizSetId, isLoggedin ? userId : null);
+        const res = await CommentSaveApi(solveUserName, commentInput, quizSetId, isLoggedin && userId);
         parseCommentList(res.data);
-        textClear();
+        commentInputClear();
       } catch (err) {
         console.log(err);
       }
-    }
   };
 
   useEffect(() => {
@@ -66,26 +66,22 @@ const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
       <Container>
         {commentList && (
           <>
-            <Bg onClick={() => setIsOpen(false)} />
+            {/* <Bg onClick={() => setIsOpen(false)} /> */}
             <Wrapper>
-              {/* <Title>
-                {hideInput ? '베스트 한줄평' : '한줄평'}
-                <img src="/assets/img/chat.png" />
-              </Title> */}
-              <CloseButton onClick={() => setIsOpen(false)}>▾</CloseButton>
+              {/* <CloseButton onClick={() => setIsOpen(false)}>▾</CloseButton> */}
               <CommentList commentList={commentList} />
               {!hideInput && (
                 <InputBox>
                   <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
                   <input
                     type="text"
-                    value={text}
-                    onChange={textHandler}
+                    value={commentInput}
+                    onChange={commentInputHandler}
                     id="comment-input"
                     maxLength={50}
-                    placeholder="나도 한마디.."
+                    placeholder="한줄평 남기기..."
                   />
-                  <button className={text && 'on'} onClick={() => saveComment(text)}>
+                  <button  disabled={commentInput.length === 0 } onClick={saveComment}>
                     등록
                   </button>
                 </InputBox>
@@ -97,6 +93,11 @@ const Comment = ({ hideInput, setIsOpen }: propsCommentType) => {
     </ModalPortal>
   );
 };
+
+const CommentInputContainer = styled.div`
+  
+  
+`
 const Container = styled.div`
   position: fixed;
   display: flex;

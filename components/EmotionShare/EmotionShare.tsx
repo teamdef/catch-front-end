@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-import { Emotion, BottomUpShare } from 'components/EmotionShare';
+
+import Emotion from './Emotion';
+import BottomUpShare from './BottomUpShare';
 
 const EmotionShare = () => {
   return (

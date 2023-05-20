@@ -6,7 +6,7 @@ import * as Match from 'styles/quiz/solve/matchnote.style';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import { EmotionShare } from 'components/EmotionShare';
+import EmotionShare from 'components/emotionShare/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

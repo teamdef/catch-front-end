@@ -7,15 +7,16 @@ import * as S from 'styles/quiz/solve/result.style';
 import { MainButton } from 'styles/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { Comment, NotFound, PopularQuiz, RankingBoard } from 'components/common';
 import { QuizRankingListApi } from 'pages/api/quiz';
-import { EmotionShare } from 'components/EmotionShare';
 import { useRouter } from 'next/router';
+
+import { NotFound, PopularQuiz, RankingBoard } from 'components/common';
+import Comment from 'components/comment/Comment';
+import  EmotionShare  from 'components/emotionShare/EmotionShare';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { quizList, quizSetId } = useSelector((state: RootState) => state.solve);
-  const [isOpen, setIsOpen] = useState(false);
+  const { quizList } = useSelector((state: RootState) => state.solve);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
   const router = useRouter();
   const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
@@ -48,21 +49,7 @@ const Page: NextPageWithLayout = () => {
   }, [router.isReady]);
 
 
-  
-  const OpenComment = () => {
-    // 한줄평 모달 오픈 시 부모 컴포넌트 스크롤 막기
-    if (isOpen) {
-      document.body.style.cssText = `
-      overflow-y: hidden;
-      touch-action: none;
-      `;
-      window.scrollTo(0, 0);
-    } else {
-      document.body.style.cssText = `
-      overflow-y: auto;`;
-    }
-    setIsOpen((current) => !current);
-  };
+
   
   useEffect(() => {
     fetchRankingList();
@@ -90,7 +77,6 @@ const Page: NextPageWithLayout = () => {
             <MainButton onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}>
               정답확인
             </MainButton>
-            <MainButton onClick={OpenComment}>한줄평</MainButton>
           </S.ButtonWrapper>
 
           <EmotionShare />
@@ -101,7 +87,7 @@ const Page: NextPageWithLayout = () => {
         </S.ErrorWrapper>
       )}
 
-      {isOpen ? <Comment setIsOpen={setIsOpen} /> : ''}
+      <Comment/>
       <PopularQuiz />
     </S.Container>
   );
