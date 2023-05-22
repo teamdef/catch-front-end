@@ -38,6 +38,7 @@ const BottomUpShare = () => {
     </>
   );
 };
+
 const ShareButton = styled.button`
   margin: auto;
   margin-top: 20px;
@@ -53,6 +54,7 @@ const ShareButton = styled.button`
   color: #9e9e9e;
   border: 1px solid #9e9e9e;
   border-radius: 8px;
-  cursor: pointer;
+  cursor: pointer; 
+
 `;
 export default BottomUpShare;
