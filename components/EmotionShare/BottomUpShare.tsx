@@ -31,28 +31,31 @@ const BottomUpShare = () => {
           e.stopPropagation(); /* 이벤트 전파 방지 */
         }}
       >
-        <img src="/assets/img/share2.svg" alt="share icon" />
+        <img src="/assets/img/share3.svg" alt="share icon" />
         퀴즈 공유하기
       </ShareButton>
       {bottomUpisOpen && <BottomUpModal shareInfo={snsShareObj} bottomUpClose={bottomUpClose} />}
     </>
   );
 };
+
 const ShareButton = styled.button`
   margin: auto;
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 0;
+  /* padding: 14px 0; */
+  height:52px;
   min-width: 200px;
   width: 100%;
   font-size: 14px;
   gap: 12px;
-  background-color: transparent;
-  color: #9e9e9e;
-  border: 1px solid #9e9e9e;
-  border-radius: 8px;
+  background-color: #ff4d57;
+  color: #fff;
+  border:none;
+  box-shadow: 0 4px #c4363e;
+  border-radius: 16px;
   cursor: pointer;
 `;
 export default BottomUpShare;

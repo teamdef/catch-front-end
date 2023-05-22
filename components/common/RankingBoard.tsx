@@ -14,15 +14,10 @@ const RankingBoard = ({ rankingList }: PropsType) => {
             return (
               <li
                 key={idx}
-                id={user.ranking === 1 ? 'first' : user.ranking === 2 ? 'second' : user.ranking === 3 ? 'third' : ''}
               >
-                <i>
-                  {user.ranking === 1 ? '🥇' : user.ranking === 2 ? '🥈' : user.ranking === 3 ? '🥉' : user.ranking}
-                </i>
-                <div>
-                  <strong>{user.nickname}</strong>
-                </div>
-                <em>{user.score}/{user.quizCount}</em>
+                <div className='user-ranking'>{user.ranking} </div>
+                <div className='user-nickname'>{user.nickname}</div>
+                <div className='user-score'>{user.score}/{user.quizCount}</div>
               </li>
             );
           })
@@ -50,69 +45,36 @@ const Wrapper = styled.ul`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  color:#212121;
   li {
     position: relative;
     display: flex;
-    color: #595959;
     width: 100%;
     list-style: none;
     border-radius: 4px;
     font-size: 0.9rem;
-    border: solid 1px #f6f6f6;
-    border-radius: 4px;
-    height: 50px;
+    border: solid 1px #757575;
+    border-radius: 8px;
+    height: 42px;
     justify-content: space-between;
     align-items: center;
-    span {
-      position: relative;
-      width: 44px;
-      height: 44px;
-    }
-    strong {
-      font-weight: normal;
-    }
-    i,
-    em {
+    .user-ranking{
+      font-size:1.2rem;
+      font-weight:500;
+      width:120px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-style: normal;
-      width: 120px;
-      color: #757575;
+      
     }
-    i {
-      color: #757575;
-      font-size: 1rem;
-      width: 100px;
-    }
-    > div {
+    .user-nickname{
+      color:#424242;
       text-align: left;
       width:100%;
     }
-  }
-  #first {
-    border: none;
-    background-color: #fe747b;
-    strong {
-      color: white;
+    .user-score{
+      width: 100px;
     }
-    em {
-      color: #212121;
-    }
-  }
-  #second {
-    border: none;
-    background-color: #ffa5aa;
-    strong {
-      color: white;
-    }
-    em {
-      color: #212121;
-    }
-  }
-  #third {
-    border: none;
-    background-color: #fff6f7;
   }
 `;
 

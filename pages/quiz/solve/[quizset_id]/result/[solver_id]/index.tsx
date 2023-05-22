@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import * as S from 'styles/quiz/solve/result.style';
 import { MainButton } from 'styles/common';
+import { Header } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { QuizRankingListApi } from 'pages/api/quiz';
@@ -12,9 +13,11 @@ import { useRouter } from 'next/router';
 
 import { NotFound, PopularQuiz, RankingBoard } from 'components/common';
 import Comment from 'components/comment/Comment';
-import  EmotionShare  from 'components/emotionShare/EmotionShare';
+import EmotionShare from 'components/emotionShare/EmotionShare';
+import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
-const Page: NextPageWithLayout = () => {
+// const Page: NextPageWithLayout = () => {
+const Page = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList } = useSelector((state: RootState) => state.solve);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
@@ -48,56 +51,68 @@ const Page: NextPageWithLayout = () => {
     if (!!quizset_id) fetchRankingList();
   }, [router.isReady]);
 
-
-
-  
   useEffect(() => {
     fetchRankingList();
   }, []);
-  
+
   return (
-    <S.Container>
-      {solveUserScore !== undefined ? (
-        <S.QuizResultCard>
-          <S.ScoreContainer>
-            <p>
-              <span className="nickname">{solveUserName}</span> 님
-            </p>
-            <p>
-              <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞히셨어요!
-            </p>
-          </S.ScoreContainer>
-
-          <S.RankingBoardWrapper>
-            <h3>현재 랭킹 🏆</h3>
-            <RankingBoard rankingList={rankingList} />
-          </S.RankingBoardWrapper>
-
-          <S.ButtonWrapper>
-            <MainButton onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}>
-              정답확인
-            </MainButton>
-          </S.ButtonWrapper>
-
-          <EmotionShare />
-        </S.QuizResultCard>
-      ) : (
-        <S.ErrorWrapper>
-          <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />
-        </S.ErrorWrapper>
-      )}
-
-      <Comment/>
-      <PopularQuiz />
-    </S.Container>
+    <>
+      <Header />
+      <S.Container>
+        {solveUserScore !== undefined ? (
+          <S.QuizResultSection>
+            <S.ScoreContainer>
+              <div>
+                <p>
+                  <span className="nickname">{solveUserName}</span> 님
+                </p>
+                <p>
+                  <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞혔네요!
+                </p>
+              </div>
+              <span
+                className="go-match-note"
+                onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}
+              >
+                정답 확인 <MdOutlineKeyboardArrowRight size={20} />
+              </span>
+            </S.ScoreContainer>
+            <S.RankingContainer>
+              <RankingBoard rankingList={rankingList} />
+            </S.RankingContainer>
+            <S.EmotionShareContainer>
+              <EmotionShare />
+            </S.EmotionShareContainer>
+          </S.QuizResultSection>
+        ) : (
+          <S.ErrorWrapper>
+            <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />
+          </S.ErrorWrapper>
+        )}
+        <S.Divider />
+        <S.CommentSection>
+          <div className="margin-bottom-20">
+            <span className="section-title">한줄평</span>
+            <span className="section-count">10</span>
+          </div>
+          <Comment />
+        </S.CommentSection>
+        <S.Divider />
+        <S.PopularQuizSection>
+          <div className="section-title">추천퀴즈</div>
+          <div className="section-description margin-bottom-20">참여율이 높은 퀴즈들을 추천해드려요!</div>
+          <PopularQuiz />
+        </S.PopularQuizSection>
+      </S.Container>
+    </>
   );
 };
 
-Page.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <AppLayout>
-      <HeaderLayout>{page}</HeaderLayout>
-    </AppLayout>
-  );
-};
+// Page.getLayout = function getLayout(page: ReactElement) {
+//   return (
+//     <AppLayout>
+//       <HeaderLayout>{page}</HeaderLayout>
+//     </AppLayout>
+//   );
+// };
 export default Page;
