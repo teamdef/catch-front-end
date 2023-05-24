@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 import { NotFound, PopularQuiz, RankingBoard } from 'components/common';
 import Comment from 'components/comment/Comment';
-import { EmotionShare } from 'components/emotionShare';
+import { EmotionShare } from 'components/emotion';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 const Page = () => {
