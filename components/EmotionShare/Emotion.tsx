@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveEmotionCount } from 'store/emotion';
 import { EmotionClickApi, QuizSolverResultApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
-
+import emotion_ANGRY from 'public/assets/img/emotion_svg_2/emotion_ANGRY.svg'
 interface EmotionComponentType {
   name: string;
   value: EmotionType;
@@ -67,13 +67,19 @@ const Emotion = () => {
               }}
               active={currentEmotion === emotion.value}
             >
-              <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
+              {currentEmotion === emotion.value ? (
+                <img src={`/assets/img/emotion_svg/emotion_${emotion.value}_active.svg`} alt={`${emotion.name} 이모티콘 클릭`} />
+              ) : (
+                <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
+              )}
+          
               <p className="emotion-name">{emotion.name}</p>
               <span className="emotion-count">{quizSetEmotion[emotion.value]}</span>
             </EmotionButton>
           );
         })}
       </EmotionBox>
+      
     </>
   );
 };
@@ -97,6 +103,9 @@ const EmotionButton = styled.button<{ active: boolean }>`
   color: ${({ active }) => (active ? '#ff4d57' : '#212121')};
   font-weight: ${({ active }) => (active ? 'bold' : 'none')};
   cursor: pointer;
+  svg{
+    border:solid 1px red;
+  }
   .emotion-name {
     position: relative;
     display: block;
