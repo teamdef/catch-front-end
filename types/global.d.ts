@@ -58,14 +58,6 @@ interface SolveUserType {
   solveUserId: string; // 유저 아이디
 }
 
-// 한줄평
-interface CommentType {
-  nickname: string;
-  content: string;
-  createdAt: string;
-  user?: UserType;
-}
-
 // 랭킹 보드
 interface RankingType {
   nickname: string;

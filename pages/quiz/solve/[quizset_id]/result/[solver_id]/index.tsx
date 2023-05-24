@@ -1,10 +1,6 @@
-import { AppLayout, HeaderLayout } from 'components/layout';
-import type { NextPageWithLayout } from 'pages/_app';
-import type { ReactElement } from 'react';
 import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import * as S from 'styles/quiz/solve/result.style';
-import { MainButton } from 'styles/common';
 import { Header } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
@@ -16,7 +12,6 @@ import Comment from 'components/comment/Comment';
 import EmotionShare from 'components/emotionShare/EmotionShare';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
-// const Page: NextPageWithLayout = () => {
 const Page = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList } = useSelector((state: RootState) => state.solve);
@@ -108,11 +103,4 @@ const Page = () => {
   );
 };
 
-// Page.getLayout = function getLayout(page: ReactElement) {
-//   return (
-//     <AppLayout>
-//       <HeaderLayout>{page}</HeaderLayout>
-//     </AppLayout>
-//   );
-// };
 export default Page;
