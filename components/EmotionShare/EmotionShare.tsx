@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import Emotion from './Emotion';
-import BottomUpShare from './BottomUpShare';
+import Emotion from 'components/emotionShare/Emotion';
+import BottomUpShare from 'components/emotionShare/BottomUpShare';
 
 const EmotionShare = () => {
   return (
@@ -14,8 +14,6 @@ const EmotionShare = () => {
   );
 };
 
-export default EmotionShare;
-
 const Wrapper = styled.div`
   position: relative;
   display: flex;
@@ -25,3 +23,5 @@ const Wrapper = styled.div`
 const Content = styled.div`
   display: inline-block;
 `;
+
+export default EmotionShare;

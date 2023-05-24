@@ -5,6 +5,10 @@ export const Container = styled.div`
   min-height: 100vh;
   background-color: #fff;
   padding-top: 80px; 
+  display: block;
+  margin: 0 auto;
+  justify-content: center;
+  max-width: 480px; /* 기준 width가 480px */
 `;
 
 export const QuizResultCard = styled.div`
