@@ -17,5 +17,7 @@ const CommentList = (props: { commentList: CommentType[] }) => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 100%;
+`;
 export default CommentList;

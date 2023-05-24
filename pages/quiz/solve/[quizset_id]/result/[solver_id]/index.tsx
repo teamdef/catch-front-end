@@ -86,10 +86,6 @@ const Page = () => {
         )}
         <S.Divider />
         <S.CommentSection>
-          <div className="margin-bottom-20">
-            <span className="section-title">한줄평</span>
-            <span className="section-count">10</span>
-          </div>
           <Comment />
         </S.CommentSection>
         <S.Divider />

@@ -1,29 +1,22 @@
 // 바텀업 모달임
 
 import styled, { keyframes } from 'styled-components';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import ModalPortal from 'components/modal/PortalWrapper';
 
 import { CommentType } from 'types/comment';
-import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
 import { useInput } from 'hooks';
-
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import CommentList from 'components/comment/CommentList';
 
 interface CommentModalProps {
   onCloseModal: () => void;
+  saveComment: (commentInput: string) => void;
+  commentList: CommentType[];
 }
 
-const CommentModal = ({ onCloseModal }: CommentModalProps) => {
-  const [commentList, setCommentList] = useState<CommentType[]>([]);
+const CommentModal = ({ onCloseModal, saveComment, commentList }: CommentModalProps) => {
   const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
-
-  const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
-  const { quizSetId } = useSelector((state: RootState) => state.solve);
-  const { solveUserName } = useSelector((state: RootState) => state.user_solve);
 
   const [animation, setAnimation] = useState('openAnimation');
 
@@ -34,43 +27,6 @@ const CommentModal = ({ onCloseModal }: CommentModalProps) => {
     }, 390);
   };
 
-  const fetchCommentList = async () => {
-    try {
-      const res = await CommentListApi(quizSetId);
-      parseCommentList(res.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const parseCommentList = (data: any) => {
-    const _commentList = data.map((comment: any) => {
-      const _comment: CommentType = {
-        nickname: comment.nickname,
-        content: comment.content,
-        createdAt: comment.created_at,
-        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
-      };
-      return _comment;
-    });
-    setCommentList(_commentList);
-  };
-
-  const saveComment = async () => {
-    try {
-      const res = await CommentSaveApi(solveUserName, commentInput, quizSetId, isLoggedin && userId);
-      parseCommentList(res.data);
-      commentInputClear();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchCommentList();
-  }, [quizSetId]);
-
-  
   return (
     <ModalPortal wrapperId="react-portal-modal-container">
       <Background onClick={close}>
@@ -87,7 +43,13 @@ const CommentModal = ({ onCloseModal }: CommentModalProps) => {
                 maxLength={50}
                 placeholder="한줄평 남기기.."
               />
-              <button disabled={commentInput.length === 0} onClick={saveComment}>
+              <button
+                disabled={commentInput.length === 0}
+                onClick={() => {
+                  saveComment(commentInput);
+                  commentInputClear();
+                }}
+              >
                 등록
               </button>
             </CommentInputContainer>
@@ -100,6 +62,7 @@ const CommentModal = ({ onCloseModal }: CommentModalProps) => {
 
 const MarginTop = styled.div`
   margin-top: 40px;
+  width:100%;
 `;
 
 const CommentInputContainer = styled.div`

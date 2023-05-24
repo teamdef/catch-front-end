@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveEmotionCount } from 'store/emotion';
 import { EmotionClickApi, QuizSolverResultApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
-import emotion_ANGRY from 'public/assets/img/emotion_svg_2/emotion_ANGRY.svg'
+
 interface EmotionComponentType {
   name: string;
   value: EmotionType;
