@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { QuizMiniCard } from 'components/common';
 import styled from 'styled-components';
+
+import PopularQuizCard from './PopularQuizCard';
 import { RecentQuizListApi } from 'pages/api/quiz';
 
 const PopularQuizList = () => {
@@ -47,7 +48,7 @@ const PopularQuizList = () => {
         <Wrapper>
           <ListWrapper>
             {popularQuizList.slice(0,4).map((quiz) => {
-              return <QuizMiniCard key={quiz.id} recentQuiz={quiz} />;
+              return <PopularQuizCard key={quiz.id} recentQuiz={quiz} />;
             })}
           </ListWrapper>
         </Wrapper>

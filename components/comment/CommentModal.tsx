@@ -1,10 +1,9 @@
-// 바텀업 모달임 
+// 바텀업 모달임
 
-import styled, { keyframes } from 'styled-components'
-import {useState, useEffect} from 'react';
+import styled, { keyframes } from 'styled-components';
+import { useState, useEffect } from 'react';
 
 import ModalPortal from 'components/modal/PortalWrapper';
-
 
 import { CommentType } from 'types/comment';
 import { CommentSaveApi, CommentListApi } from 'pages/api/quiz';
@@ -14,15 +13,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import CommentList from 'components/comment/CommentList';
 
-interface CommentModalProps{
-  onCloseModal:()=> void;
+interface CommentModalProps {
+  onCloseModal: () => void;
 }
 
-const CommentModal = ({onCloseModal}:CommentModalProps)=>{
-
+const CommentModal = ({ onCloseModal }: CommentModalProps) => {
   const [commentList, setCommentList] = useState<CommentType[]>([]);
   const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
-
 
   const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
   const { quizSetId } = useSelector((state: RootState) => state.solve);
@@ -36,7 +33,6 @@ const CommentModal = ({onCloseModal}:CommentModalProps)=>{
       onCloseModal();
     }, 390);
   };
-
 
   const fetchCommentList = async () => {
     try {
@@ -60,7 +56,7 @@ const CommentModal = ({onCloseModal}:CommentModalProps)=>{
     setCommentList(_commentList);
   };
 
-  const saveComment = async() => {
+  const saveComment = async () => {
     try {
       const res = await CommentSaveApi(solveUserName, commentInput, quizSetId, isLoggedin && userId);
       parseCommentList(res.data);
@@ -68,35 +64,43 @@ const CommentModal = ({onCloseModal}:CommentModalProps)=>{
     } catch (err) {
       console.log(err);
     }
+  };
+
+  useEffect(() => {
+    fetchCommentList();
+  }, [quizSetId]);
+
+  
+  return (
+    <ModalPortal wrapperId="react-portal-modal-container">
+      <Background onClick={close}>
+        <ModalWrapper onClick={(e) => e.stopPropagation()} className={animation}>
+          <GrabBar />
+          <MarginTop>
+            {commentList && <CommentList commentList={commentList} />}
+            <CommentInputContainer>
+              <input
+                type="text"
+                value={commentInput}
+                onChange={commentInputHandler}
+                id="comment-input"
+                maxLength={50}
+                placeholder="한줄평 남기기.."
+              />
+              <button disabled={commentInput.length === 0} onClick={saveComment}>
+                등록
+              </button>
+            </CommentInputContainer>
+          </MarginTop>
+        </ModalWrapper>
+      </Background>
+    </ModalPortal>
+  );
 };
 
-useEffect(() => {
-  fetchCommentList();
-}, [quizSetId]);
-
-  return (
-
-  <ModalPortal wrapperId="react-portal-modal-container">
-  <Background onClick={close}>
-    <ModalWrapper onClick={(e) => e.stopPropagation()} className={animation}>
-      <GrabBar />
-      <MarginTop>
-        {commentList && <CommentList commentList={commentList} />}
-        <CommentInputContainer>
-          <input type="text" value={commentInput} onChange={commentInputHandler} id='comment-input' maxLength={50} placeholder='한줄평 남기기..'/>
-          <button  disabled={commentInput.length === 0 } onClick={saveComment}>등록</button>
-        </CommentInputContainer>
-      </MarginTop>
-    </ModalWrapper>
-  </Background>
-</ModalPortal>)
-}
-
 const MarginTop = styled.div`
-    margin-top:40px;
-
-
-`
+  margin-top: 40px;
+`;
 
 const CommentInputContainer = styled.div`
   position: absolute;
@@ -109,7 +113,7 @@ const CommentInputContainer = styled.div`
   align-items: center;
   background-color: #fff;
   z-index: 1;
-  border-top:solid 1px #eee;
+  border-top: solid 1px #eee;
 
   input {
     background-color: #f4f4f4;
@@ -139,13 +143,12 @@ const CommentInputContainer = styled.div`
     color: #fff;
     border-radius: 12px;
     background-color: #212121;
-    cursor:pointer;
-    &:disabled{
+    cursor: pointer;
+    &:disabled {
       background-color: #ccc;
     }
   }
 `;
-
 
 const Background = styled.div`
   z-index: 100;
