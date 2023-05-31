@@ -1,8 +1,13 @@
-import '../styles/globals.css';
+// import '../styles/globals.css';
 import { ReactElement, ReactNode, useEffect } from 'react';
+
 import { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
-import type { AppProps} from 'next/app';
+import { GlobalStyle } from 'styles/GlobalStyle';
+import "styles/font/RixInooAriDuriR.css"
+import "styles/font/NotoSansKR.css"
+
+import type { AppProps } from 'next/app';
 import type { NextPage } from 'next';
 import Script from 'next/script';
 import { wrapper, persistor } from 'store';
@@ -30,7 +35,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const dispatch = useDispatch();
   useEffect(() => {
     TagManager.initialize({ gtmId: gtag.GTM_ID });
-    
   }, []);
   // Next.js에서는 document.referrer을 사용할 수 없다
   // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.
@@ -77,6 +81,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       />
       <ThemeProvider theme={theme}>
+        <GlobalStyle/>
         <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
       </ThemeProvider>
     </>
