@@ -6,7 +6,7 @@ import * as Match from 'styles/quiz/solve/matchnote.style';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-import EmotionShare from 'components/common/EmotionShare';
+import { EmotionShare } from 'components/emotion';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -59,8 +59,9 @@ const Page: NextPageWithLayout = () => {
       <EmotionShare />
       <Match.MatchBottom>
         <button onClick={() => router.push(`/quiz/solve/${quizSetId}`)}>
-          <img src='/assets/img/replay_icon.svg'/>
-          다시 풀기</button>
+          <img src="/assets/img/replay_icon.svg" />
+          다시 풀기
+        </button>
         <button onClick={() => router.push(`/`)}>
           퀴즈 둘러보기
           <img src="/assets/img/match_arrow.svg" />

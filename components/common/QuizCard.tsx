@@ -10,6 +10,7 @@ interface QuizProps {
 }
 const QuizCard = ({ recentQuiz }: QuizProps) => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
+
   const snsShareObj: shareProps = {
     thumbnail: recentQuiz.thumbnail,
     setTitle: recentQuiz.setTitle,
@@ -17,9 +18,11 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
     profileImg: recentQuiz.user.profileImg,
     nickName: recentQuiz.user.nickname,
   };
+
   const bottomUpOpen = () => {
     setBottomUpIsOpen(true);
   };
+  
   const bottomUpClose = () => {
     setBottomUpIsOpen(false);
   };

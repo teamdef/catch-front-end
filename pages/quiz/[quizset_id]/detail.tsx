@@ -10,7 +10,7 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 /* 컴포넌트 */
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { Title, SNSShare, ThumbnailChange, CommentList, RankingBoard } from 'components/common';
+import { Title, SNSShare, ThumbnailChange, RankingBoard } from 'components/common';
 /* react-icons */
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -19,6 +19,7 @@ import * as S from 'styles/quiz/detail/detail.style'; /* 컴포넌트 */
 import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/quiz'; /* 통신 */
 import { useModal } from 'hooks';
 
+import { CommentType } from 'types/comment'
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -100,7 +101,7 @@ const Page: NextPageWithLayout = () => {
         nickname: ranking.nickname,
         score: ranking.score,
         ranking: ranking.ranking,
-        quizCount:ranking.quiz_count,
+        quizCount: ranking.quiz_count,
       };
       return _ranking;
     });
@@ -118,7 +119,7 @@ const Page: NextPageWithLayout = () => {
     }
   };
   useEffect(() => {
-    fetchDetailQuizData();
+    if (!!quizset_id) fetchDetailQuizData();
   }, [router.isReady]);
 
   return (
@@ -192,21 +193,6 @@ const Page: NextPageWithLayout = () => {
             <RankingBoard rankingList={quizRankingList} />
           </div>
         </S.SectionBlock>
-        {/* <S.SectionBlock>
-          {quizDetailData && (
-            <div id="section-title">
-              베스트 한줄평 ✍️
-              <Link href={`/quiz/${quizset_id}/comment`} passHref>
-                <a id="more">
-                  더보기 <MdOutlineArrowForwardIos />
-                </a>
-              </Link>
-            </div>
-          )}
-          <div id="section-contents">
-            <CommentList commentList={quizCommentList} />
-          </div>
-        </S.SectionBlock> */}
         {quizDetailData && (
           <S.DeleteButton onClick={openDeleteModal}>
             <AiOutlineDelete size={30} />

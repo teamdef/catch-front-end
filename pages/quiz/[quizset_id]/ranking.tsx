@@ -53,7 +53,7 @@ const Page: NextPageWithLayout = () => {
     setRankingList(_rankingList);
   };
   useEffect(() => {
-    fetchRankingList();
+    if (!!quizset_id) fetchRankingList();
   }, [router.isReady]);
 
   return (
