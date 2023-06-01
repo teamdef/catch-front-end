@@ -4,8 +4,7 @@ import { ReactElement, ReactNode, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import theme from 'styles/theme';
 import { GlobalStyle } from 'styles/GlobalStyle';
-import "styles/font/RixInooAriDuriR.css"
-import "styles/font/NotoSansKR.css"
+import 'styles/font/NanumSquare.css';
 
 import type { AppProps } from 'next/app';
 import type { NextPage } from 'next';

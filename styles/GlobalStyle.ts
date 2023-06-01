@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
     Helvetica Neue, sans-serif;
-    font-family: 'Noto Sans KR';
+    font-family: 'NanumSquare'; // 기본 베이스 폰트 변경
 
     scroll-behavior: smooth;
     scrollbar-width: none; /* Firefox */
