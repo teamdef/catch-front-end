@@ -1,38 +1,22 @@
-// 임시 헤더 제작
-
 import styled from 'styled-components';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { SideBar, Logo } from 'components/common';
-import Router from 'next/router';
+import { useScroll } from 'hooks';
+import Link from 'next/link';
 
-const useScroll = () => {
-  const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const handleScroll = () => setIsScrolled(window.scrollY > 120);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 등록
-    return () => {
-      window.removeEventListener('scroll', handleScroll); // 스크롤 이벤트 제거
-    };
-  }, []);
-  return isScrolled;
-};
 const Header = () => {
-  const { profileImg } = useSelector((state: RootState) => state.user);
+  const { profileImg, isLoggedin } = useSelector((state: RootState) => state.user);
+  
+  const isScrolled = useScroll();
 
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
-  const [resizeHeader, setResizeHeader] = useState<boolean>(false);
 
-  const isScrolled = useScroll();
-  const openSideBar = () => {
-    setSideBarOpen(true);
-  };
-  const closeSideBar = () => {
-    setSideBarOpen(false);
-  };
-  // Header 및 DropDownMyMenu 내 유저 프로필 이미지가 존재하지 않을 시 대체 이미지 출력
+  const openSideBar = () => setSideBarOpen(true);
+  const closeSideBar = () => setSideBarOpen(false);
+
+
   const userImgError = (e: any) => {
     e.target.src = '/assets/img/user_default.png';
   };
@@ -46,10 +30,15 @@ const Header = () => {
               <Logo />
               <div className="sub-logo">너와 나를 연결하는 퀴즈 플랫폼</div>
             </LogoWrapper>
-            <UserProfile onClick={openSideBar}>
-              {/* 이미지 없을 시 대체 이미지 보이기 */}
-              <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
-            </UserProfile>
+            {isLoggedin ? (
+              <UserProfile onClick={openSideBar}>
+                <img src={profileImg || '/assets/img/user_default.png'} onError={userImgError} />
+              </UserProfile>
+            ) : (
+              <Link href="/member/login" passHref>
+                <LoginButton>로그인</LoginButton>
+              </Link>
+            )}
           </HeaderContent>
         </HeaderContentWrapper>
       </Wrapper>
@@ -106,4 +95,14 @@ const UserProfile = styled.div`
   }
 `;
 
+const LoginButton = styled.a`
+  ${({ theme }) => theme.mixin.flex()} /* mixin 사용 */
+  color: #fff;
+  border-radius: 15px;
+  width: 64px;
+  height: 30px;
+  background-color: ${({ theme }) => theme.colors.blackColors.grey_900};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  font-size: ${({ theme }) => theme.fontSize.caption};
+`;
 export default Header;
