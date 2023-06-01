@@ -20,7 +20,7 @@ const Centering = styled.div`
 `;
 const FixedWidth = styled.div`
   min-height: 100vh;
-  padding: 0 3%;
+  padding: 0 1rem;
   background-color: #fff;
 `;
 export default AppLayout;

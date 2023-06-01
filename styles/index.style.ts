@@ -2,7 +2,6 @@ import styled, { keyframes, css } from 'styled-components';
 
 export const Background = styled.div`
   position: relative;
-  background-color: #fff6f7;
 `;
 
 export const RecentQuizList = styled.div`

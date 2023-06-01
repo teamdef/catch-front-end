@@ -12,15 +12,10 @@ export const GlobalStyle = createGlobalStyle`
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
 
-    /* 텍스트 드래그 방지 input 드래그는 작동함 . */
-    /* -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none; */
 
     font-size: 14px; /* 1rem 기준을 14px로 고정 */
-
-    line-height: 1.6; /* 줄간격 160% */
+    line-height: 1.5; /* 줄간격 150% */
+    letter-spacing:-2%; /* 자간 조정 */
   }   
   input [type='text']{
   -webkit-appearance: none; /* Safari input 그림자 제거 */

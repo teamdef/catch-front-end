@@ -1,7 +1,7 @@
 import { ReactElement, useState, useEffect } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { RecentQuiz,MyQuizCard } from 'components/common';
+import { RecentQuiz, MyQuizCard } from 'components/common';
 import { useRouter } from 'next/router';
 import { RootState } from 'store';
 import { useSelector } from 'react-redux';
@@ -15,7 +15,8 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-
+import PopularQuizSection from 'components/mainPage/PopularQuizSection';
+import NoisyQuizSection from 'components/mainPage/NoisyQuizSection';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -59,7 +60,9 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       <S.Background>
-        <S.MyQuizList>
+        <PopularQuizSection />
+        <NoisyQuizSection/>
+        {/* <S.MyQuizList>
           <div id="title">
             <div>내가 만든 퀴즈들 🐻‍❄️</div>
           </div>
@@ -95,16 +98,16 @@ const Page: NextPageWithLayout = () => {
               </S.CreateCard>
             </SwiperSlide>
           </Swiper>
-        </S.MyQuizList>
+        </S.MyQuizList> */}
 
-        <S.RecentQuizList>
+        {/* <S.RecentQuizList>
           <div id="section-title">
             <div>최근에 생성된 퀴즈에요! 🐣</div>
           </div>
           <div id="section-contents">
             <RecentQuiz />
           </div>
-        </S.RecentQuizList>
+        </S.RecentQuizList> */}
       </S.Background>
     </>
   );

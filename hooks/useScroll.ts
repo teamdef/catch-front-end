@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const useScroll = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const handleScroll = () => setIsScrolled(window.scrollY > 120);
+  const handleScroll = () => setIsScrolled(window.scrollY > 0);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll); // 스크롤 이벤트 등록
