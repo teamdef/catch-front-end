@@ -12,11 +12,11 @@ import { saveSolveAnswersAction } from 'store/quiz_solve';
 import { saveSolveUserScoreAction } from 'store/user_solve';
 import { RootState } from 'store';
 import { useEffect } from 'react';
+import { useCallback } from 'react';
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
-  const { quizList } = useSelector((state: RootState) => state.solve);
-  const [userAnswers, setUserAnswers] = useState<number[]>(Array(quizList.length).fill(5));
+  const { quizList, answerList } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<Boolean>(false);
   const [isDisable, setIsDisable] = useState<boolean>(false);
   const [openModal, , RenderModal] = useModal({
@@ -25,31 +25,28 @@ const Page: NextPageWithLayout = () => {
     contents: <NickNameModal setLoading={setLoading} />,
   });
 
-  const onClickResult = () => {
-    let score = 0;
-    quizList.map((quiz: SolveQuizType, quiz_num: number) => {
-      if (quiz.correctIndex == userAnswers[quiz_num]) {
-        score++;
-      }
-    });
-    dispatch(saveSolveAnswersAction({ answerList: userAnswers }));
+  const onClickResult = useCallback(() => {
+    let score = quizList.filter(
+      (quiz: SolveQuizType, quiz_num: number) => quiz.correctIndex == answerList[quiz_num],
+    ).length;
+
     dispatch(
       saveSolveUserScoreAction({
         solveUserScore: score,
       }),
     );
     openModal();
-  };
-
+  }, [answerList]);
+  
   useEffect(() => {
-    if (!userAnswers.includes(5)) setIsDisable(true);
-  }, [userAnswers]);
+    if (!answerList.includes(5)) setIsDisable(true);
+  }, [answerList]);
 
   return (
     <S.Container>
       <Logo />
       <S.QuizSolveContent>
-        <QuizList userAnswers={userAnswers} setUserAnswers={setUserAnswers} />
+        <QuizList />
       </S.QuizSolveContent>
       <S.QuizSolveBottom>
         <MainButton className={isDisable ? 'on' : ''} onClick={onClickResult}>

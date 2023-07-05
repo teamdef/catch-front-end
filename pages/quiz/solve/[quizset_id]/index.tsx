@@ -9,7 +9,7 @@ import { MainButton } from 'styles/common';
 import { Loading, Logo, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
-import { saveSolveProblemSetAction, resetSolveAction } from 'store/quiz_solve';
+import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
 import { resetUserDataAction } from 'store/user_solve';
 
 const Page: NextPageWithLayout = () => {
@@ -58,6 +58,7 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     dispatch(resetSolveAction());
     dispatch(resetUserDataAction());
+    dispatch(saveSolveAnswersAction({ answerList: Array(quizList.length).fill(5) }));
   }, []);
 
   useEffect(() => {

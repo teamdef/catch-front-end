@@ -2,20 +2,18 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
 import * as S from 'styles/quiz/solve/main.style';
-interface QuizListPropsType {
-  userAnswers: number[];
-  setUserAnswers: Dispatch<SetStateAction<number[]>>;
-}
+import { saveSolveAnswersAction } from 'store/quiz_solve';
+interface QuizListPropsType {}
 
-const QuizList = ({ userAnswers, setUserAnswers }: QuizListPropsType) => {
-  const { quizList } = useSelector((state: RootState) => state.solve);
-  // let remainingQuizCount: number = quizList.length - answers.filter((element) => element !== undefined).length;
-  const copy_answer = [...userAnswers];
+const QuizList = () => {
+  const dispatch = useDispatch();
+  const { quizList, answerList } = useSelector((state: RootState) => state.solve);
+  const copy_answer = [...answerList];
   const onChange = (quiz_num: number, choice_num: number) => {
     copy_answer[quiz_num] = choice_num;
-    setUserAnswers(copy_answer);
+    dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
-  useEffect(() => {});
+  console.log(answerList);
   return quizList.map((item: SolveQuizType, quiz_num: number) => (
     <S.QuizSolveCard key={quiz_num}>
       <S.QuizCount>
@@ -29,6 +27,7 @@ const QuizList = ({ userAnswers, setUserAnswers }: QuizListPropsType) => {
           <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
         </S.QuizImageWrapper>
       )}
+
       {item.choiceType === 'img' ? (
         <S.ChoiceWrapper id="choice-img-wrapper">
           {item.choices.map((choice: string, choice_num: number) => (
