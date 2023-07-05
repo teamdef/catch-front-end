@@ -1,6 +1,6 @@
-import type { NextPageWithLayout } from 'pages/_app';
+import { useEffect, useState, useCallback } from 'react';
 import type { ReactElement } from 'react';
-import { useState } from 'react';
+import type { NextPageWithLayout } from 'pages/_app';
 import { useModal } from 'hooks';
 import * as S from 'styles/quiz/solve/main.style';
 import { MainButton } from 'styles/common';
@@ -8,11 +8,8 @@ import { AppLayout } from 'components/layout';
 import { Loading, Logo, QuizList } from 'components/common';
 import { NickNameModal } from 'components/modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSolveAnswersAction } from 'store/quiz_solve';
 import { saveSolveUserScoreAction } from 'store/user_solve';
 import { RootState } from 'store';
-import { useEffect } from 'react';
-import { useCallback } from 'react';
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -29,7 +26,6 @@ const Page: NextPageWithLayout = () => {
     let score = quizList.filter(
       (quiz: SolveQuizType, quiz_num: number) => quiz.correctIndex == answerList[quiz_num],
     ).length;
-
     dispatch(
       saveSolveUserScoreAction({
         solveUserScore: score,
@@ -37,7 +33,7 @@ const Page: NextPageWithLayout = () => {
     );
     openModal();
   }, [answerList]);
-  
+
   useEffect(() => {
     if (!answerList.includes(5)) setIsDisable(true);
   }, [answerList]);

@@ -26,6 +26,7 @@ const Page: NextPageWithLayout = () => {
     try {
       const res = await QuizDataFetchApi(quizset_id as string);
       parseSolveQuizSet(res.data);
+      dispatch(saveSolveAnswersAction({ answerList: Array(res.data.quiz.length).fill(5) }));
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -58,7 +59,6 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     dispatch(resetSolveAction());
     dispatch(resetUserDataAction());
-    dispatch(saveSolveAnswersAction({ answerList: Array(quizList.length).fill(5) }));
   }, []);
 
   useEffect(() => {
