@@ -16,25 +16,26 @@ import { useEffect } from 'react';
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const { quizList } = useSelector((state: RootState) => state.solve);
-  const [userAnswers, setUserAnswers] = useState<number[]>(Array(quizList.length));
-
-  console.log(userAnswers);
+  const [userAnswers, setUserAnswers] = useState<number[]>(Array(quizList.length).fill(5));
   const [loading, setLoading] = useState<Boolean>(false);
+  const [isDisable, setIsDisable] = useState<boolean>(false);
   const [openModal, , RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
     contents: <NickNameModal setLoading={setLoading} />,
   });
-
   const onClickResult = () => {
-    // dispatch(saveSolveAnswersAction({ answerList: userAnswers }));
-    // dispatch(
-    //   saveSolveUserScoreAction({
-    //     solveUserScore: userAnswers.filter((element: any) => 'catch' === element).length,
-    //   }),
-    // );
+    dispatch(saveSolveAnswersAction({ answerList: userAnswers }));
+    dispatch(
+      saveSolveUserScoreAction({
+        solveUserScore: userAnswers.filter((element: any) => 'catch' === element).length,
+      }),
+    );
     openModal();
   };
+  useEffect(() => {
+    if (!userAnswers.includes(5)) setIsDisable(true);
+  }, [userAnswers]);
   return (
     <S.Container>
       <Logo />
@@ -42,7 +43,9 @@ const Page: NextPageWithLayout = () => {
         <QuizList userAnswers={userAnswers} setUserAnswers={setUserAnswers} />
       </S.QuizSolveContent>
       <S.QuizSolveBottom>
-        <MainButton onClick={onClickResult}>결과 확인하기</MainButton>
+        <MainButton className={isDisable ? 'on' : ''} onClick={onClickResult}>
+          결과 확인하기
+        </MainButton>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
       </S.QuizSolveBottom>
