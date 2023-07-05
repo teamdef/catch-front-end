@@ -24,18 +24,27 @@ const Page: NextPageWithLayout = () => {
     backgroundClickable: false,
     contents: <NickNameModal setLoading={setLoading} />,
   });
+
   const onClickResult = () => {
+    let score = 0;
+    quizList.map((quiz: SolveQuizType, quiz_num: number) => {
+      if (quiz.correctIndex == userAnswers[quiz_num]) {
+        score++;
+      }
+    });
     dispatch(saveSolveAnswersAction({ answerList: userAnswers }));
     dispatch(
       saveSolveUserScoreAction({
-        solveUserScore: userAnswers.filter((element: any) => 'catch' === element).length,
+        solveUserScore: score,
       }),
     );
     openModal();
   };
+
   useEffect(() => {
     if (!userAnswers.includes(5)) setIsDisable(true);
   }, [userAnswers]);
+
   return (
     <S.Container>
       <Logo />
