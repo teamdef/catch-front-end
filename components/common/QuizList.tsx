@@ -3,7 +3,6 @@ import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
 import * as S from 'styles/quiz/solve/main.style';
 import { saveSolveAnswersAction } from 'store/quiz_solve';
-interface QuizListPropsType {}
 
 const QuizList = () => {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ const QuizList = () => {
     copy_answer[quiz_num] = choice_num;
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
-  console.log(answerList);
+
   return quizList.map((item: SolveQuizType, quiz_num: number) => (
     <S.QuizSolveCard key={quiz_num}>
       <S.QuizCount>
@@ -37,6 +36,7 @@ const QuizList = () => {
                 id={`choice_img_${quiz_num}_${choice_num}`}
                 name={`choice_img_${quiz_num}`}
                 value={choice}
+                checked={answerList[quiz_num] == choice_num}
                 onChange={() => {
                   onChange(quiz_num, choice_num);
                 }}
@@ -56,6 +56,7 @@ const QuizList = () => {
                 id={`choice_txt_${quiz_num}_${choice_num}`}
                 name={`choice_txt_${quiz_num}`}
                 value={choice}
+                checked={answerList[quiz_num] == choice_num}
                 onChange={() => {
                   onChange(quiz_num, choice_num);
                 }}
