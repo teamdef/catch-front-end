@@ -64,15 +64,15 @@ const QuizItem = ({ item, quiz_num }: QuizItemPropsType) => {
         {quiz_num + 1} / {answerList.length}
       </S.QuizCount>
       <S.QuizTitle>
-        {quiz_num + 1}. {item.quizTitle}
+        {quiz_num + 1}. {item.quiz_title}
       </S.QuizTitle>
-      {item.quizThumbnail && (
+      {item.quiz_thumbnail && (
         <S.QuizImageWrapper>
-          <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
+          <img alt="퀴즈 설명 이미지" src={item.quiz_thumbnail} />
         </S.QuizImageWrapper>
       )}
-      {item.choiceType == 'img' && choice_img}
-      {item.choiceType == 'text' && choice_text}
+      {item.choice_type == 'img' && choice_img}
+      {item.choice_type == 'text' && choice_text}
     </S.QuizSolveCard>
   );
 };

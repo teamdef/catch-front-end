@@ -33,21 +33,20 @@ const Page: NextPageWithLayout = () => {
     }
   };
 
-  const parseSolveQuizSet = (data: any) => {
+  const parseSolveQuizSet = (data: QuizDataType) => {
     const { id, set_title, thumbnail, description, quiz, user } = data;
     const solveQuizSet: SolveQuizSetType = {
       quizSetId: id,
       setTitle: set_title,
       quizSetThumbnail: thumbnail,
       description,
-      quizList: quiz.map((q: any) => {
+      quizList: quiz.map((q: SolveQuizType) => {
         const _q: SolveQuizType = {
-          quizId: q.id,
-          quizThumbnail: q.quiz_thumbnail ?? null,
-          quizTitle: q.quiz_title,
-          choiceType: q.choice_type,
+          quiz_thumbnail: q.quiz_thumbnail ?? null,
+          quiz_title: q.quiz_title,
+          choice_type: q.choice_type,
           choices: q.choices,
-          correctIndex: q.correct_idx,
+          correct_idx: q.correct_idx,
         };
         return _q;
       }),

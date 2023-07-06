@@ -24,7 +24,7 @@ const Page: NextPageWithLayout = () => {
 
   const onClickResult = useCallback(() => {
     let score = quizList.filter(
-      (quiz: SolveQuizType, quiz_num: number) => quiz.correctIndex == answerList[quiz_num],
+      (quiz: SolveQuizType, quiz_num: number) => quiz.correct_idx == answerList[quiz_num],
     ).length;
     dispatch(
       saveSolveUserScoreAction({
