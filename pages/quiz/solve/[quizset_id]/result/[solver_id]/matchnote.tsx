@@ -29,7 +29,7 @@ const Page: NextPageWithLayout = () => {
             )}
             {item.choice_type === 'img' ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
-                {item.choices.map((choice: any, j: number) => (
+                {item.choices.map((choice: string, j: number) => (
                   <Match.MatchChoiceItem
                     key={j}
                     className={`choice-img-item ${item.correct_idx === j ? 'correct' : ''}`}

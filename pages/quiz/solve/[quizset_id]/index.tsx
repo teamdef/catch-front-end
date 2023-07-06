@@ -33,7 +33,7 @@ const Page: NextPageWithLayout = () => {
     }
   };
 
-  const parseSolveQuizSet = (data: QuizDataType) => {
+  const parseSolveQuizSet = (data: QuizSetDtoType) => {
     const { id, set_title, thumbnail, description, quiz, user } = data;
     const solveQuizSet: SolveQuizSetType = {
       quizSetId: id,

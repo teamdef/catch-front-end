@@ -1,5 +1,4 @@
 import CommentItem from 'components/comment/CommentItem';
-import { CommentType } from 'types/comment';
 import { NotFound } from 'components/common';
 import styled from 'styled-components';
 

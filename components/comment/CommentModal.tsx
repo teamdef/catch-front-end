@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import ModalPortal from 'components/modal/PortalWrapper';
 
-import { CommentType } from 'types/comment';
 import { useInput } from 'hooks';
 import CommentList from 'components/comment/CommentList';
 

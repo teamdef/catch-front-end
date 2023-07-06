@@ -33,17 +33,11 @@ interface SolveQuizSetType {
   quizList: SolveQuizType[];
   answerList?: number[];
 }
-interface EmotionType {
-  FUNNY: number;
-  ANGRY: number;
-  EASY: number;
-  HARD: number;
-}
-interface QuizDataType {
+interface QuizSetDtoType {
   average: number;
   created_at: string;
   description: string;
-  emotion: EmotionType;
+  emotion: QuizSetEmotionType;
   id: string;
   is_secret: boolean;
   quiz: SolveQuizType[];
@@ -69,7 +63,15 @@ interface SolveUserType {
   solveUserScore: undefined | number;
   solveUserId: string;
 }
-
+interface RankingDtoType {
+  created_at:string;
+id:string;
+nickname:string;
+quiz_count:number;
+quizset_id:string;
+ranking:number;
+score:number;
+}
 interface RankingType {
   nickname: string;
   score: number;
@@ -108,7 +110,7 @@ interface DetailQuizType {
 /* 사용자 정보 타입 */
 interface UserType {
   nickname: string;
-  profileImg: string /* 있을 수 도 있고 없을 수 도 있고 ... */;
+  profile_img: string /* 있을 수 도 있고 없을 수 도 있고 ... */;
 }
 
 /* 감정표현 타입 */
@@ -128,4 +130,12 @@ interface NoticeTypes {
 interface Window {
   Kakao: any; // 카카오
   adsbygoogle: any; // 구글 애드센스
+}
+
+// 댓글 
+interface CommentType {
+  nickname: string;
+  content: string;
+  created_at: string;
+  user?: UserType;
 }
