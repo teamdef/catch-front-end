@@ -1,15 +1,13 @@
+// 인기 급상승 퀴즈 섹션 (가제)
+
 import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
 import QuizCard from './QuizCard';
 const PopularQuizSection = () => {
   return (
     <Wrapper>
-      <SectionHeader title={'인기 급상승 퀴즈'} subtitle={'많이 조회된 퀴즈를 확인해보세요!'} moreViewUri={'/'} />
+      <SectionHeader title={'인기 급상승 퀴즈'} subtitle={'많이 조회된 퀴즈를 확인해보세요!'} moreViewUri={'/'} simply={false} />
       <SectionContent>
-        <QuizCard />
-        <QuizCard />
-        <QuizCard />
-        <QuizCard />
       </SectionContent>
     </Wrapper>
   );

@@ -1,15 +1,21 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 
-const Logo = () => {
+interface Props {
+  width?: string;
+}
+const Logo = ({ width }: Props) => {
   return (
     <Link href="/" passHref>
-      <LogoImg  src={'/assets/img/rebranding/catchcatch_logo_rebranding.png'} />
+      <a>
+        <LogoImg width={width} src={'/assets/img/rebranding/catchcatch_logo_rebranding.png'} />
+      </a>
     </Link>
   );
 };
 
-const LogoImg = styled.img`
-  width: 127px;
+const LogoImg = styled.img<Props>`
+  width: ${({ width }) => width ?? '127px'};
+  display: block;
 `;
 export default Logo;

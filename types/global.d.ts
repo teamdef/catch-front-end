@@ -97,8 +97,8 @@ interface DetailQuizType {
 
 /* 사용자 정보 타입 */
 interface UserType{
-  nickname: string;
-  profileImg: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
+  nickname?: string;
+  profileImg?: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
 }
 
 /* 감정표현 타입 */

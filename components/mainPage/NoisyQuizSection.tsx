@@ -1,3 +1,5 @@
+// 시끌시끌 퀴즈 섹션
+
 import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
 import QuizCard from './QuizCard';
@@ -9,12 +11,10 @@ const NoisyQuizSection = () => {
         title={'시끌시끌 퀴즈'}
         subtitle={'퀴즈에 달린 한줄평이 많은 퀴즈를 추천해드려요!'}
         moreViewUri={'/'}
+        simply={false}
+
       />
       <SectionContent>
-        <QuizCard />
-        <QuizCard />
-        <QuizCard />
-        <QuizCard />
       </SectionContent>
     </Wrapper>
   );

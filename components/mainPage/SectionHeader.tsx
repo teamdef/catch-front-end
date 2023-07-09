@@ -8,12 +8,13 @@ import Link from 'next/link';
 
 interface props {
   title: string;
+  simply: boolean;
   subtitle?: string;
   moreViewUri?: string;
 }
-const SectionHeader = ({ title, subtitle, moreViewUri }: props) => {
+const SectionHeader = ({ title, subtitle, moreViewUri, simply }: props) => {
   return (
-    <Wrapper>
+    <Wrapper simply={simply}>
       <div className="row">
         <div className="title">{title}</div>
         {moreViewUri && (
@@ -24,21 +25,21 @@ const SectionHeader = ({ title, subtitle, moreViewUri }: props) => {
           </Link>
         )}
       </div>
-      <div className="subtitle">{subtitle}</div>
+      {!simply && <div className="subtitle">{subtitle}</div>}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ simply: boolean }>`
   width: 100%;
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     .title {
-      color: ${({ theme }) => theme.colors.secondary_500};
-      font-weight: ${({ theme }) => theme.fontWeight.extra_bold};
-      font-size: ${({ theme }) => theme.fontSize.subtitle_2};
+      color: ${({ theme, simply }) => (simply ? theme.colors.blackColors.grey_800 : theme.colors.secondary_500)};
+      font-weight: ${({ theme, simply }) => (simply ? theme.fontWeight.bold : theme.fontWeight.extra_bold)};
+      font-size: ${({ theme, simply }) => (simply ? '15px' : theme.fontSize.subtitle_2)};
     }
     a {
       ${({ theme }) => theme.mixin.flex()}/* mixin 사용 */

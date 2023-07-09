@@ -17,3 +17,5 @@ export { default as SkeletonQuizCard } from './SkeletonQuizCard';
 export { default as MatchNote } from '../../pages/quiz/solve/[quizset_id]/result/[solver_id]/matchnote';
 export { default as RankingBoard } from './RankingBoard';
 
+export { default as SideNavigationBar } from './SideNavigationBar';
+export { default as Icon } from './Icon';

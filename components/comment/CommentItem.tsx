@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { CommentType } from 'types/comment';
-import { timeForToday } from 'utils/date';
+import { timeForToday } from 'lib/date';
 
 const CommentItem = (props: { comment: CommentType }) => {
   return (

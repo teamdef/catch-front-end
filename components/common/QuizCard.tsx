@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
 import { shareProps } from 'components/common/SNSShare';
-import { timeForToday } from 'utils/date';
+import { timeForToday } from 'lib/date';
 interface QuizProps {
   recentQuiz: RecentQuizType;
 }
@@ -22,7 +22,7 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
   const bottomUpOpen = () => {
     setBottomUpIsOpen(true);
   };
-  
+
   const bottomUpClose = () => {
     setBottomUpIsOpen(false);
   };

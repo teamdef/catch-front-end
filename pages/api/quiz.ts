@@ -112,6 +112,7 @@ export const QuizThumbnailChangeApi = async (quizset_id: string, imgBlob: File):
   });
 };
 
+
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
 export const QuizDataFetchApi = async (quizset_id: string): Promise<AxiosResponse> => {
   return notAuthAxios.get(`/loadprobset/${quizset_id}`);

@@ -1,13 +1,20 @@
 import styled from 'styled-components';
 
-const QuizCard = () => {
+import { QuizSetCardType } from 'types/quiz';
+import { timeForToday } from 'lib/date';
+interface PropsType{
+  quizSet:QuizSetCardType
+}
+
+
+const QuizCard = ({ quizSet }: PropsType) => {
   return (
     <Wrapper>
       <ImgWrapper>
-        <img src="https://ynoblesse.com/wp-content/uploads/2021/06/199834299_526372721727354_5022350755607651344_n.jpg" />
+        <img src={quizSet.quizSetThumbnail} />
       </ImgWrapper>
       <ContentWrapper>
-        <div className="quiz-title">판다 덕후의 판다 퀴즈</div>
+        <div className="quiz-title">{quizSet.quizSetTitle}</div>
         <div className="row">
           <Profile>
             <div className="profile-img">
@@ -17,11 +24,11 @@ const QuizCard = () => {
                 }
               />
             </div>
-            <div className="nickname">닉네임</div>
+            <div className="nickname">{quizSet.quizSetMaker.nickname || '탈퇴한 사용자'}</div>
           </Profile>
           <QuizInfo>
-            <div>5일 전</div>
-            <div>참여 238</div>
+            <div>{timeForToday(quizSet.createdAt)}</div>
+            <div>참여 {quizSet.solverCnt}</div>
           </QuizInfo>
         </div>
       </ContentWrapper>
@@ -31,7 +38,7 @@ const QuizCard = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100px;
+  height: 120px;
   border-radius: 4px;
   border: solid 0.75px #b4a0ff;
   display: flex;
@@ -40,7 +47,7 @@ const Wrapper = styled.div`
 
 const ImgWrapper = styled.div`
   width: 120px;
-  height: inherit;
+  height: 100%;
   img {
     width: 100%;
     height: 100%;
