@@ -5,7 +5,7 @@ const initialState: SolveQuizSetType = {
   quizSetId: '',
   setTitle: '',
   quizList: [],
-  quizMaker: { nickname: '', profileImg: '' },
+  quizMaker: { nickname: '', profile_img: '' },
   quizSetThumbnail: '',
   answerList: [],
   description:'',

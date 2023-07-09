@@ -1,7 +1,7 @@
 import CommentItem from 'components/comment/CommentItem';
-import { CommentType } from 'types/comment';
 import { NotFound } from 'components/common';
 import styled from 'styled-components';
+import { CommentType } from 'types/comment';
 
 const CommentList = (props: { commentList: CommentType[] }) => {
   return (

@@ -18,8 +18,8 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import * as S from 'styles/quiz/detail/detail.style'; /* 컴포넌트 */
 import { MyQuizDetailApi, QuizDeleteApi } from 'pages/api/quiz'; /* 통신 */
 import { useModal } from 'hooks';
+import { CommentType } from 'types/comment';
 
-import { CommentType } from 'types/comment'
 export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
@@ -83,20 +83,20 @@ const Page: NextPageWithLayout = () => {
   };
 
   const parseBestCommentList = (data: any) => {
-    const _bestCommentList = data.map((comment: any) => {
+    const _bestCommentList = data.map((comment: CommentType) => {
       const _comment: CommentType = {
         nickname: comment.nickname,
         content: comment.content,
-        createdAt: comment.created_at,
-        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
+        created_at: comment.created_at,
+        user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
       };
       return _comment;
     });
     setQuizCommentList(_bestCommentList);
   };
 
-  const parseBestRankingList = (data: any) => {
-    const _bestRankingList = data.map((ranking: any) => {
+  const parseBestRankingList = (data: RankingDtoType[]) => {
+    const _bestRankingList = data.map((ranking: RankingDtoType) => {
       const _ranking: RankingType = {
         nickname: ranking.nickname,
         score: ranking.score,

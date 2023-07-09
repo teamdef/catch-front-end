@@ -11,7 +11,7 @@ interface ChoiceTextType {
 // QuizType - 퀴즈 정보
 interface QuizType {
   quizTitle: string; // 퀴즈 제목
-  quizThumbnail?:ChoiceImageType; // 퀴즈 설명 이미지
+  quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
   correctIndex: number; // 정답 번호
   choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
   choices: (ChoiceTextType | ChoiceImageType)[]; // 객관식 답안 배열
@@ -23,49 +23,61 @@ interface QuizSetType {
   quizList: QuizType[]; // 퀴즈 배열
 }
 
-
-
-
 // ---------- 퀴즈 풀이 관련 타입 ----------------------- //
-
-// SolveQuizSetType - 풀이용 퀴즈 세트 정보
 interface SolveQuizSetType {
-  quizSetId: string; // 퀴즈 아이디
-  setTitle: string; // 퀴즈세트 제목
-  quizMaker: UserType; // 퀴즈 세트 제작자 정보
-  quizSetThumbnail: string; // 퀴즈 세트 썸네일
-  description: string; // 퀴즈 세트 설명
-  quizList: SolveQuizType[]; // 퀴즈 배열
-  answerList?: number[]; // 유저가 고른 항목(답안지) 배열
+  quizSetId: string;
+  setTitle: string;
+  quizMaker: UserType;
+  quizSetThumbnail: string;
+  description: string;
+  quizList: SolveQuizType[];
+  answerList?: number[];
+}
+interface QuizSetDtoType {
+  average: number;
+  created_at: string;
+  description: string;
+  emotion: QuizSetEmotionType;
+  id: string;
+  is_secret: boolean;
+  quiz: SolveQuizType[];
+  set_title: string;
+  solver_cnt: number;
+  sum_scores: number;
+  thumbnail: string;
+  updated_at: string;
+  user: UserType;
 }
 
-
-// SolveProblemType - 풀이용 퀴즈 문항 정보
 interface SolveQuizType {
-  quizId: string; // 퀴즈별 아이디
-  quizThumbnail: string | null; // 퀴즈 설명 이미지
-  quizTitle: string; // 퀴즈 제목
-  choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
-  choices: string[]; // 객관식 항목 배열
-  correctIndex: number; // 정답 아이디
+  quiz_thumbnail: string | null;
+  quiz_title: string;
+  choice_type: 'img' | 'text';
+  choices: string[];
+  correct_idx: number;
 }
-
 
 // 풀이자 정보
 interface SolveUserType {
-  solveUserName: string; // 유저 닉네임
-  solveUserScore: undefined|number; // 유저 스코어
-  solveUserId: string; // 유저 아이디
+  solveUserName: string;
+  solveUserScore: undefined | number;
+  solveUserId: string;
 }
-
-// 랭킹 보드
+interface RankingDtoType {
+  created_at:string;
+id:string;
+nickname:string;
+quiz_count:number;
+quizset_id:string;
+ranking:number;
+score:number;
+}
 interface RankingType {
   nickname: string;
   score: number;
   ranking: number;
   quizCount: number;
 }
-
 
 /* 퀴즈 카드 타입 */
 interface RecentQuizType {
@@ -98,7 +110,7 @@ interface DetailQuizType {
 /* 사용자 정보 타입 */
 interface UserType{
   nickname?: string;
-  profileImg?: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
+  profile_img?: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
 }
 
 /* 감정표현 타입 */
@@ -119,4 +131,3 @@ interface Window {
   Kakao: any; // 카카오
   adsbygoogle: any; // 구글 애드센스
 }
-

@@ -17,7 +17,7 @@ const Page = () => {
   const { quizList } = useSelector((state: RootState) => state.solve);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
   const router = useRouter();
-  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
+  const { quizset_id, solver_id } = router.query;
 
   const fetchRankingList = async () => {
     try {
@@ -28,8 +28,9 @@ const Page = () => {
     }
   };
 
-  const parseRankingList = (data: any) => {
-    const _rankingList = data.map((ranking: any) => {
+  const parseRankingList = (data: RankingDtoType[]) => {
+    console.log(data);
+    const _rankingList = data.map((ranking: RankingDtoType) => {
       const _ranking: RankingType = {
         nickname: ranking.nickname,
         score: ranking.score,

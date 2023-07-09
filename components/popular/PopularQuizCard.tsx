@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Link from 'next/link';
-import { timeForToday } from 'lib/date';
+import { timeForToday } from 'utils/date';
 
 const PopularQuizCard = (props: { recentQuiz: RecentQuizType }) => {
   return (

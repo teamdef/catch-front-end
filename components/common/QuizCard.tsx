@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
 import { shareProps } from 'components/common/SNSShare';
-import { timeForToday } from 'lib/date';
+import { timeForToday } from 'utils/date';
 interface QuizProps {
   recentQuiz: RecentQuizType;
 }
@@ -15,7 +15,7 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
     thumbnail: recentQuiz.thumbnail,
     setTitle: recentQuiz.setTitle,
     id: recentQuiz.id,
-    profileImg: recentQuiz.user.profileImg,
+    profileImg: recentQuiz.user.profile_img,
     nickName: recentQuiz.user.nickname,
   };
 
@@ -43,7 +43,7 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
               <div id="quiz-title">{recentQuiz.setTitle}</div>
               <div id="profile-row">
                 <ProfileImgWrapper>
-                  <img src={recentQuiz.user.profileImg || '/assets/img/user_default.png'} />
+                  <img src={recentQuiz.user.profile_img || '/assets/img/user_default.png'} />
                 </ProfileImgWrapper>
                 <div id="name-and-date">
                   {recentQuiz.user.nickname || '탈퇴한 사용자'} · {timeForToday(recentQuiz.createdAt)}

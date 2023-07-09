@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { CommentType } from 'types/comment';
-import { timeForToday } from 'lib/date';
+import { timeForToday } from 'utils/date';
 
 const CommentItem = (props: { comment: CommentType }) => {
   return (
     <Wrapper>
       <div className="comment-profile">
-        <img src={props.comment.user ? props.comment.user.profileImg : '/assets/img/user_default.png'}></img>
+        <img src={props.comment.user ? props.comment.user.profile_img : '/assets/img/user_default.png'}></img>
       </div>
       <div>
         <div className="comment-info">
           <span className="comment-nickname">{props.comment.nickname}</span>
-          <span className="comment-date"> · {timeForToday(props.comment.createdAt)}</span>
+          <span className="comment-date"> · {timeForToday(props.comment.created_at)}</span>
         </div>
         <div className="comment-content">{props.comment.content}</div>
       </div>

@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 
 import { QuizSetCardType } from 'types/quiz';
-import { timeForToday } from 'lib/date';
-interface PropsType{
-  quizSet:QuizSetCardType
+import { timeForToday } from 'utils/date';
+interface PropsType {
+  quizSet: QuizSetCardType;
 }
-
 
 const QuizCard = ({ quizSet }: PropsType) => {
   return (

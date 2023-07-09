@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import CommentItem from 'components/comment/CommentItem';
 import CommentModal from 'components/comment/CommentModal';
-import { CommentType } from 'types/comment';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { CommentListApi, CommentSaveApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
@@ -32,13 +31,13 @@ const Comment = () => {
     }
   };
 
-  const parseCommentList = (data: any) => {
-    const _commentList = data.map((comment: any) => {
+  const parseCommentList = (data: CommentType[]) => {
+    const _commentList = data.map((comment: CommentType) => {
       const _comment: CommentType = {
         nickname: comment.nickname,
         content: comment.content,
-        createdAt: comment.created_at,
-        user: comment.user && { nickname: comment.user.nickname, profileImg: comment.user.profile_img },
+        created_at: comment.created_at,
+        user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
       };
       return _comment;
     });
@@ -85,7 +84,7 @@ const Comment = () => {
             <CommentItem
               comment={{
                 nickname: commentList[0].nickname,
-                createdAt: commentList[0].createdAt,
+                created_at: commentList[0].created_at,
                 content: commentList[0].content,
               }}
             />

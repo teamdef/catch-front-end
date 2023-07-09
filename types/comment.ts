@@ -1,8 +1,7 @@
-// 한줄평
+// 댓글
 export interface CommentType {
   nickname: string;
   content: string;
-  createdAt: string;
+  created_at: string;
   user?: UserType;
 }
-
