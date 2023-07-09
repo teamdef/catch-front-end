@@ -9,6 +9,8 @@ export { default as Logo } from './Logo';
 export { default as HeadMeta } from './HeadMeta';
 
 export { default as QuizCard } from './QuizCard';
+export { default as QuizList } from './QuizList';
+export { default as QuizItem } from './QuizItem';
 export { default as MyQuizCard } from './MyQuizCard';
 export { default as RecentQuiz } from './RecentQuiz';
 export { default as PopularQuiz } from '../popular/PopularQuiz';
@@ -16,4 +18,3 @@ export { default as SkeletonQuizCard } from './SkeletonQuizCard';
 
 export { default as MatchNote } from '../../pages/quiz/solve/[quizset_id]/result/[solver_id]/matchnote';
 export { default as RankingBoard } from './RankingBoard';
-

@@ -20,19 +20,19 @@ const Page: NextPageWithLayout = () => {
         return (
           <Match.QuizMatchCard key={i} className={answerList[i] != 'catch' ? 'wrong' : ''}>
             <S.QuizTitle>
-              {i + 1}. {item.quizTitle}
+              {i + 1}. {item.quiz_title}
             </S.QuizTitle>
-            {item.quizThumbnail && (
+            {item.quiz_thumbnail && (
               <S.QuizImageWrapper>
-                <img alt="퀴즈 설명 이미지" src={item.quizThumbnail} />
+                <img alt="퀴즈 설명 이미지" src={item.quiz_thumbnail} />
               </S.QuizImageWrapper>
             )}
-            {item.choiceType === 'img' ? (
+            {item.choice_type === 'img' ? (
               <S.ChoiceWrapper id="choice-img-wrapper">
-                {item.choices.map((choice: any, j: number) => (
+                {item.choices.map((choice: string, j: number) => (
                   <Match.MatchChoiceItem
                     key={j}
-                    className={`choice-img-item ${item.correctIndex === j ? 'correct' : ''}`}
+                    className={`choice-img-item ${item.correct_idx === j ? 'correct' : ''}`}
                     id={j === answerList[i] ? 'my-answer' : ''}
                   >
                     <img src={choice} />
@@ -44,11 +44,11 @@ const Page: NextPageWithLayout = () => {
                 {item.choices.map((choice: string, j: number) => (
                   <Match.MatchChoiceItem
                     key={j}
-                    className={`choice-txt-item ${item.correctIndex === j ? 'correct' : ''}`}
+                    className={`choice-txt-item ${item.correct_idx === j ? 'correct' : ''}`}
                     id={j == answerList[i] ? 'my-answer' : ''}
                   >
                     <span>{choice}</span>
-                    {item.correctIndex === j ? <img src="/assets/img/O.svg" /> : <img src="/assets/img/X.svg" />}
+                    {item.correct_idx === j ? <img src="/assets/img/O.svg" /> : <img src="/assets/img/X.svg" />}
                   </Match.MatchChoiceItem>
                 ))}
               </S.ChoiceWrapper>

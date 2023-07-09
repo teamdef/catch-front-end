@@ -32,7 +32,7 @@ const RecentQuizList = () => {
         setTitle: quizSet.set_title,
         solverCnt: quizSet.solver_cnt,
         thumbnail: quizSet.thumbnail ?? null,
-        user: { nickname: quizSet.user.nickname, profileImg: quizSet.user.profile_img },
+        user: { nickname: quizSet.user.nickname, profile_img: quizSet.user.profile_img },
       };
       return _quizObj;
     });
