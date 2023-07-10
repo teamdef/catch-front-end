@@ -2,7 +2,7 @@
 import { ReactElement, ReactNode, useEffect } from 'react';
 
 import { ThemeProvider } from 'styled-components';
-import theme from 'styles/theme';
+import { theme } from 'styles/theme';
 import { GlobalStyle } from 'styles/GlobalStyle';
 import 'styles/font/NanumSquare.css';
 
@@ -13,7 +13,7 @@ import { wrapper, persistor } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { useRouter } from 'next/router';
 import { getCookie } from 'utils/token';
-import * as gtag from '../lib/gtag';
+import * as gtag from 'lib/gtag';
 import { logoutAction } from 'store/user';
 import { useDispatch } from 'react-redux';
 import TagManager from 'react-gtm-module';
@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (!storage) return;
     // Set the previous path as the value of the current path.
     const prevPath = storage.getItem('currentPath');
-    prevPath && storage.setItem('prevPath', prevPath);
+    if (prevPath) storage.setItem('prevPath', prevPath);
     // Set the current path value by looking at the browser's location object.
     storage.setItem('currentPath', globalThis.location.pathname);
   };
@@ -51,10 +51,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // 페이지 이동 마다 쿠키에 저장된 토큰 및 isLoggedIn 확인하기
   useEffect(() => {
     // 쿠키 값 받아오기
-    const access_token = getCookie('access_token');
-    const refresh_token = getCookie('refresh_token');
+    const accessToken = getCookie('access_token');
+    const refreshToken = getCookie('refresh_token');
 
-    if (!!access_token === false || !!refresh_token === false) {
+    if (!!accessToken === false || !!refreshToken === false) {
       dispatch(logoutAction());
     }
   }, [router]);
@@ -80,7 +80,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         }}
       />
       <ThemeProvider theme={theme}>
-        <GlobalStyle/>
+        <GlobalStyle />
         <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
       </ThemeProvider>
     </>
