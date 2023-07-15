@@ -45,6 +45,7 @@
     "react/function-component-definition": [2, { "namedComponents": ["arrow-function", "function-declaration"] }],
     "react/jsx-props-no-spreading": "off", // props 확산 금지 비활성화
     "@typescript-eslint/no-use-before-define": "off", // 초기화 전 사용 금지 옵션 해제
-    "@typescript-eslint/naming-convention": "off" // 네이밍 컨벤션
+    "@typescript-eslint/naming-convention": "off", // 네이밍 컨벤션
+    "react/destructuring-assignment": "off" //
   }
 }

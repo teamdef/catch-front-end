@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from 'styled-components';
 import mixin from './mixin';
 
 const fontSize = {

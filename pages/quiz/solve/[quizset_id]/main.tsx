@@ -4,8 +4,8 @@ import type { NextPageWithLayout } from 'pages/_app';
 import { useModal } from 'hooks';
 import * as S from 'styles/quiz/solve/main.style';
 import { MainButton } from 'styles/common';
-import { AppLayout } from 'components/layout';
-import { Loading, Logo, QuizList } from 'components/common';
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Loading, QuizList } from 'components/common';
 import { NickNameModal } from 'components/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveSolveUserScoreAction } from 'store/user_solve';
@@ -23,8 +23,8 @@ const Page: NextPageWithLayout = () => {
   });
 
   const onClickResult = useCallback(() => {
-    let score = quizList.filter(
-      (quiz: SolveQuizType, quiz_num: number) => quiz.correct_idx == answerList[quiz_num],
+    const score = quizList.filter(
+      (quiz: SolveQuizType, quiz_num: number) => quiz.correct_idx === answerList[quiz_num],
     ).length;
     dispatch(
       saveSolveUserScoreAction({
@@ -40,7 +40,6 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Container>
-      <Logo />
       <S.QuizSolveContent>
         <QuizList />
       </S.QuizSolveContent>
@@ -56,6 +55,10 @@ const Page: NextPageWithLayout = () => {
 };
 
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 export default Page;
