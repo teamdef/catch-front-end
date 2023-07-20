@@ -5,10 +5,10 @@ import { Header } from 'components/common';
 import styled from 'styled-components';
 import { layoutProps } from 'types/layout';
 
-const HeaderLayout = ({ children, bg }: layoutProps) => {
+const HeaderLayout = ({ children, bgColor }: layoutProps) => {
   return (
     <>
-      <Header bg={bg} />
+      <Header bgColor={bgColor} />
       <SpaceWrapper>{children}</SpaceWrapper>
     </>
   );

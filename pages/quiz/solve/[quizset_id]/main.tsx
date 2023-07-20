@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useModal } from 'hooks';
 import * as S from 'styles/quiz/solve/main.style';
-import { MainBtn } from 'styles/common';
+import { MainBtn, Sketchbook } from 'styles/common';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Loading, QuizList } from 'components/common';
 import { NickNameModal } from 'components/modal';
@@ -41,9 +41,9 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <S.Container>
-      <S.QuizSolveContent>
+      <Sketchbook>
         <QuizList />
-      </S.QuizSolveContent>
+      </Sketchbook>
       <S.QuizSolveBottom>
         <MainBtn className={isDisable ? 'on' : ''} onClick={onClickResult}>
           결과 확인하기
