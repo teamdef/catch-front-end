@@ -5,12 +5,13 @@ import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { MainButton, Sketchbook } from 'styles/common';
+import { MainBtn, Sketchbook } from 'styles/common';
 import { Loading, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
 import { resetUserDataAction } from 'store/user_solve';
+import { theme } from 'styles/theme';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -66,24 +67,23 @@ const Page: NextPageWithLayout = () => {
     <>
       {loading && <Loading />}
       <Sketchbook>
-        <S.QuizTitleContainer thumbnail={quizSetThumbnail}>
-          <S.QuizTitle>{setTitle}</S.QuizTitle>
-        </S.QuizTitleContainer>
+        <S.QuizTitle>{setTitle}</S.QuizTitle>
+        <S.Description>{desc}</S.Description>
+        <S.QuizTitleContainer thumbnail={quizSetThumbnail} />
         <S.InnerContainer>
           <S.QuizMakerImage src={quizMaker?.profile_img ?? '/assets/img/user_default.png'} />
           <S.QuizMakerName>{quizMaker?.nickname ?? '탈퇴한 사용자'}</S.QuizMakerName>
-          <S.Description>{desc}</S.Description>
           <S.QuizCountContainer>
             총 <strong>{quizList?.length}</strong> 문제
           </S.QuizCountContainer>
           <S.ButtonWrap>
-            <MainButton
+            <MainBtn
               onClick={() => {
                 router.push(`/quiz/solve/${quizset_id}/main`);
               }}
             >
-              <span>시작하기</span>
-            </MainButton>
+              시작하기
+            </MainBtn>
           </S.ButtonWrap>
           <S.SNSShareContainer>
             <div id="explain">
@@ -105,8 +105,8 @@ const Page: NextPageWithLayout = () => {
 };
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <AppLayout bg>
-      <HeaderLayout bg>{page}</HeaderLayout>
+    <AppLayout bgColor={theme.colors.mintColor}>
+      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
     </AppLayout>
   );
 };

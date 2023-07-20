@@ -38,27 +38,26 @@ export const QuizTitleContainer = styled.div<QuizInfoProps>`
 `;
 
 export const QuizTitle = styled.h1`
-  position: absolute;
-  display: block;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2.5rem;
-  line-height: 120%;
-  /* identical to box height, or 42px */
-  letter-spacing: -0.02em;
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-  @media (max-width: 390px) {
-    font-size: 2rem;
-  }
-  /* 나중에 500px 이하로 내려가면 vw 에 따라 조절 */
-  word-break: keep-all;
+  position: relative;
+  margin-top: 56px;
+  color: #000;
   text-align: center;
-  color: #fff;
-  z-index: 1;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  line-height: 150%; /* 27px */
+  letter-spacing: -0.9px;
 `;
-// // 퀴즈카트 타이틀 컨테이너
-
+export const Description = styled.div`
+  color: ${({ theme }) => theme.colors.blackColors.grey_700};
+  text-align: center;
+  font-family: NanumSquare;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+  letter-spacing: -0.7px;
+`;
 export const InnerContainer = styled.div`
   position: relative;
   top: -37px;
@@ -85,18 +84,7 @@ export const QuizMakerName = styled.div`
   font-size: 0.875rem;
   line-height: 20px;
 `;
-export const Description = styled.div`
-  color: #595959;
-  margin-top: 4.5vh;
-  font-size: 14px;
-  line-height: 160%;
-  max-height: 88px;
-  /*line-height: 1.5rem;*/
-  text-align: center;
-  word-break: keep-all;
-  word-wrap: break-word;
-  width: 60%;
-`;
+
 export const QuizCountContainer = styled.div`
   position: relative;
   font-size: 0.875rem;
@@ -125,20 +113,6 @@ export const QuizCountContainer = styled.div`
 export const ButtonWrap = styled.div`
   position: relative;
   display: flex;
-  margin-top: 4.5vh;
-  button {
-    position: relative;
-    height: auto;
-    padding: 20px 100px;
-    span {
-      position: relative;
-      display: block;
-      font-weight: 700;
-      font-size: 19px;
-      line-height: 28px;
-    }
-    border-radius: 16px;
-  }
 `;
 
 export const SNSShareContainer = styled.div`

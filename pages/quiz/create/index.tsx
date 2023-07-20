@@ -14,21 +14,21 @@ import imageCompression from 'browser-image-compression'; // 이미지 최적화
 import { AxiosResponse } from 'axios';
 import { QuizUploadApi } from 'pages/api/quiz';
 /* 컴포넌트 */
-import { Logo, Loading } from 'components/common';
+import { Loading } from 'components/common';
 import { AppLayout } from 'components/layout';
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/index.style';
-import { MainButton } from 'styles/common';
+import { MainBtn } from 'styles/common';
 /* react-icons */
 import { MdClear, MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
   if (cookie) {
-    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
+    const match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
     // 쿠키가 적용되어 있다면 (로그인 상태라면)
     if (!!match === false) {
       res.statusCode = 302;
@@ -58,7 +58,7 @@ const Page: NextPageWithLayout = () => {
   const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
 
   /* 모달 관리 */
-  const [open제작중있음Modal, , Render제작중있음Modal] = useModal({
+  const [openContinueModal, , RenderContinueModal] = useModal({
     yesTitle: '이어서',
     noTitle: '새롭게',
     noAction: () => {
@@ -79,10 +79,9 @@ const Page: NextPageWithLayout = () => {
   // 퀴즈 세트 설명 textarea 핸들러
   const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.length > 100) {
-      return false;
-    } else {
-      _setDescription(e.target.value);
+      return;
     }
+    _setDescription(e.target.value);
   };
 
   // redux store 자체를 초기화
@@ -107,13 +106,13 @@ const Page: NextPageWithLayout = () => {
       choices: [],
       correctIndex: 0,
     };
-    //prev => [...prev, obj]
+    // prev => [...prev, obj]
     _setQuizList((prev) => [...prev, obj]);
   };
   // 퀴즈 문항 삭제 함수
   const deleteProblem = useCallback(
     (quizIndex: number) => {
-      let temp = [..._quizList];
+      const temp = [..._quizList];
       temp.splice(quizIndex, 1);
       _setQuizList(temp);
     },
@@ -124,14 +123,14 @@ const Page: NextPageWithLayout = () => {
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
     const problem = { ..._quizList[index], [name]: value };
-    let temp = [..._quizList];
+    const temp = [..._quizList];
     temp[index] = problem;
     _setQuizList(temp);
   };
 
   // 객관식 답안 타입 변경 함수
   const setChoiceType = (quizIndex: number, choiceType: 'img' | 'text') => {
-    let temp = JSON.parse(JSON.stringify(_quizList));
+    const temp = JSON.parse(JSON.stringify(_quizList));
     if (_quizList[quizIndex].choices.length !== 0) {
       if (choiceType === 'img') {
         temp[quizIndex].choices = [] as ChoiceImageType[];
@@ -149,7 +148,7 @@ const Page: NextPageWithLayout = () => {
     if (textChoiceInput === '') {
       alert('빈 값은 추가할 수 없습니다.');
     } else {
-      let temp = JSON.parse(JSON.stringify(_quizList));
+      const temp = JSON.parse(JSON.stringify(_quizList));
       temp[quizIndex].choices.push(textChoiceInput);
       _setQuizList(temp);
       textChoiceInputClear();
@@ -157,7 +156,7 @@ const Page: NextPageWithLayout = () => {
   };
   // 정답 체크
   const setCorrectIndex = (quizIndex: number, choiceIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(_quizList));
+    const temp = JSON.parse(JSON.stringify(_quizList));
     temp[quizIndex].correctIndex = choiceIndex;
     _setQuizList(temp);
   };
@@ -166,15 +165,15 @@ const Page: NextPageWithLayout = () => {
   const options = {
     maxSizeMB: 1, // 원본 이미지 최대 용량
     maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
-    //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
+    // useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
 
   // 랜덤 문자열 생성 함수
   const randomString = (len: number): string => {
     let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
-    for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
+    for (let i = 0; i < len; i += 1) text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   };
   // 오늘 날짜 date객체 -> yyyy/mm/dd 함수
@@ -220,7 +219,7 @@ const Page: NextPageWithLayout = () => {
   const FileListToImageObject = (_files: FileList) => {
     const _URL = window.URL || window.webkitURL;
     // FileList -> File Array
-    let _fileArray = Array.from(_files);
+    const _fileArray = Array.from(_files);
     return _fileArray.map(async (file) => {
       const _imgElement = await loadImage(_URL.createObjectURL(file)); // 이미지 element 구하기
       const _thumbnail = await ReturnFileByImageSize(_imgElement, file); // 이미지 파일 url 저장
@@ -242,8 +241,8 @@ const Page: NextPageWithLayout = () => {
       // Promise.all 의 응답값은 filelist의 file객체를 모두 ChoiceImageTypes 타입으로 변경한 것
       Promise.all(_imgFileTaskList).then((res) => {
         const _choicesImgThumbnail = res;
-        let temp = JSON.parse(JSON.stringify(_quizList));
-        let _choices = [...temp[quizIndex].choices, ..._choicesImgThumbnail];
+        const temp = JSON.parse(JSON.stringify(_quizList));
+        const _choices = [...temp[quizIndex].choices, ..._choicesImgThumbnail];
         temp[quizIndex].choices = _choices;
         _setQuizList(temp);
         e.target.value = '';
@@ -260,7 +259,7 @@ const Page: NextPageWithLayout = () => {
       const _quizImageFile = files[0];
       const _imgElement = await loadImage(_URL.createObjectURL(_quizImageFile)); // 이미지 element 구하기
       const _thumbnail = await ReturnFileByImageSize(_imgElement, _quizImageFile); // 이미지 파일 url 저장
-      let temp = JSON.parse(JSON.stringify(_quizList));
+      const temp = JSON.parse(JSON.stringify(_quizList));
       temp[quizIndex].quizThumbnail = _thumbnail;
       _setQuizList(temp);
       e.target.value = '';
@@ -268,13 +267,13 @@ const Page: NextPageWithLayout = () => {
   };
 
   const deleteQuizImage = (quizIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(_quizList));
+    const temp = JSON.parse(JSON.stringify(_quizList));
     temp[quizIndex].quizThumbnail = undefined;
     _setQuizList(temp);
   };
   // 답안 항목 삭제
   const deleteChoice = (quizIndex: number, choiceIndex: number) => {
-    let temp = JSON.parse(JSON.stringify(_quizList));
+    const temp = JSON.parse(JSON.stringify(_quizList));
     temp[quizIndex].choices.splice(choiceIndex, 1);
     if (temp[quizIndex].correctIndex > temp[quizIndex].choices.length - 1) {
       temp[quizIndex].correctIndex = 0;
@@ -288,7 +287,7 @@ const Page: NextPageWithLayout = () => {
   };
 
   /* 문제 저장 조건 체크 함수 2 */
-  const checkQuizSet = ():boolean => {
+  const checkQuizSet = (): boolean => {
     if (_quizList.length === 0) return false;
     _quizList.forEach((quiz: QuizType) => {
       if (quiz.quizTitle === '') {
@@ -297,10 +296,10 @@ const Page: NextPageWithLayout = () => {
       if (quiz.choices.length < 2) {
         return false;
       }
+      return true;
     });
     return true;
-  }
-
+  };
 
   // 문제집 생성하기 ( 서버에 저장하기 )
   const publicationProblemSet = async () => {
@@ -331,7 +330,7 @@ const Page: NextPageWithLayout = () => {
   useEffect(() => {
     if (quizList.length !== 0) {
       // 제작 중이던 문제가 있을 경우
-      open제작중있음Modal();
+      openContinueModal();
     }
     if (quizList) {
       _setQuizList(quizList);
@@ -355,12 +354,9 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      {loading && <Loading ment={'퀴즈 세트를 저장하고 있습니다!'} />}
+      {loading && <Loading ment="퀴즈 세트를 저장하고 있습니다!" />}
       <S.Wrapper>
         <S.TitleContainer>
-          <div id="logo-wrapper">
-            <Logo color={'#fff'} />
-          </div>
           <div id="title-input-wrapper">
             <S.TitleInput>
               <input
@@ -377,7 +373,7 @@ const Page: NextPageWithLayout = () => {
           </div>
           <div id="description-input-wrapper">
             <div id="title">퀴즈에 대한 설명을 적어보세요! ({_description.length}/100)</div>
-            <textarea value={_description} onChange={_descriptionHandler} id="description-textarea"></textarea>
+            <textarea value={_description} onChange={_descriptionHandler} id="description-textarea" />
           </div>
         </S.TitleContainer>
         <S.QuizCreateContainer>
@@ -424,7 +420,7 @@ const Page: NextPageWithLayout = () => {
                         >
                           <MdClose />
                         </S.DeleteButton>
-                        <img src={quiz.quizThumbnail.imgURL} />
+                        <img src={quiz.quizThumbnail.imgURL} alt="퀴즈썸네일이미지" />
                       </>
                     ) : (
                       <S.QuizImageUpload>
@@ -488,7 +484,7 @@ const Page: NextPageWithLayout = () => {
                       <S.TextChoiceCreateBtn>
                         <input
                           type="text"
-                          placeholder={'객관식 답안을 입력해주세요!'}
+                          placeholder="객관식 답안을 입력해주세요!"
                           autoComplete="off"
                           maxLength={30}
                           value={textChoiceInput}
@@ -563,12 +559,12 @@ const Page: NextPageWithLayout = () => {
           </S.QuizCreateBtn>
         </S.QuizCreateContainer>
         <S.ButtonContainer>
-          <MainButton onClick={publicationProblemSet} disabled={title === ''}>
+          <MainBtn onClick={publicationProblemSet} disabled={title === ''}>
             퀴즈 생성 완료
-          </MainButton>
+          </MainBtn>
         </S.ButtonContainer>
       </S.Wrapper>
-      <Render제작중있음Modal />
+      <RenderContinueModal />
     </>
   );
 };

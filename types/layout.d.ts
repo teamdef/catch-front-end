@@ -1,4 +1,4 @@
 export interface layoutProps {
   children: React.ReactNode;
-  bg: boolean;
+  bgColor?: string | undefined;
 }

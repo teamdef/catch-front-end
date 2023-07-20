@@ -15,16 +15,16 @@ import { QuizThumbnailChangeApi } from 'pages/api/quiz';
 import { SNSShare } from 'components/common';
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/share.style';
-import { MainButton } from 'styles/common';
+import { MainBtn } from 'styles/common';
 /* react-icons */
 import { MdPhotoCamera, MdHomeFilled } from 'react-icons/md';
 import { HiOutlineShare } from 'react-icons/hi';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res, params }: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
   const cookie = req ? req?.headers?.cookie : null;
   if (cookie) {
-    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
+    const match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
     // 쿠키가 적용되어 있다면 (로그인 상태라면)
     if (!!match === false) {
       res.statusCode = 302;
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res, params 
 };
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quizSetTitle, quizSetCount, quizSetThumb, quizSetId } = router?.query;
+  const { quizSetTitle, quizSetCount, quizSetId } = router.query;
   const [thumbnailURL, setThumbnailURL] = useState<string>('');
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
@@ -50,8 +50,8 @@ const Page: NextPageWithLayout = () => {
 
   const randomString = (len: number): string => {
     let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
-    for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
+    for (let i = 0; i < len; i += 1) text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   };
 
@@ -74,7 +74,7 @@ const Page: NextPageWithLayout = () => {
   const options = {
     maxSizeMB: 1, // 원본 이미지 최대 용량
     maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
-    //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
+    // useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
 
@@ -136,10 +136,10 @@ const Page: NextPageWithLayout = () => {
             />
           </div>
         </S.ShareContainer>
-        <MainButton onClick={goHome}>
+        <MainBtn onClick={goHome}>
           <MdHomeFilled size={20} />
           홈으로
-        </MainButton>
+        </MainBtn>
       </div>
     </S.Wrapper>
   );

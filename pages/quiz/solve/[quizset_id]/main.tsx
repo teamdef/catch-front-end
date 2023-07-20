@@ -3,13 +3,14 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useModal } from 'hooks';
 import * as S from 'styles/quiz/solve/main.style';
-import { MainButton } from 'styles/common';
+import { MainBtn } from 'styles/common';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { Loading, QuizList } from 'components/common';
 import { NickNameModal } from 'components/modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveSolveUserScoreAction } from 'store/user_solve';
 import { RootState } from 'store';
+import { theme } from 'styles/theme';
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -44,9 +45,9 @@ const Page: NextPageWithLayout = () => {
         <QuizList />
       </S.QuizSolveContent>
       <S.QuizSolveBottom>
-        <MainButton className={isDisable ? 'on' : ''} onClick={onClickResult}>
+        <MainBtn className={isDisable ? 'on' : ''} onClick={onClickResult}>
           결과 확인하기
-        </MainButton>
+        </MainBtn>
         <RenderModal />
         {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
       </S.QuizSolveBottom>
@@ -56,8 +57,8 @@ const Page: NextPageWithLayout = () => {
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <AppLayout>
-      <HeaderLayout>{page}</HeaderLayout>
+    <AppLayout bgColor={theme.colors.mintColor}>
+      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
     </AppLayout>
   );
 };

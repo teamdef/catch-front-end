@@ -1,24 +1,22 @@
 import styled from 'styled-components';
 
-export const MainButton = styled.button`
+export const MainBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  line-height: 28px;
-  font-weight: 700;
-  width: 100%;
-  height: 64px;
+  font-size: ${({ theme }) => theme.fontSize.body_1};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  padding: 12px 100px;
   border: none;
-  border-radius: 16px;
-  background-color: #ff4d57;
   color: #fff;
-  box-shadow: 0 4px #c4363e;
+  border-radius: 8px;
+  border: 1px solid #0500c9;
+  background: #3b27ff;
+  box-shadow: 0px 4px 0px 0px #0500c9;
   word-break: keep-all;
   &:disabled {
-    color: #7c7c7c;
-    background-color: #ececec;
-    box-shadow: 0 4px lightgrey;
+    opacity: 0.5;
+    background: #3b27ff;
   }
   &:hover {
     cursor: pointer;
