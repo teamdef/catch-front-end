@@ -5,7 +5,7 @@ export const MainButton = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
-  line-height:28px;
+  line-height: 28px;
   font-weight: 700;
   width: 100%;
   height: 64px;
@@ -25,6 +25,24 @@ export const MainButton = styled.button`
   }
   svg {
     margin-right: 4px;
+  }
+`;
+export const Sketchbook = styled.div`
+  position: relative;
+  border-radius: 8px;
+  border: 0.75px solid #00fba5;
+  background: #fff;
+  box-shadow: 1px -2px 0px 0px #00fba5;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -29px;
+    left: 0;
+    margin: 0 20px;
+    width: calc(100% - 40px);
+    height: 54px;
+    background-image: url('/assets/img/rebranding/anyquiz/spring.svg');
+    background-repeat: space;
   }
 `;
 

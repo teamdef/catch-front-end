@@ -5,7 +5,7 @@ import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { MainButton } from 'styles/common';
+import { MainButton, Sketchbook } from 'styles/common';
 import { Loading, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
@@ -65,7 +65,7 @@ const Page: NextPageWithLayout = () => {
   return (
     <>
       {loading && <Loading />}
-      <S.Container>
+      <Sketchbook>
         <S.QuizTitleContainer thumbnail={quizSetThumbnail}>
           <S.QuizTitle>{setTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
@@ -99,7 +99,7 @@ const Page: NextPageWithLayout = () => {
             />
           </S.SNSShareContainer>
         </S.InnerContainer>
-      </S.Container>
+      </Sketchbook>
     </>
   );
 };
