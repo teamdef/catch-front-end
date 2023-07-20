@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
-import { Logo, Icon, SideNavigationBar } from 'components/common';
+import Logo from './Logo';
+import Icon from './Icon';
+import SideNavigationBar from './SideNavigationBar';
 
-const Header = () => {
+const Header = ({ bg }: { bg: boolean }) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
-
   const handleSideBar = () => {
     setIsSideBarOpen((state) => !state);
   };
@@ -15,7 +16,7 @@ const Header = () => {
 
   return (
     <>
-      <Wrapper>
+      <Wrapper bg={bg}>
         <Logo width="100px" />
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
@@ -24,9 +25,9 @@ const Header = () => {
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ bg: boolean }>`
   position: fixed;
-  background-color: #fff;
+  background-color: ${(props) => (props.bg ? '#D9FFF0' : '#fff')};
   left: 50%;
   top: 0;
   transform: translateX(-50%);

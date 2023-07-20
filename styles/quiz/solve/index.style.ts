@@ -7,13 +7,6 @@ export const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #fff;
-  a {
-    position: absolute;
-    display: block;
-    top: 22px;
-    left: 2%;
-    z-index: 99;
-  }
 `;
 
 interface QuizInfoProps {
@@ -102,7 +95,7 @@ export const Description = styled.div`
   /*line-height: 1.5rem;*/
   text-align: center;
   word-break: keep-all;
-  word-wrap:break-word;
+  word-wrap: break-word;
   width: 60%;
 `;
 export const QuizCountContainer = styled.div`
@@ -175,4 +168,3 @@ export const BestCommentContainer = styled.div`
     text-align: left;
   }
 `;
-

@@ -6,12 +6,6 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
-  a {
-    position: absolute;
-    display: block;
-    top: 22px;
-    left: 2%;
-  }
 `;
 export const QuizCount = styled.span`
   position: absolute;

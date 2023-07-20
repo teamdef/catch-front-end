@@ -1,12 +1,12 @@
 import * as S from 'styles/quiz/solve/index.style';
-import { AppLayout } from 'components/layout';
+import { AppLayout, HeaderLayout } from 'components/layout';
 import { useRouter } from 'next/router';
 import { useEffect, useState, ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainButton } from 'styles/common';
-import { Loading, Logo, SNSShare } from 'components/common';
+import { Loading, SNSShare } from 'components/common';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
@@ -16,9 +16,7 @@ const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { quizset_id } = router.query;
   const dispatch = useDispatch();
-  const { setTitle, quizList, quizMaker, quizSetThumbnail, description } = useSelector(
-    (state: RootState) => state.solve,
-  );
+  const { setTitle, quizList, quizMaker, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -41,14 +39,13 @@ const Page: NextPageWithLayout = () => {
       quizSetThumbnail: thumbnail,
       description,
       quizList: quiz.map((q: SolveQuizType) => {
-        const _q: SolveQuizType = {
+        return {
           quiz_thumbnail: q.quiz_thumbnail ?? null,
           quiz_title: q.quiz_title,
           choice_type: q.choice_type,
           choices: q.choices,
           correct_idx: q.correct_idx,
         };
-        return _q;
       }),
       quizMaker: user,
     };
@@ -62,21 +59,20 @@ const Page: NextPageWithLayout = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (!!quizset_id) fetchSolveQuizSet();
+    if (quizset_id) fetchSolveQuizSet();
   }, [router.isReady]);
 
   return (
     <>
       {loading && <Loading />}
       <S.Container>
-        <Logo />
         <S.QuizTitleContainer thumbnail={quizSetThumbnail}>
           <S.QuizTitle>{setTitle}</S.QuizTitle>
         </S.QuizTitleContainer>
         <S.InnerContainer>
-          <S.QuizMakerImage src={quizMaker?.profile_img ?? '/assets/img/user_default.png'}></S.QuizMakerImage>
+          <S.QuizMakerImage src={quizMaker?.profile_img ?? '/assets/img/user_default.png'} />
           <S.QuizMakerName>{quizMaker?.nickname ?? '탈퇴한 사용자'}</S.QuizMakerName>
-          <S.Description>{description}</S.Description>
+          <S.Description>{desc}</S.Description>
           <S.QuizCountContainer>
             총 <strong>{quizList?.length}</strong> 문제
           </S.QuizCountContainer>
@@ -108,6 +104,10 @@ const Page: NextPageWithLayout = () => {
   );
 };
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout bg>
+      <HeaderLayout bg>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 export default Page;

@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
-import styled, { keyframes } from 'styled-components';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
 import Link from 'next/link';
-import Icon from './Icon';
 import ProfileImage from './ProfileImage';
 
 interface Props {
@@ -42,7 +39,7 @@ const SideNavigationBar = ({ headerHeight }: Props) => {
               <ProfileImage src="" size="48px" />
               <div className="info-content">
                 <div className="nickname">여행가고싶다</div>
-                <div className="profile-edit">프로필 수정 > </div>
+                <div className="profile-edit">프로필 수정 {'>'} </div>
               </div>
             </MyInfoWrapper>
           </a>
@@ -105,7 +102,7 @@ const MyInfoWrapper = styled.div`
       font-weight: ${({ theme }) => theme.fontWeight.bold};
     }
     .profile-edit {
-      margin-top:8px;
+      margin-top: 8px;
       color: ${({ theme }) => theme.colors.secondary_300};
       font-size: ${({ theme }) => theme.fontSize.caption};
       font-weight: ${({ theme }) => theme.fontWeight.regular};

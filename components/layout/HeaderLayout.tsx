@@ -1,12 +1,15 @@
 // 헤더와 사이드바를 포함하는 레이아웃.
 
+// eslint-disable-next-line import/no-cycle
 import { Header } from 'components/common';
 import styled from 'styled-components';
-const HeaderLayout = (props: { children: React.ReactNode }) => {
+import { layoutProps } from 'types/layout';
+
+const HeaderLayout = ({ children, bg }: layoutProps) => {
   return (
     <>
-      <Header />
-      <SpaceWrapper>{props.children}</SpaceWrapper>
+      <Header bg={bg} />
+      <SpaceWrapper>{children}</SpaceWrapper>
     </>
   );
 };

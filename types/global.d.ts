@@ -64,13 +64,13 @@ interface SolveUserType {
   solveUserId: string;
 }
 interface RankingDtoType {
-  created_at:string;
-id:string;
-nickname:string;
-quiz_count:number;
-quizset_id:string;
-ranking:number;
-score:number;
+  created_at: string;
+  id: string;
+  nickname: string;
+  quiz_count: number;
+  quizset_id: string;
+  ranking: number;
+  score: number;
 }
 interface RankingType {
   nickname: string;
@@ -108,9 +108,9 @@ interface DetailQuizType {
 }
 
 /* 사용자 정보 타입 */
-interface UserType{
+interface UserType {
   nickname?: string;
-  profile_img?: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
+  profile_img?: string /* 있을 수 도 있고 없을 수 도 있고 ... */;
 }
 
 /* 감정표현 타입 */
