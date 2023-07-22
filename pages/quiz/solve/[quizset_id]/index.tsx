@@ -76,15 +76,13 @@ const Page: NextPageWithLayout = () => {
           <S.QuizCountContainer>
             총 <strong>{quizList?.length}</strong> 문제
           </S.QuizCountContainer>
-          <S.ButtonWrap>
-            <MainBtn
-              onClick={() => {
-                router.push(`/quiz/solve/${quizset_id}/main`);
-              }}
-            >
-              시작하기
-            </MainBtn>
-          </S.ButtonWrap>
+          <MainBtn
+            onClick={() => {
+              router.push(`/quiz/solve/${quizset_id}/main`);
+            }}
+          >
+            시작하기
+          </MainBtn>
           <S.SNSShareContainer>
             <div id="explain">
               <AiOutlineShareAlt />

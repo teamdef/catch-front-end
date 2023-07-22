@@ -110,11 +110,6 @@ export const QuizCountContainer = styled.div`
   }
 `;
 
-export const ButtonWrap = styled.div`
-  position: relative;
-  display: flex;
-`;
-
 export const SNSShareContainer = styled.div`
   display: flex;
   flex-direction: column;

@@ -30,15 +30,10 @@ export const QuizSolveCard = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  margin-top: 65px;
   margin-bottom: 56px;
-  & + & {
-    margin-top: 0;
-  }
   &:last-child {
-    margin-bottom: 186px;
+    margin-bottom: 0;
   }
-  padding: 0 4%;
   flex-direction: column;
   flex-wrap: nowrap;
 `;
@@ -173,35 +168,4 @@ export const QuizGuide = styled.span`
   font-size: 12px;
   font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
-export const QuizSolveBottom = styled.div`
-  @keyframes Bounce {
-    0% {
-      transform: translateY(0);
-    }
-    100% {
-      transform: translateY(-60px);
-    }
-  }
-  position: fixed;
-  max-width: 480px;
-  width: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100%;
-  display: flex;
-  z-index: 1;
-  button {
-    position: relative;
-    display: flex;
-    margin: 0 3%;
-    transform: translateY(0);
-    transition: transform 0.5s;
-    &.on {
-      transform: translateY(-80px);
-    }
-    span {
-      font-size: 1.2rem;
-    }
-    align-items: center;
-  }
-`;
+export const QuizSolveBottom = styled.div``;
