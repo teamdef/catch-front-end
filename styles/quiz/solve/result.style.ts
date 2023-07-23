@@ -4,7 +4,7 @@ export const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   background-color: #fff;
-  padding-top: 80px; 
+  padding-top: 80px;
   display: block;
   margin: 0 auto;
   justify-content: center;
