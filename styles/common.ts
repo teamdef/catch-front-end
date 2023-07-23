@@ -32,7 +32,7 @@ export const Sketchbook = styled.div`
   border-radius: 8px;
   border: 0.75px solid #00fba5;
   background: #fff;
-  padding: 0 4%;
+  padding: 0 4.27%;
   box-shadow: 1px -2px 0px 0px #00fba5;
   &::before {
     content: '';

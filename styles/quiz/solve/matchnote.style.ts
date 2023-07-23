@@ -15,7 +15,7 @@ export const MatchTitle = styled.h1`
 export const QuizMatchCard = styled.div`
   position: relative;
   width: 100%;
-  padding: 0 4%;
+  padding: 0 4.27%;
   border: 1px solid #ff4d57;
   border-radius: 20px;
   background-color: white;

@@ -20,8 +20,8 @@ function SectionNav() {
   ];
   return (
     <NavBox>
-      {navDataList.map((item) => (
-        <NavItem name={item.name} value={item.value} checked={checked} onChangeHandler={onChangeHandler} />
+      {navDataList.map((item, index) => (
+        <NavItem key={index} name={item.name} value={item.value} checked={checked} onChangeHandler={onChangeHandler} />
       ))}
     </NavBox>
   );

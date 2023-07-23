@@ -16,6 +16,6 @@ const HeaderLayout = ({ children, bgColor }: layoutProps) => {
 
 const SpaceWrapper = styled.div`
   position: relative;
-  padding-top: 120px; /* 딱 헤더의 높이 만큼 위에 공간을 띄움*/
+  padding-top: 111px;
 `;
 export default HeaderLayout;

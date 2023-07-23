@@ -1,23 +1,22 @@
-import * as S from 'styles/quiz/solve/index.style';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { useRouter } from 'next/router';
-import { useEffect, useState, ReactElement } from 'react';
+import { useEffect, useState, ReactElement, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
 import { MainBtn, Sketchbook } from 'styles/common';
-import { Loading, SNSShare } from 'components/common';
-import { AiOutlineShareAlt } from 'react-icons/ai';
+import { Loading } from 'components/common';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
 import { resetUserDataAction } from 'store/user_solve';
 import { theme } from 'styles/theme';
+import styled from 'styled-components';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const { quizset_id } = router.query;
   const dispatch = useDispatch();
-  const { setTitle, quizList, quizMaker, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
+  const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -53,6 +52,13 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveSolveProblemSetAction(solveQuizSet));
   };
 
+  const moveMain = () => {
+    router.push(`/quiz/solve/${quizset_id}/main`);
+  };
+  const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = '/assets/img/rebranding/defaultThumb.svg';
+  };
+
   useEffect(() => {
     dispatch(resetSolveAction());
     dispatch(resetUserDataAction());
@@ -67,40 +73,84 @@ const Page: NextPageWithLayout = () => {
     <>
       {loading && <Loading />}
       <Sketchbook>
-        <S.QuizTitle>{setTitle}</S.QuizTitle>
-        <S.Description>{desc}</S.Description>
-        <S.QuizTitleContainer thumbnail={quizSetThumbnail} />
-        <S.InnerContainer>
-          <S.QuizMakerImage src={quizMaker?.profile_img ?? '/assets/img/user_default.png'} />
-          <S.QuizMakerName>{quizMaker?.nickname ?? '탈퇴한 사용자'}</S.QuizMakerName>
-          <S.QuizCountContainer>
-            총 <strong>{quizList?.length}</strong> 문제
-          </S.QuizCountContainer>
-          <MainBtn
-            onClick={() => {
-              router.push(`/quiz/solve/${quizset_id}/main`);
-            }}
-          >
-            시작하기
-          </MainBtn>
-          <S.SNSShareContainer>
-            <div id="explain">
-              <AiOutlineShareAlt />
-              <div>퀴즈 세트를 공유해보세요!</div>
-            </div>
-            <SNSShare
-              nickName={quizMaker?.nickname}
-              profileImg={quizMaker?.profile_img}
-              setTitle={setTitle}
-              id={quizset_id as string}
-              thumbnail={quizSetThumbnail}
-            />
-          </S.SNSShareContainer>
-        </S.InnerContainer>
+        <Wrapper>
+          <QuizTitle>{setTitle}</QuizTitle>
+          <QuizThumbnail src={quizSetThumbnail} onError={handleImgError} />
+          <Description>{desc}</Description>
+          <QuizCount>
+            총<b>{quizList?.length}</b>문제
+          </QuizCount>
+          <MainBtn onClick={moveMain}>시작하기</MainBtn>
+        </Wrapper>
       </Sketchbook>
     </>
   );
 };
+
+interface QuizInfoProps {
+  thumbnail?: string;
+}
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 56px;
+  padding-bottom: 48px;
+`;
+
+const QuizTitle = styled.h1`
+  position: relative;
+  color: #000;
+  text-align: center;
+  font-size: ${theme.fontSize.subtitle_2};
+  font-style: normal;
+  font-weight: ${theme.fontWeight.bold};
+`;
+
+const QuizThumbnail = styled.img<QuizInfoProps>`
+  position: relative;
+  display: block;
+  margin-top: 42px;
+  width: 100%;
+  aspect-ratio: 310 / 192;
+  object-fit: contain;
+  margin-bottom: 38px;
+`;
+
+const Description = styled.p`
+  color: ${theme.colors.blackColors.grey_700};
+  text-align: center;
+  word-break: keep-all;
+  max-height: 63px;
+  font-size: ${theme.fontSize.body_2};
+`;
+
+const QuizCount = styled.div`
+  position: relative;
+  margin-top: 40px;
+  margin-bottom: 48px;
+  color: ${theme.colors.blackColors.grey_800};
+  font-size: ${theme.fontSize.caption};
+  font-weight: ${theme.fontWeight.regular};
+  b {
+    color: ${theme.colors.blackColors.grey_900};
+    font-size: ${theme.fontSize.body_1};
+    margin: 0 10px;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 4px);
+    transform: translateX(-50%);
+    display: block;
+    width: 128px;
+    height: 1px;
+    background-color: ${theme.colors.secondary_300};
+  }
+`;
+
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout bgColor={theme.colors.mintColor}>
