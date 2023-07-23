@@ -13,6 +13,7 @@ const QuizList = () => {
   const dispatch = useDispatch();
   const { quizList, answerList } = useSelector((state: RootState) => state.solve);
   const [loading, setLoading] = useState<Boolean>(false);
+  const isDone = !answerList.includes(5);
   const [openModal, , RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
@@ -31,18 +32,21 @@ const QuizList = () => {
     );
     openModal();
   }, [answerList]);
-
   return (
-    <Wrapper>
-      {quizList.map((item: SolveQuizType, quiz_num: number) => (
-        <QuizItem item={item} quiz_num={quiz_num} />
-      ))}
-      <MainBtn onClick={onClickResult} isBlur={answerList.includes(5)}>
-        결과 확인하기
-      </MainBtn>
-      <RenderModal />
-      {loading ? <Loading ment="결과 출력 중 . . ." /> : ''}
-    </Wrapper>
+    <>
+      {loading && <Loading ment="결과 출력 중 . . ." />}
+      {!loading && (
+        <Wrapper>
+          {quizList.map((item: SolveQuizType, quiz_num: number) => (
+            <QuizItem item={item} quiz_num={quiz_num} />
+          ))}
+          <MainBtn onClick={onClickResult} disabled={!isDone}>
+            결과 확인하기
+          </MainBtn>
+          <RenderModal />
+        </Wrapper>
+      )}
+    </>
   );
 };
 

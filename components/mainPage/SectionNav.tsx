@@ -2,17 +2,27 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import NavItem from './NavItem';
 
+interface NavData {
+  name: string;
+  value: number;
+}
 function SectionNav() {
   const [checked, setChecked] = useState<number>(1);
 
   const onChangeHandler = (_value: number) => {
     setChecked(_value);
   };
+
+  const navDataList: NavData[] = [
+    { name: '최신순', value: 1 },
+    { name: '인기순', value: 2 },
+    { name: '댓글순', value: 3 },
+  ];
   return (
     <NavBox>
-      <NavItem name="최신순" value={1} checked={checked} onChangeHandler={onChangeHandler} />
-      <NavItem name="인기순" value={2} checked={checked} onChangeHandler={onChangeHandler} />
-      <NavItem name="댓글순" value={3} checked={checked} onChangeHandler={onChangeHandler} />
+      {navDataList.map((item) => (
+        <NavItem name={item.name} value={item.value} checked={checked} onChangeHandler={onChangeHandler} />
+      ))}
     </NavBox>
   );
 }
