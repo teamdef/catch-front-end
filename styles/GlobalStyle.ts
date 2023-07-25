@@ -38,6 +38,7 @@ const GlobalStyle = createGlobalStyle`
   button {
     border: 0;
     outline-style: none;
+    cursor:pointer;
   }
 `;
 

@@ -45,8 +45,8 @@ const Emotion = () => {
     }
   };
 
-  const emotionChangesClick = (prevEmotion: EmotionType | null, currentEmotion: EmotionType) => {
-    setCurrentEmotion(prevEmotion === currentEmotion ? null : currentEmotion);
+  const emotionChangesClick = (prevEmotion: EmotionType | null, _currentEmotion: EmotionType) => {
+    setCurrentEmotion(prevEmotion === _currentEmotion ? null : _currentEmotion);
   };
 
   const emotionChangesSave = (quizset_emotion: QuizSetEmotionType) => {
@@ -57,30 +57,30 @@ const Emotion = () => {
     if (!!quizset_id && !!solver_id) getCurrentEmotion();
   }, [router.isReady]);
   return (
-    <>
-      <EmotionBox>
-        {EmotionList.map((emotion: EmotionComponentType) => {
-          return (
-            <EmotionButton
-              onClick={() => {
-                emotionClick(emotion.value);
-              }}
-              active={currentEmotion === emotion.value}
-            >
-              {currentEmotion === emotion.value ? (
-                <img src={`/assets/img/emotion_svg/emotion_${emotion.value}_active.svg`} alt={`${emotion.name} 이모티콘 클릭`} />
-              ) : (
-                <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
-              )}
-          
-              <p className="emotion-name">{emotion.name}</p>
-              <span className="emotion-count">{quizSetEmotion[emotion.value]}</span>
-            </EmotionButton>
-          );
-        })}
-      </EmotionBox>
-      
-    </>
+    <EmotionBox>
+      {EmotionList.map((emotion: EmotionComponentType) => {
+        return (
+          <EmotionButton
+            onClick={() => {
+              emotionClick(emotion.value);
+            }}
+            active={currentEmotion === emotion.value}
+          >
+            {currentEmotion === emotion.value ? (
+              <img
+                src={`/assets/img/emotion_svg/emotion_${emotion.value}_active.svg`}
+                alt={`${emotion.name} 이모티콘 클릭`}
+              />
+            ) : (
+              <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
+            )}
+
+            <p className="emotion-name">{emotion.name}</p>
+            <span className="emotion-count">{quizSetEmotion[emotion.value]}</span>
+          </EmotionButton>
+        );
+      })}
+    </EmotionBox>
   );
 };
 const EmotionBox = styled.div`
@@ -103,8 +103,8 @@ const EmotionButton = styled.button<{ active: boolean }>`
   color: ${({ active }) => (active ? '#ff4d57' : '#212121')};
   font-weight: ${({ active }) => (active ? 'bold' : 'none')};
   cursor: pointer;
-  svg{
-    border:solid 1px red;
+  svg {
+    border: solid 1px red;
   }
   .emotion-name {
     position: relative;

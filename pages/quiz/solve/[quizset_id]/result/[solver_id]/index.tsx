@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
-import Router from 'next/router';
-import * as S from 'styles/quiz/solve/result.style';
-import { Header } from 'components/common';
+import { useState, useEffect, ReactElement } from 'react';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { NotFound, RankingBoard } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { QuizRankingListApi } from 'pages/api/quiz';
-import { useRouter } from 'next/router';
 
-import { NotFound, PopularQuiz, RankingBoard } from 'components/common';
-import Comment from 'components/comment/Comment';
-import { EmotionShare } from 'components/emotion';
-import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { NextPageWithLayout } from 'pages/_app';
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { theme } from 'styles/theme';
+import { Sketchbook } from 'styles/common';
+import UserScore from 'components/resultPage/UserScore';
 
-const Page = () => {
+const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList } = useSelector((state: RootState) => state.solve);
   const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
   const router = useRouter();
-  const { quizset_id, solver_id } = router.query;
+  const { quizset_id } = router.query;
 
   const fetchRankingList = async () => {
     try {
@@ -44,7 +44,7 @@ const Page = () => {
     setRankingList(_sliceRankingList);
   };
   useEffect(() => {
-    if (!!quizset_id) fetchRankingList();
+    if (quizset_id) fetchRankingList();
   }, [router.isReady]);
 
   useEffect(() => {
@@ -53,51 +53,29 @@ const Page = () => {
 
   return (
     <>
-      <Header />
-      <S.Container>
-        {solveUserScore !== undefined ? (
-          <S.QuizResultSection>
-            <S.ScoreContainer>
-              <div>
-                <p>
-                  <span className="nickname">{solveUserName}</span> 님
-                </p>
-                <p>
-                  <b>{quizList.length} 문제</b> 중 <b>{solveUserScore}문제</b> 맞혔네요!
-                </p>
-              </div>
-              <span
-                className="go-match-note"
-                onClick={() => Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`)}
-              >
-                정답 확인 <MdOutlineKeyboardArrowRight size={20} />
-              </span>
-            </S.ScoreContainer>
-            <S.RankingContainer>
-              <RankingBoard rankingList={rankingList} />
-            </S.RankingContainer>
-            <S.EmotionShareContainer>
-              <EmotionShare />
-            </S.EmotionShareContainer>
-          </S.QuizResultSection>
-        ) : (
-          <S.ErrorWrapper>
-            <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />
-          </S.ErrorWrapper>
-        )}
-        <S.Divider />
-        <S.CommentSection>
-          <Comment />
-        </S.CommentSection>
-        <S.Divider />
-        <S.PopularQuizSection>
-          <div className="section-title">추천퀴즈</div>
-          <div className="section-description margin-bottom-20">참여율이 높은 퀴즈들을 추천해드려요!</div>
-          <PopularQuiz />
-        </S.PopularQuizSection>
-      </S.Container>
+      {solveUserScore && (
+        <Sketchbook>
+          <Wrapper>
+            <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
+            <RankingBoard rankingList={rankingList} />
+          </Wrapper>
+        </Sketchbook>
+      )}
+      {!solveUserScore && <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />}
     </>
   );
 };
 
+const Wrapper = styled.div`
+  position: relative;
+  margin-top: 56px;
+  margin-bottom: 52px;
+`;
+Page.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AppLayout bgColor={theme.colors.mintColor}>
+      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
+    </AppLayout>
+  );
+};
 export default Page;

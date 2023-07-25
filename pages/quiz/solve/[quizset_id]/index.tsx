@@ -56,7 +56,7 @@ const Page: NextPageWithLayout = () => {
     router.push(`/quiz/solve/${quizset_id}/main`);
   };
   const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = '/assets/img/rebranding/defaultThumb.svg';
+    e.currentTarget.src = '/assets/img/rebranding/anyquiz/defaultThumb.svg';
   };
 
   useEffect(() => {
