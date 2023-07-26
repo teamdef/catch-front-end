@@ -73,6 +73,7 @@ interface RankingDtoType {
   score: number;
 }
 interface RankingType {
+  id: string;
   nickname: string;
   score: number;
   ranking: number;

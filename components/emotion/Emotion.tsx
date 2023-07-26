@@ -92,9 +92,13 @@ const Emotion = () => {
 
   return (
     <EmotionBox>
-      {EmotionList.map((emotion: EmotionComponentType) => {
+      {EmotionList.map((emotion: EmotionComponentType, idx: number) => {
         return (
-          <EmotionButton onClick={() => emotionClick(emotion.value)} active={currentEmotion === emotion.value}>
+          <EmotionButton
+            onClick={() => emotionClick(emotion.value)}
+            active={currentEmotion === emotion.value}
+            key={idx}
+          >
             <EmotionImage
               src={currentEmotion === emotion.value ? emotion.src.on : emotion.src.off}
               alt="이모티콘이미지"
@@ -111,7 +115,7 @@ const EmotionBox = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 48px;
+  margin-top: 44px;
 `;
 
 const EmotionButton = styled.button<{ active: boolean }>`
