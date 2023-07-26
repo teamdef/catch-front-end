@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveEmotionCount } from 'store/emotion';
 import { EmotionClickApi, QuizSolverResultApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
+import { theme } from 'styles/theme';
 
 interface EmotionComponentType {
   name: string;
@@ -19,7 +20,7 @@ const Emotion = () => {
   const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(null);
 
   const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
-
+  const imgSrc = '/assets/img/emotion_svg/';
   const EmotionList: EmotionComponentType[] = [
     { name: '재밌네요?', value: 'FUNNY' },
     { name: '쉬워요', value: 'EASY' },
@@ -60,21 +61,13 @@ const Emotion = () => {
     <EmotionBox>
       {EmotionList.map((emotion: EmotionComponentType) => {
         return (
-          <EmotionButton
-            onClick={() => {
-              emotionClick(emotion.value);
-            }}
-            active={currentEmotion === emotion.value}
-          >
-            {currentEmotion === emotion.value ? (
-              <img
-                src={`/assets/img/emotion_svg/emotion_${emotion.value}_active.svg`}
-                alt={`${emotion.name} 이모티콘 클릭`}
-              />
-            ) : (
+          <EmotionButton onClick={() => emotionClick(emotion.value)} active={currentEmotion === emotion.value}>
+            {currentEmotion === emotion.value && (
+              <img src={`${imgSrc + emotion.value}.svg`} alt={`${emotion.name}이모티콘 클릭`} />
+            )}
+            {currentEmotion !== emotion.value && (
               <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
             )}
-
             <p className="emotion-name">{emotion.name}</p>
             <span className="emotion-count">{quizSetEmotion[emotion.value]}</span>
           </EmotionButton>
@@ -86,8 +79,8 @@ const Emotion = () => {
 const EmotionBox = styled.div`
   display: flex;
   justify-content: center;
-  gap: 32px;
-  margin-top: 16px;
+  gap: 20px;
+  margin-top: 48px;
 `;
 
 const EmotionButton = styled.button<{ active: boolean }>`
@@ -97,12 +90,15 @@ const EmotionButton = styled.button<{ active: boolean }>`
   align-items: center;
   justify-content: center;
   border: 0;
-  width: 52px;
+  width: 12.8%;
   padding: 0;
   background-color: transparent;
-  color: ${({ active }) => (active ? '#ff4d57' : '#212121')};
-  font-weight: ${({ active }) => (active ? 'bold' : 'none')};
+  color: ${({ active }) => (active ? theme.colors.secondary_500 : theme.colors.blackColors.grey_900)};
+  font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
+  img {
+    width: 100%;
+  }
   svg {
     border: solid 1px red;
   }

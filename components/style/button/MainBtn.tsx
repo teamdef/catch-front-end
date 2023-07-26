@@ -19,12 +19,6 @@ const MainBtn = styled.button`
     opacity: 0.5;
     background: #3b27ff;
   }
-  &:hover {
-    cursor: pointer;
-  }
-  svg {
-    margin-right: 4px;
-  }
 `;
 
 export default MainBtn;

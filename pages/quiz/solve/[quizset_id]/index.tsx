@@ -4,13 +4,14 @@ import { useEffect, useState, ReactElement, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { MainBtn, Sketchbook } from 'styles/common';
 import { Loading } from 'components/common';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
 import { resetUserDataAction } from 'store/user_solve';
 import { theme } from 'styles/theme';
 import styled from 'styled-components';
+import { MainBtn } from 'components/style/button';
+import Sketchbook from 'components/style/Sketchbook';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();

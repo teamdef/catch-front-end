@@ -1,11 +1,11 @@
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
-import { MainBtn } from 'styles/common';
 import { useCallback, useState } from 'react';
 import { saveSolveUserScoreAction } from 'store/user_solve';
 import { useModal } from 'hooks';
 import { NickNameModal } from 'components/modal';
 import styled from 'styled-components';
+import { MainBtn } from 'components/style/button';
 import QuizItem from './QuizItem';
 import Loading from './Loading';
 

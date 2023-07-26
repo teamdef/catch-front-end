@@ -9,8 +9,9 @@ import { QuizRankingListApi } from 'pages/api/quiz';
 import { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { theme } from 'styles/theme';
-import { Sketchbook } from 'styles/common';
 import UserScore from 'components/resultPage/UserScore';
+import { Emotion } from 'components/emotion';
+import Sketchbook from 'components/style/Sketchbook';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
@@ -29,7 +30,6 @@ const Page: NextPageWithLayout = () => {
   };
 
   const parseRankingList = (data: RankingDtoType[]) => {
-    console.log(data);
     const _rankingList = data.map((ranking: RankingDtoType) => {
       const _ranking: RankingType = {
         nickname: ranking.nickname,
@@ -53,15 +53,16 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
+      {!solveUserScore && <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />}
       {solveUserScore && (
         <Sketchbook>
           <Wrapper>
             <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
             <RankingBoard rankingList={rankingList} />
+            <Emotion />
           </Wrapper>
         </Sketchbook>
       )}
-      {!solveUserScore && <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />}
     </>
   );
 };
