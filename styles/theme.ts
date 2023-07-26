@@ -19,6 +19,7 @@ const colors = {
   primary_200: '#27FFBE',
   primary_500: '#00EC81',
   primary_700: '#00C565',
+  secondary_200: '#B099FE',
   secondary_300: '#8C6EFF',
   secondary_500: '#3B27FF',
   secondary_700: '#001BF0',
@@ -73,5 +74,3 @@ export const theme: DefaultTheme = {
   fontWeight,
   mixin,
 };
-
-export default theme;

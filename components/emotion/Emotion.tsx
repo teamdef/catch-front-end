@@ -116,6 +116,7 @@ const EmotionBox = styled.div`
   justify-content: center;
   gap: 20px;
   margin-top: 44px;
+  margin-bottom: 28px;
 `;
 
 const EmotionButton = styled.button<{ active: boolean }>`

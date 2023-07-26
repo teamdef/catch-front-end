@@ -1,5 +1,4 @@
 /* eslint-disable no-async-promise-executor */
-// Custom Axios에서 instance만든거 가져와서 사용
 import { AxiosResponse } from 'axios';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import { authAxios, notAuthAxios } from './customAxios';

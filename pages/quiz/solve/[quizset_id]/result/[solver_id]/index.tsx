@@ -9,6 +9,7 @@ import { theme } from 'styles/theme';
 import UserScore from 'components/resultPage/UserScore';
 import { Emotion } from 'components/emotion';
 import Sketchbook from 'components/style/Sketchbook';
+import ShareBtn from 'components/common/ShareBtn';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
@@ -22,6 +23,7 @@ const Page: NextPageWithLayout = () => {
             <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
             <RankingBoard />
             <Emotion />
+            <ShareBtn />
           </Wrapper>
         </Sketchbook>
       )}
@@ -34,6 +36,7 @@ const Wrapper = styled.div`
   margin-top: 56px;
   margin-bottom: 52px;
 `;
+
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
     <AppLayout bgColor={theme.colors.mintColor}>

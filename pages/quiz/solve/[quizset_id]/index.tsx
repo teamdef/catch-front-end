@@ -10,8 +10,8 @@ import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } f
 import { resetUserDataAction } from 'store/user_solve';
 import { theme } from 'styles/theme';
 import styled from 'styled-components';
-import { MainBtn } from 'components/style/button';
 import Sketchbook from 'components/style/Sketchbook';
+import { LargeContainedBtn } from 'components/style/button';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
@@ -81,7 +81,7 @@ const Page: NextPageWithLayout = () => {
           <QuizCount>
             총<b>{quizList?.length}</b>문제
           </QuizCount>
-          <MainBtn onClick={moveMain}>시작하기</MainBtn>
+          <LargeContainedBtn onClick={moveMain}>시작하기</LargeContainedBtn>
         </Wrapper>
       </Sketchbook>
     </>

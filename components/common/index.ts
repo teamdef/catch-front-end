@@ -5,6 +5,7 @@ export { default as SideBar } from './SideBar';
 export { default as ThumbnailChange } from './ThumbnailChange';
 export { default as NotFound } from './NotFound';
 export { default as SNSShare } from './SNSShare';
+export { default as ShareBtn } from './ShareBtn';
 export { default as Logo } from './Logo';
 export { default as HeadMeta } from './HeadMeta';
 

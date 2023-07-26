@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const MainBtn = styled.button`
+const LargeContainedBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,4 +21,4 @@ const MainBtn = styled.button`
   }
 `;
 
-export default MainBtn;
+export default LargeContainedBtn;
