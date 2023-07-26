@@ -9,18 +9,25 @@ interface ChoiceTextType {
   choiceText: string; // 답안
 }
 // QuizType - 퀴즈 정보
-interface QuizType {
+interface TextQuiz {
   quizTitle: string; // 퀴즈 제목
   quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
   correctIndex: number; // 정답 번호
-  choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
-  choices: (ChoiceTextType | ChoiceImageType)[]; // 객관식 답안 배열
+  choiceType: 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
+  choices: ChoiceTextType[]; // 객관식 답안 배열
+}
+interface ImageQuiz {
+  quizTitle: string; // 퀴즈 제목
+  quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
+  correctIndex: number; // 정답 번호
+  choiceType: 'img'; // 이미지형 퀴즈 , 텍스트형 퀴즈
+  choices: ChoiceImageType[]; // 객관식 답안 배열
 }
 // QuizSetType - 퀴즈세트 정보
 interface QuizSetType {
   setTitle: string; // 퀴즈세트 제목
   description?: string; // 퀴즈 세트 설명
-  quizList: QuizType[]; // 퀴즈 배열
+  quizList: (TextQuiz | ImageQuiz)[]; // 퀴즈 배열
 }
 
 // ---------- 퀴즈 풀이 관련 타입 ----------------------- //

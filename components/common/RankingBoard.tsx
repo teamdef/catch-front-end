@@ -13,19 +13,9 @@ const RankingBoard = () => {
 
   const fetchRankingList = async () => {
     try {
-      const res = await QuizRankingListApi(quizset_id as string);
-      const parseRankingList = res.data.map((ranking: RankingDtoType) => {
-        const _ranking: RankingType = {
-          id: ranking.id,
-          nickname: ranking.nickname,
-          score: ranking.score,
-          ranking: ranking.ranking,
-          quizCount: ranking.quiz_count,
-        };
-        return _ranking;
-      });
-      setRankingList(parseRankingList.slice(0, 3));
-      setUserRanking(parseRankingList[parseRankingList.findIndex((user: RankingType) => user.id === solver_id)]);
+      const response = await QuizRankingListApi(quizset_id as string);
+      setRankingList(response.slice(0, 3));
+      setUserRanking(response[response.findIndex((user: RankingType) => user.id === solver_id)]);
     } catch (err) {
       console.log(err);
     }
