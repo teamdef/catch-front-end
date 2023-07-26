@@ -17,3 +17,7 @@ export type QuizSetCardType = Pick<
   QuizSetType2,
   'quizSetId' | 'createdAt' | 'quizSetTitle' | 'solverCnt' | 'quizSetMaker' | 'quizSetThumbnail'
 >;
+export interface ChoiceProps {
+  choices: string[];
+  quizNum: number;
+}

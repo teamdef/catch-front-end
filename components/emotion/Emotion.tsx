@@ -10,6 +10,10 @@ import { theme } from 'styles/theme';
 interface EmotionComponentType {
   name: string;
   value: EmotionType;
+  src: {
+    on: string;
+    off: string;
+  };
 }
 
 const Emotion = () => {
@@ -19,14 +23,42 @@ const Emotion = () => {
   const quizSetEmotion = useSelector((state: RootState) => state.emotion);
   const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(null);
 
-  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
-  const imgSrc = '/assets/img/emotion_svg/';
+  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 src에서 사용 가능
   const EmotionList: EmotionComponentType[] = [
-    { name: '재밌네요?', value: 'FUNNY' },
-    { name: '쉬워요', value: 'EASY' },
-    { name: '어려운데요', value: 'HARD' },
-    { name: '주인장나와', value: 'ANGRY' },
+    {
+      name: '재밌네요?',
+      value: 'FUNNY',
+      src: {
+        on: '/assets/img/rebranding/emotion/on1.svg',
+        off: '/assets/img/rebranding/emotion/off1.svg',
+      },
+    },
+    {
+      name: '쉬워요',
+      value: 'EASY',
+      src: {
+        on: '/assets/img/rebranding/emotion/on2.svg',
+        off: '/assets/img/rebranding/emotion/off2.svg',
+      },
+    },
+    {
+      name: '어려운데요',
+      value: 'HARD',
+      src: {
+        on: '/assets/img/rebranding/emotion/on3.svg',
+        off: '/assets/img/rebranding/emotion/off3.svg',
+      },
+    },
+    {
+      name: '주인장나와',
+      value: 'ANGRY',
+      src: {
+        on: '/assets/img/rebranding/emotion/on4.svg',
+        off: '/assets/img/rebranding/emotion/off4.svg',
+      },
+    },
   ];
+
   const emotionClick = async (emotion: EmotionType) => {
     try {
       const res = await EmotionClickApi(emotion, quizset_id as string, solver_id as string);
@@ -57,19 +89,18 @@ const Emotion = () => {
   useEffect(() => {
     if (!!quizset_id && !!solver_id) getCurrentEmotion();
   }, [router.isReady]);
+
   return (
     <EmotionBox>
       {EmotionList.map((emotion: EmotionComponentType) => {
         return (
           <EmotionButton onClick={() => emotionClick(emotion.value)} active={currentEmotion === emotion.value}>
-            {currentEmotion === emotion.value && (
-              <img src={`${imgSrc + emotion.value}.svg`} alt={`${emotion.name}이모티콘 클릭`} />
-            )}
-            {currentEmotion !== emotion.value && (
-              <img src={`/assets/img/emotion_svg/emotion_${emotion.value}.svg`} alt={`${emotion.name} 이모티콘`} />
-            )}
-            <p className="emotion-name">{emotion.name}</p>
-            <span className="emotion-count">{quizSetEmotion[emotion.value]}</span>
+            <EmotionImage
+              src={currentEmotion === emotion.value ? emotion.src.on : emotion.src.off}
+              alt="이모티콘이미지"
+            />
+            <EmotionName>{emotion.name}</EmotionName>
+            <EmotionCount>{quizSetEmotion[emotion.value]}</EmotionCount>
           </EmotionButton>
         );
       })}
@@ -96,23 +127,20 @@ const EmotionButton = styled.button<{ active: boolean }>`
   color: ${({ active }) => (active ? theme.colors.secondary_500 : theme.colors.blackColors.grey_900)};
   font-weight: ${theme.fontWeight.regular};
   cursor: pointer;
-  img {
-    width: 100%;
-  }
-  svg {
-    border: solid 1px red;
-  }
-  .emotion-name {
-    position: relative;
-    display: block;
-    margin-top: 10px;
-    font-size: 11px;
-    white-space: nowrap;
-  }
-  .emotion-count {
-    position: relative;
-    display: block;
-    font-size: 14px;
-  }
+`;
+const EmotionImage = styled.img`
+  width: 100%;
+`;
+const EmotionName = styled.p`
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  white-space: nowrap;
+`;
+const EmotionCount = styled.span`
+  position: relative;
+  display: block;
+  font-size: 14px;
 `;
 export default Emotion;

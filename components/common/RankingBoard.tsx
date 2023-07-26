@@ -8,7 +8,7 @@ const RankingBoard = ({ rankingList }: PropsType) => {
   const slice_list = rankingList.length >= 3 ? rankingList.slice(1, 3) : rankingList;
   const item = rankingList[0];
   slice_list.splice(1, 0, item);
-  console.log(slice_list);
+
   return (
     <Wrapper>
       {slice_list.map((user) => (

@@ -12,15 +12,16 @@ const AppLayout = ({ children, bgColor }: layoutProps) => {
 };
 
 const Centering = styled.div`
-  display: block;
-  margin: 0 auto;
+  position: relative;
+  display: flex;
   justify-content: center;
-  max-width: 480px; /* 기준 width가 480px */
   width: 100%;
 `;
 const FixedWidth = styled.div<{ bgColor: string | undefined }>`
+  max-width: 480px; /* 기준 width가 480px */
+  width: 100%;
   min-height: 100vh;
-  padding: 0 1rem;
+  padding: 0 16px;
   background-color: ${(props) => (props.bgColor ? props.bgColor : '#fff')};
 `;
 export default AppLayout;
