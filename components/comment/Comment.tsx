@@ -4,7 +4,6 @@ import { CommentListApi, CommentSaveApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { CommentType } from 'types/comment';
 import { theme } from 'styles/theme';
 import { CommentItem, CommentModal } from '.';
 
@@ -65,12 +64,10 @@ const Comment = () => {
           <Title>한줄평</Title>
           <Count>{commentList.length}</Count>
         </HeaderLeft>
-        <More>더보기</More>
+        <More onClick={OpenComment}>더보기</More>
       </CommentHeader>
-      <CommentPreviewButton onClick={OpenComment}>
-        {commentList[0] && <CommentItem comment={commentList[0]} />}
-        {!commentList[0] && <EmptyComment>한줄평을 작성해볼까요?</EmptyComment>}
-      </CommentPreviewButton>
+      {commentList[0] && <CommentItem comment={commentList[0]} />}
+      {!commentList[0] && <EmptyComment>한줄평을 작성해볼까요?</EmptyComment>}
       {isOpen && <CommentModal onCloseModal={handleCloseModal} saveComment={saveComment} commentList={commentList} />}
     </Wrapper>
   );
@@ -105,14 +102,6 @@ const More = styled.button`
   font-size: ${theme.fontSize.caption};
   background-color: transparent;
   padding: 8px 12px;
-`;
-const CommentPreviewButton = styled.button`
-  outline: none;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
 `;
 
 const EmptyComment = styled.div`

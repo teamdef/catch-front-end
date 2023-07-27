@@ -139,3 +139,9 @@ interface Window {
   Kakao: any; // 카카오
   adsbygoogle: any; // 구글 애드센스
 }
+interface CommentType {
+  nickname: string;
+  content: string;
+  created_at: string;
+  user?: UserType;
+}

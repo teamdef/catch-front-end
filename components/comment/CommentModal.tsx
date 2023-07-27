@@ -7,7 +7,6 @@ import ModalPortal from 'components/modal/PortalWrapper';
 
 import { useInput } from 'hooks';
 import CommentList from 'components/comment/CommentList';
-import { CommentType } from 'types/comment';
 
 interface CommentModalProps {
   onCloseModal: () => void;

@@ -1,7 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 import { AxiosResponse } from 'axios';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
-import { CommentType } from 'types/comment';
 import { authAxios, notAuthAxios } from './customAxios';
 
 // 최근 생성된 퀴즈 목록
@@ -176,7 +175,7 @@ export const CommentListApi = async (quizset_id: string) => {
 // 한줄평 - 등록하기
 export const CommentSaveApi = async (nickname: string, content: string, quizset_id: string, user_id: string | null) => {
   const res: AxiosResponse = await notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
-  const _commentList = res.data.map((comment: CommentType) => {
+  const _commentList: CommentType[] = res.data.map((comment: CommentType) => {
     const _comment: CommentType = {
       nickname: comment.nickname,
       content: comment.content,
