@@ -14,6 +14,7 @@ const Comment = () => {
   const [openModal, , RenderModal] = useModal({
     escClickable: true,
     backgroundClickable: true,
+    bottomSheet: true,
     contents: <CommentModal setCommentList={setCommentList} commentList={commentList} />,
   });
 

@@ -1,36 +1,13 @@
-import React, { useEffect, MouseEvent } from 'react';
+import { ModalProps } from 'hooks/useModal';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import ModalPortal from 'components/modal/PortalWrapper';
 
-export interface BaseModalType {
-  escClickable?: boolean; // esc로 모달을 닫을 수 있는지에 대한 여부
-  backgroundClickable?: boolean; // 백그라운드 클릭으로 모달을 닫을 수 있는지에 대한 여부
-  yesTitle?: string; // yes 버튼에 표시할 이름
-  noTitle?: string; // no 버튼에 표시할 이름
-  yesAction?: () => void; // yes 버튼 클릭시 수행할 함수
-  noAction?: () => void; // no 버튼 클릭시 수행할 함수
-  contents: JSX.Element;
-  bottomSheet?: boolean; // 바텀시트 여부
-}
-
-interface BaseModalProps {
-  props: BaseModalType;
-  closeModal: () => void;
-}
-/* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
-const BaseModal = ({ props, closeModal }: BaseModalProps) => {
+const Dialog = ({ props, closeModal }: ModalProps) => {
   //  const modalRef = useRef<HTMLDivElement>(null); // mutableRefObject가 아닌 readonly refObject로 사용하기 위해서 ...
 
   /* https://darrengwon.tistory.com/865
   이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임.
   모달 켜졌을 때 배경 스크롤 방지 */
-
-  const close = (e: MouseEvent) => {
-    if (props.backgroundClickable) {
-      closeModal();
-    }
-    e.stopPropagation();
-  };
 
   const yesActionAndClose = () => {
     if (props.yesAction) {
@@ -54,38 +31,15 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
   }, []);
 
   return (
-    <ModalPortal wrapperId="react-portal-modal-container">
-      <Background onClick={close}>
-        <ModalWrapper onClick={(e) => e.stopPropagation()}>
-          <ModalBody>{props.contents}</ModalBody>
-          <ActionBtnContainer>
-            {props.yesTitle && <ActionYesBtn onClick={yesActionAndClose}>{props.yesTitle || '확인'}</ActionYesBtn>}
-            {props.noTitle && <ActionNoBtn onClick={noActionAndClose}>{props.noTitle || '취소'}</ActionNoBtn>}
-          </ActionBtnContainer>
-        </ModalWrapper>
-      </Background>
-    </ModalPortal>
+    <ModalWrapper onClick={(e) => e.stopPropagation()}>
+      <ModalBody>{props.contents}</ModalBody>
+      <ActionBtnContainer>
+        {props.yesTitle && <ActionYesBtn onClick={yesActionAndClose}>{props.yesTitle || '확인'}</ActionYesBtn>}
+        {props.noTitle && <ActionNoBtn onClick={noActionAndClose}>{props.noTitle || '취소'}</ActionNoBtn>}
+      </ActionBtnContainer>
+    </ModalWrapper>
   );
 };
-
-const Background = styled.div`
-  z-index: 100;
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  width: 480px;
-  @media (max-width: 480px) {
-    width: 100%;
-  }
-  height: 100vh;
-  background: #56565650;
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-`;
 
 const ModalWrapper = styled.div`
   z-index: 99;
@@ -152,4 +106,4 @@ const ActionNoBtn = styled(ActionButton)`
   color: #7c7c7c;
 `;
 
-export default BaseModal;
+export default Dialog;
