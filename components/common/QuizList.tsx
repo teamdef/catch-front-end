@@ -5,7 +5,7 @@ import { saveSolveUserScoreAction } from 'store/user_solve';
 import { useModal } from 'hooks';
 import { NickNameModal } from 'components/modal';
 import styled from 'styled-components';
-import { MainBtn } from 'components/style/button';
+import { LargeContainedBtn } from 'components/style/button';
 import QuizItem from './QuizItem';
 import Loading from './Loading';
 
@@ -40,9 +40,9 @@ const QuizList = () => {
           {quizList.map((item: SolveQuizType, quiz_num: number) => (
             <QuizItem item={item} quiz_num={quiz_num} />
           ))}
-          <MainBtn onClick={onClickResult} disabled={!isDone}>
+          <LargeContainedBtn onClick={onClickResult} disabled={!isDone}>
             결과 확인하기
-          </MainBtn>
+          </LargeContainedBtn>
           <RenderModal />
         </Wrapper>
       )}

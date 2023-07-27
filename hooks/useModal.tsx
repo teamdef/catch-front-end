@@ -1,6 +1,7 @@
-import { useState, useCallback, ChangeEvent, useEffect, RefObject } from 'react';
+import { useState, useCallback, useEffect, RefObject } from 'react';
 import { BaseModalType } from 'components/modal/BaseModal'; // 모달 타입
 import { BaseModal } from 'components/modal'; // 모달 컴포넌트
+import ModalPortal from 'components/modal/PortalWrapper';
 /* 특정 컴포넌트 이외를 클릭하였을 때 모달을 닫도록 함 */
 /* 
     clickRef : 현재 클릭한 컴포넌트
@@ -26,7 +27,7 @@ export const useOnOutsideClick = (
             const curIsContain: boolean = !cur.current?.contains(e.target as Node);
             return acc && curIsContain; // 현재 값인 cur가 ref이외의 컴포넌트인지 체크하고, 그 결과 값을 acc 값과 연산하여 다시 acc에 저장
           }, true); // 초기 값은 true로 시작함. && 연산이기 때문에.
-          result ? callback() : null;
+          if (result) callback();
         }
       }
     };
@@ -50,8 +51,8 @@ export const useOnEscapeClick = (callback: () => void) => {
   }, [callback]);
 };
 
-const useModal = (initialState: BaseModalType): [() => void,()=>void, () => JSX.Element | null] => {
-  const [modalValue, setModalValue] = useState<BaseModalType>(initialState);
+const useModal = (initialState: BaseModalType): [() => void, () => void, () => JSX.Element | null] => {
+  const [modalValue] = useState<BaseModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openModal = useCallback(() => {
@@ -63,10 +64,14 @@ const useModal = (initialState: BaseModalType): [() => void,()=>void, () => JSX.
   }, [isOpen]);
 
   const renderModal = (): JSX.Element | null => {
-    return isOpen ? <BaseModal props={modalValue} closeModal={closeModal}></BaseModal> : null;
+    return isOpen ? (
+      <ModalPortal wrapperId="react-portal-modal-container">
+        <BaseModal props={modalValue} closeModal={closeModal} />
+      </ModalPortal>
+    ) : null;
   };
 
-  return [openModal,closeModal, renderModal]; // [T, (e: any)=>void]
+  return [openModal, closeModal, renderModal]; // [T, (e: any)=>void]
 };
 
 export default useModal;

@@ -17,6 +17,7 @@ const CommentItem = ({ comment }: { comment: CommentType }) => {
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 28px;
 `;
 const TextBox = styled.div`
   margin-left: 16px;

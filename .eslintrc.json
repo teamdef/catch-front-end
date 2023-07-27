@@ -56,6 +56,7 @@
     ], // a 태그 안에 하이퍼링크 필수
     "no-underscore-dangle": "off", // '_' 사용 금지
     "react/button-has-type": "off", // <button type={}> 필수
-    "no-useless-concat": "off" // 쓸데없이 문자열 붙히기 금지
+    "no-useless-concat": "off", // 쓸데없이 문자열 붙히기 금지
+    "react/prop-types": "off"
   }
 }

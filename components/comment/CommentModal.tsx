@@ -1,61 +1,57 @@
 // 바텀업 모달임
 
 import styled, { keyframes } from 'styled-components';
-import { useState } from 'react';
-
-import ModalPortal from 'components/modal/PortalWrapper';
+import { Dispatch, SetStateAction } from 'react';
 
 import { useInput } from 'hooks';
 import CommentList from 'components/comment/CommentList';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { CommentSaveApi } from 'pages/api/quiz';
+import { useRouter } from 'next/router';
 
 interface CommentModalProps {
-  onCloseModal: () => void;
-  saveComment: (commentInput: string) => void;
   commentList: CommentType[];
+  setCommentList: Dispatch<SetStateAction<CommentType[]>>;
 }
 
-const CommentModal = ({ onCloseModal, saveComment, commentList }: CommentModalProps) => {
+const CommentModal = ({ commentList, setCommentList }: CommentModalProps) => {
+  const router = useRouter();
+  const { quizset_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
   const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
+  const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
+  const { solveUserName } = useSelector((state: RootState) => state.user_solve);
 
-  const [animation, setAnimation] = useState('openAnimation');
-
-  const close = () => {
-    setAnimation('closeAnimation');
-    setTimeout(() => {
-      onCloseModal();
-    }, 390);
+  const saveComment = async () => {
+    try {
+      const res = await CommentSaveApi(solveUserName, commentInput, quizset_id as string, isLoggedin && userId);
+      setCommentList(res);
+      commentInputClear();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <ModalPortal wrapperId="react-portal-modal-container">
-      <Background onClick={close}>
-        <ModalWrapper onClick={(e) => e.stopPropagation()} className={animation}>
-          <GrabBar />
-          <MarginTop>
-            {commentList && <CommentList commentList={commentList} />}
-            <CommentInputContainer>
-              <input
-                type="text"
-                value={commentInput}
-                onChange={commentInputHandler}
-                id="comment-input"
-                maxLength={50}
-                placeholder="한줄평 남기기.."
-              />
-              <button
-                disabled={commentInput.length === 0}
-                onClick={() => {
-                  saveComment(commentInput);
-                  commentInputClear();
-                }}
-              >
-                등록
-              </button>
-            </CommentInputContainer>
-          </MarginTop>
-        </ModalWrapper>
-      </Background>
-    </ModalPortal>
+    <Wrapper>
+      <GrabBar />
+      <MarginTop>
+        {commentList && <CommentList commentList={commentList} />}
+        <CommentInputContainer>
+          <input
+            type="text"
+            value={commentInput}
+            onChange={commentInputHandler}
+            id="comment-input"
+            maxLength={50}
+            placeholder="한줄평 남기기.."
+          />
+          <button disabled={commentInput.length === 0} onClick={saveComment}>
+            등록
+          </button>
+        </CommentInputContainer>
+      </MarginTop>
+    </Wrapper>
   );
 };
 
@@ -112,24 +108,6 @@ const CommentInputContainer = styled.div`
   }
 `;
 
-const Background = styled.div`
-  z-index: 100;
-  position: fixed;
-  left: 50%;
-  top: 0;
-  width: 480px;
-  @media (max-width: 480px) {
-    width: 100%;
-  }
-  transform: translate(-50%, 0%);
-  height: 100vh;
-  background: #56565650;
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: end;
-  overflow: hidden;
-`;
-
 const BottomUp = keyframes` 
   0% {
     transform: translateY(100%);
@@ -149,7 +127,7 @@ const TopDown = keyframes`
 
 `;
 
-const ModalWrapper = styled.div`
+const Wrapper = styled.div`
   z-index: 99;
   background-color: white;
   box-shadow:

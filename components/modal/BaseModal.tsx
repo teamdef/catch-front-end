@@ -1,7 +1,6 @@
-import React, { useEffect, RefObject, useRef, MouseEvent } from 'react';
+import React, { useEffect, MouseEvent } from 'react';
 import styled from 'styled-components';
 import ModalPortal from 'components/modal/PortalWrapper';
-import { useOnOutsideClick } from 'hooks/useModal';
 
 export interface BaseModalType {
   escClickable?: boolean; // esc로 모달을 닫을 수 있는지에 대한 여부
@@ -11,6 +10,7 @@ export interface BaseModalType {
   yesAction?: () => void; // yes 버튼 클릭시 수행할 함수
   noAction?: () => void; // no 버튼 클릭시 수행할 함수
   contents: JSX.Element;
+  bottomSheet?: boolean; // 바텀시트 여부
 }
 
 interface BaseModalProps {
@@ -36,14 +36,14 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
     if (props.yesAction) {
       props.yesAction();
       closeModal();
-    }
+    } else closeModal();
   };
 
   const noActionAndClose = () => {
     if (props.noAction) {
       props.noAction();
       closeModal();
-    }
+    } else closeModal();
   };
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
@@ -58,26 +58,10 @@ const BaseModal = ({ props, closeModal }: BaseModalProps) => {
       <Background onClick={close}>
         <ModalWrapper onClick={(e) => e.stopPropagation()}>
           <ModalBody>{props.contents}</ModalBody>
-          <ActionButtonContainer>
-            {props.yesTitle && (
-              <ActionButtonYes
-                onClick={() => {
-                  props.yesAction ? yesActionAndClose() : closeModal();
-                }}
-              >
-                {props.yesTitle || '확인'}
-              </ActionButtonYes>
-            )}
-            {props.noTitle && (
-              <ActionButtonNo
-                onClick={() => {
-                  props.noAction ? noActionAndClose() : closeModal();
-                }}
-              >
-                {props.noTitle || '취소'}
-              </ActionButtonNo>
-            )}
-          </ActionButtonContainer>
+          <ActionBtnContainer>
+            {props.yesTitle && <ActionYesBtn onClick={yesActionAndClose}>{props.yesTitle || '확인'}</ActionYesBtn>}
+            {props.noTitle && <ActionNoBtn onClick={noActionAndClose}>{props.noTitle || '취소'}</ActionNoBtn>}
+          </ActionBtnContainer>
         </ModalWrapper>
       </Background>
     </ModalPortal>
@@ -106,8 +90,12 @@ const Background = styled.div`
 const ModalWrapper = styled.div`
   z-index: 99;
   background-color: white;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11), 0 4px 4px rgba(0, 0, 0, 0.11),
-    0 6px 8px rgba(0, 0, 0, 0.11), 0 8px 16px rgba(0, 0, 0, 0.11);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.11),
+    0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11),
+    0 6px 8px rgba(0, 0, 0, 0.11),
+    0 8px 16px rgba(0, 0, 0, 0.11);
   border-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
   width: 384px; /* 480px 의 80% 너비가 384px임. */
@@ -139,7 +127,7 @@ const ModalBody = styled.div`
   padding-bottom: 2rem;
   /*line-height:1.5rem;*/
 `;
-const ActionButtonContainer = styled.div`
+const ActionBtnContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
@@ -155,11 +143,11 @@ const ActionButton = styled.div`
     cursor: pointer;
   }
 `;
-const ActionButtonYes = styled(ActionButton)`
+const ActionYesBtn = styled(ActionButton)`
   color: white;
   background-color: #ff4d57;
 `;
-const ActionButtonNo = styled(ActionButton)`
+const ActionNoBtn = styled(ActionButton)`
   background-color: #ececec;
   color: #7c7c7c;
 `;

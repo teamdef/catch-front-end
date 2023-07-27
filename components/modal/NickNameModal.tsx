@@ -30,7 +30,7 @@ const NickNameModal = ({ setLoading }: any) => {
         isLoggedin ? userId : undefined,
         quizList.length,
       );
-      const { quizset_emotion,solver_id } = res.data;
+      const { quizset_emotion, solver_id } = res.data;
       dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
       Router.push(`/quiz/solve/${quizSetId}/result/${solver_id}`);
     } catch (err) {
@@ -40,7 +40,6 @@ const NickNameModal = ({ setLoading }: any) => {
     }
   };
 
-  
   const checkNickname = () => {
     if (_nickname && _nickname.length <= 12) {
       postSolver();

@@ -36,7 +36,7 @@ const Page: NextPageWithLayout = () => {
 const Wrapper = styled.div`
   position: relative;
   margin-top: 56px;
-  margin-bottom: 52px;
+  margin-bottom: 12px;
 `;
 
 Page.getLayout = function getLayout(page: ReactElement) {
