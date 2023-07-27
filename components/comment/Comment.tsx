@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
-import CommentItem from 'components/comment/CommentItem';
-import CommentModal from 'components/comment/CommentModal';
-import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { CommentListApi, CommentSaveApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import { CommentType } from 'types/comment';
+import { theme } from 'styles/theme';
+import { CommentItem, CommentModal } from '.';
 
 // 미리보기용 한줄평 1개를 클릭하면 자세히 볼 수 있는 바텀업이 올라오는 컴포넌트임.
 const Comment = () => {
@@ -25,29 +24,16 @@ const Comment = () => {
   const fetchCommentList = async (id: string) => {
     try {
       const res = await CommentListApi(id);
-      parseCommentList(res.data);
+      setCommentList(res);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const parseCommentList = (data: CommentType[]) => {
-    const _commentList = data.map((comment: CommentType) => {
-      const _comment: CommentType = {
-        nickname: comment.nickname,
-        content: comment.content,
-        created_at: comment.created_at,
-        user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
-      };
-      return _comment;
-    });
-    setCommentList(_commentList);
-  };
-
   const saveComment = async (commentInput: string) => {
     try {
       const res = await CommentSaveApi(solveUserName, commentInput, quizset_id as string, isLoggedin && userId);
-      parseCommentList(res.data);
+      setCommentList(res);
     } catch (err) {
       console.log(err);
     }
@@ -74,52 +60,51 @@ const Comment = () => {
 
   return (
     <Wrapper>
-      <CommentTitle>
-        <span className="section-title">한줄평</span>
-        <span className="section-count">{commentList.length}</span>
-      </CommentTitle>
+      <CommentHeader>
+        <HeaderLeft>
+          <Title>한줄평</Title>
+          <Count>{commentList.length}</Count>
+        </HeaderLeft>
+        <More>더보기</More>
+      </CommentHeader>
       <CommentPreviewButton onClick={OpenComment}>
-        {commentList.length !== 0 ? (
-          <MoreCommentWrapper>
-            <CommentItem
-              comment={{
-                nickname: commentList[0].nickname,
-                created_at: commentList[0].created_at,
-                content: commentList[0].content,
-              }}
-            />
-            <MoreComment>
-              <MdOutlineKeyboardArrowRight size={20} />
-            </MoreComment>
-          </MoreCommentWrapper>
-        ) : (
-          <EmptyComment>한줄평을 작성해볼까요?</EmptyComment>
-        )}
+        {commentList[0] && <CommentItem comment={commentList[0]} />}
+        {!commentList[0] && <EmptyComment>한줄평을 작성해볼까요?</EmptyComment>}
       </CommentPreviewButton>
       {isOpen && <CommentModal onCloseModal={handleCloseModal} saveComment={saveComment} commentList={commentList} />}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  margin-top: 48px;
+`;
 
-const CommentTitle = styled.div`
-  margin-top: 20px;
-  .section-title {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #212121;
-  }
-  .section-description {
-    color: #616161;
-    font-size: 0.85rem;
-  }
-  .section-count {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #424242;
-    margin-left: 8px;
-  }
+const CommentHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+`;
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: baseline;
+`;
+const Title = styled.h1`
+  color: ${theme.colors.blackColors.grey_900};
+  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.body_1};
+`;
+const Count = styled.span`
+  margin-left: 8px;
+  color: ${theme.colors.blackColors.grey_800};
+  font-size: ${theme.fontSize.caption};
+`;
+const More = styled.button`
+  color: ${theme.colors.secondary_300};
+  font-size: ${theme.fontSize.caption};
+  background-color: transparent;
+  padding: 8px 12px;
 `;
 const CommentPreviewButton = styled.button`
   outline: none;
@@ -130,20 +115,9 @@ const CommentPreviewButton = styled.button`
   text-align: left;
 `;
 
-const MoreCommentWrapper = styled.div`
-  display: flex;
-  margin-top: 20px;
-`;
-
-const MoreComment = styled.div`
-  display: flex;
-  align-items: center;
-  color: #9e9e9e;
-`;
-
 const EmptyComment = styled.div`
   color: #616161;
-  height:100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;

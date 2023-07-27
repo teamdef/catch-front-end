@@ -1,6 +1,7 @@
 /* eslint-disable no-async-promise-executor */
 import { AxiosResponse } from 'axios';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+import { CommentType } from 'types/comment';
 import { authAxios, notAuthAxios } from './customAxios';
 
 // 최근 생성된 퀴즈 목록
@@ -158,12 +159,34 @@ export const QuizSolveSaveApi = async (
 
 // 한줄평 - 목록 불러오기
 export const CommentListApi = async (quizset_id: string) => {
-  return notAuthAxios.get(`/comment/${quizset_id}`);
+  const res: AxiosResponse = await notAuthAxios.get(`/comment/${quizset_id}`);
+  const _commentList = res.data.map((comment: CommentType) => {
+    const _comment: CommentType = {
+      nickname: comment.nickname,
+      content: comment.content,
+      created_at: comment.created_at,
+      user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
+    };
+    return _comment;
+  });
+
+  return _commentList;
 };
 
 // 한줄평 - 등록하기
 export const CommentSaveApi = async (nickname: string, content: string, quizset_id: string, user_id: string | null) => {
-  return notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
+  const res: AxiosResponse = await notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
+  const _commentList = res.data.map((comment: CommentType) => {
+    const _comment: CommentType = {
+      nickname: comment.nickname,
+      content: comment.content,
+      created_at: comment.created_at,
+      user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
+    };
+    return _comment;
+  });
+
+  return _commentList;
 };
 
 // 감정표현

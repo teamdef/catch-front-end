@@ -62,7 +62,7 @@ const CommentModal = ({ onCloseModal, saveComment, commentList }: CommentModalPr
 
 const MarginTop = styled.div`
   margin-top: 40px;
-  width:100%;
+  width: 100%;
 `;
 
 const CommentInputContainer = styled.div`
@@ -153,8 +153,12 @@ const TopDown = keyframes`
 const ModalWrapper = styled.div`
   z-index: 99;
   background-color: white;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11), 0 4px 4px rgba(0, 0, 0, 0.11),
-    0 6px 8px rgba(0, 0, 0, 0.11), 0 8px 16px rgba(0, 0, 0, 0.11);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.11),
+    0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11),
+    0 6px 8px rgba(0, 0, 0, 0.11),
+    0 8px 16px rgba(0, 0, 0, 0.11);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
