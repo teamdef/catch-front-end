@@ -1,16 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ShareInfo } from './ShareModal';
 
-export interface ShareBtnProps {
-  props: { thumbnail?: string | null; setTitle?: string; id: string; profileImg?: string | null; nickName?: string };
-}
-
-const Kakaotalk = ({ props }: ShareBtnProps) => {
-  const { thumbnail, setTitle, id, profileImg, nickName } = props;
+const Kakaotalk = ({ shareInfo }: { shareInfo: ShareInfo }) => {
+  const { thumbnail, setTitle, id, profileImg, nickName } = shareInfo;
   const BASEURL: string = process.env.NEXT_PUBLIC_FRONTEND as string;
 
   const goKakaoTalk = () => {
-    console.log({ thumbnail, setTitle, profileImg, nickName });
     if (window.Kakao) {
       const kakaoShareUrl = `quiz/solve/${id}/?utm_source=kakao&utm_medium=share&utm_campaign=funnel`;
       window.Kakao.Link.sendScrap({

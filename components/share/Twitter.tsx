@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { ShareBtnProps } from './Kakaotalk';
+import { ShareInfo } from './ShareModal';
 
-const Twitter = ({ props }: ShareBtnProps) => {
-  const { setTitle, id, nickName } = props;
+const Twitter = ({ shareInfo }: { shareInfo: ShareInfo }) => {
+  const { setTitle, id, nickName } = shareInfo;
   const BASEURL: string = process.env.NEXT_PUBLIC_FRONTEND as string;
 
   const goTwitter = () => {

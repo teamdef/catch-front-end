@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 import { Twitter, Facebook, Kakaotalk, LinkCopyBtn } from '.';
 
-export interface ShareModalProps {
+export interface ShareInfo {
   thumbnail: string | null;
   setTitle: string;
   id: string;
@@ -10,7 +12,17 @@ export interface ShareModalProps {
   nickName: string | undefined;
 }
 
-const ShareModal = ({ thumbnail, setTitle, id, profileImg, nickName }: ShareModalProps) => {
+const ShareModal = () => {
+  const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+
+  const shareInfo: ShareInfo = {
+    thumbnail: quizSetThumbnail,
+    setTitle,
+    id: quizSetId,
+    profileImg: quizMaker.profileImg,
+    nickName: quizMaker.nickname,
+  };
+
   useEffect(() => {
     if (window.Kakao) {
       if (!window.Kakao.isInitialized()) {
@@ -21,10 +33,10 @@ const ShareModal = ({ thumbnail, setTitle, id, profileImg, nickName }: ShareModa
 
   return (
     <Wrapper>
-      <Twitter props={{ setTitle, id, nickName }} />
-      <Facebook id={id} />
-      <Kakaotalk props={{ thumbnail, setTitle, id, profileImg, nickName }} />
-      <LinkCopyBtn id={id} />
+      <Twitter shareInfo={shareInfo} />
+      <Facebook id={shareInfo.id} />
+      <Kakaotalk shareInfo={shareInfo} />
+      <LinkCopyBtn id={shareInfo.id} />
     </Wrapper>
   );
 };

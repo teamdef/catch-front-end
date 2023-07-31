@@ -15,6 +15,7 @@ import { ShareModalBtn } from 'components/share';
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList } = useSelector((state: RootState) => state.solve);
+
   return (
     <>
       {!solveUserScore && <NotFound text="잘못된 접근이에요!" />}
