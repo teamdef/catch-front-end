@@ -15,26 +15,21 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
 
-  return (
-    <ChoiceTextWrapper>
-      {choices.map((choice: string, choice_num: number) => (
-        <>
-          <ChoiceTextInput
-            key={choice_num}
-            type="radio"
-            id={`choice_txt_${quizNum}_${choice_num}`}
-            name={`choice_txt_${quizNum}`}
-            value={choice}
-            checked={answerList[quizNum] === choice_num}
-            onChange={() => {
-              answerHandler(choice_num);
-            }}
-          />
-          <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
-        </>
-      ))}
+  return choices.map((choice: string, choice_num: number) => (
+    <ChoiceTextWrapper key={choice_num}>
+      <ChoiceTextInput
+        type="radio"
+        id={`choice_txt_${quizNum}_${choice_num}`}
+        name={`choice_txt_${quizNum}`}
+        value={choice}
+        checked={answerList[quizNum] === choice_num}
+        onChange={() => {
+          answerHandler(choice_num);
+        }}
+      />
+      <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
     </ChoiceTextWrapper>
-  );
+  ));
 };
 
 const ChoiceTextWrapper = styled.div`
