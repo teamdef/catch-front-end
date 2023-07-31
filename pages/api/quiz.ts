@@ -146,7 +146,7 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const QuizSolveSaveApi = async (
+export const SaveScoreApi = async (
   nickname: string,
   score: number,
   quizset_id: string,

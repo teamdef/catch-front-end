@@ -4,45 +4,17 @@ import { useInput } from 'hooks';
 import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
-import { saveEmotionCount } from 'store/emotion';
-import Router from 'next/router';
 import { RootState } from 'store';
-import { QuizSolveSaveApi } from 'pages/api/quiz';
-
-/* 이 Modal 컴포넌트는 ReactDom.createPortal 로 관리 될 예정임. */
+import saveScore from 'utils/score';
 
 const NickNameModal = ({ setLoading }: any) => {
   const dispatch = useDispatch();
-
-  const { quizSetId, quizList } = useSelector((state: RootState) => state.solve);
-  const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { isLoggedin, nickName, userId } = useSelector((state: RootState) => state.user);
-
+  const { isLoggedin, nickName } = useSelector((state: RootState) => state.user);
   const [_nickname, _nicknameSetter, _nicknameClearFunction, _nicknameHandler] = useInput<string>('');
-
-  /**  비동기로 풀이자 닉네임과 점수를 서버에 저장을 요청하는 함수 */
-  const postSolver = async () => {
-    try {
-      const res = await QuizSolveSaveApi(
-        _nickname,
-        solveUserScore,
-        quizSetId,
-        isLoggedin ? userId : undefined,
-        quizList.length,
-      );
-      const { quizset_emotion, solver_id } = res.data;
-      dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
-      Router.push(`/quiz/solve/${quizSetId}/result/${solver_id}`);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const checkNickname = () => {
     if (_nickname && _nickname.length <= 12) {
-      postSolver();
+      saveScore(_nickname);
       dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
       setLoading(true);
     } else if (_nickname.length > 13) {
