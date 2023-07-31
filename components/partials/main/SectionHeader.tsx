@@ -20,7 +20,7 @@ const SectionHeader = ({ title, subtitle, moreViewUri, simply }: props) => {
         {moreViewUri && (
           <Link href={moreViewUri} passHref>
             <a>
-              <img src={'assets/img/rebranding/navigate_next.png'} />
+              <img src="assets/img/rebranding/navigate_next.png" alt="더보기이미지" />
             </a>
           </Link>
         )}

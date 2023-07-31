@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { QuizList } from 'components/common';
 import { theme } from 'styles/theme';
 import styled from 'styled-components';
 import Sketchbook from 'components/style/Sketchbook';
+import { QuizList } from 'components/partials/solve/main';
 
 const Page: NextPageWithLayout = () => {
   return (

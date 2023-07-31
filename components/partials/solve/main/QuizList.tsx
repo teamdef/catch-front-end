@@ -7,7 +7,7 @@ import { NickNameModal } from 'components/modal';
 import styled from 'styled-components';
 import { LargeContainedBtn } from 'components/style/button';
 import QuizItem from './QuizItem';
-import Loading from './Loading';
+import Loading from '../../../common/Loading';
 
 const QuizList = () => {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const QuizList = () => {
       {!loading && (
         <Wrapper>
           {quizList.map((item: SolveQuizType, quiz_num: number) => (
-            <QuizItem item={item} quiz_num={quiz_num} />
+            <QuizItem item={item} quiz_num={quiz_num} key={quiz_num} />
           ))}
           <LargeContainedBtn onClick={onClickResult} disabled={!isDone}>
             결과 확인하기

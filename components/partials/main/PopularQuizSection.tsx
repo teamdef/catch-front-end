@@ -1,26 +1,24 @@
-// 시끌시끌 퀴즈 섹션
+// 인기 급상승 퀴즈 섹션 (가제)
 
 import styled from 'styled-components';
 import SectionHeader from './SectionHeader';
-import QuizCard from './QuizCard';
 
-const NoisyQuizSection = () => {
+const PopularQuizSection = () => {
   return (
     <Wrapper>
       <SectionHeader
-        title={'시끌시끌 퀴즈'}
-        subtitle={'퀴즈에 달린 한줄평이 많은 퀴즈를 추천해드려요!'}
-        moreViewUri={'/'}
+        title="인기 급상승 퀴즈"
+        subtitle="많이 조회된 퀴즈를 확인해보세요!"
+        moreViewUri="/"
         simply={false}
-
       />
-      <SectionContent>
-      </SectionContent>
+      <SectionContent />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div``;
+
 const SectionContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,4 +26,4 @@ const SectionContent = styled.div`
   margin-top: 14px;
   margin-bottom: 24px;
 `;
-export default NoisyQuizSection;
+export default PopularQuizSection;

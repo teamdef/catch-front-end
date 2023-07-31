@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
 import { timeForToday } from 'utils/date';
-import { ShareModalProps } from 'components/share/ShareBox';
+import { ShareInfo } from 'components/share/ShareBox';
 
 interface QuizProps {
   recentQuiz: RecentQuizType;
@@ -12,7 +12,7 @@ interface QuizProps {
 const QuizCard = ({ recentQuiz }: QuizProps) => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
 
-  const snsShareObj: ShareModalProps = {
+  const snsShareObj: ShareInfo = {
     thumbnail: recentQuiz.thumbnail,
     setTitle: recentQuiz.setTitle,
     id: recentQuiz.id,

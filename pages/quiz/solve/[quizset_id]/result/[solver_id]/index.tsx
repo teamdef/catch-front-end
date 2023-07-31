@@ -1,15 +1,16 @@
 import { ReactElement } from 'react';
 import styled from 'styled-components';
-import { Emotion, NotFound, RankingBoard } from 'components/common';
+import { Emotion, NotFound } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { theme } from 'styles/theme';
-import UserScore from 'components/resultPage/UserScore';
+import UserScore from 'components/partials/solve/result/UserScore';
 import Sketchbook from 'components/style/Sketchbook';
 import Comment from 'components/comment/Comment';
 import { ShareModalBtn } from 'components/share';
+import { RankingBoard } from 'components/ranking';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);

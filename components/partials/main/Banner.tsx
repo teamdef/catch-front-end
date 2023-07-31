@@ -6,8 +6,8 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import Link from 'next/link';
-const Banner = () => {
 
+const Banner = () => {
   return (
     <Wrapper>
       <Swiper
@@ -18,13 +18,13 @@ const Banner = () => {
           disableOnInteraction: false,
         }}
         modules={[Pagination]}
-        loop={true}
+        loop
       >
         <SwiperSlide>
           <Link href="/quiz/create" passHref>
             <a>
               <BannerContent>
-                <img src={'/assets/img/rebranding/quiz-create-banner-1.png'} />
+                <img src="/assets/img/rebranding/quiz-create-banner-1.png" alt="배너이미지" />
               </BannerContent>
             </a>
           </Link>
@@ -33,7 +33,7 @@ const Banner = () => {
           <Link href="/quiz/create" passHref>
             <a>
               <BannerContent>
-                <img src={'/assets/img/rebranding/quiz-create-banner-2.png'} />
+                <img src="/assets/img/rebranding/quiz-create-banner-2.png" alt="배너이미지" />
               </BannerContent>
             </a>
           </Link>

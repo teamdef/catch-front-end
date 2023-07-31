@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { QuizSetCardType } from 'types/quiz';
 import { timeForToday } from 'utils/date';
+
 interface PropsType {
   quizSet: QuizSetCardType;
 }
@@ -10,7 +11,7 @@ const QuizCard = ({ quizSet }: PropsType) => {
   return (
     <Wrapper>
       <ImgWrapper>
-        <img src={quizSet.quizSetThumbnail} />
+        <img src={quizSet.quizSetThumbnail ? quizSet.quizSetThumbnail : ''} alt="퀴즈썸네일이미지" />
       </ImgWrapper>
       <ContentWrapper>
         <div className="quiz-title">{quizSet.quizSetTitle}</div>
@@ -18,9 +19,8 @@ const QuizCard = ({ quizSet }: PropsType) => {
           <Profile>
             <div className="profile-img">
               <img
-                src={
-                  'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927'
-                }
+                src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F2513B53E55DB206927"
+                alt="유저프로필이미지"
               />
             </div>
             <div className="nickname">{quizSet.quizSetMaker.nickname || '탈퇴한 사용자'}</div>

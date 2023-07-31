@@ -2,8 +2,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { QuizRankingListApi } from 'pages/api/quiz';
-import RankCard from './RankCard';
-import Ranker from './Ranker';
+import { RankCard, Ranker } from '.';
 
 const RankingBoard = () => {
   const router = useRouter();

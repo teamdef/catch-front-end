@@ -20,6 +20,7 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
       {choices.map((choice: string, choice_num: number) => (
         <>
           <ChoiceTextInput
+            key={choice_num}
             type="radio"
             id={`choice_txt_${quizNum}_${choice_num}`}
             name={`choice_txt_${quizNum}`}

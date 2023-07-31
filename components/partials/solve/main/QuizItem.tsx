@@ -1,6 +1,5 @@
-import ChoiceImage from 'components/solvePage/ChoiceImage';
-import ChoiceText from 'components/solvePage/ChoiceText';
 import styled from 'styled-components';
+import { ChoiceImage, ChoiceText } from '.';
 
 interface QuizItemPropsType {
   item: SolveQuizType;
