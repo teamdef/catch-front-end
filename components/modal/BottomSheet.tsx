@@ -26,50 +26,37 @@ const BottomSheet = ({ props, closeModal }: ModalProps) => {
 
   return (
     <ModalWrapper onClick={(e: MouseEvent) => e.stopPropagation()}>
-      <button onClick={noActionAndClose}>닫기</button>
-      <ModalBody>{props.contents}</ModalBody>
+      <CloseBtn onClick={noActionAndClose} />
+      {props.contents}
     </ModalWrapper>
   );
 };
 
 const ModalWrapper = styled.div`
-  z-index: 99;
-  background-color: white;
-  box-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.11),
-    0 2px 2px rgba(0, 0, 0, 0.11),
-    0 4px 4px rgba(0, 0, 0, 0.11),
-    0 6px 8px rgba(0, 0, 0, 0.11),
-    0 8px 16px rgba(0, 0, 0, 0.11);
-  border-radius: 12px;
-  padding: 1.5rem 2rem 1.5rem 2rem;
-  width: 384px; /* 480px 의 80% 너비가 384px임. */
-  @media (max-width: 480px) {
-    width: 80vw;
-  }
-  max-height: 50vh;
-  overflow: auto;
-  font-size: 1rem;
-  color: rgb(59, 59, 59);
-
-  .close-button-wrapper {
-    display: flex;
-    justify-content: right;
-    color: #d6d6d6;
-    &:hover {
-      cursor: pointer;
-    }
-  }
+  position: relative;
+  width: 100%;
+  height: 52%;
+  border-radius: 24px 24px 0 0;
+  align-self: end;
+  padding: 0 4.27%;
+  background-color: #fff;
 `;
-
-const ModalBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding-top: 1.5rem;
-  padding-bottom: 2rem;
-  /*line-height:1.5rem;*/
+const CloseBtn = styled.button`
+  position: absolute;
+  display: block;
+  top: 21px;
+  right: 4.27%;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+  background: url(/assets/img/rebranding/icon/close_24px.svg) no-repeat center;
 `;
+// animation: ${BottomUp} 0.4s ease-out;
+// animation: ${TopDown} 0.4s ease-in-out;
+// 0% {
+//   transform: translateY(100%);
+// }
+// 100% {
+//   transform: translateY(0);
+// }
 export default BottomSheet;

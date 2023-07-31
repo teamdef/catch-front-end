@@ -17,7 +17,7 @@ const Page: NextPageWithLayout = () => {
   const { quizList } = useSelector((state: RootState) => state.solve);
   return (
     <>
-      {!solveUserScore && <NotFound title="잘못된 접근이에요!" subTitle="더이상 결과를 불러올 수 없어요" />}
+      {!solveUserScore && <NotFound text="잘못된 접근이에요!" />}
       {solveUserScore && (
         <Sketchbook>
           <Wrapper>

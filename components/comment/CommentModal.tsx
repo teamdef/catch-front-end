@@ -1,166 +1,67 @@
 // 바텀업 모달임
 
-import styled, { keyframes } from 'styled-components';
-import { Dispatch, SetStateAction } from 'react';
-
-import { useInput } from 'hooks';
+import styled from 'styled-components';
+import { useCallback, useEffect, useState } from 'react';
 import CommentList from 'components/comment/CommentList';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
-import { CommentSaveApi } from 'pages/api/quiz';
+import { CommentListApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
+import { NotFound } from 'components/common';
+import CommentForm from './CommentForm';
 
-interface CommentModalProps {
-  commentList: CommentType[];
-  setCommentList: Dispatch<SetStateAction<CommentType[]>>;
-}
-
-const CommentModal = ({ commentList, setCommentList }: CommentModalProps) => {
+const CommentModal = () => {
   const router = useRouter();
   const { quizset_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
-  const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
-  const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
-  const { solveUserName } = useSelector((state: RootState) => state.user_solve);
+  const [comments, setComments] = useState<CommentType[]>([]);
 
-  const saveComment = async () => {
+  const commentsHandler = (_comments: CommentType[]) => {
+    setComments(_comments);
+  };
+  const fetchCommentList = useCallback(async () => {
     try {
-      const res = await CommentSaveApi(solveUserName, commentInput, quizset_id as string, isLoggedin && userId);
-      setCommentList(res);
-      commentInputClear();
+      const res = await CommentListApi(quizset_id as string);
+      setComments(res);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [quizset_id]);
+
+  useEffect(() => {
+    fetchCommentList();
+  }, [quizset_id]);
 
   return (
     <Wrapper>
-      <GrabBar />
-      <MarginTop>
-        {commentList && <CommentList commentList={commentList} />}
-        <CommentInputContainer>
-          <input
-            type="text"
-            value={commentInput}
-            onChange={commentInputHandler}
-            id="comment-input"
-            maxLength={50}
-            placeholder="한줄평 남기기.."
-          />
-          <button disabled={commentInput.length === 0} onClick={saveComment}>
-            등록
-          </button>
-        </CommentInputContainer>
-      </MarginTop>
+      <Title>한줄평</Title>
+      <Content>
+        {comments[0] && <CommentList comments={comments} />}
+        {!comments[0] && <NotFound text="등록된 한줄평이 없습니다." />}
+      </Content>
+      <CommentForm commentsHandler={commentsHandler} />
     </Wrapper>
   );
 };
-
-const MarginTop = styled.div`
-  margin-top: 40px;
-  width: 100%;
-`;
-
-const CommentInputContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  z-index: 1;
-  border-top: solid 1px #eee;
-
-  input {
-    background-color: #f4f4f4;
-    margin-left: 10px;
-    margin-right: 3%;
-    outline: none;
-    flex-grow: 1;
-    height: 51px;
-    border: none;
-    padding: 0 5%;
-    color: #888;
-    border-radius: 12px;
-    font-size: 1rem;
-    ::placeholder {
-      color: #757575;
-    }
-  }
-  button {
-    position: absolute;
-    word-break: keep-all;
-    height: 38px;
-    right: calc(3% + 8px);
-    border: none;
-    padding: 0 20px;
-    font-weight: 500;
-    font-size: 1rem;
-    color: #fff;
-    border-radius: 12px;
-    background-color: #212121;
-    cursor: pointer;
-    &:disabled {
-      background-color: #ccc;
-    }
-  }
-`;
-
-const BottomUp = keyframes` 
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(0);
-  }
-
-`;
-const TopDown = keyframes` 
-      0% {
-    transform: translateY(0);
-  }
-  100% {
-        transform: translateY(100%);
-  }
-
-`;
-
 const Wrapper = styled.div`
-  z-index: 99;
-  background-color: white;
-  box-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.11),
-    0 2px 2px rgba(0, 0, 0, 0.11),
-    0 4px 4px rgba(0, 0, 0, 0.11),
-    0 6px 8px rgba(0, 0, 0, 0.11),
-    0 8px 16px rgba(0, 0, 0, 0.11);
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  padding: 1.5rem 2rem 1.5rem 2rem;
-
-  width: 100%;
-  height: 80vh;
-
-  overflow: auto;
+  position: relative;
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  &.openAnimation {
-    animation: ${BottomUp} 0.4s ease-out;
-  }
-  &.closeAnimation {
-    animation: ${TopDown} 0.4s ease-in-out;
-  }
+`;
+const Title = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.subtitle_2};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.blackColors.grey_900};
+  height: 69px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const GrabBar = styled.div`
-  width: 50px;
-  height: 5px;
-  border-radius: 12px;
-  background-color: #eee;
-  cursor: pointer;
+const Content = styled.div`
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default CommentModal;

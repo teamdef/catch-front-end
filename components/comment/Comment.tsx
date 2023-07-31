@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { CommentListApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
@@ -15,20 +15,20 @@ const Comment = () => {
     escClickable: true,
     backgroundClickable: true,
     bottomSheet: true,
-    contents: <CommentModal setCommentList={setCommentList} commentList={commentList} />,
+    contents: <CommentModal />,
   });
 
-  const fetchCommentList = async (id: string) => {
+  const fetchCommentList = useCallback(async () => {
     try {
-      const res = await CommentListApi(id);
+      const res = await CommentListApi(quizset_id as string);
       setCommentList(res);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [quizset_id]);
 
   useEffect(() => {
-    fetchCommentList(quizset_id as string);
+    fetchCommentList();
   }, [quizset_id]);
 
   return (

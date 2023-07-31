@@ -21,7 +21,7 @@ const FixedWidth = styled.div<{ bgColor: string | undefined }>`
   max-width: 480px; /* 기준 width가 480px */
   width: 100%;
   min-height: 100vh;
-  padding: 0 16px;
+  padding: 0 4.27%;
   background-color: ${(props) => (props.bgColor ? props.bgColor : '#fff')};
 `;
 export default AppLayout;
