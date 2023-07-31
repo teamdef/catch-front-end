@@ -1,33 +1,35 @@
 import { useInput } from 'hooks';
 import { useRouter } from 'next/router';
 import { CommentSaveApi } from 'pages/api/quiz';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import styled from 'styled-components';
 
-interface CommentFormProps {
+interface CommentInputProps {
   commentsHandler: (comments: CommentType[]) => void;
 }
 
-const CommentForm = ({ commentsHandler }: CommentFormProps) => {
+const CommentInput = ({ commentsHandler }: CommentInputProps) => {
   const router = useRouter();
   const { quizset_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
   const [commentInput, , commentInputClear, commentInputHandler] = useInput<string>('');
   const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
   const { solveUserName } = useSelector((state: RootState) => state.user_solve);
 
-  const saveComment = async () => {
+  const saveComment = useCallback(async () => {
     try {
       const res = await CommentSaveApi(solveUserName, commentInput, quizset_id as string, isLoggedin && userId);
       commentsHandler(res);
+      console.log(commentInput);
       commentInputClear();
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [commentInput, quizset_id, solveUserName, isLoggedin, userId]);
 
   return (
-    <Form>
+    <Wrapper>
       <input
         type="text"
         value={commentInput}
@@ -36,22 +38,27 @@ const CommentForm = ({ commentsHandler }: CommentFormProps) => {
         maxLength={50}
         placeholder="한줄평 남기기.."
       />
-      <button disabled={commentInput.length === 0} onClick={saveComment}>
+      <button disabled={!commentInput} onClick={saveComment}>
         등록
       </button>
-    </Form>
+    </Wrapper>
   );
 };
-const Form = styled.form`
-  position: relative;
+const Wrapper = styled.div`
+  position: absolute;
   display: flex;
+  bottom: 0;
   width: 100%;
-  margin: 17px 0;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.secondary_500};
+  flex: none;
+  justify-content: end;
+  padding: 12px;
+  background-color: #fff;
+  box-shadow: 0px -4px 13px 0px rgba(180, 160, 255, 0.12);
   input {
+    position: relative;
+    width: 100%;
     border-radius: 8px;
-    border: 0;
+    border: 1px solid ${({ theme }) => theme.colors.secondary_500};
     flex-grow: 1;
     outline-style: none;
     padding: 16px 24px;
@@ -60,6 +67,7 @@ const Form = styled.form`
     }
   }
   button {
+    position: absolute;
     background-color: transparent;
     padding: 16px 24px;
     display: block;
@@ -71,4 +79,4 @@ const Form = styled.form`
     }
   }
 `;
-export default CommentForm;
+export default CommentInput;

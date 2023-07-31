@@ -13,7 +13,10 @@ const CommentList = (props: { comments: CommentType[] }) => {
 
 const Wrapper = styled.div`
   position: relative;
-  display: flex;
   width: 100%;
+  margin-bottom: 74px;
+  padding-left: 24px;
+  padding-right: 15px;
+  overflow-y: scroll;
 `;
 export default CommentList;

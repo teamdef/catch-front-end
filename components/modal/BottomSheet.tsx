@@ -38,7 +38,6 @@ const ModalWrapper = styled.div`
   height: 52%;
   border-radius: 24px 24px 0 0;
   align-self: end;
-  padding: 0 4.27%;
   background-color: #fff;
 `;
 const CloseBtn = styled.button`

@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from 'react';
 import CommentList from 'components/comment/CommentList';
 import { CommentListApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
-import { NotFound } from 'components/common';
-import CommentForm from './CommentForm';
+import Empty from 'components/style/Empty';
+import CommentInput from './CommentInput';
 
 const CommentModal = () => {
   const router = useRouter();
@@ -32,11 +32,9 @@ const CommentModal = () => {
   return (
     <Wrapper>
       <Title>한줄평</Title>
-      <Content>
-        {comments[0] && <CommentList comments={comments} />}
-        {!comments[0] && <NotFound text="등록된 한줄평이 없습니다." />}
-      </Content>
-      <CommentForm commentsHandler={commentsHandler} />
+      {comments[0] && <CommentList comments={comments} />}
+      {!comments[0] && <Empty>등록된 한줄평이 없습니다.</Empty>}
+      <CommentInput commentsHandler={commentsHandler} />
     </Wrapper>
   );
 };
@@ -55,13 +53,7 @@ const Title = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Content = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
+  flex: none;
 `;
 
 export default CommentModal;

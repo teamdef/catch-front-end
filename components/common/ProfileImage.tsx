@@ -23,6 +23,7 @@ const ProfileImage = ({ src, size }: Props) => {
 const Wrapper = styled.div<Pick<Props, 'size'>>`
   width: ${({ size }) => size || '40px'};
   height: ${({ size }) => size || '40px'};
+  flex: none;
   img {
     width: 100%;
     height: 100%;
