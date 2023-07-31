@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
 import { timeForToday } from 'utils/date';
-import { ShareModalProps } from 'components/share/ShareModal';
+import { ShareModalProps } from 'components/share/ShareBox';
 
 interface QuizProps {
   recentQuiz: RecentQuizType;

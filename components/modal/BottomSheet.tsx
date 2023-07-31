@@ -33,12 +33,16 @@ const BottomSheet = ({ props, closeModal }: ModalProps) => {
 };
 
 const ModalWrapper = styled.div`
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 52%;
-  border-radius: 24px 24px 0 0;
-  align-self: end;
-  background-color: #fff;
+  justify-content: end;
+  > div {
+    border-radius: 24px 24px 0 0;
+    background-color: #fff;
+  }
 `;
 const CloseBtn = styled.button`
   position: absolute;

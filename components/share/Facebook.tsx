@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ShareBtnProps } from './Kakaotalk';
+import { ShareInfo } from './ShareBox';
 
-const Facebook = ({ id }: { id: ShareBtnProps['props']['id'] }) => {
+const Facebook = ({ id }: { id: ShareInfo['id'] }) => {
   const BASEURL: string = process.env.NEXT_PUBLIC_FRONTEND as string;
 
   const goFacebook = () => {
@@ -15,6 +15,6 @@ const Facebook = ({ id }: { id: ShareBtnProps['props']['id'] }) => {
 };
 
 const Button = styled.button`
-  background-image: url(/assets/img/facebook_icon.png);
+  background-image: url(/assets/img/rebranding/icon/facebook.svg);
 `;
 export default Facebook;

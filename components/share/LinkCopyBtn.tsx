@@ -1,9 +1,9 @@
 /* eslint-disable no-alert */
 import React from 'react';
 import styled from 'styled-components';
-import { ShareBtnProps } from './Kakaotalk';
+import { ShareInfo } from './ShareBox';
 
-const LinkCopyBtn = ({ id }: { id: ShareBtnProps['props']['id'] }) => {
+const LinkCopyBtn = ({ id }: { id: ShareInfo['id'] }) => {
   const BASEURL: string = process.env.NEXT_PUBLIC_FRONTEND as string;
   const handleCopyClipBoard = async (text: string) => {
     try {
@@ -24,7 +24,7 @@ const LinkCopyBtn = ({ id }: { id: ShareBtnProps['props']['id'] }) => {
 };
 
 const Button = styled.button`
-  background-image: url(/assets/img/facebook_icon.png);
+  background-image: url(/assets/img/rebranding/icon/link.svg);
 `;
 
 export default LinkCopyBtn;

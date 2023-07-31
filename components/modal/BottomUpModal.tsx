@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import ModalPortal from 'components/modal/PortalWrapper';
-import ShareModal, { ShareModalProps } from 'components/share/ShareModal';
+import ShareBox, { ShareInfo } from 'components/share/ShareBox';
 
 interface BottomUpProps {
   bottomUpClose: () => void;
-  shareInfo: ShareModalProps;
+  shareInfo: ShareInfo;
 }
 
 const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
@@ -26,13 +26,7 @@ const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
             <div id="info">퀴즈를 공유하고 다같이 즐겨보세요 ❤️</div>
           </QuizTitleAndShareInfo>
           <SNSShareWrapper>
-            <ShareModal
-              nickName={shareInfo.nickName}
-              profileImg={shareInfo.profileImg}
-              thumbnail={shareInfo.thumbnail}
-              setTitle={shareInfo.setTitle}
-              id={shareInfo.id}
-            />
+            <ShareBox />
           </SNSShareWrapper>
         </ModalWrapper>
       </Background>

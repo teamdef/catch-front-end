@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ShareInfo } from './ShareModal';
+import { ShareInfo } from './ShareBox';
 
 const Kakaotalk = ({ shareInfo }: { shareInfo: ShareInfo }) => {
   const { thumbnail, setTitle, id, profileImg, nickName } = shareInfo;
@@ -22,11 +22,11 @@ const Kakaotalk = ({ shareInfo }: { shareInfo: ShareInfo }) => {
       });
     }
   };
-  return <Button onClick={goKakaoTalk} className="share-btn kakao-btn" />;
+  return <Button onClick={goKakaoTalk} />;
 };
 
 const Button = styled.button`
-  background-image: url(/assets/img/kakao_icon.png);
+  background-image: url(/assets/img/rebranding/icon/kakaotalk.svg);
 `;
 
 export default Kakaotalk;

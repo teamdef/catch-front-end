@@ -10,13 +10,11 @@ const ShareModalBtn = () => {
     contents: <ShareModal />,
   });
   return (
-    <>
-      <LargeOutlinedBtn onClick={openModal}>
-        <img src="/assets/img/rebranding/icon/share_icon.svg" alt="공유버튼아이콘이미지" />
-        퀴즈 공유하기
-      </LargeOutlinedBtn>
+    <LargeOutlinedBtn onClick={openModal}>
+      <img src="/assets/img/rebranding/icon/share_icon.svg" alt="공유버튼아이콘이미지" />
+      퀴즈 공유하기
       <RenderModal />
-    </>
+    </LargeOutlinedBtn>
   );
 };
 
