@@ -11,16 +11,12 @@ import styled from 'styled-components';
 export interface ModalType {
   escClickable?: boolean; // esc로 모달을 닫을 수 있는지에 대한 여부
   backgroundClickable?: boolean; // 백그라운드 클릭으로 모달을 닫을 수 있는지에 대한 여부
-  yesTitle?: string; // yes 버튼에 표시할 이름
-  noTitle?: string; // no 버튼에 표시할 이름
-  yesAction?: () => void; // yes 버튼 클릭시 수행할 함수
-  noAction?: () => void; // no 버튼 클릭시 수행할 함수
   contents: JSX.Element;
   bottomSheet?: boolean; // 바텀시트 여부
 }
 
 export interface ModalProps {
-  props: ModalType;
+  contents: ModalType['contents'];
   closeModal: () => void;
 }
 
@@ -47,8 +43,8 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     return isOpen ? (
       <ModalPortal wrapperId="react-portal-modal-container">
         <Background onClick={close}>
-          {modalValue.bottomSheet && <BottomSheet props={modalValue} closeModal={closeModal} />}
-          {!modalValue.bottomSheet && <Dialog props={modalValue} closeModal={closeModal} />}
+          {modalValue.bottomSheet && <BottomSheet contents={modalValue.contents} closeModal={closeModal} />}
+          {!modalValue.bottomSheet && <Dialog contents={modalValue.contents} closeModal={closeModal} />}
         </Background>
       </ModalPortal>
     ) : null;

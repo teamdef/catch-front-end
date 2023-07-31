@@ -11,7 +11,6 @@ const saveScore = async (_nickname: string) => {
   const { quizSetId, quizList } = useSelector((state: RootState) => state.solve);
   const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { isLoggedin, userId } = useSelector((state: RootState) => state.user);
-
   try {
     const res = await SaveScoreApi(
       _nickname,

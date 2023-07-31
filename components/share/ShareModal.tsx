@@ -1,10 +1,16 @@
 import styled from 'styled-components';
+import { ModalProps } from 'hooks/useModal';
+import CloseBtn from 'components/style/button/CloseBtn';
 import { ShareBox } from '.';
 
-const ShareModal = () => {
+const ShareModal = ({ closeModal }: { closeModal: ModalProps['closeModal'] }) => {
   return (
     <Wrapper>
-      <Title>퀴즈 공유하기</Title>
+      <Title>
+        퀴즈 공유하기
+        <CloseBtn onClick={closeModal} />
+      </Title>
+
       <SubTitle>
         퀴즈를 재밌게 풀었다면
         <br />
@@ -14,6 +20,7 @@ const ShareModal = () => {
     </Wrapper>
   );
 };
+
 const Wrapper = styled.div`
   height: 234px;
 `;
@@ -27,6 +34,7 @@ const Title = styled.div`
   align-items: center;
   flex: none;
 `;
+
 const SubTitle = styled.p`
   color: ${({ theme }) => theme.colors.blackColors.grey_700};
   text-align: center;
