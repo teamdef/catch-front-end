@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BottomUpModal } from 'components/modal';
-import { shareProps } from 'components/common/SNSShare';
 import { RootState } from 'store';
 import styled from 'styled-components';
+import { ShareProps } from 'components/share/ShareModal';
 
 const BottomUpShare = () => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
   const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
 
-  const snsShareObj: shareProps = {
+  const snsShareObj: ShareProps = {
     thumbnail: quizSetThumbnail,
-    setTitle: setTitle,
+    setTitle,
     id: quizSetId,
     profileImg: quizMaker.profileImg,
     nickName: quizMaker.nickname,
@@ -46,14 +46,14 @@ const ShareButton = styled.button`
   align-items: center;
   justify-content: center;
   /* padding: 14px 0; */
-  height:52px;
+  height: 52px;
   min-width: 200px;
   width: 100%;
   font-size: 14px;
   gap: 12px;
   background-color: #ff4d57;
   color: #fff;
-  border:none;
+  border: none;
   box-shadow: 0 4px #c4363e;
   border-radius: 16px;
   cursor: pointer;

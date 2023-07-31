@@ -1,6 +1,6 @@
 import { LargeOutlinedBtn } from 'components/style/button';
 
-const ShareBtn = () => {
+const ShareModalBtn = () => {
   return (
     <LargeOutlinedBtn>
       <img src="/assets/img/rebranding/icon/share_icon.svg" alt="공유버튼아이콘이미지" />
@@ -9,4 +9,4 @@ const ShareBtn = () => {
   );
 };
 
-export default ShareBtn;
+export default ShareModalBtn;
