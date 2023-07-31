@@ -44,8 +44,8 @@ const ShareBox = () => {
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  padding: 0 27px;
+  justify-content: center;
+  gap: 20px;
   button {
     width: 57px;
     height: 57px;

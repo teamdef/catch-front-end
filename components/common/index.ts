@@ -19,3 +19,5 @@ export { default as RankingBoard } from './RankingBoard';
 
 export { default as SideNavigationBar } from './SideNavigationBar';
 export { default as Icon } from './Icon';
+
+export { default as Emotion } from './Emotion';

@@ -41,7 +41,7 @@ const CommentModal = () => {
 const Wrapper = styled.div`
   position: relative;
   display: flex;
-  height: 52vh;
+  height: 428px;
   flex-direction: column;
   align-items: center;
 `;

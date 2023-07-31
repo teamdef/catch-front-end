@@ -1,13 +1,12 @@
 import { ReactElement } from 'react';
 import styled from 'styled-components';
-import { NotFound, RankingBoard } from 'components/common';
+import { Emotion, NotFound, RankingBoard } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { theme } from 'styles/theme';
 import UserScore from 'components/resultPage/UserScore';
-import { Emotion } from 'components/emotion';
 import Sketchbook from 'components/style/Sketchbook';
 import Comment from 'components/comment/Comment';
 import { ShareModalBtn } from 'components/share';
