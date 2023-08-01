@@ -5,6 +5,10 @@ import { saveSolveAnswersAction } from 'store/quiz_solve';
 import styled from 'styled-components';
 import { ChoiceProps } from 'types/quiz';
 
+// interface ChoiceReturn {
+//   (choices: ChoiceProps): React.ReactElement[]; // or JSX.Element[]
+// }
+
 const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
   const dispatch = useDispatch();
   const { answerList } = useSelector((state: RootState) => state.solve);
@@ -15,21 +19,27 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
 
-  return choices.map((choice: string, choice_num: number) => (
-    <ChoiceTextWrapper key={choice_num}>
-      <ChoiceTextInput
-        type="radio"
-        id={`choice_txt_${quizNum}_${choice_num}`}
-        name={`choice_txt_${quizNum}`}
-        value={choice}
-        checked={answerList[quizNum] === choice_num}
-        onChange={() => {
-          answerHandler(choice_num);
-        }}
-      />
-      <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
-    </ChoiceTextWrapper>
-  ));
+  return (
+    <>
+      {choices.map((choice: string, choice_num: number) => {
+        return (
+          <ChoiceTextWrapper key={choice_num}>
+            <ChoiceTextInput
+              type="radio"
+              id={`choice_txt_${quizNum}_${choice_num}`}
+              name={`choice_txt_${quizNum}`}
+              value={choice}
+              checked={answerList[quizNum] === choice_num}
+              onChange={() => {
+                answerHandler(choice_num);
+              }}
+            />
+            <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
+          </ChoiceTextWrapper>
+        );
+      })}
+    </>
+  );
 };
 
 const ChoiceTextWrapper = styled.div`

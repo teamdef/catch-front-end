@@ -10,7 +10,7 @@ import { ModalProps } from 'hooks/useModal';
 import CloseBtn from 'components/style/button/CloseBtn';
 import CommentInput from './CommentInput';
 
-const CommentModal = ({ closeModal }: { closeModal: ModalProps['closeModal'] }) => {
+const CommentModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }) => {
   const router = useRouter();
   const { quizset_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 url에서 사용 가능
   const [comments, setComments] = useState<CommentType[]>([]);

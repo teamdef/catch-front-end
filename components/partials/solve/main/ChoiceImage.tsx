@@ -14,24 +14,26 @@ const ChoiceImage = ({ choices, quizNum }: ChoiceProps) => {
     copy_answer[_quiz_num] = choice_num;
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
-
-  return choices.map((choice: string, choice_num: number) => (
-    <ChoiceImgWrapper>
-      <ChoiceImgInput
-        type="radio"
-        id={`choice_img_${quizNum}_${choice_num}`}
-        name={`choice_img_${quizNum}`}
-        value={choice}
-        checked={answerList[quizNum] === choice_num}
-        onChange={() => {
-          answerHandler(quizNum, choice_num);
-        }}
-      />
-      <ChoiceImgLabel htmlFor={`choice_img_${quizNum}_${choice_num}`} imgSrc={choice} />
-    </ChoiceImgWrapper>
-  ));
+  return (
+    <>
+      {choices.map((choice: string, choice_num: number) => (
+        <ChoiceImgWrapper>
+          <ChoiceImgInput
+            type="radio"
+            id={`choice_img_${quizNum}_${choice_num}`}
+            name={`choice_img_${quizNum}`}
+            value={choice}
+            checked={answerList[quizNum] === choice_num}
+            onChange={() => {
+              answerHandler(quizNum, choice_num);
+            }}
+          />
+          <ChoiceImgLabel htmlFor={`choice_img_${quizNum}_${choice_num}`} imgSrc={choice} />
+        </ChoiceImgWrapper>
+      ))}
+    </>
+  );
 };
-
 const ChoiceImgWrapper = styled.div`
   position: relative;
   display: grid;

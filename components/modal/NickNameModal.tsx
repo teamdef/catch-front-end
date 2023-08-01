@@ -7,7 +7,7 @@ import { RootState } from 'store';
 import saveScore from 'utils/score';
 import { ModalProps } from 'hooks/useModal';
 
-const NicknameModal = ({ closeModal }: { closeModal: ModalProps['closeModal'] }) => {
+const NicknameModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }) => {
   const dispatch = useDispatch();
   const { isLoggedin, nickName } = useSelector((state: RootState) => state.user);
   const [_nickname, _nicknameSetter, , _nicknameHandler] = useInput<string>('');
@@ -16,16 +16,16 @@ const NicknameModal = ({ closeModal }: { closeModal: ModalProps['closeModal'] })
     try {
       saveScore(_nickname);
       dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
-      closeModal();
+      if (closeModal) closeModal();
     } catch (err) {
       console.log(err);
     }
   };
 
-  // 로그인 환경일 경우 닉네임 default 넣어주기
   useEffect(() => {
     if (isLoggedin) _nicknameSetter(nickName);
   }, []);
+
   return (
     <Wrapper>
       <Title>닉네임을 입력해주세요</Title>

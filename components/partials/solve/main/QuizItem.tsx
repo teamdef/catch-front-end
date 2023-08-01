@@ -7,15 +7,17 @@ interface QuizItemPropsType {
 }
 
 const QuizItem = ({ item, quiz_num }: QuizItemPropsType) => {
+  const { quiz_title, quiz_thumbnail, choice_type, choices } = item;
+
   return (
     <QuizSolveCard key={quiz_num}>
       <QuizTitle>
         <QuizCount>Q {quiz_num + 1}.</QuizCount>
-        {item.quiz_title}
+        {quiz_title}
       </QuizTitle>
-      {item.quiz_thumbnail && <QuizImageWrapper src={item.quiz_thumbnail} />}
-      {item.choice_type === 'img' && <ChoiceImage choices={item.choices} quizNum={quiz_num} />}
-      {item.choice_type === 'text' && <ChoiceText choices={item.choices} quizNum={quiz_num} />}
+      {quiz_thumbnail && <QuizImageWrapper src={quiz_thumbnail} />}
+      {choice_type === 'img' && <ChoiceImage choices={choices} quizNum={quiz_num} />}
+      {choice_type === 'text' && <ChoiceText choices={choices} quizNum={quiz_num} />}
       <QuizGuide>퀴즈의 정답을 선택해주세요!</QuizGuide>
     </QuizSolveCard>
   );
@@ -37,9 +39,7 @@ const QuizTitle = styled.div`
   display: flex;
   color: #000;
   font-size: ${({ theme }) => theme.fontSize.body_2};
-  font-weight: 700;
-  line-height: 130%; /* 18.2px */
-  letter-spacing: -0.7px;
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-left: 4px;
 `;
 
@@ -59,7 +59,8 @@ const QuizImageWrapper = styled.img`
 const QuizGuide = styled.span`
   margin-top: 16px;
   color: ${({ theme }) => theme.colors.blackColors.grey_500};
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.fontSize.caption};
   font-weight: ${({ theme }) => theme.fontWeight.regular};
 `;
+
 export default QuizItem;
