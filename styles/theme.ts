@@ -25,6 +25,7 @@ const colors = {
   secondary_700: '#001BF0',
   complementary_1: '#FF6897',
   complementary_2: '#FF2768',
+  error: '#FF2768',
   mintColor: '#D9FFF0',
   blackColors: {
     grey_900: '#212121',

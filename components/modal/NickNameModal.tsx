@@ -4,20 +4,34 @@ import { useInput } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveSolveUserNameAction } from 'store/user_solve';
 import { RootState } from 'store';
-import saveScore from 'utils/score';
 import { ModalProps } from 'hooks/useModal';
 import SmallOutlinedBtn from 'components/style/button/SmallOutlinedBtn';
 import SmallContainedBtn from 'components/style/button/SmallContainedBtn';
+import { SaveScoreApi } from 'pages/api/quiz';
+import { useRouter } from 'next/router';
+import { saveEmotionCount } from 'store/emotion';
 
 const NicknameModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
-  const { isLoggedin, nickName } = useSelector((state: RootState) => state.user);
+  const { isLoggedin, nickName, userId } = useSelector((state: RootState) => state.user);
   const [_nickname, _nicknameSetter, , _nicknameHandler] = useInput<string>('');
+  const { quizSetId, quizList } = useSelector((state: RootState) => state.solve);
+  const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
 
   const saveUserData = async () => {
     try {
-      saveScore(_nickname);
       dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
+      const res = await SaveScoreApi(
+        _nickname,
+        solveUserScore,
+        quizSetId,
+        isLoggedin ? userId : undefined,
+        quizList.length,
+      );
+      const { quizset_emotion, solver_id } = res.data;
+      dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
+      router.push(`/quiz/solve/${quizSetId}/result/${solver_id}`);
       if (closeModal) closeModal();
     } catch (err) {
       console.log(err);

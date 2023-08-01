@@ -14,12 +14,13 @@ import { RankingBoard } from 'components/ranking';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { quizList } = useSelector((state: RootState) => state.solve);
-
+  const { quizList, answerList } = useSelector((state: RootState) => state.solve);
+  const isValid = solveUserScore !== undefined;
+  console.log(answerList);
   return (
     <>
-      {!solveUserScore && <NotFound text="잘못된 접근이에요!" />}
-      {solveUserScore && (
+      {!isValid && <NotFound text="잘못된 접근이에요!" />}
+      {isValid && (
         <Sketchbook>
           <Wrapper>
             <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
