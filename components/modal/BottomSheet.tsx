@@ -1,5 +1,5 @@
 import { ModalProps } from 'hooks/useModal';
-import React, { MouseEvent, useEffect } from 'react';
+import { MouseEvent, cloneElement, useEffect } from 'react';
 import styled from 'styled-components';
 
 const BottomSheet = ({ contents, closeModal }: ModalProps) => {
@@ -12,7 +12,7 @@ const BottomSheet = ({ contents, closeModal }: ModalProps) => {
   }, []);
   return (
     <ModalWrapper onClick={(e: MouseEvent) => e.stopPropagation()}>
-      {React.cloneElement(contents, { closeModal })}
+      {cloneElement(contents, { closeModal })}
     </ModalWrapper>
   );
 };

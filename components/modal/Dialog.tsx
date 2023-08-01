@@ -1,5 +1,5 @@
 import { ModalProps } from 'hooks/useModal';
-import React, { useEffect } from 'react';
+import { cloneElement, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Dialog = ({ contents, closeModal }: ModalProps) => {
@@ -10,17 +10,11 @@ const Dialog = ({ contents, closeModal }: ModalProps) => {
       body.style.overflowY = 'auto';
     };
   }, []);
-  return (
-    <ModalWrapper onClick={(e) => e.stopPropagation()}>
-      <ModalBody>{React.cloneElement(contents, { closeModal })}</ModalBody>
-    </ModalWrapper>
-  );
+  return <ModalWrapper onClick={(e) => e.stopPropagation()}>{cloneElement(contents, { closeModal })}</ModalWrapper>;
 };
 
 const ModalWrapper = styled.div`
   z-index: 1;
 `;
-
-const ModalBody = styled.div``;
 
 export default Dialog;
