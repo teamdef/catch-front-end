@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from 'styled-components';
 import mixin from './mixin';
 
 const fontSize = {
@@ -15,14 +15,17 @@ const fontSize = {
 };
 
 const colors = {
+  primary_50: '#EEE6FF',
   primary_200: '#27FFBE',
   primary_500: '#00EC81',
   primary_700: '#00C565',
+  secondary_200: '#B099FE',
   secondary_300: '#8C6EFF',
   secondary_500: '#3B27FF',
   secondary_700: '#001BF0',
   complementary_1: '#FF6897',
   complementary_2: '#FF2768',
+  mintColor: '#D9FFF0',
   blackColors: {
     grey_900: '#212121',
     grey_800: '#424242',
@@ -71,5 +74,3 @@ export const theme: DefaultTheme = {
   fontWeight,
   mixin,
 };
-
-export default theme;

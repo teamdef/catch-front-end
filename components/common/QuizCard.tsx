@@ -3,15 +3,16 @@ import styled, { css } from 'styled-components';
 import Link from 'next/link';
 import { IoShareOutline } from 'react-icons/io5';
 import { BottomUpModal } from 'components/modal';
-import { shareProps } from 'components/common/SNSShare';
 import { timeForToday } from 'utils/date';
+import { ShareInfo } from 'components/share/ShareBox';
+
 interface QuizProps {
   recentQuiz: RecentQuizType;
 }
 const QuizCard = ({ recentQuiz }: QuizProps) => {
   const [bottomUpisOpen, setBottomUpIsOpen] = useState<boolean>(false); /* 퀴즈 공유 바텀업 */
 
-  const snsShareObj: shareProps = {
+  const snsShareObj: ShareInfo = {
     thumbnail: recentQuiz.thumbnail,
     setTitle: recentQuiz.setTitle,
     id: recentQuiz.id,
@@ -43,7 +44,7 @@ const QuizCard = ({ recentQuiz }: QuizProps) => {
               <div id="quiz-title">{recentQuiz.setTitle}</div>
               <div id="profile-row">
                 <ProfileImgWrapper>
-                  <img src={recentQuiz.user.profile_img || '/assets/img/user_default.png'} />
+                  <img src={recentQuiz.user.profile_img || '/assets/img/user_default.png'} alt="유저프로필이미지" />
                 </ProfileImgWrapper>
                 <div id="name-and-date">
                   {recentQuiz.user.nickname || '탈퇴한 사용자'} · {timeForToday(recentQuiz.createdAt)}

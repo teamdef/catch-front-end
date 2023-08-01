@@ -1,7 +1,7 @@
-// Custom Axios에서 instance만든거 가져와서 사용
-import { authAxios, notAuthAxios } from './customAxios';
+/* eslint-disable no-async-promise-executor */
 import { AxiosResponse } from 'axios';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+import { authAxios, notAuthAxios } from './customAxios';
 
 // 최근 생성된 퀴즈 목록
 
@@ -25,9 +25,22 @@ export const QuizDeleteApi = (quizset_id: string): Promise<AxiosResponse> => {
   return authAxios.delete(`/probset/${quizset_id}`);
 };
 
-// 특정 퀴즈 id의 랭킹 조회
-export const QuizRankingListApi = (quizset_id: string): Promise<AxiosResponse> => {
-  return notAuthAxios.get(`/solver/ranking`, { params: { quizset_id } });
+/**
+ * @param quizset_id
+ * 특정 퀴즈 id의 랭킹 조회 */
+export const QuizRankingListApi = async (quizset_id: string) => {
+  const res: AxiosResponse = await notAuthAxios.get(`/solver/ranking`, { params: { quizset_id } });
+  const parseRankingList: RankingType[] = res.data.map((ranking: RankingDtoType) => {
+    const _ranking: RankingType = {
+      id: ranking.id,
+      nickname: ranking.nickname,
+      score: ranking.score,
+      ranking: ranking.ranking,
+      quizCount: ranking.quiz_count,
+    };
+    return _ranking;
+  });
+  return parseRankingList;
 };
 
 // 풀이 결과 불러오기
@@ -42,26 +55,27 @@ const putImageToS3URL = async (urlArray: any, _imageObject: ChoiceImageType) => 
     _imageObject.imgURL,
     _imageObject.imgName,
   )) as unknown as File;
-  const res = await notAuthAxios.put(_foundUrl.put_url, _imageFile, {
+  const res = notAuthAxios.put(_foundUrl.put_url, _imageFile, {
     headers: { 'Content-Type': _imageFile.type },
   });
+  return res;
 };
 // 생성 - 새로 만든 퀴즈 업로드
 export const QuizUploadApi = (
-  quizList: QuizType[],
+  quizList: (TextQuiz | ImageQuiz)[],
   userId: number,
   setTitle: string,
   description: string,
 ): Promise<AxiosResponse> => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     // 이미지 파일의 경우 이름만 전송하여 AWS S3 전송 링크를 받는다
-    const _quizList = quizList.map((quiz: any) => {
-      let _tempQuiz: any = {};
+    const _quizList = quizList.map((quiz: TextQuiz | ImageQuiz) => {
+      const _tempQuiz: any = {};
       _tempQuiz.quiz_title = quiz.quizTitle;
       _tempQuiz.correct_idx = quiz.correctIndex;
       _tempQuiz.choice_type = quiz.choiceType;
       if (quiz.choiceType === 'img') {
-        let _imgChoices = quiz.choices.map((imgChoice: ChoiceImageType) => {
+        const _imgChoices = quiz.choices.map((imgChoice: ChoiceImageType) => {
           return imgChoice.imgName;
         });
         _tempQuiz.choices = _imgChoices;
@@ -83,8 +97,8 @@ export const QuizUploadApi = (
 
     const urlArray = res.data.url_array;
     // problemList 에서 이미지 객체만 뽑아내기
-    let imageArray: ChoiceImageType[] = [];
-    quizList.forEach((quiz: QuizType) => {
+    const imageArray: ChoiceImageType[] = [];
+    quizList.forEach((quiz: TextQuiz | ImageQuiz) => {
       if (quiz.choiceType === 'img') {
         imageArray.push(...(quiz.choices as ChoiceImageType[]));
       }
@@ -103,7 +117,7 @@ export const QuizUploadApi = (
 
 // 특정 id의 퀴즈 썸네일 변경
 export const QuizThumbnailChangeApi = async (quizset_id: string, imgBlob: File): Promise<number> => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     const res: AxiosResponse = await authAxios.post('/thumbnail', { quizset_id, thumbnail: imgBlob.name });
     const res2: AxiosResponse = await notAuthAxios.put(res.data, imgBlob, {
       headers: { 'Content-Type': imgBlob.type },
@@ -111,7 +125,6 @@ export const QuizThumbnailChangeApi = async (quizset_id: string, imgBlob: File):
     resolve(res2.status);
   });
 };
-
 
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
 export const QuizDataFetchApi = async (quizset_id: string): Promise<AxiosResponse> => {
@@ -133,7 +146,7 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const QuizSolveSaveApi = async (
+export const SaveScoreApi = async (
   nickname: string,
   score: number,
   quizset_id: string,
@@ -145,12 +158,34 @@ export const QuizSolveSaveApi = async (
 
 // 한줄평 - 목록 불러오기
 export const CommentListApi = async (quizset_id: string) => {
-  return notAuthAxios.get(`/comment/${quizset_id}`);
+  const res: AxiosResponse = await notAuthAxios.get(`/comment/${quizset_id}`);
+  const _commentList = res.data.map((comment: CommentType) => {
+    const _comment: CommentType = {
+      nickname: comment.nickname,
+      content: comment.content,
+      created_at: comment.created_at,
+      user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
+    };
+    return _comment;
+  });
+
+  return _commentList;
 };
 
 // 한줄평 - 등록하기
 export const CommentSaveApi = async (nickname: string, content: string, quizset_id: string, user_id: string | null) => {
-  return notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
+  const res: AxiosResponse = await notAuthAxios.post(`/comment`, { nickname, content, quizset_id, user_id });
+  const _commentList: CommentType[] = res.data.map((comment: CommentType) => {
+    const _comment: CommentType = {
+      nickname: comment.nickname,
+      content: comment.content,
+      created_at: comment.created_at,
+      user: comment.user && { nickname: comment.user.nickname, profile_img: comment.user.profile_img },
+    };
+    return _comment;
+  });
+
+  return _commentList;
 };
 
 // 감정표현

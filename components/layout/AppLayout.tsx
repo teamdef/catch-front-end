@@ -1,26 +1,27 @@
 // 렌더링할 화면의 가로폭을 고정하고, 가운데로 위치시키는 레이아웃.
 
-import { useEffect } from 'react';
 import styled from 'styled-components';
+import { layoutProps } from 'types/layout';
 
-const AppLayout = (props: { children: React.ReactNode }) => {
+const AppLayout = ({ children, bgColor }: layoutProps) => {
   return (
     <Centering>
-      <FixedWidth>{props.children}</FixedWidth>
+      <FixedWidth bgColor={bgColor}>{children}</FixedWidth>
     </Centering>
   );
 };
 
 const Centering = styled.div`
-  display: block;
-  margin: 0 auto;
+  position: relative;
+  display: flex;
   justify-content: center;
-  max-width: 480px; /* 기준 width가 480px */
   width: 100%;
 `;
-const FixedWidth = styled.div`
+const FixedWidth = styled.div<{ bgColor: string | undefined }>`
+  max-width: 480px; /* 기준 width가 480px */
+  width: 100%;
   min-height: 100vh;
-  padding: 0 1rem;
-  background-color: #fff;
+  padding: 0 4.27%;
+  background-color: ${(props) => (props.bgColor ? props.bgColor : '#fff')};
 `;
 export default AppLayout;

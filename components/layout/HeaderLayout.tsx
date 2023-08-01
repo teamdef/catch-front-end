@@ -1,18 +1,22 @@
 // 헤더와 사이드바를 포함하는 레이아웃.
 
+// eslint-disable-next-line import/no-cycle
 import { Header } from 'components/common';
 import styled from 'styled-components';
-const HeaderLayout = (props: { children: React.ReactNode }) => {
+import { layoutProps } from 'types/layout';
+
+const HeaderLayout = ({ children, bgColor }: layoutProps) => {
   return (
     <>
-      <Header />
-      <SpaceWrapper>{props.children}</SpaceWrapper>
+      <Header bgColor={bgColor} />
+      <SpaceWrapper>{children}</SpaceWrapper>
     </>
   );
 };
 
 const SpaceWrapper = styled.div`
   position: relative;
-  padding-top: 120px; /* 딱 헤더의 높이 만큼 위에 공간을 띄움*/
+  padding-top: 111px;
+  padding-bottom: 28px;
 `;
 export default HeaderLayout;

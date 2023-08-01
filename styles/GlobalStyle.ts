@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
-export const GlobalStyle = createGlobalStyle` 
+const GlobalStyle = createGlobalStyle` 
   ${reset}
   body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
@@ -13,7 +13,8 @@ export const GlobalStyle = createGlobalStyle`
     -ms-overflow-style: none; /* IE and Edge */
 
 
-    font-size: 14px; /* 1rem 기준을 14px로 고정 */
+    font-size: ${({ theme }) => theme.fontSize.body_2};
+    font-weight:${({ theme }) => theme.fontWeight.regular};
     line-height: 1.5; /* 줄간격 150% */
     letter-spacing:-2%; /* 자간 조정 */
   }   
@@ -35,4 +36,11 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  button {
+    border: 0;
+    outline-style: none;
+    cursor:pointer;
+  }
 `;
+
+export default GlobalStyle;

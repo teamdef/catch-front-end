@@ -9,18 +9,25 @@ interface ChoiceTextType {
   choiceText: string; // 답안
 }
 // QuizType - 퀴즈 정보
-interface QuizType {
+interface TextQuiz {
   quizTitle: string; // 퀴즈 제목
   quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
   correctIndex: number; // 정답 번호
-  choiceType: 'img' | 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
-  choices: (ChoiceTextType | ChoiceImageType)[]; // 객관식 답안 배열
+  choiceType: 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
+  choices: ChoiceTextType[]; // 객관식 답안 배열
+}
+interface ImageQuiz {
+  quizTitle: string; // 퀴즈 제목
+  quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
+  correctIndex: number; // 정답 번호
+  choiceType: 'img'; // 이미지형 퀴즈 , 텍스트형 퀴즈
+  choices: ChoiceImageType[]; // 객관식 답안 배열
 }
 // QuizSetType - 퀴즈세트 정보
 interface QuizSetType {
   setTitle: string; // 퀴즈세트 제목
   description?: string; // 퀴즈 세트 설명
-  quizList: QuizType[]; // 퀴즈 배열
+  quizList: (TextQuiz | ImageQuiz)[]; // 퀴즈 배열
 }
 
 // ---------- 퀴즈 풀이 관련 타입 ----------------------- //
@@ -64,15 +71,16 @@ interface SolveUserType {
   solveUserId: string;
 }
 interface RankingDtoType {
-  created_at:string;
-id:string;
-nickname:string;
-quiz_count:number;
-quizset_id:string;
-ranking:number;
-score:number;
+  created_at: string;
+  id: string;
+  nickname: string;
+  quiz_count: number;
+  quizset_id: string;
+  ranking: number;
+  score: number;
 }
 interface RankingType {
+  id: string;
   nickname: string;
   score: number;
   ranking: number;
@@ -108,9 +116,9 @@ interface DetailQuizType {
 }
 
 /* 사용자 정보 타입 */
-interface UserType{
+interface UserType {
   nickname?: string;
-  profile_img?: string; /* 있을 수 도 있고 없을 수 도 있고 ... */
+  profile_img?: string /* 있을 수 도 있고 없을 수 도 있고 ... */;
 }
 
 /* 감정표현 타입 */
@@ -130,4 +138,10 @@ interface NoticeTypes {
 interface Window {
   Kakao: any; // 카카오
   adsbygoogle: any; // 구글 애드센스
+}
+interface CommentType {
+  nickname: string;
+  content: string;
+  created_at: string;
+  user?: UserType;
 }

@@ -3,7 +3,7 @@ import { ReactElement, ReactNode, useEffect } from 'react';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'styles/theme';
-import { GlobalStyle } from 'styles/GlobalStyle';
+import GlobalStyle from 'styles/GlobalStyle';
 import 'styles/font/NanumSquare.css';
 
 import type { AppProps } from 'next/app';

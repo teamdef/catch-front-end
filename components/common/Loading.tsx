@@ -1,5 +1,5 @@
+import { PortalWrapper } from 'components/modal';
 import styled, { keyframes } from 'styled-components';
-import { PortalWrapper } from 'components/modal'
 
 interface LoadingProps {
   ment?: string;
@@ -23,8 +23,8 @@ const Loading = ({ ment }: LoadingProps) => {
 const Background = styled.div`
   background-color: #00000085;
   width: 480px;
-  @media (max-width:480px){
-    width:100%;
+  @media (max-width: 480px) {
+    width: 100%;
   }
   height: 100vh;
   z-index: 999;
