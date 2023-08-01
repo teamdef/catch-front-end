@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "postinstall": "husky install",
+    "format": "prettier --cache --write .",
+    "lint": "eslint --cache .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^3.5.7",
@@ -21,7 +24,6 @@
     "axios": "^0.27.2",
     "babel-plugin-transform-define": "^2.1.0",
     "browser-image-compression": "^2.0.0",
-    "eslint-plugin-import": "^2.26.0",
     "gh-pages": "^4.0.0",
     "next": "12.2.0",
     "next-redux-wrapper": "^7.0.5",
@@ -47,11 +49,29 @@
     "@types/react-gtm-module": "^2.0.1",
     "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "^5.30.3",
-    "@typescript-eslint/parser": "^5.30.3",
+    "@typescript-eslint/parser": "^5.61.0",
+    "babel-eslint": "^10.1.0",
     "babel-plugin-styled-components": "^2.0.7",
-    "eslint": "^8.19.0",
+    "eslint": "^8.44.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "12.2.0",
-    "eslint-plugin-react": "^7.30.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.0-alpha.2",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0",
     "typescript": "4.7.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }
