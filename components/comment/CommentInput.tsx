@@ -60,7 +60,6 @@ const Wrapper = styled.div`
     border-radius: 8px;
     border: 1px solid ${({ theme }) => theme.colors.secondary_500};
     flex-grow: 1;
-    outline-style: none;
     padding: 16px 24px;
     ::placeholder {
       color: ${({ theme }) => theme.colors.blackColors.grey_400};

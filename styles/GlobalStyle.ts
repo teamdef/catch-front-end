@@ -35,10 +35,10 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    outline-style: none;
   }
   button {
     border: 0;
-    outline-style: none;
     cursor:pointer;
   }
 `;
