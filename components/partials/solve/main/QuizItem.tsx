@@ -35,12 +35,14 @@ const QuizSolveCard = styled.div`
   flex-wrap: nowrap;
 `;
 
-const QuizTitle = styled.div`
+export const QuizTitle = styled.div`
   display: flex;
   color: #000;
   font-size: ${({ theme }) => theme.fontSize.body_2};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-left: 4px;
+  height: 36px;
+  margin-bottom: 12px;
 `;
 
 const QuizCount = styled.span`
@@ -48,12 +50,12 @@ const QuizCount = styled.span`
   flex: none;
 `;
 
-const QuizImageWrapper = styled.img`
-  margin-top: 12px;
+export const QuizImageWrapper = styled.img`
   width: 100%;
   height: 185px;
   object-fit: contain;
   border-radius: 4px;
+  margin-bottom: 20px;
 `;
 
 const QuizGuide = styled.span`

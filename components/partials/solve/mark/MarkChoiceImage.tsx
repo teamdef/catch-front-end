@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { MarkChoiceProps } from './MarkChoiceText';
 
-const MarkChoiceImage = ({ choices }: { choices: SolveQuizType['choices'] }) => {
+const MarkChoiceImage = ({ choices, answerObj }: MarkChoiceProps) => {
+  console.log(answerObj);
   return (
     <>
       {choices.map((choice: string, j: number) => (

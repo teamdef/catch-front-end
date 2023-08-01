@@ -16,6 +16,9 @@ const MarkList = () => {
 };
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
   margin-top: 46px;
   margin-bottom: 13px;
 `;

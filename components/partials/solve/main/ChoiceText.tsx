@@ -23,7 +23,7 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
     <>
       {choices.map((choice: string, choice_num: number) => {
         return (
-          <ChoiceTextWrapper key={choice_num}>
+          <Wrapper key={choice_num}>
             <ChoiceTextInput
               type="radio"
               id={`choice_txt_${quizNum}_${choice_num}`}
@@ -35,30 +35,24 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
               }}
             />
             <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
-          </ChoiceTextWrapper>
+          </Wrapper>
         );
       })}
     </>
   );
 };
 
-const ChoiceTextWrapper = styled.div`
+export const Wrapper = styled.div`
   position: relative;
-  width: 100%;
   display: flex;
-  gap: 15px;
   flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
+  gap: 8px;
 `;
 
 const ChoiceTextLabel = styled.label`
   width: 100%;
   padding: 22px 24px;
   font-size: ${({ theme }) => theme.fontSize.body_2};
-  font-weight: 400;
-  line-height: normal;
   border: 1px solid ${({ theme }) => theme.colors.secondary_500};
   border-radius: 8px;
   color: ${({ theme }) => theme.colors.secondary_500};

@@ -2,27 +2,35 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import styled from 'styled-components';
 import { MarkChoiceText, MarkChoiceImage } from '.';
+import { QuizImageWrapper, QuizTitle } from '../main/QuizItem';
 
 export interface MarkCardProps {
   quiz: SolveQuizType;
   quiz_num: number;
 }
-
+export interface AnswerObjProps {
+  correct: number;
+  user: number;
+}
 const MarkCard = ({ quiz, quiz_num }: MarkCardProps) => {
   const { answerList } = useSelector((state: RootState) => state.solve);
-  const { quiz_title, quiz_thumbnail, choice_type, choices } = quiz;
-  const isCorrect = answerList[quiz_num] === quiz.correct_idx;
+  const { quiz_title, quiz_thumbnail, choice_type, choices, correct_idx } = quiz;
+  const isCorrect = answerList[quiz_num] === correct_idx;
   const isImage = choice_type === 'img';
+  const answer_obj: AnswerObjProps = { correct: correct_idx, user: answerList[quiz_num] }; // 정답 / 유저답이 담긴 객체
   return (
     <Wrapper>
-      <MarkCount correct={isCorrect}>Q {quiz_num + 1}.</MarkCount>
-      <Question>{quiz_title}</Question>
-      {quiz_thumbnail && <QuizImage src={quiz_thumbnail} alt="퀴즈 설명 이미지" />}
-      {isImage && <MarkChoiceImage choices={choices} />}
-      {!isImage && <MarkChoiceText choices={choices} />}
+      <QuizTitle>
+        <MarkCount correct={isCorrect}>Q {quiz_num + 1}.</MarkCount>
+        {quiz_title}
+      </QuizTitle>
+      {quiz_thumbnail && <QuizImageWrapper src={quiz_thumbnail} alt="퀴즈 설명 이미지" />}
+      {isImage && <MarkChoiceImage choices={choices} answerObj={answer_obj} />}
+      {!isImage && <MarkChoiceText choices={choices} answerObj={answer_obj} />}
     </Wrapper>
   );
 };
+
 const Wrapper = styled.div`
   position: relative;
 `;
@@ -30,7 +38,8 @@ const Wrapper = styled.div`
 const MarkCount = styled.span<{ correct: boolean }>`
   position: relative;
   display: block;
-  margin-left: 3px;
+  margin-right: 12px;
+  flex: none;
   &::before {
     content: '';
     position: absolute;
@@ -46,7 +55,5 @@ const MarkCount = styled.span<{ correct: boolean }>`
       'width:74px; height:70px;background-image:url(/assets/img/rebranding/anyquiz/correct.svg); top: - 31px;left:-15px;'}
   }
 `;
-const Question = styled.p``;
-const QuizImage = styled.img``;
 
 export default MarkCard;

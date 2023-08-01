@@ -11,7 +11,7 @@ import Sketchbook from 'components/style/Sketchbook';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quizList, quizSetId } = useSelector((state: RootState) => state.solve);
+  const { quizList, quizSetId, setTitle } = useSelector((state: RootState) => state.solve);
   const { solveUserScore } = useSelector((state: RootState) => state.user_solve);
 
   const goReplay = () => router.push(`/quiz/solve/${quizSetId}`);
@@ -21,7 +21,7 @@ const Page: NextPageWithLayout = () => {
     <Sketchbook>
       <Wrapper>
         <UserScore>점수: {`${solveUserScore}/${quizList.length}`}</UserScore>
-        <QuizTitle>{quizList.title}</QuizTitle>
+        <QuizTitle>{setTitle}</QuizTitle>
         <MarkList />
         <ButtonBox>
           <Button onClick={goReplay}>퀴즈 다시 풀기</Button>
@@ -41,7 +41,7 @@ const Wrapper = styled.div`
   font-weight: ${theme.fontWeight.bold};
 `;
 const UserScore = styled.p`
-  color: ${theme.colors.error};
+  color: ${theme.colors.error_1};
 `;
 
 const QuizTitle = styled.h2`
