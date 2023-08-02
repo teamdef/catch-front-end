@@ -20,6 +20,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 56px;
   margin-top: 46px;
-  margin-bottom: 13px;
+  margin-bottom: 64px;
 `;
 export default MarkList;

@@ -33,6 +33,8 @@ const MarkCard = ({ quiz, quiz_num }: MarkCardProps) => {
 
 const Wrapper = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const MarkCount = styled.span<{ correct: boolean }>`

@@ -15,6 +15,7 @@ const fontSize = {
 };
 
 const colors = {
+  primary_bg: '#D9FFF0',
   primary_50: '#EEE6FF',
   primary_200: '#27FFBE',
   primary_500: '#00EC81',
@@ -27,7 +28,6 @@ const colors = {
   complementary_2: '#FF2768',
   error_1: '#FF2768',
   error_2: '#FFD2E0',
-  mintColor: '#D9FFF0',
   blackColors: {
     grey_900: '#212121',
     grey_800: '#424242',

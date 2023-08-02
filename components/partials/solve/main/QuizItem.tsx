@@ -55,7 +55,6 @@ export const QuizImageWrapper = styled.img`
   height: 185px;
   object-fit: contain;
   border-radius: 4px;
-  margin-bottom: 20px;
 `;
 
 const QuizGuide = styled.span`

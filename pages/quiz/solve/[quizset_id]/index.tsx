@@ -154,8 +154,8 @@ const QuizCount = styled.div`
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <AppLayout bgColor={theme.colors.mintColor}>
-      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
+    <AppLayout bgColor={theme.colors.primary_bg}>
+      <HeaderLayout bgColor={theme.colors.primary_bg}>{page}</HeaderLayout>
     </AppLayout>
   );
 };

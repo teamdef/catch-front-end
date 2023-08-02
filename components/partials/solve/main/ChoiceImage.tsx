@@ -15,9 +15,9 @@ const ChoiceImage = ({ choices, quizNum }: ChoiceProps) => {
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
   return (
-    <>
+    <Wrapper>
       {choices.map((choice: string, choice_num: number) => (
-        <ChoiceImgWrapper>
+        <>
           <ChoiceImgInput
             type="radio"
             id={`choice_img_${quizNum}_${choice_num}`}
@@ -28,13 +28,13 @@ const ChoiceImage = ({ choices, quizNum }: ChoiceProps) => {
               answerHandler(quizNum, choice_num);
             }}
           />
-          <ChoiceImgLabel htmlFor={`choice_img_${quizNum}_${choice_num}`} imgSrc={choice} />
-        </ChoiceImgWrapper>
+          <ChoiceImgLabel key={choice_num} htmlFor={`choice_img_${quizNum}_${choice_num}`} imgSrc={choice} />
+        </>
       ))}
-    </>
+    </Wrapper>
   );
 };
-const ChoiceImgWrapper = styled.div`
+const Wrapper = styled.div`
   position: relative;
   display: grid;
   width: 100%;
@@ -48,7 +48,7 @@ const ChoiceImgLabel = styled.label<{ imgSrc: string }>`
   width: 100%;
   height: 150px;
   padding: 0;
-  border-radius: 15px;
+  border-radius: 8px;
   overflow: hidden;
   object-fit: cover;
   background: center / contain no-repeat url(${({ imgSrc }) => imgSrc || ''});

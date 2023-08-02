@@ -18,7 +18,7 @@ function AllQuizSection() {
       console.log(err);
     }
   };
-
+  console.log(allQuizList);
   const parseAllQuizList = (data: any) => {
     const allQuizMap = data.map((quizSet: any) => {
       const quizObj: QuizSetCardType = {
@@ -32,8 +32,7 @@ function AllQuizSection() {
       return quizObj;
     });
 
-    const sliceAllQuizList = allQuizMap.slice(0, 4);
-    setAllQuizList(sliceAllQuizList);
+    setAllQuizList(allQuizMap);
   };
 
   useEffect(() => {

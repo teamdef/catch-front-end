@@ -20,10 +20,10 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
   };
 
   return (
-    <>
+    <Wrapper>
       {choices.map((choice: string, choice_num: number) => {
         return (
-          <Wrapper key={choice_num}>
+          <>
             <ChoiceTextInput
               type="radio"
               id={`choice_txt_${quizNum}_${choice_num}`}
@@ -34,11 +34,13 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
                 answerHandler(choice_num);
               }}
             />
-            <ChoiceTextLabel htmlFor={`choice_txt_${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
-          </Wrapper>
+            <ChoiceTextLabel key={choice_num} htmlFor={`choice_txt_${quizNum}_${choice_num}`}>
+              {choice}
+            </ChoiceTextLabel>
+          </>
         );
       })}
-    </>
+    </Wrapper>
   );
 };
 

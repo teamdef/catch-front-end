@@ -7,15 +7,15 @@ export interface MarkChoiceProps {
 }
 const MarkChoiceText = ({ choices, answerObj }: MarkChoiceProps) => {
   const { correct, user } = answerObj;
-
   const textCard = (_text: string, _index: number) => {
-    if (correct === _index) return <CorrectText>{_text}</CorrectText>;
-    if (user === _index && user !== correct) return <UserAnswerText>{_text}</UserAnswerText>;
-    return <WrongText>{_text}</WrongText>;
+    if (correct === _index) return <CorrectText key={_index}>{_text}</CorrectText>;
+    if (user === _index && user !== correct) return <UserAnswerText key={_index}>{_text}</UserAnswerText>;
+    return <WrongText key={_index}>{_text}</WrongText>;
   };
 
   return <Wrapper>{choices.map((choice: string, index: number) => textCard(choice, index))}</Wrapper>;
 };
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
