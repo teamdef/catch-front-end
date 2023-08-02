@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { QuizImage, QuizTitle } from 'components/style';
 import { ChoiceImage, ChoiceText } from '.';
 
 interface QuizItemPropsType {
@@ -15,7 +16,7 @@ const QuizItem = ({ item, quiz_num }: QuizItemPropsType) => {
         <QuizCount>Q {quiz_num + 1}.</QuizCount>
         {quiz_title}
       </QuizTitle>
-      {quiz_thumbnail && <QuizImageWrapper src={quiz_thumbnail} />}
+      {quiz_thumbnail && <QuizImage src={quiz_thumbnail} />}
       {choice_type === 'img' && <ChoiceImage choices={choices} quizNum={quiz_num} />}
       {choice_type === 'text' && <ChoiceText choices={choices} quizNum={quiz_num} />}
       <QuizGuide>퀴즈의 정답을 선택해주세요!</QuizGuide>
@@ -35,26 +36,9 @@ const QuizSolveCard = styled.div`
   flex-wrap: nowrap;
 `;
 
-export const QuizTitle = styled.div`
-  display: flex;
-  color: #000;
-  font-size: ${({ theme }) => theme.fontSize.body_2};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  margin-left: 4px;
-  height: 36px;
-  margin-bottom: 12px;
-`;
-
 const QuizCount = styled.span`
   margin-right: 12px;
   flex: none;
-`;
-
-export const QuizImageWrapper = styled.img`
-  width: 100%;
-  height: 185px;
-  object-fit: contain;
-  border-radius: 4px;
 `;
 
 const QuizGuide = styled.span`

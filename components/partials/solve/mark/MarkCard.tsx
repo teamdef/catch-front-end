@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import styled from 'styled-components';
+import { QuizImage, QuizTitle } from 'components/style';
 import { MarkChoiceText, MarkChoiceImage } from '.';
-import { QuizImageWrapper, QuizTitle } from '../main/QuizItem';
 
 export interface MarkCardProps {
   quiz: SolveQuizType;
@@ -12,6 +12,7 @@ export interface AnswerObjProps {
   correct: number;
   user: number;
 }
+
 const MarkCard = ({ quiz, quiz_num }: MarkCardProps) => {
   const { answerList } = useSelector((state: RootState) => state.solve);
   const { quiz_title, quiz_thumbnail, choice_type, choices, correct_idx } = quiz;
@@ -24,7 +25,7 @@ const MarkCard = ({ quiz, quiz_num }: MarkCardProps) => {
         <MarkCount correct={isCorrect}>Q {quiz_num + 1}.</MarkCount>
         {quiz_title}
       </QuizTitle>
-      {quiz_thumbnail && <QuizImageWrapper src={quiz_thumbnail} alt="퀴즈 설명 이미지" />}
+      {quiz_thumbnail && <QuizImage src={quiz_thumbnail} alt="퀴즈 설명 이미지" />}
       {isImage && <MarkChoiceImage choices={choices} answerObj={answer_obj} />}
       {!isImage && <MarkChoiceText choices={choices} answerObj={answer_obj} />}
     </Wrapper>
