@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const Sketchbook = styled.div`
   position: relative;
+  margin-top: 56px;
   border-radius: 8px;
   border: 0.75px solid ${({ theme }) => theme.colors.primary_bg};
   background: #fff;

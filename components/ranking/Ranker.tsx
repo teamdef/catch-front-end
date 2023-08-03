@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Ranker = ({ ranker }: { ranker: RankingType }) => {
+  if (!ranker) return <div />;
+
   return (
     <Box key={ranker.ranking} rank={ranker.ranking}>
       {ranker.nickname}

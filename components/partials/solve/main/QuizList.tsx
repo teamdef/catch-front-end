@@ -45,6 +45,7 @@ const QuizList = () => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     if (solveUserName) saveUserScore();
   }, [solveUserName]);
