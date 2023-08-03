@@ -22,7 +22,9 @@ const MarkCard = ({ quiz, quiz_num }: MarkCardProps) => {
   return (
     <Wrapper>
       <QuizTitle>
-        <MarkCount correct={isCorrect}>Q {quiz_num + 1}.</MarkCount>
+        <MarkCount correct={isCorrect}>
+          <span>Q {quiz_num + 1}.</span>
+        </MarkCount>
         {quiz_title}
       </QuizTitle>
       {quiz_thumbnail && <QuizImage src={quiz_thumbnail} alt="퀴즈 설명 이미지" />}
@@ -43,6 +45,10 @@ const MarkCount = styled.span<{ correct: boolean }>`
   display: block;
   margin-right: 12px;
   flex: none;
+  span {
+    position: relative;
+    z-index: 1;
+  }
   &::before {
     content: '';
     position: absolute;

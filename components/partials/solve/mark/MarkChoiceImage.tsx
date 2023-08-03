@@ -52,7 +52,7 @@ const CorrectImage = styled.div<{ src: string }>`
 `;
 const UserAnswerImage = styled.div<{ src: string }>`
   background-image: ${({ src }) => `url(${src})`};
-  border: 2px solid ${({ theme }) => theme.colors.error_1};
+  border: 1px solid ${({ theme }) => theme.colors.error_1};
   background-color: rgba(0, 0, 0, 0.2);
   background-blend-mode: multiply, normal;
   &::before {
@@ -63,5 +63,6 @@ const UserAnswerImage = styled.div<{ src: string }>`
 `;
 const WrongImage = styled.div<{ src: string }>`
   background-image: ${({ src }) => `url(${src})`};
+  border: 1px solid ${({ theme }) => theme.colors.error_1};
 `;
 export default MarkChoiceImage;

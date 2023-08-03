@@ -61,9 +61,8 @@ const Background = styled.div`
   top: 0;
   max-width: 480px;
   width: 100%;
+  background-color: rgba(0, 0, 0, 0.47);
   height: 100vh;
-  background: #56565650;
-  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
