@@ -24,7 +24,6 @@ const Text = styled.p`
 `;
 const Button = styled.button`
   display: inline-block;
-  padding: 0;
   color: ${({ theme }) => theme.colors.secondary_300};
   font-size: ${({ theme }) => theme.fontSize.body_1};
   font-weight: ${({ theme }) => theme.fontWeight.extra_bold};
