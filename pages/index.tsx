@@ -8,12 +8,10 @@ import 'swiper/css/pagination';
 import { AllQuizSetWrapper, Banner } from 'components/partials/main';
 import styled from 'styled-components';
 import LoginText from 'components/partials/main/LoginText';
-import { Loading } from 'components/common';
 
 const Page: NextPageWithLayout = () => {
   return (
     <Wrapper>
-      <Loading text="결과 출력중 입니다." />
       <LoginText />
       <Banner />
       <AllQuizSetWrapper />
