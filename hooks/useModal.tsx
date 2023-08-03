@@ -1,7 +1,7 @@
 import { useState, useCallback, MouseEvent } from 'react';
 import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
 import ModalPortal from 'components/modal/PortalWrapper';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 /* 특정 컴포넌트 이외를 클릭하였을 때 모달을 닫도록 함 */
 /* 
     clickRef : 현재 클릭한 컴포넌트
@@ -52,6 +52,14 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
 
   return [openModal, closeModal, renderModal]; // [T, (e: any)=>void]
 };
+const BgColorAni = keyframes`
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.47);
+  }
+`;
 
 const Background = styled.div`
   z-index: 100;
@@ -67,6 +75,7 @@ const Background = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  animation: ${BgColorAni} 0.2s ease;
 `;
 
 export default useModal;

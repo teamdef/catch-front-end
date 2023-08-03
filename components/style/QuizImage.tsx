@@ -5,5 +5,6 @@ const QuizImage = styled.img`
   height: 185px;
   object-fit: contain;
   border-radius: 4px;
+  margin-top: 12px;
 `;
 export default QuizImage;

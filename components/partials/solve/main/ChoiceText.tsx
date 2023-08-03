@@ -48,6 +48,7 @@ export const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
   gap: 8px;
 `;
 
