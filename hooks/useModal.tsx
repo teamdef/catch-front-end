@@ -61,7 +61,7 @@ const BgColorAni = keyframes`
   }
 `;
 
-const Background = styled.div`
+export const Background = styled.div`
   z-index: 100;
   position: fixed;
   left: 50%;
