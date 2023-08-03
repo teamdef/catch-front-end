@@ -39,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
   }
   button {
     border: 0;
+    background-color: transparent;
     cursor:pointer;
   }
 `;

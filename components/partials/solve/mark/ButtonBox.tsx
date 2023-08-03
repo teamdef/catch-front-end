@@ -29,7 +29,6 @@ const Wrapper = styled.div`
 const Button = styled.button`
   display: flex;
   padding: 8px;
-  background-color: transparent;
   color: ${({ theme }) => theme.colors.blackColors.grey_800};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   img {

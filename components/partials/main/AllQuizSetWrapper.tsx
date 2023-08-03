@@ -4,22 +4,27 @@ import { QuizSetCardType } from 'types/quiz';
 import { useState, useEffect } from 'react';
 import { RecentQuizListApi } from 'pages/api/quiz';
 import styled from 'styled-components';
-import QuizCard from './QuizCard';
-import SectionNav from './SectionNav';
+import { QuizCard, TabBar } from '.';
 
-function AllQuizSection() {
-  const [allQuizList, setAllQuizList] = useState<QuizSetCardType[] | null>(null);
-  const fetchAllQuizList = async () => {
+function AllQuizSetWrapper() {
+  const [quizSetList, setQuizSetList] = useState<QuizSetCardType[] | null>(null);
+
+  const fetchAllQuizSet = async () => {
     try {
       const res = await RecentQuizListApi();
       const { recent_quizset } = res.data;
-      parseAllQuizList(recent_quizset);
+      parseQuizSetList(recent_quizset);
     } catch (err) {
       console.log(err);
     }
   };
-  console.log(allQuizList);
-  const parseAllQuizList = (data: any) => {
+
+  const listHandler = (_list: QuizSetCardType[]) => {
+    setQuizSetList(_list);
+  };
+
+  console.log(quizSetList);
+  const parseQuizSetList = (data: any) => {
     const allQuizMap = data.map((quizSet: any) => {
       const quizObj: QuizSetCardType = {
         quizSetId: quizSet.id,
@@ -31,21 +36,19 @@ function AllQuizSection() {
       };
       return quizObj;
     });
-
-    setAllQuizList(allQuizMap);
+    setQuizSetList(allQuizMap);
   };
 
   useEffect(() => {
-    fetchAllQuizList();
+    fetchAllQuizSet();
   }, []);
 
-  // if (!allQuizList) return <div></div>;
-
+  if (!quizSetList) return <div />;
   return (
     <Wrapper>
-      <SectionNav />
+      <TabBar props={{ quizSetList, listHandler }} />
       <SectionContent>
-        {allQuizList?.map((quizSet: QuizSetCardType, idx: number) => {
+        {quizSetList.map((quizSet: QuizSetCardType, idx: number) => {
           return <QuizCard quizSet={quizSet} key={`quiz-set-card-${idx}`} />;
         })}
       </SectionContent>
@@ -61,4 +64,4 @@ const SectionContent = styled.div`
   margin-top: 15px;
   margin-bottom: 24px;
 `;
-export default AllQuizSection;
+export default AllQuizSetWrapper;

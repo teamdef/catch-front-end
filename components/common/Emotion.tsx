@@ -128,7 +128,6 @@ const EmotionButton = styled.button<{ active: boolean }>`
   border: 0;
   width: 12.8%;
   padding: 0;
-  background-color: transparent;
   color: ${({ active }) => (active ? theme.colors.secondary_500 : theme.colors.blackColors.grey_900)};
   font-weight: ${theme.fontWeight.regular};
   cursor: pointer;

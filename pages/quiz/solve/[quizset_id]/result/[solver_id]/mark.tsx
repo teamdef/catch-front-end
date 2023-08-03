@@ -5,10 +5,9 @@ import { RootState } from 'store';
 import { useSelector } from 'react-redux';
 import { theme } from 'styles/theme';
 import styled from 'styled-components';
-import MarkList from 'components/partials/solve/mark/MarkList';
 import Sketchbook from 'components/style/Sketchbook';
-import ButtonBox from 'components/partials/solve/mark/ButtonBox';
 import { NotFound } from 'components/common';
+import { ButtonBox, MarkList } from 'components/partials/solve/mark';
 
 const Page: NextPageWithLayout = () => {
   const { quizList, setTitle, answerList } = useSelector((state: RootState) => state.solve);
