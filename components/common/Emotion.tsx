@@ -5,59 +5,43 @@ import { useSelector, useDispatch } from 'react-redux';
 import { saveEmotionCount } from 'store/emotion';
 import { EmotionClickApi, QuizSolverResultApi } from 'pages/api/quiz';
 import { useRouter } from 'next/router';
-import { theme } from 'styles/theme';
 
 interface EmotionComponentType {
   name: string;
   value: EmotionType;
-  src: {
-    on: string;
-    off: string;
-  };
+  src: string;
 }
+
+const EmotionList: EmotionComponentType[] = [
+  {
+    name: '재밌네요?',
+    value: 'FUNNY',
+    src: '/assets/img/rebranding/emotion/off1.svg',
+  },
+  {
+    name: '쉽네요',
+    value: 'EASY',
+    src: '/assets/img/rebranding/emotion/off2.svg',
+  },
+  {
+    name: '어려운데요',
+    value: 'HARD',
+    src: '/assets/img/rebranding/emotion/off3.svg',
+  },
+  {
+    name: '주인장나와',
+    value: 'ANGRY',
+    src: '/assets/img/rebranding/emotion/off4.svg',
+  },
+];
 
 const Emotion = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 src에서 사용 가능
 
   const quizSetEmotion = useSelector((state: RootState) => state.emotion);
   const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(null);
-
-  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 src에서 사용 가능
-  const EmotionList: EmotionComponentType[] = [
-    {
-      name: '재밌네요?',
-      value: 'FUNNY',
-      src: {
-        on: '/assets/img/rebranding/emotion/on1.svg',
-        off: '/assets/img/rebranding/emotion/off1.svg',
-      },
-    },
-    {
-      name: '쉬워요',
-      value: 'EASY',
-      src: {
-        on: '/assets/img/rebranding/emotion/on2.svg',
-        off: '/assets/img/rebranding/emotion/off2.svg',
-      },
-    },
-    {
-      name: '어려운데요',
-      value: 'HARD',
-      src: {
-        on: '/assets/img/rebranding/emotion/on3.svg',
-        off: '/assets/img/rebranding/emotion/off3.svg',
-      },
-    },
-    {
-      name: '주인장나와',
-      value: 'ANGRY',
-      src: {
-        on: '/assets/img/rebranding/emotion/on4.svg',
-        off: '/assets/img/rebranding/emotion/off4.svg',
-      },
-    },
-  ];
 
   const emotionClick = async (emotion: EmotionType) => {
     try {
@@ -93,16 +77,10 @@ const Emotion = () => {
   return (
     <EmotionBox>
       {EmotionList.map((emotion: EmotionComponentType, idx: number) => {
+        const isActive = currentEmotion === emotion.value;
         return (
-          <EmotionButton
-            onClick={() => emotionClick(emotion.value)}
-            active={currentEmotion === emotion.value}
-            key={idx}
-          >
-            <EmotionImage
-              src={currentEmotion === emotion.value ? emotion.src.on : emotion.src.off}
-              alt="이모티콘이미지"
-            />
+          <EmotionButton key={idx} onClick={() => emotionClick(emotion.value)} active={isActive}>
+            <EmotionImage src={emotion.src} alt="이모티콘이미지" active={isActive} />
             <EmotionName>{emotion.name}</EmotionName>
             <EmotionCount>{quizSetEmotion[emotion.value]}</EmotionCount>
           </EmotionButton>
@@ -127,12 +105,15 @@ const EmotionButton = styled.button<{ active: boolean }>`
   justify-content: center;
   border: 0;
   width: 12.8%;
-  color: ${({ active }) => (active ? theme.colors.secondary_500 : theme.colors.blackColors.grey_900)};
-  font-weight: ${theme.fontWeight.regular};
+  color: ${({ active, theme }) => (active ? theme.colors.secondary_500 : theme.colors.blackColors.grey_900)};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
   cursor: pointer;
 `;
-const EmotionImage = styled.img`
+const EmotionImage = styled.img<{ active: boolean }>`
   width: 100%;
+  border: 0.25px solid ${({ active, theme }) => (active ? theme.colors.secondary_300 : 'transparent')};
+  box-shadow: ${({ active, theme }) => active && `0px 0px 10px -3px ${theme.colors.secondary_300}`};
+  border-radius: 50%;
 `;
 const EmotionName = styled.p`
   position: relative;
