@@ -1,10 +1,9 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { useRouter } from 'next/router';
-import { useEffect, useState, ReactElement, SyntheticEvent } from 'react';
+import { useEffect, ReactElement, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
 import { RootState } from 'store';
-import { Loading } from 'components/common';
 import { QuizDataFetchApi } from 'pages/api/quiz';
 import { saveSolveProblemSetAction, resetSolveAction, saveSolveAnswersAction } from 'store/quiz_solve';
 import { resetUserDataAction } from 'store/user_solve';
@@ -19,14 +18,11 @@ const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
   const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
 
-  const [loading, setLoading] = useState<boolean>(false);
-
   const fetchSolveQuizSet = async () => {
     try {
       const res = await QuizDataFetchApi(quizset_id as string);
       parseSolveQuizSet(res.data);
       dispatch(saveSolveAnswersAction({ answerList: Array(res.data.quiz.length).fill(5) }));
-      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -66,25 +62,21 @@ const Page: NextPageWithLayout = () => {
   }, []);
 
   useEffect(() => {
-    setLoading(true);
     if (quizset_id) fetchSolveQuizSet();
   }, [router.isReady]);
 
   return (
-    <>
-      {loading && <Loading />}
-      <Sketchbook>
-        <Wrapper>
-          <QuizTitle>{setTitle}</QuizTitle>
-          <QuizThumbnail src={quizSetThumbnail} onError={handleImgError} />
-          <Description>{desc}</Description>
-          <QuizCount>
-            총<b>{quizList?.length}</b>문제
-          </QuizCount>
-          <LargeContainedBtn onClick={moveMain}>시작하기</LargeContainedBtn>
-        </Wrapper>
-      </Sketchbook>
-    </>
+    <Sketchbook>
+      <Wrapper>
+        <QuizTitle>{setTitle}</QuizTitle>
+        <QuizThumbnail src={quizSetThumbnail} onError={handleImgError} />
+        <Description>{desc}</Description>
+        <QuizCount>
+          총<b>{quizList?.length}</b>문제
+        </QuizCount>
+        <LargeContainedBtn onClick={moveMain}>시작하기</LargeContainedBtn>
+      </Wrapper>
+    </Sketchbook>
   );
 };
 
@@ -154,8 +146,8 @@ const QuizCount = styled.div`
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <AppLayout bgColor={theme.colors.mintColor}>
-      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
+    <AppLayout bgColor={theme.colors.primary_bg}>
+      <HeaderLayout bgColor={theme.colors.primary_bg}>{page}</HeaderLayout>
     </AppLayout>
   );
 };

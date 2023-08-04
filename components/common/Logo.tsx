@@ -8,7 +8,7 @@ const Logo = ({ width }: Props) => {
   return (
     <Link href="/" passHref>
       <a>
-        <LogoImg width={width} src={'/assets/img/rebranding/catchcatch_logo_rebranding.png'} />
+        <LogoImg width={width} src="/assets/img/rebranding/catchcatch_logo_rebranding.png" />
       </a>
     </Link>
   );

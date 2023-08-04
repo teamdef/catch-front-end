@@ -1,6 +1,6 @@
 import { ModalProps } from 'hooks/useModal';
 import { MouseEvent, cloneElement, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const BottomSheet = ({ contents, closeModal }: ModalProps) => {
   useEffect(() => {
@@ -17,6 +17,15 @@ const BottomSheet = ({ contents, closeModal }: ModalProps) => {
   );
 };
 
+const BottomUpAni = keyframes`
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
+
 const ModalWrapper = styled.div`
   position: absolute;
   bottom: 0;
@@ -28,13 +37,7 @@ const ModalWrapper = styled.div`
     border-radius: 24px 24px 0 0;
     background-color: #fff;
   }
+  animation: ${BottomUpAni} 0.2s ease-out;
 `;
-// animation: ${BottomUp} 0.4s ease-out;
-// animation: ${TopDown} 0.4s ease-in-out;
-// 0% {
-//   transform: translateY(100%);
-// }
-// 100% {
-//   transform: translateY(0);
-// }
+
 export default BottomSheet;

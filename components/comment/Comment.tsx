@@ -74,7 +74,6 @@ const Count = styled.span`
 const More = styled.button`
   color: ${theme.colors.secondary_300};
   font-size: ${theme.fontSize.caption};
-  background-color: transparent;
   padding: 8px 12px;
 `;
 

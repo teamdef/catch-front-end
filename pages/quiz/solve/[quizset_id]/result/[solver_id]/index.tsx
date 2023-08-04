@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import styled from 'styled-components';
 import { Emotion, NotFound } from 'components/common';
 import { useSelector } from 'react-redux';
@@ -11,15 +11,35 @@ import Sketchbook from 'components/style/Sketchbook';
 import Comment from 'components/comment/Comment';
 import { ShareModalBtn } from 'components/share';
 import { RankingBoard } from 'components/ranking';
+import { useRouter } from 'next/router';
 
 const Page: NextPageWithLayout = () => {
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { quizList } = useSelector((state: RootState) => state.solve);
+  const isValid = solveUserScore !== undefined;
+  const router = useRouter();
+  const { quizset_id, solver_id } = router.query;
 
+  useEffect(() => {
+    // 뒤로가기 막기 (router query 할당 이전 함수 실행 방지)
+    if (quizset_id && solver_id) {
+      router.beforePopState(({ as }) => {
+        if (as !== router.asPath) {
+          window.history.pushState('', '');
+          router.push(router.asPath);
+          return false;
+        }
+        return true;
+      });
+    }
+    return () => {
+      router.beforePopState(() => true);
+    };
+  }, [quizset_id, solver_id]);
   return (
     <>
-      {!solveUserScore && <NotFound text="잘못된 접근이에요!" />}
-      {solveUserScore && (
+      {!isValid && <NotFound text="잘못된 접근이에요!" />}
+      {isValid && (
         <Sketchbook>
           <Wrapper>
             <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
@@ -42,8 +62,8 @@ const Wrapper = styled.div`
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
-    <AppLayout bgColor={theme.colors.mintColor}>
-      <HeaderLayout bgColor={theme.colors.mintColor}>{page}</HeaderLayout>
+    <AppLayout bgColor={theme.colors.primary_bg}>
+      <HeaderLayout bgColor={theme.colors.primary_bg}>{page}</HeaderLayout>
     </AppLayout>
   );
 };

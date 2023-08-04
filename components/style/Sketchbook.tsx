@@ -2,11 +2,12 @@ import styled from 'styled-components';
 
 const Sketchbook = styled.div`
   position: relative;
+  margin-top: 56px;
   border-radius: 8px;
-  border: 0.75px solid #00fba5;
+  border: 0.75px solid ${({ theme }) => theme.colors.primary_bg};
   background: #fff;
-  padding: 0 4.27%;
-  box-shadow: 1px -2px 0px 0px #00fba5;
+  padding: 0 16px;
+  box-shadow: 1px -2px 0px 0px ${({ theme }) => theme.colors.primary_bg};
   &::before {
     content: '';
     position: absolute;

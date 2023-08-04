@@ -10,8 +10,8 @@ const UserScore = ({ name, score, total }: UserScoreProps) => {
   const router = useRouter();
   const { quizset_id, solver_id } = router.query;
 
-  const moveMatchnote = () => {
-    Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/matchnote`);
+  const moveMark = () => {
+    Router.push(`/quiz/solve/${quizset_id}/result/${solver_id}/mark`);
   };
   return (
     <Wrapper>
@@ -20,7 +20,7 @@ const UserScore = ({ name, score, total }: UserScoreProps) => {
         <Score>
           <b>{total}문제</b> 중 <b>{score}문제</b> 맞혔네요!
         </Score>
-        <MoveMatchBtn onClick={moveMatchnote}>오답노트</MoveMatchBtn>
+        <MoveMatchBtn onClick={moveMark}>오답노트</MoveMatchBtn>
       </Bottom>
     </Wrapper>
   );

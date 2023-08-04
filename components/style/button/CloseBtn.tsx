@@ -4,7 +4,7 @@ const CloseBtn = styled.button`
   position: absolute;
   display: block;
   top: 21px;
-  right: 4.27%;
+  right: 16px;
   width: 24px;
   height: 24px;
   z-index: 1;
