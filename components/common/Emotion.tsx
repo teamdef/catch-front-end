@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { RootState } from 'store';
-import { useSelector, useDispatch } from 'react-redux';
-import { saveEmotionCount } from 'store/emotion';
-import { EmotionClickApi, QuizSolverResultApi } from 'pages/api/quiz';
-import { useRouter } from 'next/router';
+import useEmotion from 'hooks/useEmotion';
 
 interface EmotionComponentType {
   name: string;
@@ -36,53 +31,17 @@ const EmotionList: EmotionComponentType[] = [
 ];
 
 const Emotion = () => {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 src에서 사용 가능
-
-  const quizSetEmotion = useSelector((state: RootState) => state.emotion);
-  const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(null);
-
-  const emotionClick = async (emotion: EmotionType) => {
-    try {
-      const res = await EmotionClickApi(emotion, quizset_id as string, solver_id as string);
-      emotionChangesSave(res.data);
-      emotionChangesClick(currentEmotion, emotion);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getCurrentEmotion = async () => {
-    try {
-      const res = await QuizSolverResultApi(quizset_id as string, solver_id as string);
-      setCurrentEmotion(res.data.emotion as EmotionType);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const emotionChangesClick = (prevEmotion: EmotionType | null, _currentEmotion: EmotionType) => {
-    setCurrentEmotion(prevEmotion === _currentEmotion ? null : _currentEmotion);
-  };
-
-  const emotionChangesSave = (quizset_emotion: QuizSetEmotionType) => {
-    dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
-  };
-
-  useEffect(() => {
-    if (!!quizset_id && !!solver_id) getCurrentEmotion();
-  }, [router.isReady]);
+  const { currentEmotion, emotionList, emotionObjHandler } = useEmotion();
 
   return (
     <EmotionBox>
       {EmotionList.map((emotion: EmotionComponentType, idx: number) => {
         const isActive = currentEmotion === emotion.value;
         return (
-          <EmotionButton key={idx} onClick={() => emotionClick(emotion.value)} active={isActive}>
+          <EmotionButton key={idx} onClick={() => emotionObjHandler(emotion.value)} active={isActive}>
             <EmotionImage src={emotion.src} alt="이모티콘이미지" active={isActive} />
             <EmotionName>{emotion.name}</EmotionName>
-            <EmotionCount>{quizSetEmotion[emotion.value]}</EmotionCount>
+            <EmotionCount>{emotionList[emotion.value]}</EmotionCount>
           </EmotionButton>
         );
       })}
