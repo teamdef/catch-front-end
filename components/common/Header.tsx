@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React, { useState } from 'react';
 import Logo from './Logo';
 import Icon from './Icon';
-import SideNavigationBar from './SideNavigationBar';
+import SideNavigationBar from '../profile/SideNavigationBar';
 
 const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
@@ -20,7 +20,7 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
         <Logo width="100px" />
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
-      {isSideBarOpen && <SideNavigationBar />}
+      {isSideBarOpen && <SideNavigationBar bgColor={bgColor} />}
     </>
   );
 };

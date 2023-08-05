@@ -9,18 +9,21 @@ const LoginText = () => {
   };
 
   return (
-    <Text>
+    <MainText>
       퀴즈를 만들고 싶다면 <br />
       <Button onClick={goLogin}>로그인</Button>해주세요!
-    </Text>
+    </MainText>
   );
 };
-const Text = styled.p`
+export const MainText = styled.p`
   line-height: 160%;
   margin-bottom: 16px;
   color: ${({ theme }) => theme.colors.blackColors.grey_900};
   font-size: ${({ theme }) => theme.fontSize.body_1};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
+  b {
+    color: ${({ theme }) => theme.colors.secondary_500};
+  }
 `;
 const Button = styled.button`
   display: inline-block;

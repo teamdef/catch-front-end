@@ -58,11 +58,9 @@ const useEmotion = () => {
       if (!isDiff) {
         const res = await EmotionClickApi('NONE', quizset_id as string, solver_id as string);
         dispatch(saveEmotionCount({ quizSetEmotion: res.data }));
-        console.log('서버데이터', res.data);
       } else {
         const res = await EmotionClickApi(emotion, quizset_id as string, solver_id as string);
         dispatch(saveEmotionCount({ quizSetEmotion: res.data }));
-        console.log('서버데이터', res.data);
       }
     }
   };
