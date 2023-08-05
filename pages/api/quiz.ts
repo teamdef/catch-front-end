@@ -189,6 +189,6 @@ export const CommentSaveApi = async (nickname: string, content: string, quizset_
 };
 
 // 감정표현
-export const EmotionClickApi = async (emotion: EmotionType, quizset_id: string, solver_id: string) => {
+export const EmotionClickApi = async (emotion: EmotionType | 'NONE', quizset_id: string, solver_id: string) => {
   return notAuthAxios.put(`/solver/emotion`, { emotion, quizset_id, solver_id });
 };

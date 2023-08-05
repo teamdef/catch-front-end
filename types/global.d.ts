@@ -122,7 +122,7 @@ interface UserType {
 }
 
 /* 감정표현 타입 */
-type EmotionType = 'FUNNY' | 'EASY' | 'HARD' | 'ANGRY';
+type EmotionType = 'FUNNY' | 'EASY' | 'HARD' | 'ANGRY' | 'NONE';
 type QuizSetEmotionType = {
   [x in EmotionValueType]: number;
 };

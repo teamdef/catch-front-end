@@ -18,11 +18,11 @@ import { Loading } from 'components/common';
 import { AppLayout } from 'components/layout';
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/index.style';
-import { MainBtn } from 'styles/common';
 /* react-icons */
 import { MdClear, MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
+import { LargeContainedBtn } from 'components/style/button';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -52,18 +52,18 @@ const Page: NextPageWithLayout = () => {
   const { userId } = useSelector((state: RootState) => state.user);
 
   /* 페이지 렌더링 용 input 핸들러 및 state */
-  const [_quizList, _setQuizList] = useState<QuizType[]>([]); // 문제 내부 저장 배열
+  const [_quizList, _setQuizList] = useState<(TextQuiz | ImageQuiz)[]>([]); // 문제 내부 저장 배열
   const [_description, _setDescription] = useState<string>('');
   const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
   const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
 
   /* 모달 관리 */
   const [openContinueModal, , RenderContinueModal] = useModal({
-    yesTitle: '이어서',
-    noTitle: '새롭게',
-    noAction: () => {
-      resetLocalProblemSet();
-    },
+    // yesTitle: '이어서',
+    // noTitle: '새롭게',
+    // noAction: () => {
+    //   resetLocalProblemSet();
+    // },
     contents: (
       <div>
         <div>
@@ -91,15 +91,15 @@ const Page: NextPageWithLayout = () => {
     dispatch(saveProblemsAction({ quizList: [] })); // 빈 배열로 초기화
   };
 
-  const resetLocalProblemSet = () => {
-    _setDescription('');
-    _setQuizList([]);
-    titleClear();
-  };
+  // const resetLocalProblemSet = () => {
+  //   _setDescription('');
+  //   _setQuizList([]);
+  //   titleClear();
+  // };
 
   // 새로운 퀴즈 문항 추가 함수
   const createProblem = () => {
-    const obj: QuizType = {
+    const obj: TextQuiz | ImageQuiz = {
       quizTitle: '',
       quizThumbnail: undefined,
       choiceType: 'text',
@@ -289,7 +289,7 @@ const Page: NextPageWithLayout = () => {
   /* 문제 저장 조건 체크 함수 2 */
   const checkQuizSet = (): boolean => {
     if (_quizList.length === 0) return false;
-    _quizList.forEach((quiz: QuizType) => {
+    _quizList.forEach((quiz: TextQuiz | ImageQuiz) => {
       if (quiz.quizTitle === '') {
         return false;
       }
@@ -354,7 +354,7 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <>
-      {loading && <Loading ment="퀴즈 세트를 저장하고 있습니다!" />}
+      {loading && <Loading text="퀴즈 세트를 저장하고 있습니다!" />}
       <S.Wrapper>
         <S.TitleContainer>
           <div id="title-input-wrapper">
@@ -559,9 +559,9 @@ const Page: NextPageWithLayout = () => {
           </S.QuizCreateBtn>
         </S.QuizCreateContainer>
         <S.ButtonContainer>
-          <MainBtn onClick={publicationProblemSet} disabled={title === ''}>
+          <LargeContainedBtn onClick={publicationProblemSet} disabled={title === ''}>
             퀴즈 생성 완료
-          </MainBtn>
+          </LargeContainedBtn>
         </S.ButtonContainer>
       </S.Wrapper>
       <RenderContinueModal />

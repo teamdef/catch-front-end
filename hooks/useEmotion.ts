@@ -22,16 +22,23 @@ const useEmotion = () => {
   const getCurrentEmotion = async () => {
     try {
       const res = await QuizSolverResultApi(quizset_id as string, solver_id as string);
-      setCurrentEmotion(res.data.emotion as EmotionType);
-      console.log(res.data.emotion);
+      if (res.data.emotion) setCurrentEmotion(res.data.emotion as EmotionType);
     } catch (e) {
       console.log(e);
     }
   };
 
+  const objEqual = (obj1: QuizSetEmotionType, obj2: QuizSetEmotionType) => {
+    if (obj1.FUNNY !== obj2.FUNNY) return false;
+    if (obj1.ANGRY !== obj2.ANGRY) return false;
+    if (obj1.HARD !== obj2.HARD) return false;
+    if (obj1.EASY !== obj2.EASY) return false;
+    return true;
+  };
+
   const emotionObjHandler = (emotion: EmotionType) => {
-    const isDiff = currentEmotion !== emotion;
     const currentList = { ...emotionList };
+    const isDiff = currentEmotion !== emotion;
     if (isDiff && !currentEmotion) {
       currentList[emotion] += 1;
     } else if (isDiff && currentEmotion) {
@@ -40,15 +47,24 @@ const useEmotion = () => {
     } else if (!isDiff) {
       currentList[emotion] -= 1;
     }
+    const isEqual = objEqual(quizSetEmotion, currentList);
     setEmmotionList(currentList);
     emotionHandler(isDiff, emotion);
-    delayChangesSave(emotion);
+    delayChangesSave(emotion, isEqual, isDiff);
   };
 
-  const emotionChangesSave = async (emotion: EmotionType) => {
-    const res = await EmotionClickApi(emotion, quizset_id as string, solver_id as string);
-    dispatch(saveEmotionCount({ quizSetEmotion: res.data }));
-    console.log('api 통신! current :', res.data);
+  const emotionChangesSave = async (emotion: EmotionType, isEqual: boolean, isDiff: boolean) => {
+    if (!isEqual) {
+      if (!isDiff) {
+        const res = await EmotionClickApi('NONE', quizset_id as string, solver_id as string);
+        dispatch(saveEmotionCount({ quizSetEmotion: res.data }));
+        console.log('서버데이터', res.data);
+      } else {
+        const res = await EmotionClickApi(emotion, quizset_id as string, solver_id as string);
+        dispatch(saveEmotionCount({ quizSetEmotion: res.data }));
+        console.log('서버데이터', res.data);
+      }
+    }
   };
 
   const delayChangesSave = useDebounce(emotionChangesSave, 500);
