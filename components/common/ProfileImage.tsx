@@ -13,22 +13,13 @@ const ProfileImage = ({ src, size }: Props) => {
     e.currentTarget.src = DEFAULT_IMG;
   };
 
-  return (
-    <Wrapper size={size}>
-      <img src={isSrc} onError={onErrorHandler} alt="유저프로필이미지" />
-    </Wrapper>
-  );
+  return <ProfileImageBox size={size} src={isSrc} onError={onErrorHandler} alt="유저프로필이미지" />;
 };
 
-const Wrapper = styled.div<Pick<Props, 'size'>>`
+const ProfileImageBox = styled.img<Pick<Props, 'size'>>`
   width: ${({ size }) => size || '40px'};
   height: ${({ size }) => size || '40px'};
-  flex: none;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
+  object-fit: cover;
+  border-radius: 50%;
 `;
 export default ProfileImage;

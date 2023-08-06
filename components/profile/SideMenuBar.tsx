@@ -6,11 +6,10 @@ import { Account, MyInfoWrapper, SignInWrapper, MyQuizNav } from '.';
 
 interface SideMenuBarProps {
   bgColor?: string;
-  onTransitionEnd: () => void;
   triggerAnimation: boolean;
   handleSideBar: () => void;
 }
-const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation, handleSideBar }: SideMenuBarProps) => {
+const SideMenuBar = ({ bgColor, triggerAnimation, handleSideBar }: SideMenuBarProps) => {
   const { isLoggedin } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -21,21 +20,13 @@ const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation, handleSideBar
     };
   }, []);
 
-  useEffect(() => {
-    if (!triggerAnimation) {
-      setTimeout(() => {
-        onTransitionEnd();
-      }, 300);
-    }
-  }, [triggerAnimation]);
-
   return (
     <Wrapper bgColor={bgColor} triggerAnimation={triggerAnimation}>
-      <SideBarTitle>마이페이지</SideBarTitle>
+      <Title>마이페이지</Title>
       {!isLoggedin && <SignInWrapper />}
       {isLoggedin && (
         <>
-          <MyInfoWrapper />
+          <MyInfoWrapper handleSideBar={handleSideBar} />
           <MyQuizNav />
           <Account handleSideBar={handleSideBar} />
         </>
@@ -46,22 +37,22 @@ const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation, handleSideBar
 
 const Wrapper = styled.div<{ bgColor: string | undefined; triggerAnimation: boolean }>`
   z-index: 999;
-  position: absolute;
-  left: 0;
+  position: fixed;
+  left: 50%;
   width: 100%;
   max-width: 480px;
-  transform: translateX(100%);
+  transform: translateX(50%);
   top: 56px;
   height: 100vh;
   overflow: hidden;
   background-color: ${({ bgColor }) => bgColor || '#fff'};
   padding: 0 24px;
-  ${({ triggerAnimation }) => triggerAnimation && 'transform: translateX(0);'};
+  ${({ triggerAnimation }) => triggerAnimation && 'transform: translateX(-50%);'};
 
   transition: 300ms ease;
 `;
 
-const SideBarTitle = styled.div`
+const Title = styled.div`
   margin-top: 24px;
   font-size: ${({ theme }) => theme.fontSize.subtitle_2};
   font-weight: ${({ theme }) => theme.fontWeight.bold};

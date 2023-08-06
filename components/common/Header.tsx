@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useAnimation from 'hooks/useAnimation';
 import Logo from './Logo';
 import Icon from './Icon';
@@ -18,6 +18,14 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
     return '/assets/img/icon/menu_24px.png';
   };
 
+  useEffect(() => {
+    if (!triggerAnimation) {
+      setTimeout(() => {
+        handleTransitionEnd();
+      }, 300);
+    }
+  }, [triggerAnimation]);
+
   return (
     <>
       <Wrapper bgColor={bgColor}>
@@ -25,12 +33,7 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
       {renderSideBar && (
-        <SideMenuBar
-          bgColor={bgColor}
-          onTransitionEnd={handleTransitionEnd}
-          triggerAnimation={triggerAnimation}
-          handleSideBar={handleSideBar}
-        />
+        <SideMenuBar bgColor={bgColor} triggerAnimation={triggerAnimation} handleSideBar={handleSideBar} />
       )}
     </>
   );

@@ -5,20 +5,20 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import styled from 'styled-components';
 
-const MyInfoWrapper = () => {
+const MyInfoWrapper = ({ handleSideBar }: { handleSideBar: () => void }) => {
   const { nickName, profileImg } = useSelector((state: RootState) => state.user);
+
   const moveProfile = () => {
     Router.push('/member/profile');
+    handleSideBar();
   };
+
   return (
-    <Wrapper onClick={moveProfile}>
+    <Wrapper>
       <ProfileImage src={profileImg} size="48px" />
       <Content>
         <Nickname>{nickName}</Nickname>
-        <ProfileEditBtn>
-          프로필 수정
-          <img src="/assets/img/rebranding/icon/arrow_right_secondary300.svg" alt="" />
-        </ProfileEditBtn>
+        <ProfileEditBtn onClick={moveProfile}>프로필 수정</ProfileEditBtn>
       </Content>
     </Wrapper>
   );
@@ -29,6 +29,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
 `;
+
 const Content = styled.div`
   margin-left: 16px;
 `;
@@ -44,8 +45,14 @@ const ProfileEditBtn = styled.button`
   display: flex;
   align-items: center;
   padding: 8px 12px 8px 0;
-  img {
+  &::after {
+    content: '';
+    position: relative;
+    display: block;
+    width: 6px;
     margin-left: 8px;
+    height: 10px;
+    background: url(/assets/img/rebranding/icon/arrow_right_secondary300.svg) no-repeat center;
   }
 `;
 export default MyInfoWrapper;
