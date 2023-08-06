@@ -41,6 +41,7 @@ const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation }: SideMenuBar
 const Wrapper = styled.div<{ bgColor: string | undefined; triggerAnimation: boolean }>`
   z-index: 999;
   position: absolute;
+  left: 0;
   width: 100%;
   max-width: 480px;
   transform: translateX(100%);
