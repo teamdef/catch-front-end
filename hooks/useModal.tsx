@@ -62,7 +62,7 @@ const BgColorAni = keyframes`
 `;
 
 export const Background = styled.div`
-  z-index: 100;
+  z-index: 99999;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);

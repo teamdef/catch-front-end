@@ -36,12 +36,14 @@ const NicknameModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }
 };
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 184px;
   background-color: #fff;
   border-radius: 10px;
   padding: 20px 24px;
+  margin: 0 9%;
 `;
 const Title = styled.h2`
   color: ${({ theme }) => theme.colors.blackColors.grey_900};
