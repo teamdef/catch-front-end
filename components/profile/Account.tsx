@@ -1,9 +1,20 @@
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from 'store/user';
 import styled from 'styled-components';
 
-const Account = () => {
+const Account = ({ handleSideBar }: { handleSideBar: () => void }) => {
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(logoutAction()); // 로그아웃 처리. 쿠키 삭제
+    Router.push('/'); // 홈으로
+    handleSideBar();
+  };
+
   return (
     <Wrapper>
-      <Button>로그아웃</Button>
+      <Button onClick={logout}>로그아웃</Button>
       <Button>회원탈퇴</Button>
     </Wrapper>
   );

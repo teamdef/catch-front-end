@@ -25,7 +25,12 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
       {renderSideBar && (
-        <SideMenuBar bgColor={bgColor} onTransitionEnd={handleTransitionEnd} triggerAnimation={triggerAnimation} />
+        <SideMenuBar
+          bgColor={bgColor}
+          onTransitionEnd={handleTransitionEnd}
+          triggerAnimation={triggerAnimation}
+          handleSideBar={handleSideBar}
+        />
       )}
     </>
   );

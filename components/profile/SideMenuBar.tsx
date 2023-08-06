@@ -8,8 +8,9 @@ interface SideMenuBarProps {
   bgColor?: string;
   onTransitionEnd: () => void;
   triggerAnimation: boolean;
+  handleSideBar: () => void;
 }
-const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation }: SideMenuBarProps) => {
+const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation, handleSideBar }: SideMenuBarProps) => {
   const { isLoggedin } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -31,9 +32,14 @@ const SideMenuBar = ({ bgColor, onTransitionEnd, triggerAnimation }: SideMenuBar
   return (
     <Wrapper bgColor={bgColor} triggerAnimation={triggerAnimation}>
       <SideBarTitle>마이페이지</SideBarTitle>
-      {isLoggedin ? <MyInfoWrapper /> : <SignInWrapper />}
-      <MyQuizNav />
-      <Account />
+      {!isLoggedin && <SignInWrapper />}
+      {isLoggedin && (
+        <>
+          <MyInfoWrapper />
+          <MyQuizNav />
+          <Account handleSideBar={handleSideBar} />
+        </>
+      )}
     </Wrapper>
   );
 };
