@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import useAnimation from 'hooks/useAnimation';
 import Logo from './Logo';
 import Icon from './Icon';
-import SideNavigationBar from '../profile/SideNavigationBar';
+import SideMenuBar from '../profile/SideMenuBar';
 
 const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
+  const [renderSideBar, handleTransitionEnd, triggerAnimation] = useAnimation(isSideBarOpen);
+
   const handleSideBar = () => {
-    setIsSideBarOpen((state) => !state);
+    setIsSideBarOpen((current) => !current);
   };
+
   const handleSideBarIconSrc = () => {
     if (isSideBarOpen) return '/assets/img/icon/close_24px.png';
     return '/assets/img/icon/menu_24px.png';
@@ -20,7 +24,9 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
         <Logo width="100px" />
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
-      {isSideBarOpen && <SideNavigationBar bgColor={bgColor} />}
+      {renderSideBar && (
+        <SideMenuBar bgColor={bgColor} onTransitionEnd={handleTransitionEnd} triggerAnimation={triggerAnimation} />
+      )}
     </>
   );
 };
