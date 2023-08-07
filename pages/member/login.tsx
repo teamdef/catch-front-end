@@ -2,25 +2,9 @@
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import Router from 'next/router';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-
 import { AppLayout } from 'components/layout'; /* 컴포넌트 */
 import styled from 'styled-components';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
-  const cookie = req ? req?.headers?.cookie : null;
-  if (cookie) {
-    const match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
-    // 쿠키가 적용되어 있다면 (로그인 상태라면)
-    // 로그인 상태에서는 로그인 페이지에 접근할 수 없으니 돌려보내야 한다.
-    if (!!match === true) {
-      res.statusCode = 302;
-      res.setHeader('Location', `/`);
-      res.end();
-    }
-  }
-  return { props: {} };
-};
 const Page: NextPageWithLayout = () => {
   const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
   const API_KEY = process.env.NEXT_PUBLIC_KAKAO_RESTAPI_KEY;

@@ -1,6 +1,5 @@
 /* react, next 관련 */
 import { ReactElement, ChangeEvent, useEffect, useState, useCallback, KeyboardEvent } from 'react';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import type { NextPageWithLayout } from 'pages/_app';
 import { useModal, useInput } from 'hooks';
 import { useRouter } from 'next/router';
@@ -23,25 +22,6 @@ import { MdClear, MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
 import { LargeContainedBtn } from 'components/style/button';
-
-export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
-  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
-  const cookie = req ? req?.headers?.cookie : null;
-  if (cookie) {
-    const match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
-    // 쿠키가 적용되어 있다면 (로그인 상태라면)
-    if (!!match === false) {
-      res.statusCode = 302;
-      res.setHeader('Location', `/`);
-      res.end();
-    }
-  } else {
-    res.statusCode = 302;
-    res.setHeader('Location', `/`);
-    res.end();
-  }
-  return { props: {} };
-};
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
