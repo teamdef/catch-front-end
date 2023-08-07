@@ -15,6 +15,7 @@ import { Loading, ProfileImage } from 'components/common';
 import imageCompression from 'browser-image-compression'; /* 라이브러리 */
 import styled from 'styled-components';
 import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
+import HeaderContentWrapper from 'components/style/HeaderContentWrapper';
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }: GetServerSidePropsContext) => {
   // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
@@ -108,7 +109,7 @@ const Profile: NextPageWithLayout = () => {
   return (
     <>
       {isLoading && <Loading text="정보 저장중 입니다." />}
-      <Wrapper>
+      <HeaderContentWrapper paddingTop="24px">
         <Title>프로필 수정</Title>
         <Content>
           <ImageSelectWrapper>
@@ -140,18 +141,11 @@ const Profile: NextPageWithLayout = () => {
             </SmallContainedBtn>
           </ButtonBox>
         </Content>
-      </Wrapper>
+      </HeaderContentWrapper>
     </>
   );
 };
 
-const Wrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding-top: 24px;
-  height: calc(100vh - 84px);
-`;
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.subtitle_2};
   font-weight: ${({ theme }) => theme.fontWeight.bold};

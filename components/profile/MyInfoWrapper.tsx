@@ -5,12 +5,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import styled from 'styled-components';
 
-const MyInfoWrapper = ({ handleSideBar }: { handleSideBar: () => void }) => {
+const MyInfoWrapper = () => {
   const { nickName, profileImg } = useSelector((state: RootState) => state.user);
 
   const moveProfile = () => {
     Router.push('/member/profile');
-    handleSideBar();
   };
 
   return (

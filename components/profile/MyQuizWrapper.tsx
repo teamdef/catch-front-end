@@ -1,12 +1,16 @@
+import Router from 'next/router';
 import styled from 'styled-components';
 
 const MyQuizNav = () => {
+  const moveMyAnyQuiz = () => Router.push('/member/myquiz/anyquiz');
+  const moveMyCatchme = () => Router.push('/member/myquiz/catchme');
+
   return (
     <Wrapper>
       <Title>내가 만든 퀴즈</Title>
       <ButtonBox>
-        <AnyQuizBtn>모두의 퀴즈</AnyQuizBtn>
-        <CatchMeBtn>캐치미 퀴즈</CatchMeBtn>
+        <AnyQuizBtn onClick={moveMyAnyQuiz}>모두의 퀴즈</AnyQuizBtn>
+        <CatchMeBtn onClick={moveMyCatchme}>캐치미 퀴즈</CatchMeBtn>
       </ButtonBox>
     </Wrapper>
   );

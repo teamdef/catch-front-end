@@ -6,6 +6,7 @@ import Icon from './Icon';
 import SideMenuBar from '../profile/SideMenuBar';
 
 const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
+  const currentUrl = window.location.href;
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
   const [renderSideBar, handleTransitionEnd, triggerAnimation] = useAnimation(isSideBarOpen);
 
@@ -26,6 +27,9 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
     }
   }, [triggerAnimation]);
 
+  useEffect(() => {
+    setIsSideBarOpen(false); // url 이 변경되면 사이드메뉴바는 닫히도록 함.
+  }, [currentUrl]);
   return (
     <>
       <Wrapper bgColor={bgColor}>

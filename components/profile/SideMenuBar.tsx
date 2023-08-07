@@ -26,7 +26,7 @@ const SideMenuBar = ({ bgColor, triggerAnimation, handleSideBar }: SideMenuBarPr
       {!isLoggedin && <SignInWrapper />}
       {isLoggedin && (
         <>
-          <MyInfoWrapper handleSideBar={handleSideBar} />
+          <MyInfoWrapper />
           <MyQuizNav />
           <Account handleSideBar={handleSideBar} />
         </>
@@ -43,7 +43,7 @@ const Wrapper = styled.div<{ bgColor: string | undefined; triggerAnimation: bool
   max-width: 480px;
   transform: translateX(50%);
   top: 56px;
-  height: 100vh;
+  height: calc(100vh - 56px);
   overflow: hidden;
   background-color: ${({ bgColor }) => bgColor || '#fff'};
   padding: 0 24px;
