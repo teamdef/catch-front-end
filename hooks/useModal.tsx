@@ -60,19 +60,20 @@ const BgColorAni = keyframes`
   }
 `;
 
-export const Background = styled.div`
+export const Background = styled.div<{ triggerAnimation?: boolean }>`
   z-index: 99;
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  max-width: 480px;
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.47);
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.47);
+  ${({ triggerAnimation }) => triggerAnimation === false && 'background-color: transparent; transition: 0.2s ease;'}
   overflow: hidden;
   animation: ${BgColorAni} 0.2s ease;
 `;

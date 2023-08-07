@@ -29,8 +29,12 @@ const Empty = styled.div`
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  padding-bottom: 52px;
 `;
-const Text = styled.div``;
+const Text = styled.div`
+  color: ${({ theme }) => theme.colors.blackColors.grey_900};
+  padding: 7px 0;
+`;
 const Button = styled.div``;
 
 Page.getLayout = function getLayout(page: ReactElement) {
