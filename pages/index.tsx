@@ -8,11 +8,13 @@ import { AllQuizSetWrapper, Banner, LoginText, Wellcome } from 'components/parti
 // Import Swiper
 import 'swiper/css';
 import 'swiper/css/pagination';
+import Floating from 'components/common/Floating';
 
 const Page: NextPageWithLayout = () => {
   const { isLoggedin } = useSelector((state: RootState) => state.user);
   return (
     <Wrapper>
+      <Floating />
       {isLoggedin ? <Wellcome /> : <LoginText />}
       <Banner />
       <AllQuizSetWrapper />

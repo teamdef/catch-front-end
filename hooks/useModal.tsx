@@ -38,7 +38,6 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     }
     e.stopPropagation();
   };
-
   const renderModal = (): JSX.Element | null => {
     return isOpen ? (
       <ModalPortal wrapperId="react-portal-modal-container">
@@ -62,7 +61,7 @@ const BgColorAni = keyframes`
 `;
 
 export const Background = styled.div`
-  z-index: 99999;
+  z-index: 99;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
