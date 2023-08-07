@@ -27,7 +27,7 @@ const SideMenuBar = ({ bgColor, triggerAnimation, handleSideBar }: SideMenuBarPr
       {isLoggedin && (
         <>
           <MyInfoWrapper />
-          <MyQuizNav />
+          <MyQuizNav handleSideBar={handleSideBar} />
           <Account handleSideBar={handleSideBar} />
         </>
       )}

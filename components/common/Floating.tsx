@@ -48,7 +48,7 @@ const Floating = () => {
 };
 
 const Content = styled.div`
-  z-index: 999;
+  z-index: 9999;
   position: fixed;
   width: 72px;
   height: 72px;

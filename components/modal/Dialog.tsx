@@ -15,7 +15,6 @@ const Dialog = ({ contents, closeModal }: ModalProps) => {
 
 const ModalWrapper = styled.div`
   position: relative;
-  z-index: 1;
   width: 100%;
 `;
 

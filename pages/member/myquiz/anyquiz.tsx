@@ -1,14 +1,33 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
+import AnyQuizListWrapper from 'components/partials/member/myquiz/AnyQuizListWrapper';
 import EmptyQuiz from 'components/partials/member/myquiz/EmptyQuiz';
 import HeaderContentWrapper from 'components/style/HeaderContentWrapper';
-import { ReactElement } from 'react';
+import { UserQuizListApi } from 'pages/api/quiz';
+import { ReactElement, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
 import styled from 'styled-components';
 
 const Page = () => {
+  const { userId } = useSelector((state: RootState) => state.user);
+  const [userAnyQuiz, setUserAnyQuiz] = useState([]);
+
+  const getUserAnyQuiz = async (_userId: string) => {
+    const res = await UserQuizListApi(_userId);
+    setUserAnyQuiz(res.data);
+  };
+
+  console.log(userAnyQuiz);
+
+  useEffect(() => {
+    if (userId) getUserAnyQuiz(userId);
+  }, [userId]);
+
   return (
     <HeaderContentWrapper>
       <Title>모두의 퀴즈</Title>
-      <EmptyQuiz />
+      {userAnyQuiz[0] && <AnyQuizListWrapper userAnyQuiz={userAnyQuiz} />}
+      {!userAnyQuiz[0] && <EmptyQuiz />}
     </HeaderContentWrapper>
   );
 };

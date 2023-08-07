@@ -61,7 +61,7 @@ const BgColorAni = keyframes`
 `;
 
 export const Background = styled.div<{ triggerAnimation?: boolean }>`
-  z-index: 99;
+  z-index: 9999;
   position: fixed;
   display: flex;
   align-items: center;

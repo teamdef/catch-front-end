@@ -1,9 +1,15 @@
 import Router from 'next/router';
 import styled from 'styled-components';
 
-const MyQuizNav = () => {
-  const moveMyAnyQuiz = () => Router.push('/member/myquiz/anyquiz');
-  const moveMyCatchme = () => Router.push('/member/myquiz/catchme');
+const MyQuizNav = ({ handleSideBar }: { handleSideBar: () => void }) => {
+  const moveMyAnyQuiz = () => {
+    Router.push('/member/myquiz/anyquiz');
+    handleSideBar();
+  };
+  const moveMyCatchme = () => {
+    Router.push('/member/myquiz/catchme');
+    handleSideBar();
+  };
 
   return (
     <Wrapper>
