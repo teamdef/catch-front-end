@@ -1,3 +1,4 @@
+import { PortalWrapper } from 'components/modal';
 import { Background } from 'hooks/useModal';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -19,7 +20,7 @@ const Floating = () => {
   }, [isActive]);
 
   return (
-    <>
+    <PortalWrapper wrapperId="react-portal-loading-container">
       {isActive && <Background onClick={activeHandler} />}
       <Content>
         <ButtonBox isActive={isActive}>
@@ -32,7 +33,7 @@ const Floating = () => {
         </ButtonBox>
         <PlusBtn onClick={activeHandler} />
       </Content>
-    </>
+    </PortalWrapper>
   );
 };
 
