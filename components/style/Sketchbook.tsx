@@ -3,10 +3,10 @@ import styled from 'styled-components';
 const Sketchbook = styled.div`
   position: relative;
   margin-top: 56px;
+  padding: 0 16px;
   border-radius: 8px;
   border: 0.75px solid ${({ theme }) => theme.colors.primary_bg};
   background: #fff;
-  padding: 0 16px;
   box-shadow: 1px -2px 0px 0px ${({ theme }) => theme.colors.primary_bg};
   &::before {
     content: '';

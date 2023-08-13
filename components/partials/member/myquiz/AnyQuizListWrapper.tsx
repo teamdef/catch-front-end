@@ -3,7 +3,7 @@ import { QuizSetCardType } from 'types/quiz';
 import { QuizCard } from 'components/common';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import MoveCreateAnyQuizBtn from './MoveCreateAnyQuizBtn';
+import DottedBox from './MoveCreateAnyQuizBtn';
 
 interface AnyQuizListWrapperProps {
   userAnyQuiz: QuizSetCardType[];
@@ -12,7 +12,7 @@ const AnyQuizListWrapper = ({ userAnyQuiz }: AnyQuizListWrapperProps) => {
   const { profileImg, nickName } = useSelector((state: RootState) => state.user);
   return (
     <Wrapper>
-      <MoveCreateAnyQuizBtn />
+      <DottedBox />
       <QuizCardList>
         {userAnyQuiz.map((quizSet: any, idx: number) => {
           const obj = {

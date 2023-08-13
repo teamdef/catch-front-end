@@ -14,14 +14,19 @@ import { AxiosResponse } from 'axios';
 import { QuizUploadApi } from 'pages/api/quiz';
 /* 컴포넌트 */
 import { Loading } from 'components/common';
-import { AppLayout } from 'components/layout';
+import { AppLayout, HeaderLayout } from 'components/layout';
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/index.style';
 /* react-icons */
-import { MdClear, MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
+import { MdOutlineAdd, MdClose, MdPhotoCamera } from 'react-icons/md';
 import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
 import { LargeContainedBtn } from 'components/style/button';
+import { theme } from 'styles/theme';
+import Sketchbook from 'components/style/Sketchbook';
+import QuizSetInput from 'components/partials/create/QuizSetInput';
+import styled from 'styled-components';
+import AddQuizBtn from 'components/partials/create/AddQuizBtn';
 
 const Page: NextPageWithLayout = () => {
   const dispatch = useDispatch();
@@ -33,8 +38,7 @@ const Page: NextPageWithLayout = () => {
 
   /* 페이지 렌더링 용 input 핸들러 및 state */
   const [_quizList, _setQuizList] = useState<(TextQuiz | ImageQuiz)[]>([]); // 문제 내부 저장 배열
-  const [_description, _setDescription] = useState<string>('');
-  const [title, titleSetter, titleClear, titleHandler] = useInput<string>('');
+
   const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
 
   /* 모달 관리 */
@@ -56,14 +60,6 @@ const Page: NextPageWithLayout = () => {
     ),
   });
 
-  // 퀴즈 세트 설명 textarea 핸들러
-  const _descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length > 100) {
-      return;
-    }
-    _setDescription(e.target.value);
-  };
-
   // redux store 자체를 초기화
   const resetReduxProblemSet = () => {
     dispatch(saveProblemDescriptionAction({ description: '' })); // 설명 저장
@@ -76,19 +72,9 @@ const Page: NextPageWithLayout = () => {
   //   _setQuizList([]);
   //   titleClear();
   // };
-
-  // 새로운 퀴즈 문항 추가 함수
-  const createProblem = () => {
-    const obj: TextQuiz | ImageQuiz = {
-      quizTitle: '',
-      quizThumbnail: undefined,
-      choiceType: 'text',
-      choices: [],
-      correctIndex: 0,
-    };
-    // prev => [...prev, obj]
-    _setQuizList((prev) => [...prev, obj]);
-  };
+  // const quizListHandler = (_params: (TextQuiz | ImageQuiz)[]) => {
+  //   _setQuizList(_params);
+  // };
   // 퀴즈 문항 삭제 함수
   const deleteProblem = useCallback(
     (quizIndex: number) => {
@@ -315,47 +301,20 @@ const Page: NextPageWithLayout = () => {
     if (quizList) {
       _setQuizList(quizList);
     }
-    titleSetter(setTitle); // 퀴즈 세트 제목 세팅
-    _setDescription(description); // 퀴즈 세트 설명 세팅
+    // titleSetter(setTitle); // 퀴즈 세트 제목 세팅
   }, []);
-
-  // 퀴즈 세트 제목 변경 사항 바로 redux에 저장
-  useEffect(() => {
-    dispatch(saveProblemSetTitleAction({ setTitle: title }));
-  }, [title]);
-  // 퀴즈 세트 설명 변경 사항 바로 redux에 저장
-  useEffect(() => {
-    dispatch(saveProblemDescriptionAction({ description: _description }));
-  }, [_description]);
   // 퀴즈 세트 문항 변경 사항 바로 redux에 저장
   useEffect(() => {
     dispatch(saveProblemsAction({ quizList: _quizList }));
   }, [_quizList]);
 
+  if (loading) return <Loading text="퀴즈 세트를 저장하고 있습니다!" />;
   return (
-    <>
-      {loading && <Loading text="퀴즈 세트를 저장하고 있습니다!" />}
-      <S.Wrapper>
-        <S.TitleContainer>
-          <div id="title-input-wrapper">
-            <S.TitleInput>
-              <input
-                type="text"
-                placeholder="제목을 입력해주세요! (최대20자)"
-                value={title}
-                onChange={titleHandler}
-                maxLength={20}
-              />
-              <button id="clear-btn" onClick={titleClear} disabled={title === ''}>
-                <MdClear size={20} />
-              </button>
-            </S.TitleInput>
-          </div>
-          <div id="description-input-wrapper">
-            <div id="title">퀴즈에 대한 설명을 적어보세요! ({_description.length}/100)</div>
-            <textarea value={_description} onChange={_descriptionHandler} id="description-textarea" />
-          </div>
-        </S.TitleContainer>
+    <Sketchbook>
+      <Wrapper>
+        <RenderContinueModal />
+        <QuizSetInput />
+        <AddQuizBtn setQuizList={_setQuizList} />
         <S.QuizCreateContainer>
           {_quizList.map((quiz, quizIndex) => {
             return (
@@ -533,23 +492,25 @@ const Page: NextPageWithLayout = () => {
               </S.QuizCreateCard>
             );
           })}
-          <S.QuizCreateBtn onClick={createProblem}>
-            <span>퀴즈 추가하기</span>
-            <MdOutlineAdd size={20} />
-          </S.QuizCreateBtn>
         </S.QuizCreateContainer>
-        <S.ButtonContainer>
-          <LargeContainedBtn onClick={publicationProblemSet} disabled={title === ''}>
-            퀴즈 생성 완료
-          </LargeContainedBtn>
-        </S.ButtonContainer>
-      </S.Wrapper>
-      <RenderContinueModal />
-    </>
+        <LargeContainedBtn onClick={publicationProblemSet}>퀴즈 생성 완료</LargeContainedBtn>
+      </Wrapper>
+    </Sketchbook>
   );
 };
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 56px;
+  padding-bottom: 40px;
+`;
+
 Page.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout bgColor={theme.colors.primary_bg}>
+      <HeaderLayout bgColor={theme.colors.primary_bg}>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Page;
