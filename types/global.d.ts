@@ -4,17 +4,14 @@ interface ChoiceImageType {
   imgName: string; // 최적화 시킨 이미지 파일 이름.
   // 위 두 정보를 합쳐서 객체로 변환해야 함.
 }
-// ChoiceTextType - 텍스트 타입 객관식 답안
-interface ChoiceTextType {
-  choiceText: string; // 답안
-}
+
 // QuizType - 퀴즈 정보
 interface TextQuiz {
   quizTitle: string; // 퀴즈 제목
   quizThumbnail?: ChoiceImageType; // 퀴즈 설명 이미지
   correctIndex: number; // 정답 번호
   choiceType: 'text'; // 이미지형 퀴즈 , 텍스트형 퀴즈
-  choices: ChoiceTextType[]; // 객관식 답안 배열
+  choices: string[]; // 객관식 답안 배열
 }
 interface ImageQuiz {
   quizTitle: string; // 퀴즈 제목

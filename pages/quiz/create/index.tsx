@@ -32,7 +32,7 @@ const Page: NextPageWithLayout = () => {
   const [_quizList, _setQuizList] = useState<(TextQuiz | ImageQuiz)[]>([]); // 문제 내부 저장 배열
 
   /* 모달 관리 */
-  const [openContinueModal, , ,] = useModal({
+  const [openContinueModal, ,] = useModal({
     // yesTitle: '이어서',
     // noTitle: '새롭게',
     // noAction: () => {
@@ -94,7 +94,7 @@ const Page: NextPageWithLayout = () => {
 
   // 기존에 제작하던 퀴즈 세트의 유무를 확인하고 팝업을 띄운다.
   useEffect(() => {
-    if (quizList.length !== 0) {
+    if (quizList[0]) {
       // 제작 중이던 문제가 있을 경우
       openContinueModal();
     }
@@ -122,6 +122,7 @@ const Page: NextPageWithLayout = () => {
   );
 };
 const Wrapper = styled.div`
+  margin-top: 56px;
   border: 0;
   font-weight: ${theme.fontWeight.bold};
   &::placeholder {

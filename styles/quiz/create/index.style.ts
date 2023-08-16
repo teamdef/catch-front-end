@@ -183,20 +183,6 @@ export const DeleteButton = styled.button`
   }
 `;
 
-export const QuizTitleInput = styled.input`
-  width: 80%;
-  font-size: 1.3rem;
-  text-align: center;
-  align-self: center;
-  margin-top: 4rem;
-  border: none;
-  border-bottom: solid 1px #6a5050;
-  outline: none;
-  padding: 0rem 0.5rem 0.5rem 0.5rem;
-  color: #6a5050;
-  font-family: 'Noto Sans KR';
-`;
-
 export const QuizChoiceTypeRadio = styled.div`
   margin-top: 1.5rem;
   display: flex;
@@ -243,32 +229,7 @@ export const TextChoiceContainer = styled.div`
 export const TextChoiceList = styled.ul`
   width: 100%;
 `;
-export const TextChoiceItem = styled.li<CorrectProps>`
-  width: 100%;
-  display: flex;
-  position: relative;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${({ correct }) => (correct ? '#AAD775' : '#eee')};
-  color: ${({ correct }) => (correct ? '#244E10' : '#888')};
-  font-weight: ${({ correct }) => correct && 'bold'};
-  border-radius: 30px;
-  margin-top: 20px;
-  padding-left: 34px;
-  padding-right: 20px;
-  height: 60px;
-  cursor: pointer;
-  font-size: 1rem;
-  button {
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    color: ${({ correct }) => (correct ? '#244E10' : '#888')};
-  }
-`;
+
 export const TextChoiceCreateBtn = styled.div`
   width: 100%;
   display: flex;
@@ -420,11 +381,11 @@ export const QuizCreateBtn = styled.button`
   font-weight: bold;
   font-size: 1.25rem;
   margin-bottom: 120px;
-  span{
-    margin-right:8px;
+  span {
+    margin-right: 8px;
   }
-  &:hover{
-    cursor:pointer;
+  &:hover {
+    cursor: pointer;
   }
 `;
 

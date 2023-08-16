@@ -1,26 +1,21 @@
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/index.style';
-import { useInput } from 'hooks';
-import { ChangeEvent, useCallback, useState, KeyboardEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, useCallback, Dispatch, SetStateAction } from 'react';
 /* 라이브러리 */
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import styled from 'styled-components';
 import { QuizImage, QuizTitle } from 'components/style';
-import { QuizTitleInput } from 'styles/quiz/create/index.style';
 /* react-icons */
 import { MdClose } from 'react-icons/md';
-import { VscChromeClose } from 'react-icons/vsc';
 import { AiFillCamera } from 'react-icons/ai';
 import { QuizCount, QuizSolveCard } from '../solve/main/QuizItem';
+import CreateChoiceTextList from './CreateChoiceTextList';
 
 interface CreateQuizListProps {
   quizList: (TextQuiz | ImageQuiz)[];
   setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
 }
 const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
-  const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
-  const [activeInput, setActiveInput] = useState<boolean>(false); // 퀴즈 정답 입력창 활성화 여부
-  const activeInputHandler = () => setActiveInput((prev) => !prev);
   const deleteProblem = useCallback(
     (quizIndex: number) => {
       const temp = [...quizList];
@@ -29,10 +24,7 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
     },
     [quizList],
   );
-  // 엔터키 클릭시 답안 등록
-  const onKeyDown = (e: KeyboardEvent<HTMLElement>, quizIndex: number): void => {
-    if (e.key === 'Enter') addChoiceText(quizIndex);
-  };
+
   // 문제 정보를 변경하는 함수
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -42,18 +34,6 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
     setQuizList(temp);
   };
 
-  // 텍스트 답안 추가
-  const addChoiceText = (quizIndex: number) => {
-    if (textChoiceInput === '') {
-      alert('빈 값은 추가할 수 없습니다.');
-    } else {
-      const temp = JSON.parse(JSON.stringify(quizList));
-      temp[quizIndex].choices.push(textChoiceInput);
-      setQuizList(temp);
-      textChoiceInputClear();
-      activeInputHandler();
-    }
-  };
   // 정답 체크
   const setCorrectIndex = (quizIndex: number, choiceIndex: number) => {
     const temp = JSON.parse(JSON.stringify(quizList));
@@ -180,7 +160,6 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
     }
     setQuizList(temp);
   };
-
   return (
     <>
       {quizList.map((quiz: TextQuiz | ImageQuiz, quizIndex: number) => (
@@ -196,13 +175,6 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
               }}
             />
           </QuizTitle>
-          <button
-            onClick={() => {
-              deleteProblem(quizIndex);
-            }}
-          >
-            퀴즈 삭제버튼
-          </button>
           <QuizImageInput
             type="file"
             accept="image/*"
@@ -229,50 +201,7 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
               <QuizImageUpload>이미지를 선택해주세요. (선택사항)</QuizImageUpload>
             )}
           </QuizImageLabel>
-          {quiz.choiceType === 'text' && (
-            <div>
-              {quiz.choices.map((item: ChoiceTextType, choiceIndex: number) => {
-                return (
-                  <S.TextChoiceItem
-                    correct={quiz.correctIndex === choiceIndex}
-                    key={`${quiz.choiceType} ${quizIndex + choiceIndex}`}
-                    onClick={() => {
-                      setCorrectIndex(quizIndex, choiceIndex);
-                    }}
-                  >
-                    <div>{item.choiceText}</div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteChoice(quizIndex, choiceIndex);
-                      }}
-                    >
-                      <VscChromeClose size={20} />
-                    </button>
-                  </S.TextChoiceItem>
-                );
-              })}
-              {quiz.choices.length < 4 && !activeInput && (
-                <AddChoiceTextBtn onClick={activeInputHandler}>퀴즈 문항 추가하기</AddChoiceTextBtn>
-              )}
-              {activeInput && (
-                <>
-                  <input
-                    type="text"
-                    placeholder="이곳에 정답을 입력해주세요."
-                    maxLength={30}
-                    value={textChoiceInput}
-                    onChange={textChoiceInputHandler}
-                    onBlur={() => addChoiceText(quizIndex)}
-                    onKeyDown={(e) => {
-                      onKeyDown(e, quizIndex);
-                    }}
-                  />
-                  <button onClick={activeInputHandler}>ㅁ</button>
-                </>
-              )}
-            </div>
-          )}
+          {quiz.choiceType === 'text' && <CreateChoiceTextList props={{ quiz, quizIndex, quizList, setQuizList }} />}
           {quiz.choiceType === 'img' && (
             <S.ImgChoiceContainer>
               <S.ImgChoiceListContainer>
@@ -318,6 +247,13 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
               </S.ImgChoiceListContainer>
             </S.ImgChoiceContainer>
           )}
+          <button
+            onClick={() => {
+              deleteProblem(quizIndex);
+            }}
+          >
+            퀴즈 삭제버튼
+          </button>
           <S.InfoContainer>정답을 선택해 주세요</S.InfoContainer>
         </QuizSolveCard>
       ))}
@@ -346,16 +282,8 @@ const QuizImageUpload = styled.div`
     background: url(/assets/img/rebranding/icon/camera.svg) center no-repeat;
   }
 `;
+const QuizTitleInput = styled.input`
+  border: 0;
+`;
 
-// const CreateChoiceText = styled.div`
-//   border: 1px solid ${({ theme }) => theme.colors.secondary_500};
-//   border-radius: 8px;
-// `;
-// const CreateChoiceTextInput = styled.input`
-//   width: 100%;
-//   padding: 22px 24px;
-//   border-radius: 8px;
-//   border: none;
-// `;
-const AddChoiceTextBtn = styled.button``;
 export default CreateQuizList;
