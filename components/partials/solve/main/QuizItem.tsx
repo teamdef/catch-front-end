@@ -24,7 +24,7 @@ const QuizItem = ({ item, quiz_num }: QuizItemPropsType) => {
   );
 };
 
-const QuizSolveCard = styled.div`
+export const QuizSolveCard = styled.div`
   position: relative;
   display: flex;
   width: 100%;
@@ -36,7 +36,7 @@ const QuizSolveCard = styled.div`
   flex-wrap: nowrap;
 `;
 
-const QuizCount = styled.span`
+export const QuizCount = styled.span`
   margin-right: 12px;
   flex: none;
 `;
