@@ -1,22 +1,26 @@
 import { useInput } from 'hooks';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
 import { saveProblemDescriptionAction, saveProblemSetTitleAction } from 'store/quiz';
 import styled from 'styled-components';
 
 const QuizSetInput = () => {
-  const [title, , , titleHandler] = useInput<string>('');
-  const [desc, , , descHandler] = useInput<string>('');
+  const { setTitle, description } = useSelector((state: RootState) => state.quiz);
+  const [title, titleSetter, , titleHandler] = useInput<string>('');
+  const [desc, descSetter, , descHandler] = useInput<string>('');
   const dispatch = useDispatch();
-  // 퀴즈 세트 제목 변경 사항 바로 redux에 저장
+
   useEffect(() => {
     dispatch(saveProblemSetTitleAction({ setTitle: title }));
   }, [title]);
-  // 퀴즈 세트 설명 변경 사항 바로 redux에 저장
   useEffect(() => {
     dispatch(saveProblemDescriptionAction({ description: desc }));
   }, [desc]);
-
+  useEffect(() => {
+    if (setTitle) titleSetter(setTitle);
+    if (description) descSetter(description);
+  }, []);
   return (
     <Wrapper>
       <InputBox>

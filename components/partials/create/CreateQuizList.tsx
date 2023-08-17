@@ -1,6 +1,6 @@
 /* 스타일 코드 */
 import * as S from 'styles/quiz/create/index.style';
-import { ChangeEvent, useCallback, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
 /* 라이브러리 */
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
 import styled from 'styled-components';
@@ -8,23 +8,18 @@ import { QuizImage, QuizTitle } from 'components/style';
 /* react-icons */
 import { MdClose } from 'react-icons/md';
 import { AiFillCamera } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
+import { saveProblemsAction } from 'store/quiz';
 import { QuizCount, QuizSolveCard } from '../solve/main/QuizItem';
 import CreateChoiceTextList from './CreateChoiceTextList';
+import CreateQuizBottom from './CreateQuizBottom';
 
 interface CreateQuizListProps {
   quizList: (TextQuiz | ImageQuiz)[];
   setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
 }
 const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
-  const deleteProblem = useCallback(
-    (quizIndex: number) => {
-      const temp = [...quizList];
-      temp.splice(quizIndex, 1);
-      setQuizList(temp);
-    },
-    [quizList],
-  );
-
+  const dispatch = useDispatch();
   // 문제 정보를 변경하는 함수
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -160,6 +155,11 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
     }
     setQuizList(temp);
   };
+  // 퀴즈 세트 문항 변경 사항 바로 redux에 저장
+  useEffect(() => {
+    dispatch(saveProblemsAction({ quizList }));
+  }, [quizList]);
+
   return (
     <>
       {quizList.map((quiz: TextQuiz | ImageQuiz, quizIndex: number) => (
@@ -247,14 +247,7 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
               </S.ImgChoiceListContainer>
             </S.ImgChoiceContainer>
           )}
-          <button
-            onClick={() => {
-              deleteProblem(quizIndex);
-            }}
-          >
-            퀴즈 삭제버튼
-          </button>
-          <S.InfoContainer>정답을 선택해 주세요</S.InfoContainer>
+          <CreateQuizBottom quizList={quizList} setQuizList={setQuizList} quizIndex={quizIndex} />
         </QuizSolveCard>
       ))}
     </>
@@ -263,7 +256,10 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
 const QuizImageInput = styled.input`
   display: none;
 `;
-const QuizImageLabel = styled.label``;
+const QuizImageLabel = styled.label`
+  margin-top: 12px;
+  margin-bottom: 20px;
+`;
 const QuizImageUpload = styled.div`
   display: flex;
   flex-direction: column;

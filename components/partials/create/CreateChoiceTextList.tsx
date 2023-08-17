@@ -59,7 +59,11 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
     </Wrapper>
   );
 };
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 const AddChoiceTextBtn = styled.button`
   position: relative;
   display: flex;
@@ -83,12 +87,15 @@ const CreateChoiceTextInputBox = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   padding: 22px 24px;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.secondary_500};
+  color: ${({ theme }) => theme.colors.secondary_500};
 `;
 const Input = styled.input`
+  flex-grow: 1;
   border: 0;
   color: ${({ theme }) => theme.colors.secondary_500};
   ::placeholder {
@@ -102,6 +109,6 @@ const DeleteInputBtn = styled.button`
   display: block;
   width: 14px;
   height: 14px;
-  background: url(/assets/img/rebranding/icon/close_secondary500.svg);
+  background: url(/assets/img/rebranding/icon/close_secondary500.svg) center no-repeat;
 `;
 export default CreateChoiceTextList;

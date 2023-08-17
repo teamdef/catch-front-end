@@ -36,35 +36,38 @@ const CreateChoiceText = ({ props }: CreateChoiceTextProps) => {
 
   return (
     <Wrapper correct={isCorrect} key={key} onClick={setCorrectIndex}>
-      <div>{text}</div>
-      <button onClick={(e: MouseEvent) => deleteChoice(e)}>항목삭제</button>
+      {text}
+      <DeleteChoiceBtn onClick={(e: MouseEvent) => deleteChoice(e)} />
     </Wrapper>
   );
 };
-const Wrapper = styled.li<{ correct: boolean }>`
+
+const DeleteChoiceBtn = styled.button`
   position: relative;
-  width: 100%;
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-position: center;
+`;
+
+const Wrapper = styled.button<{ correct: boolean }>`
+  position: relative;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background-color: ${({ correct }) => (correct ? '#AAD775' : '#eee')};
-  color: ${({ correct }) => (correct ? '#244E10' : '#888')};
-  font-weight: ${({ correct }) => correct && 'bold'};
+  width: 100%;
+  padding: 22px 24px;
   border-radius: 8px;
-  margin-top: 20px;
-  padding-left: 34px;
-  padding-right: 20px;
+  background-color: ${({ correct, theme }) => (correct ? theme.colors.secondary_500 : '#fff')};
+  color: ${({ correct, theme }) => (correct ? '#fff' : theme.colors.secondary_500)};
+  border: 1px solid ${({ theme }) => theme.colors.secondary_500};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  border-radius: 8px;
   height: 60px;
-  cursor: pointer;
-  font-size: 1rem;
-  button {
-    width: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    color: ${({ correct }) => (correct ? '#244E10' : '#888')};
+  & ${DeleteChoiceBtn} {
+    background: ${({ correct }) =>
+      correct
+        ? 'url(/assets/img/rebranding/icon/close_white.svg)'
+        : 'url(/assets/img/rebranding/icon/close_secondary500.svg)'};
   }
 `;
 
