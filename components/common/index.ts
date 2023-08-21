@@ -12,8 +12,8 @@ export { default as MyQuizCard } from './MyQuizCard';
 export { default as RecentQuiz } from './RecentQuiz';
 export { default as PopularQuiz } from '../popular/PopularQuiz';
 export { default as SkeletonQuizCard } from './SkeletonQuizCard';
+export { default as ProfileImage } from './ProfileImage';
 
-export { default as SideNavigationBar } from './SideNavigationBar';
 export { default as Icon } from './Icon';
 
 export { default as Emotion } from './Emotion';

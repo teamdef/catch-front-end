@@ -17,6 +17,7 @@ const HeaderLayout = ({ children, bgColor }: layoutProps) => {
 const SpaceWrapper = styled.div`
   position: relative;
   padding-top: 56px;
+  min-height: 100%;
   padding-bottom: 28px;
 `;
 export default HeaderLayout;

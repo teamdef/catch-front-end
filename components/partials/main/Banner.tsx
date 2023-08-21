@@ -4,10 +4,18 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-
-import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import Router from 'next/router';
 
 const Banner = () => {
+  const { isLoggedin } = useSelector((state: RootState) => state.user);
+  const moveLogin = () => {
+    Router.push('/member/login');
+  };
+  const moveCreate = () => {
+    Router.push('/quiz/create');
+  };
   return (
     <Wrapper>
       <Swiper
@@ -21,22 +29,14 @@ const Banner = () => {
         loop
       >
         <SwiperSlide>
-          <Link href="/quiz/create" passHref>
-            <a>
-              <BannerContent>
-                <img src="/assets/img/rebranding/quiz-create-banner-1.png" alt="배너이미지" />
-              </BannerContent>
-            </a>
-          </Link>
+          <BannerContent onClick={isLoggedin ? moveCreate : moveLogin}>
+            <img src="/assets/img/rebranding/quiz-create-banner-1.png" alt="배너이미지" />
+          </BannerContent>
         </SwiperSlide>
         <SwiperSlide>
-          <Link href="/quiz/create" passHref>
-            <a>
-              <BannerContent>
-                <img src="/assets/img/rebranding/quiz-create-banner-2.png" alt="배너이미지" />
-              </BannerContent>
-            </a>
-          </Link>
+          <BannerContent onClick={isLoggedin ? moveCreate : moveLogin}>
+            <img src="/assets/img/rebranding/quiz-create-banner-2.png" alt="배너이미지" />
+          </BannerContent>
         </SwiperSlide>
       </Swiper>
     </Wrapper>
@@ -63,6 +63,7 @@ const Wrapper = styled.div`
   }
 `;
 const BannerContent = styled.div`
+  cursor: pointer;
   img {
     width: 100%;
     height: auto;

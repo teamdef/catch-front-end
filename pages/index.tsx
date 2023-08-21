@@ -1,18 +1,21 @@
 import { ReactElement } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
-
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import styled from 'styled-components';
+import { AllQuizSetWrapper, Banner, LoginText, Wellcome } from 'components/partials/main';
 // Import Swiper
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { AllQuizSetWrapper, Banner } from 'components/partials/main';
-import styled from 'styled-components';
-import LoginText from 'components/partials/main/LoginText';
+import Floating from 'components/common/Floating';
 
 const Page: NextPageWithLayout = () => {
+  const { isLoggedin } = useSelector((state: RootState) => state.user);
   return (
     <Wrapper>
-      <LoginText />
+      <Floating />
+      {isLoggedin ? <Wellcome /> : <LoginText />}
       <Banner />
       <AllQuizSetWrapper />
     </Wrapper>

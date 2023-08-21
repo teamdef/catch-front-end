@@ -4,7 +4,8 @@ import { QuizSetCardType } from 'types/quiz';
 import { useState, useEffect } from 'react';
 import { RecentQuizListApi } from 'pages/api/quiz';
 import styled from 'styled-components';
-import { QuizCard, TabBar } from '.';
+import { QuizCard } from 'components/common';
+import { TabBar } from '.';
 
 function AllQuizSetWrapper() {
   const [quizSetList, setQuizSetList] = useState<QuizSetCardType[] | null>(null);
@@ -23,7 +24,6 @@ function AllQuizSetWrapper() {
     setQuizSetList(_list);
   };
 
-  console.log(quizSetList);
   const parseQuizSetList = (data: any) => {
     const allQuizMap = data.map((quizSet: any) => {
       const quizObj: QuizSetCardType = {
@@ -49,7 +49,16 @@ function AllQuizSetWrapper() {
       <TabBar props={{ quizSetList, listHandler }} />
       <SectionContent>
         {quizSetList.map((quizSet: QuizSetCardType, idx: number) => {
-          return <QuizCard quizSet={quizSet} key={`quiz-set-card-${idx}`} />;
+          const quizInfo = {
+            quizSetId: quizSet.quizSetId,
+            quizSetTitle: quizSet.quizSetTitle,
+            createdAt: quizSet.createdAt,
+            thumbnail: quizSet.quizSetThumbnail,
+            profileImg: quizSet.quizSetMaker.profile_img,
+            nickname: quizSet.quizSetMaker.nickname,
+            solverCnt: quizSet.solverCnt,
+          };
+          return <QuizCard quizInfo={quizInfo} key={`quiz-set-card-${idx}`} />;
         })}
       </SectionContent>
     </Wrapper>

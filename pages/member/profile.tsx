@@ -1,67 +1,48 @@
 /* react, next 관련 */
-import { ReactElement, useEffect } from 'react';
+import { ReactElement, ChangeEvent, useState } from 'react';
 import type { NextPageWithLayout } from 'pages/_app';
-import { useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 /* redux 관련 */
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { profileUploadAction } from 'store/user';
 /* 통신 */
-import { ProfileChangeApi } from 'pages/api/member';
+import { ProfileChangeApi, ProfileChangeProps } from 'pages/api/member';
 /* 컴포넌트 */
-import { AppLayout } from 'components/layout';
-import { Title, Loading } from 'components/common';
-
-import * as S from 'styles/member/profile.style'; /* 스타일 코드 */
+import { AppLayout, HeaderLayout } from 'components/layout';
+import { Loading, ProfileImage } from 'components/common';
 import imageCompression from 'browser-image-compression'; /* 라이브러리 */
-import { MdOutlineSettings } from 'react-icons/md'; /* react-icons */
+import styled from 'styled-components';
+import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
+import HeaderContentWrapper from 'components/style/HeaderContentWrapper';
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res}: GetServerSidePropsContext) => {
-  // 클라이언트는 여러 대지만 서버는 한대이기 때문에 서버 사용한 쿠키는 반드시 제거해 줘야 한다
-  const cookie = req ? req?.headers?.cookie : null;
-  if (cookie) {
-    let match = cookie.match(new RegExp('(^| )' + 'access_token' + '=([^;]+)'));
-    // 쿠키가 적용되어 있다면 (로그인 상태라면)
-    if (!!match === false) {
-      res.statusCode = 302;
-      res.setHeader('Location', `/`);
-      res.end();
-    }
-  } else {
-    res.statusCode = 302;
-    res.setHeader('Location', `/`);
-    res.end();
-  }
-  return { props: {} };
-};
 const Profile: NextPageWithLayout = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  let { isSignUp } = router.query;
+  const dispatch = useDispatch();
   const { userId, nickName, profileImg } = useSelector((state: RootState) => state.user);
   const [tempProfileImg, setTempProfileImg] = useState<string>(profileImg);
   const [tempNickname, setTempNickname] = useState<string>(nickName);
-  const [error, setError] = useState<string | null>(null);
-  const [isRegister, setIsRegister] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
+  const isValid = tempNickname.length < 2 || (tempNickname === nickName && tempProfileImg === profileImg);
 
   const _tempNicknameHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTempNickname(e.target.value);
+  };
+  const moveHome = () => {
+    router.push('/');
   };
   // 이미지 압축을 위한 옵션
   const options = {
     maxSizeMB: 1, // 원본 이미지 최대 용량
     maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
-    //useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
+    // useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
     fileType: 'images/*', // 파일 타입
   };
 
   const randomString = (len: number): string => {
     let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
-    for (let i = 0; i < len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
+    for (let i = 0; i < len; i + 1) text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   };
 
@@ -81,17 +62,10 @@ const Profile: NextPageWithLayout = () => {
   };
 
   const saveProfile = async () => {
-    if (tempNickname && (tempNickname.length < 2 || tempNickname.length > 6)) {
-      setError('닉네임은 최소 2글자에서 최대 6글자까지 입력 필수입니다');
-    } else {
-      setError(null);
-      setIsLoading(true);
-      // 기존 등록된 닉네임이랑 변경하고자 하는 닉네임이 다를 경우에만 변경 진행
-      let _obj: any = {};
-      _obj['id'] = userId;
-      if (tempNickname !== nickName) {
-        _obj['nickname'] = tempNickname;
-      }
+    setIsLoading(true);
+    try {
+      const _obj: ProfileChangeProps = { id: userId };
+      if (tempNickname !== nickName) _obj.nickname = tempNickname;
       if (tempProfileImg !== profileImg) {
         const timestamp = new Date().toISOString().substring(0, 10);
         const _file = await imageCompression.getFilefromDataUrl(tempProfileImg, '1234');
@@ -99,79 +73,117 @@ const Profile: NextPageWithLayout = () => {
         const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
           type: _compressed.type,
         }); // 압축 이미지 대입
-        _obj['imgBlob'] = _imgFile;
+        _obj.imgBlob = _imgFile;
       }
       const res = await ProfileChangeApi(_obj);
-      if (res.status === 200) {
-        const { profile_img, nickname } = res.data;
-        dispatch(profileUploadAction({ profileImg: profile_img, nickName: nickname }));
-        setIsLoading(false);
-        router.push('/'); // 홈으로
-      }
+      const { profile_img, nickname } = res.data;
+      dispatch(profileUploadAction({ profileImg: profile_img, nickName: nickname }));
+      moveHome();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    setIsRegister(isSignUp === 'true');
-  }, [router.isReady]);
   return (
     <>
-      {isLoading && <Loading ment={'저장중 입니다...'} />}
-      <S.Wrapper>
-        <Title
-          title={isRegister ? '프로필 등록 👧' : '프로필 수정 👧'}
-          subTitle={`서비스에서 사용하실 프로필을 ${isRegister ? '등록' : '수정'}해보세요!`}
-        />
-        <S.ProfileContentContainer>
-          <S.ProfileImgInputContainer>
-            <S.ProfileThumbnail>
-              <img src={profileImg ? tempProfileImg : '/assets/img/user_default.png'} />
-              {userId && (
-                <S.ProfileSetting>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="select-image"
-                    name="select-image"
-                    onClick={onImgClick}
-                    onChange={onImgChange}
-                  />
-                  <label htmlFor="select-image">
-                    <MdOutlineSettings size={20} color={'#B4B4B4'} />
-                  </label>
-                </S.ProfileSetting>
-              )}
-            </S.ProfileThumbnail>
-          </S.ProfileImgInputContainer>
-          <S.ProfileNicknameInput
+      {isLoading && <Loading text="정보 저장중 입니다." />}
+      <HeaderContentWrapper paddingTop="24px">
+        <Title>프로필 수정</Title>
+        <Content>
+          <ImageSelectWrapper>
+            <ImageSelectInput
+              type="file"
+              accept="image/*"
+              id="select-image"
+              name="select-image"
+              onClick={onImgClick}
+              onChange={onImgChange}
+            />
+            <ImageSelectLabel htmlFor="select-image">
+              <ProfileImage src={tempProfileImg} size="56px" />
+            </ImageSelectLabel>
+          </ImageSelectWrapper>
+          <Nickname>{nickName}</Nickname>
+          <NicknameInput
             type="text"
-            placeholder="한글 2~6자까지 입력 가능합니다."
+            placeholder="닉네임을 설정하세요. (2~8 자)"
             value={tempNickname}
             onChange={_tempNicknameHandler}
+            maxLength={8}
           />
-          {error && <S.Error>{error}</S.Error>}
-          {isRegister ? (
-            <S.Info>
-              소셜 로그인에서 설정된 프로필 값이 기본으로 설정되며,
-              <br /> 이 단계에서 수정하지 않아도 서비스 내에서 수정 가능 합니다 :)
-            </S.Info>
-          ) : (
-            <S.Info>
-              수정 완료 버튼을 누르면 변경사항이 저장되고,
-              <br /> 홈 화면으로 이동됩니다.
-            </S.Info>
-          )}
 
-          <S.SaveButton disabled={!!tempNickname === false} onClick={saveProfile}>
-            {isRegister ? '등록' : '수정'}완료
-          </S.SaveButton>
-        </S.ProfileContentContainer>
-      </S.Wrapper>
+          <ButtonBox>
+            <SmallOutlinedBtn onClick={moveHome}>취소하기</SmallOutlinedBtn>
+            <SmallContainedBtn disabled={isValid} onClick={saveProfile}>
+              저장하기
+            </SmallContainedBtn>
+          </ButtonBox>
+        </Content>
+      </HeaderContentWrapper>
     </>
   );
 };
+
+const Title = styled.h2`
+  font-size: ${({ theme }) => theme.fontSize.subtitle_2};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+`;
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 44px;
+  margin-bottom: 52px;
+  flex-grow: 1;
+`;
+const ImageSelectWrapper = styled.div``;
+const ImageSelectInput = styled.input`
+  display: none;
+`;
+const ImageSelectLabel = styled.label`
+  position: relative;
+  display: block;
+  width: 56px;
+  height: 56px;
+  cursor: pointer;
+  margin-bottom: 16px;
+`;
+const Nickname = styled.span`
+  color: ${({ theme }) => theme.colors.blackColors.grey_900};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  margin-bottom: 26px;
+`;
+const NicknameInput = styled.input`
+  width: 202px;
+  text-align: center;
+  border: 0;
+  ::placeholder {
+    color: ${({ theme }) => theme.colors.blackColors.grey_400};
+    font-size: ${({ theme }) => theme.fontSize.caption};
+  }
+  padding: 5px 0;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.blackColors.grey_500};
+`;
+const ButtonBox = styled.div`
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  button {
+    flex-grow: 1;
+  }
+`;
+
 Profile.getLayout = function getLayout(page: ReactElement) {
-  return <AppLayout>{page}</AppLayout>;
+  return (
+    <AppLayout>
+      <HeaderLayout>{page}</HeaderLayout>
+    </AppLayout>
+  );
 };
 
 export default Profile;

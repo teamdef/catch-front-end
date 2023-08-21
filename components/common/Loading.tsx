@@ -4,7 +4,7 @@ import { Background } from 'hooks/useModal';
 import styled from 'styled-components';
 
 interface LoadingProps {
-  text: string;
+  text?: string;
 }
 const Loading = ({ text }: LoadingProps) => {
   return (

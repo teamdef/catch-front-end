@@ -10,7 +10,6 @@ const SmallContainedBtn = styled.button`
   border-radius: 8px;
   border: 1px solid #0500c9;
   background: #3b27ff;
-  box-shadow: 0px 4px 0px 0px #0500c9;
   word-break: keep-all;
   &:disabled {
     opacity: 0.5;

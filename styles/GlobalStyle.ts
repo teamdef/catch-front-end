@@ -36,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
     outline-style: none;
+    -webkit-tap-highlight-color : transparent;
   }
   button {
     border: 0;

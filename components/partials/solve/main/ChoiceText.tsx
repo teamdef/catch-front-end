@@ -26,17 +26,15 @@ const ChoiceText = ({ choices, quizNum }: ChoiceProps) => {
           <>
             <ChoiceTextInput
               type="radio"
-              id={`choice_txt_${quizNum}_${choice_num}`}
-              name={`choice_txt_${quizNum}`}
+              id={`${quizNum}_${choice_num}`}
+              name={`${quizNum}`}
               value={choice}
               checked={answerList[quizNum] === choice_num}
               onChange={() => {
                 answerHandler(choice_num);
               }}
             />
-            <ChoiceTextLabel key={choice_num} htmlFor={`choice_txt_${quizNum}_${choice_num}`}>
-              {choice}
-            </ChoiceTextLabel>
+            <ChoiceTextLabel htmlFor={`${quizNum}_${choice_num}`}>{choice}</ChoiceTextLabel>
           </>
         );
       })}

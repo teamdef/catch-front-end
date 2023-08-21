@@ -1,26 +1,44 @@
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useAnimation from 'hooks/useAnimation';
 import Logo from './Logo';
 import Icon from './Icon';
-import SideNavigationBar from './SideNavigationBar';
+import SideMenuBar from '../profile/SideMenuBar';
 
 const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
+  const currentUrl = window.location.href;
   const [isSideBarOpen, setIsSideBarOpen] = useState<boolean>(false);
+  const [renderSideBar, handleTransitionEnd, triggerAnimation] = useAnimation(isSideBarOpen);
+
   const handleSideBar = () => {
-    setIsSideBarOpen((state) => !state);
+    setIsSideBarOpen((current) => !current);
   };
+
   const handleSideBarIconSrc = () => {
     if (isSideBarOpen) return '/assets/img/icon/close_24px.png';
     return '/assets/img/icon/menu_24px.png';
   };
 
+  useEffect(() => {
+    if (!triggerAnimation) {
+      setTimeout(() => {
+        handleTransitionEnd();
+      }, 300);
+    }
+  }, [triggerAnimation]);
+
+  useEffect(() => {
+    setIsSideBarOpen(false); // url 이 변경되면 사이드메뉴바는 닫히도록 함.
+  }, [currentUrl]);
   return (
     <>
       <Wrapper bgColor={bgColor}>
         <Logo width="100px" />
         <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
       </Wrapper>
-      {isSideBarOpen && <SideNavigationBar />}
+      {renderSideBar && (
+        <SideMenuBar bgColor={bgColor} triggerAnimation={triggerAnimation} handleSideBar={handleSideBar} />
+      )}
     </>
   );
 };

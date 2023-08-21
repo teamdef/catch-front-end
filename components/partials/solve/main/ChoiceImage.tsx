@@ -14,21 +14,22 @@ const ChoiceImage = ({ choices, quizNum }: ChoiceProps) => {
     copy_answer[_quiz_num] = choice_num;
     dispatch(saveSolveAnswersAction({ answerList: copy_answer }));
   };
+
   return (
     <Wrapper>
       {choices.map((choice: string, choice_num: number) => (
         <>
           <ChoiceImgInput
             type="radio"
-            id={`choice_img_${quizNum}_${choice_num}`}
-            name={`choice_img_${quizNum}`}
+            id={`${quizNum}_${choice_num}`}
+            name={`${quizNum}`}
             value={choice}
             checked={answerList[quizNum] === choice_num}
             onChange={() => {
               answerHandler(quizNum, choice_num);
             }}
           />
-          <ChoiceImgLabel key={choice_num} htmlFor={`choice_img_${quizNum}_${choice_num}`} imgSrc={choice} />
+          <ChoiceImgLabel htmlFor={`${quizNum}_${choice_num}`} imgSrc={choice} />
         </>
       ))}
     </Wrapper>
