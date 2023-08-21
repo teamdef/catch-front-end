@@ -23,7 +23,8 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
   // 텍스트 답안 추가
   const addChoiceText = () => {
     if (textChoiceInput === '') {
-      alert('빈 값은 추가할 수 없습니다.');
+      textChoiceInputClear();
+      activeInputHandler();
     } else {
       const temp = JSON.parse(JSON.stringify(quizList));
       temp[quizIndex].choices.push(textChoiceInput);
@@ -49,6 +50,7 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
             value={textChoiceInput}
             onChange={textChoiceInputHandler}
             onBlur={addChoiceText}
+            autoFocus={activeInput}
             onKeyDown={onKeyDown}
           />
           <DeleteInputBtn onClick={activeInputHandler} />
