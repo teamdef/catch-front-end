@@ -58,7 +58,7 @@ const Page: NextPageWithLayout = () => {
         <QuizSetInput />
         <CreateQuizList quizList={_quizList} setQuizList={_setQuizList} />
         <AddQuizBtn setQuizList={_setQuizList} />
-        <CreateQuizSetBtn _quizList={_quizList} />
+        <CreateQuizSetBtn />
       </Wrapper>
     </Sketchbook>
   );
