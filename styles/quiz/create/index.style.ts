@@ -271,14 +271,6 @@ export const ImgChoiceContainer = styled.div`
   margin-top: 20px;
 `;
 
-export const ImgChoiceListContainer = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-`;
-
 export const ImgWrapper = styled.div<CorrectProps>`
   width: 100%;
   height: 150px;
