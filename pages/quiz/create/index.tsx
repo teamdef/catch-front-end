@@ -8,13 +8,13 @@ import { RootState } from 'store';
 /* 컴포넌트 */
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { theme } from 'styles/theme';
-import Sketchbook from 'components/style/Sketchbook';
 import QuizSetInput from 'components/partials/create/QuizSetInput';
 import styled from 'styled-components';
 import AddQuizBtn from 'components/partials/create/AddQuizBtn';
 import CreateQuizList from 'components/partials/create/CreateQuizList';
 import CreateQuizSetBtn from 'components/partials/create/CreateQuizSetBtn';
 import ContinueModal from 'components/partials/create/ContinueModal';
+import Torn from 'components/style/Torn';
 
 const Page: NextPageWithLayout = () => {
   const { quizList, setTitle, description } = useSelector((state: RootState) => state.quiz);
@@ -34,21 +34,31 @@ const Page: NextPageWithLayout = () => {
   }, []);
 
   return (
-    <Sketchbook>
-      <Wrapper>
-        <RenderContinueModal />
-        <QuizSetInput props={{ title, titleHandler, desc, descHandler }} />
-        <CreateQuizList quizList={_quizList} setQuizList={_setQuizList} />
-        <AddQuizBtn setQuizList={_setQuizList} />
-        <CreateQuizSetBtn />
-      </Wrapper>
-    </Sketchbook>
+    <Wrapper>
+      <Title>모두의 퀴즈 만들기</Title>
+      <Torn>
+        <ContentWrapper>
+          <RenderContinueModal />
+          <QuizSetInput props={{ title, titleHandler, desc, descHandler }} />
+          <CreateQuizList quizList={_quizList} setQuizList={_setQuizList} />
+          <AddQuizBtn setQuizList={_setQuizList} />
+          <CreateQuizSetBtn />
+        </ContentWrapper>
+      </Torn>
+    </Wrapper>
   );
 };
-const Wrapper = styled.div`
-  margin-top: 56px;
-  border: 0;
+const Wrapper = styled.div``;
+const Title = styled.h2`
+  padding: 14px 0;
   color: ${theme.colors.blackColors.grey_900};
+  font-weight: ${theme.fontWeight.bold};
+  font-size: ${theme.fontSize.subtitle_2};
+`;
+const ContentWrapper = styled.div`
+  position: relative;
+  margin-top: 31px;
+  padding-bottom: 40px;
 `;
 
 Page.getLayout = function getLayout(page: ReactElement) {
