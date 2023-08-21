@@ -49,9 +49,7 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
             value={textChoiceInput}
             onChange={textChoiceInputHandler}
             onBlur={addChoiceText}
-            onKeyDown={(e) => {
-              onKeyDown(e);
-            }}
+            onKeyDown={onKeyDown}
           />
           <DeleteInputBtn onClick={activeInputHandler} />
         </CreateChoiceTextInputBox>
