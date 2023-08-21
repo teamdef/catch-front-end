@@ -41,38 +41,60 @@ const CreateChoiceImageList = ({ props }: CreateChoiceImageListProps) => {
 
   return (
     <Wrapper>
-      <ImgChoiceListContainer>
-        {quiz.choices.map((imageObj: ChoiceImageType, choiceIndex: number) => (
-          <CreateChoiceImage props={{ quiz, quizIndex, choiceIndex, quizList, setQuizList, imageObj }} />
-        ))}
-        {quiz.choices.length < 4 && (
-          <CreateChoiceImageInputBox>
-            <CreateChoiceImageInput
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={onChoiceImgChange}
-              id={`choice-image-input-${quizIndex}`}
-              name={`choice-image-input-${quizIndex}`}
-            />
-            <CreateChoiceImageLabel htmlFor={`choice-image-input-${quizIndex}`} />
-          </CreateChoiceImageInputBox>
-        )}
-      </ImgChoiceListContainer>
+      {quiz.choices.map((imageObj: ChoiceImageType, choiceIndex: number) => (
+        <CreateChoiceImage props={{ quiz, quizIndex, choiceIndex, quizList, setQuizList, imageObj }} />
+      ))}
+      {quiz.choices.length < 4 && (
+        <CreateChoiceImageInputBox>
+          <CreateChoiceImageInput
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onChoiceImgChange}
+            id={`choice-image-input-${quizIndex}`}
+            name={`choice-image-input-${quizIndex}`}
+          />
+          <CreateChoiceImageLabel htmlFor={`choice-image-input-${quizIndex}`} />
+        </CreateChoiceImageInputBox>
+      )}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div``;
-const ImgChoiceListContainer = styled.div`
-  width: 100%;
+const Wrapper = styled.div`
+  position: relative;
   display: grid;
+  width: 100%;
   grid-template-columns: 1fr 1fr;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
 `;
-const CreateChoiceImageInputBox = styled.div``;
-const CreateChoiceImageInput = styled.input``;
-const CreateChoiceImageLabel = styled.label``;
+const CreateChoiceImageInputBox = styled.div`
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 152/138;
+`;
+const CreateChoiceImageInput = styled.input`
+  display: none;
+`;
+const CreateChoiceImageLabel = styled.label`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.primary_50};
+  ::before {
+    content: '';
+    position: relative;
+    display: block;
+    width: 27.5px;
+    height: 22px;
+    background: url(/assets/img/rebranding/icon/camera_secondary200.svg) no-repeat center;
+  }
+`;
 
 export default CreateChoiceImageList;

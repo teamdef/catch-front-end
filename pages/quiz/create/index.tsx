@@ -66,7 +66,6 @@ const Page: NextPageWithLayout = () => {
 const Wrapper = styled.div`
   margin-top: 56px;
   border: 0;
-  font-weight: ${theme.fontWeight.bold};
   &::placeholder {
     font-weight: ${theme.fontWeight.regular};
   }
