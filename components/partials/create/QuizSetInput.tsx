@@ -1,14 +1,19 @@
-import { useInput } from 'hooks';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'store';
+import { ChangeEvent, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { saveProblemDescriptionAction, saveProblemSetTitleAction } from 'store/quiz';
 import styled from 'styled-components';
 
-const QuizSetInput = () => {
-  const { setTitle, description } = useSelector((state: RootState) => state.quiz);
-  const [title, titleSetter, , titleHandler] = useInput<string>('');
-  const [desc, descSetter, , descHandler] = useInput<string>('');
+interface QuizSetInputProps {
+  props: {
+    title: string;
+    titleHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+    desc: string;
+    descHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+  };
+}
+
+const QuizSetInput = ({ props }: QuizSetInputProps) => {
+  const { title, titleHandler, desc, descHandler } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,10 +22,6 @@ const QuizSetInput = () => {
   useEffect(() => {
     dispatch(saveProblemDescriptionAction({ description: desc }));
   }, [desc]);
-  useEffect(() => {
-    if (setTitle) titleSetter(setTitle);
-    if (description) descSetter(description);
-  }, []);
   return (
     <Wrapper>
       <InputBox>
@@ -69,9 +70,11 @@ const Input = styled.input`
   padding-bottom: 4px;
   border: 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.secondary_300};
+  color: ${({ theme }) => theme.colors.blackColors.grey_700};
+  font-weight: ${({ theme }) => theme.fontWeight.regular};
+  font-size: ${({ theme }) => theme.fontSize.caption};
   &::placeholder {
     color: ${({ theme }) => theme.colors.blackColors.grey_400};
-    font-size: ${({ theme }) => theme.fontSize.caption};
   }
 `;
 export default QuizSetInput;

@@ -33,6 +33,7 @@ const AddButton = styled.button`
   padding: 64px 0;
   border: 1px dashed #8c6eff;
   background: #fff;
+  gap: 10px;
   ::before {
     content: '';
     position: relative;
@@ -40,7 +41,6 @@ const AddButton = styled.button`
     width: 16px;
     height: 16px;
     background: url(/assets/img/rebranding/icon/plus_secondary500.svg) no-repeat center;
-    gap: 10px;
   }
   font-size: ${({ theme }) => theme.fontSize.subtitle_2};
   font-weight: ${({ theme }) => theme.fontWeight.bold};

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
 import { saveSolveUserScoreAction } from 'store/user_solve';
 import { useModal } from 'hooks';
-import { NicknameModal } from 'components/modal';
 import styled from 'styled-components';
 import { LargeContainedBtn } from 'components/style/button';
 import { useRouter } from 'next/router';
@@ -11,6 +10,7 @@ import { saveEmotionCount } from 'store/emotion';
 import { SaveScoreApi } from 'pages/api/quiz';
 import { Loading } from 'components/common';
 import QuizItem from './QuizItem';
+import NicknameModal from './NicknameModal';
 
 const QuizList = () => {
   const router = useRouter();
