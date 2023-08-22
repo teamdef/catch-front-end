@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
+import { useRouter } from 'next/router';
 import { Twitter, Facebook, Kakaotalk, LinkCopyBtn } from '.';
 
 export interface ShareInfo {
@@ -13,15 +14,17 @@ export interface ShareInfo {
 }
 
 const ShareBox = () => {
+  const router = useRouter();
+  const { quizSetThumb } = router.query;
   const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
-
   const shareInfo: ShareInfo = {
-    thumbnail: quizSetThumbnail,
+    thumbnail: quizSetThumbnail || quizSetThumb,
     setTitle,
     id: quizSetId,
     profileImg: quizMaker.profileImg,
     nickName: quizMaker.nickname,
   };
+  console.log(shareInfo);
 
   useEffect(() => {
     if (window.Kakao) {

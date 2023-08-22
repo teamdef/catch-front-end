@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-const Torn = styled.div`
+const Torn = styled.div<{ marginTop?: string }>`
+  margin-top: ${({ marginTop }) => marginTop && marginTop};
   position: relative;
   border-radius: 8px;
   padding: 25px 20px 0;

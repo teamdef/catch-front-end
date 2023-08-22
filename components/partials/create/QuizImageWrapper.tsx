@@ -47,7 +47,6 @@ const QuizImageWrapper = ({ quizList, setQuizList, imgURL, quizIndex }: CreateQu
           <>
             <ImageDeleteBtn onClick={deleteQuizImage} />
             <QuizImage src={imgURL} alt="퀴즈썸네일이미지" />
-            <EditBtn htmlFor={`quiz-image-input-${quizIndex}`} />
           </>
         )}
       </QuizImageLabel>
@@ -60,7 +59,6 @@ const QuizImageInput = styled.input`
 `;
 const QuizImageLabel = styled.label`
   position: relative;
-  margin-top: 12px;
   margin-bottom: 20px;
 `;
 const QuizImageUpload = styled.div`
@@ -76,24 +74,18 @@ const QuizImageUpload = styled.div`
     content: '';
     position: relative;
     display: block;
-    width: 28px;
-    height: 22px;
+    width: 26px;
+    height: 24px;
     background: url(/assets/img/rebranding/icon/camera.svg) center no-repeat;
   }
 `;
 const ImageDeleteBtn = styled.button`
   position: absolute;
   display: block;
-  bottom: 0;
-  right: 10px;
-`;
-const EditBtn = styled.label`
-  position: absolute;
-  bottom: 12px;
+  top: 12px;
   right: 12px;
-  display: block;
-  width: 18px;
-  height: 18px;
-  background: url(/assets/img/rebranding/icon/image_box.svg) no-repeat center;
+  width: 24px;
+  height: 24px;
+  background: url(/assets/img/rebranding/icon/close_bg.svg) no-repeat center;
 `;
 export default QuizImageWrapper;
