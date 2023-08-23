@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { QuizRankingListApi } from 'pages/api/quiz';
 import { RankCard, Ranker } from '.';
 
-const RankingBoard = () => {
+interface RankingBoardProps {
+  quizRankingList?: RankingType[];
+}
+const RankingBoard = ({ quizRankingList }: RankingBoardProps) => {
   const router = useRouter();
   const { quizset_id, solver_id } = router.query;
-  const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+  const [rankingList, setRankingList] = useState<RankingType[] | null>(quizRankingList || null);
   const [userRanking, setUserRanking] = useState<RankingType>();
 
   const fetchRankingList = async () => {
@@ -21,7 +24,7 @@ const RankingBoard = () => {
   };
 
   useEffect(() => {
-    if (quizset_id) fetchRankingList();
+    if (quizset_id && !quizRankingList) fetchRankingList();
   }, [router.isReady]);
 
   return (

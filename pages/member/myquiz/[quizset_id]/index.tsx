@@ -1,6 +1,8 @@
 import { Loading } from 'components/common';
 import { AppLayout, HeaderLayout } from 'components/layout';
+import AverageBox from 'components/partials/member/myquiz/AverageBox';
 import DetailQuizInfo from 'components/partials/member/myquiz/DetailQuizInfo';
+import { RankingBoard } from 'components/ranking';
 import Torn from 'components/style/Torn';
 import { useRouter } from 'next/router';
 import { MyQuizDetailApi } from 'pages/api/quiz';
@@ -20,6 +22,7 @@ const Page = () => {
     try {
       const res = await MyQuizDetailApi(_quizset_id);
       const { quizset, best_solver, best_comment } = res.data;
+
       setQuizRankingList(parseBestRankingList(best_solver));
       setQuizCommentList(parseBestCommentList(best_comment));
       setQuizDetailData(parseDetailQuiz(quizset));
@@ -27,7 +30,6 @@ const Page = () => {
       console.log(err);
     }
   };
-
   useEffect(() => {
     if (quizset_id) fetchDetailQuizData(quizset_id as string);
   }, [router.isReady]);
@@ -39,6 +41,9 @@ const Page = () => {
       <Torn>
         <Content>
           <DetailQuizInfo detail={quizDetailData} />
+          <SectionTitle>현재 랭킹</SectionTitle>
+          <RankingBoard quizRankingList={quizRankingList} />
+          <AverageBox average={quizDetailData.average} count={quizDetailData.solverCnt} />
         </Content>
       </Torn>
     </Wrapper>
@@ -52,6 +57,12 @@ const Title = styled.h2`
   font-size: ${theme.fontSize.subtitle_2};
 `;
 const Content = styled.div``;
+const SectionTitle = styled.h3`
+  color: ${theme.colors.blackColors.grey_900};
+  font-weight: ${theme.fontWeight.bold};
+  margin-top: 35px;
+  font-size: ${theme.fontSize.body_1};
+`;
 
 Page.getLayout = function getLayout(page: ReactElement) {
   return (
