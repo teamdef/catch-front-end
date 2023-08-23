@@ -1,13 +1,16 @@
 # 캐치캐치 | 당신의 시간을 캐치캐치
-
 <p align="center">
   <br>
-  <img src="https://github.com/teamdef/catch-front-end/assets/69412482/af00b68c-1f52-40e7-90a1-f227ba0237ad">
+  <img width='200' src="https://github.com/teamdef/catch-front-end/assets/69412482/af00b68c-1f52-40e7-90a1-f227ba0237ad">
   <br>
 </p>
 
-목차
+## getting started
 
+  ```js
+  npm install
+  npm run dev
+  ```
 
 ## 프로젝트 소개
 
@@ -18,8 +21,6 @@
 <p align="justify">
 
 </p>
-
-### preview
 <p align="center">
   
   <img width='300' src='https://github.com/teamdef/catch-front-end/assets/69412482/48cfc39a-c067-497c-9e88-ed13d01ff0cb'>
