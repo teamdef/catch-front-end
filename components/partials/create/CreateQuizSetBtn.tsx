@@ -32,15 +32,7 @@ const CreateQuizSetBtn = () => {
     try {
       const res = await QuizUploadApi(quizList, userId, setTitle, description);
       resetReduxProblemSet();
-      router.push({
-        pathname: '/quiz/create/done',
-        query: {
-          quizSetTitle: setTitle,
-          quizSetCount: quizList.length,
-          quizSetThumb: res.data.quizset_thumb,
-          quizSetId: res.data.quizset_id,
-        },
-      });
+      router.push(`/quiz/create/${res.data.quizset_id}`);
     } catch (err) {
       alert(`퀴즈 저장에 실패했습니다. 다시 확인해주세요.`);
     } finally {

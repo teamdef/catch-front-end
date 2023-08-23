@@ -1,35 +1,37 @@
-import { useRouter } from 'next/router';
 import { changeQuizThumbnail } from 'pages/api/quiz';
 import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { getComperssedImg } from 'utils/image';
+import Loading from './Loading';
 
 interface ImageSetterProps {
   quizSetThumb: string | string[] | undefined | null;
   quizSetId: string;
 }
 const ImageSetter = ({ quizSetThumb, quizSetId }: ImageSetterProps) => {
-  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [thumbnailURL, setThumbnailURL] = useState<string | null>(quizSetThumb as string);
 
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const imgFileObj = await getComperssedImg(e);
-    if (imgFileObj) {
-      const imgFile = await changeQuizThumbnail(imgFileObj, quizSetId);
-      router.push({
-        query: {
-          quizSetThumb: imgFile,
-        },
-      });
-      setThumbnailURL(imgFile as string);
+    setLoading(true);
+    try {
+      const imgFileObj = await getComperssedImg(e);
+      if (imgFileObj) {
+        const imgFile = await changeQuizThumbnail(imgFileObj, quizSetId);
+        setThumbnailURL(imgFile as string);
+      }
+    } catch (err) {
+      console.log('onImgChange', err);
+    } finally {
+      setLoading(false);
     }
   };
   const deleteThumbnail = async () => {
     console.log('퀴즈이미지 썸네일 삭제버튼 추후 기능 추가');
   };
-
   return (
     <Wrapper>
+      {loading && <Loading text="이미지 저장중입니다." />}
       <Input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
       <Label htmlFor="thumbnail-input">
         {thumbnailURL ? (
@@ -49,6 +51,7 @@ const ImageSetter = ({ quizSetThumb, quizSetId }: ImageSetterProps) => {
 };
 const Wrapper = styled.div`
   position: relative;
+  width: 100%;
 `;
 const Input = styled.input`
   display: none;

@@ -28,7 +28,6 @@ const Page = () => {
     }
   };
 
-  console.log(quizDetailData, quizRankingList, quizCommentList);
   useEffect(() => {
     if (quizset_id) fetchDetailQuizData(quizset_id as string);
   }, [router.isReady]);

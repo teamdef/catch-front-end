@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { useRouter } from 'next/router';
 import { Twitter, Facebook, Kakaotalk, LinkCopyBtn } from '.';
 
 export interface ShareInfo {
@@ -12,13 +11,15 @@ export interface ShareInfo {
   profileImg: string | undefined;
   nickName: string | undefined;
 }
-
-const ShareBox = () => {
-  const router = useRouter();
-  const { quizSetThumb } = router.query;
+interface ShareBoxProps {
+  quizSetThumb?: string;
+}
+const ShareBox = ({ quizSetThumb }: ShareBoxProps) => {
   const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+  const DEFAULT_IMG = '/assets/img/rebranding/icon/default_profile.svg';
+
   const shareInfo: ShareInfo = {
-    thumbnail: quizSetThumbnail || quizSetThumb,
+    thumbnail: quizSetThumbnail || quizSetThumb || DEFAULT_IMG,
     setTitle,
     id: quizSetId,
     profileImg: quizMaker.profileImg,

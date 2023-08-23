@@ -4,15 +4,31 @@ import { ShareBox } from 'components/share';
 import Torn from 'components/style/Torn';
 import { useRouter } from 'next/router';
 import { NextPageWithLayout } from 'pages/_app';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
+import { QuizDataFetchApi } from 'pages/api/quiz';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quizSetTitle, quizSetThumb, quizSetId } = router.query;
-  // const { profileImg, nickName } = useSelector((state: RootState) => state.user);
+  const { quizset_id } = router.query;
+  const [quizSetTitle, setQuizSetTitle] = useState<string>('');
+  const [quizSetThumb, setQuizSetThumb] = useState<string>('');
 
+  const fetchDetailQuizData = async () => {
+    try {
+      const res = await QuizDataFetchApi(quizset_id as string);
+      const { set_title, thumbnail } = res.data;
+      setQuizSetTitle(set_title);
+      setQuizSetThumb(thumbnail);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (quizset_id) fetchDetailQuizData();
+  }, [router.isReady]);
   return (
     <Torn marginTop="16px">
       <Content>
@@ -23,9 +39,9 @@ const Page: NextPageWithLayout = () => {
           퀴즈 수정은 마이페이지 &#62; 내가 만든 퀴즈에서 가능합니다.
         </Description>
         <QuizTitle>{quizSetTitle}</QuizTitle>
-        <ImageSetter quizSetThumb={quizSetThumb} quizSetId={quizSetId as string} />
+        <ImageSetter quizSetThumb={quizSetThumb} quizSetId={quizset_id as string} />
         <ShareText>친구들에게 내가 만든 퀴즈를 공유해보세요!</ShareText>
-        <ShareBox />
+        <ShareBox quizSetThumb={quizSetThumb} />
       </Content>
     </Torn>
   );
