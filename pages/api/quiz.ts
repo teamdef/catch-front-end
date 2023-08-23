@@ -192,3 +192,13 @@ export const CommentSaveApi = async (nickname: string, content: string, quizset_
 export const EmotionClickApi = async (emotion: EmotionType | 'NONE', quizset_id: string, solver_id: string) => {
   return notAuthAxios.put(`/solver/emotion`, { emotion, quizset_id, solver_id });
 };
+/** 퀴즈세트썸네일 변경 API */
+export const changeQuizThumbnail = async (imgFileObj: imgFileObj, quizSetId: string) => {
+  try {
+    await QuizThumbnailChangeApi(quizSetId as string, imgFileObj._imgFile);
+    return imgFileObj._imgURL;
+  } catch (err) {
+    console.log('changeQuizThumbnail : ', err);
+  }
+  return null;
+};
