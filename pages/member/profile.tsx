@@ -82,9 +82,8 @@ const Profile: NextPageWithLayout = () => {
               onClick={onImgClick}
               onChange={onImgChange}
             />
-            <ImageSelectLabel htmlFor="select-image">
-              <ProfileImage src={tempProfileImg} size="56px" />
-            </ImageSelectLabel>
+            <ProfileImage src={tempProfileImg} size="56px" />
+            <ImageSelectLabel htmlFor="select-image" />
           </ImageSelectWrapper>
           <Nickname>{nickName}</Nickname>
           <NicknameInput
@@ -120,17 +119,28 @@ const Content = styled.div`
   margin-bottom: 52px;
   flex-grow: 1;
 `;
-const ImageSelectWrapper = styled.div``;
-const ImageSelectInput = styled.input`
-  display: none;
-`;
-const ImageSelectLabel = styled.label`
+const ImageSelectWrapper = styled.div`
   position: relative;
   display: block;
   width: 56px;
   height: 56px;
   cursor: pointer;
   margin-bottom: 16px;
+`;
+const ImageSelectInput = styled.input`
+  display: none;
+`;
+const ImageSelectLabel = styled.label`
+  position: absolute;
+  bottom: -4px;
+  right: -5px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url(/assets/img/rebranding/icon/camera_white.svg) no-repeat center;
+  background-color: ${({ theme }) => theme.colors.secondary_300};
+  border-radius: 50%;
+  border: 0.75px solid #fff;
 `;
 const Nickname = styled.span`
   color: ${({ theme }) => theme.colors.blackColors.grey_900};
