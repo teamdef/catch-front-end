@@ -1,5 +1,5 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
-import ImageSetter from 'components/partials/create/done/ImageSetter';
+import ImageSetter from 'components/common/ImageSetter';
 import { ShareBox } from 'components/share';
 import Torn from 'components/style/Torn';
 import { useRouter } from 'next/router';
@@ -10,7 +10,7 @@ import { theme } from 'styles/theme';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quizSetTitle } = router.query;
+  const { quizSetTitle, quizSetThumb, quizSetId } = router.query;
   // const { profileImg, nickName } = useSelector((state: RootState) => state.user);
 
   return (
@@ -23,7 +23,7 @@ const Page: NextPageWithLayout = () => {
           퀴즈 수정은 마이페이지 &#62; 내가 만든 퀴즈에서 가능합니다.
         </Description>
         <QuizTitle>{quizSetTitle}</QuizTitle>
-        <ImageSetter />
+        <ImageSetter quizSetThumb={quizSetThumb} quizSetId={quizSetId as string} />
         <ShareText>친구들에게 내가 만든 퀴즈를 공유해보세요!</ShareText>
         <ShareBox />
       </Content>

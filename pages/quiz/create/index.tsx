@@ -37,13 +37,13 @@ const Page: NextPageWithLayout = () => {
     <Wrapper>
       <Title>모두의 퀴즈 만들기</Title>
       <Torn>
-        <ContentWrapper>
+        <Content>
           <RenderContinueModal />
           <QuizSetInput props={{ title, titleHandler, desc, descHandler }} />
           <CreateQuizList quizList={_quizList} setQuizList={_setQuizList} />
           <AddQuizBtn setQuizList={_setQuizList} />
           <CreateQuizSetBtn />
-        </ContentWrapper>
+        </Content>
       </Torn>
     </Wrapper>
   );
@@ -55,7 +55,7 @@ const Title = styled.h2`
   font-weight: ${theme.fontWeight.bold};
   font-size: ${theme.fontSize.subtitle_2};
 `;
-const ContentWrapper = styled.div`
+const Content = styled.div`
   position: relative;
   margin-top: 31px;
   padding-bottom: 40px;

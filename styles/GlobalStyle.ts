@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     background-color: transparent;
     cursor:pointer;
+    line-height: 1.5;
   }
 `;
 
