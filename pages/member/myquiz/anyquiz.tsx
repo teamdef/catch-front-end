@@ -17,8 +17,6 @@ const Page = () => {
     setUserAnyQuiz(res.data);
   };
 
-  console.log(userAnyQuiz);
-
   useEffect(() => {
     if (userId) getUserAnyQuiz(userId);
   }, [userId]);
