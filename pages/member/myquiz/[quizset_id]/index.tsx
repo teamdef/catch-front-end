@@ -37,7 +37,7 @@ const Page = () => {
 
   if (!quizDetailData || !quizRankingList || !quizCommentList) return <Loading />;
   return (
-    <Wrapper>
+    <>
       <Title>퀴즈 자세히 보기</Title>
       <Torn>
         <Content>
@@ -49,10 +49,9 @@ const Page = () => {
           <Comment />
         </Content>
       </Torn>
-    </Wrapper>
+    </>
   );
 };
-const Wrapper = styled.div``;
 const Title = styled.h2`
   padding: 14px 0;
   color: ${theme.colors.blackColors.grey_900};
