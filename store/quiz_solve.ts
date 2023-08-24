@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // user스토어의 초기값을 설정
@@ -5,10 +6,10 @@ const initialState: SolveQuizSetType = {
   quizSetId: '',
   setTitle: '',
   quizList: [],
-  quizMaker: { nickname: '', profileImg: '' },
+  quizMaker: { nickname: '', profile_img: '' },
   quizSetThumbnail: '',
   answerList: [],
-  description:'',
+  description: '',
 };
 
 // ducks 패턴을 지원하기 위해 나온 함수가 createSlice.

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import ModalPortal from 'components/modal/PortalWrapper';
-import { SNSShare } from 'components/common';
-import { shareProps } from 'components/common/SNSShare';
+import ShareBox, { ShareInfo } from 'components/share/ShareBox';
+
 interface BottomUpProps {
   bottomUpClose: () => void;
-  shareInfo: shareProps;
+  shareInfo: ShareInfo;
 }
 
 const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
@@ -21,19 +21,12 @@ const BottomUpModal = ({ bottomUpClose, shareInfo }: BottomUpProps) => {
     <ModalPortal wrapperId="react-portal-modal-container">
       <Background onClick={close}>
         <ModalWrapper onClick={(e) => e.stopPropagation()} className={animation}>
-          <GrabBar />
           <QuizTitleAndShareInfo>
             <div id="title">{shareInfo.setTitle}</div>
             <div id="info">퀴즈를 공유하고 다같이 즐겨보세요 ❤️</div>
           </QuizTitleAndShareInfo>
           <SNSShareWrapper>
-            <SNSShare
-              nickName={shareInfo.nickName}
-              profileImg={shareInfo.profileImg}
-              thumbnail={shareInfo.thumbnail}
-              setTitle={shareInfo.setTitle}
-              id={shareInfo.id}
-            />
+            <ShareBox />
           </SNSShareWrapper>
         </ModalWrapper>
       </Background>
@@ -81,8 +74,12 @@ const TopDown = keyframes`
 const ModalWrapper = styled.div`
   z-index: 99;
   background-color: white;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11), 0 2px 2px rgba(0, 0, 0, 0.11), 0 4px 4px rgba(0, 0, 0, 0.11),
-    0 6px 8px rgba(0, 0, 0, 0.11), 0 8px 16px rgba(0, 0, 0, 0.11);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.11),
+    0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11),
+    0 6px 8px rgba(0, 0, 0, 0.11),
+    0 8px 16px rgba(0, 0, 0, 0.11);
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 1.5rem 2rem 1.5rem 2rem;
@@ -103,14 +100,6 @@ const ModalWrapper = styled.div`
   &.closeAnimation {
     animation: ${TopDown} 0.4s ease-in-out;
   }
-`;
-
-const GrabBar = styled.div`
-  width: 50px;
-  height: 5px;
-  border-radius: 12px;
-  background-color: #eee;
-  cursor: pointer;
 `;
 
 const QuizTitleAndShareInfo = styled.div`

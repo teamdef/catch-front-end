@@ -1,22 +1,18 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-param-reassign */
 import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getCookie, saveToken, deleteToken } from 'utils/token';
 
 // https://velog.io/@dkdlel102/React-CORS-%EC%98%A4%EB%A5%98-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0
 const authAxios: AxiosInstance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development'
-      ? process.env.NEXT_PUBLIC_DEV_BACKEND
-      : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND,
   timeout: 100000000,
   headers: { 'Content-Type': 'application/json' },
 });
 
 authAxios.defaults.withCredentials = false;
 const notAuthAxios: AxiosInstance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development'
-      ? process.env.NEXT_PUBLIC_DEV_BACKEND
-      : process.env.NEXT_PUBLIC_DEPLOY_BACKEND,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND,
   timeout: 100000000,
   headers: { 'Content-Type': 'application/json' },
 });
@@ -31,7 +27,7 @@ const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   const access_token = getCookie('access_token');
   /* 토큰이 있을 경우 헤더에 삽입한다. 없을 경우 빈 문자열을 넣는다(null은 안됨) */
   config.headers = {
-    Authorization: !!access_token ? `Bearer ${access_token}` : '',
+    Authorization: access_token ? `Bearer ${access_token}` : '',
   };
   return config;
 };
@@ -50,7 +46,7 @@ const onResponse = (res: AxiosResponse): AxiosResponse => {
   return res;
 };
 
-/* http response가 catch로 넘어가기 전에 호출되는 함수이다.*/
+/* http response가 catch로 넘어가기 전에 호출되는 함수이다. */
 const onErrorResponse = async (err: AxiosError | Error): Promise<AxiosError> => {
   const _err = err as unknown as AxiosError; // err 객체의 타입은 unknown이므로 타입 단언을 해주어야 한다
   const { response } = _err; // err 객체에서 response 를 구조 분해 할당
