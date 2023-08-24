@@ -1,4 +1,5 @@
-import { Loading } from 'components/common';
+import { Comment } from 'components/comment';
+import { Emotion, Loading } from 'components/common';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import AverageBox from 'components/partials/member/myquiz/AverageBox';
 import DetailQuizInfo from 'components/partials/member/myquiz/DetailQuizInfo';
@@ -44,6 +45,8 @@ const Page = () => {
           <SectionTitle>현재 랭킹</SectionTitle>
           <RankingBoard quizRankingList={quizRankingList} />
           <AverageBox average={quizDetailData.average} count={quizDetailData.solverCnt} />
+          <Emotion />
+          <Comment />
         </Content>
       </Torn>
     </Wrapper>
@@ -56,7 +59,9 @@ const Title = styled.h2`
   font-weight: ${theme.fontWeight.bold};
   font-size: ${theme.fontSize.subtitle_2};
 `;
-const Content = styled.div``;
+const Content = styled.div`
+  padding-bottom: 50px;
+`;
 const SectionTitle = styled.h3`
   color: ${theme.colors.blackColors.grey_900};
   font-weight: ${theme.fontWeight.bold};

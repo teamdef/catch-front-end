@@ -27,6 +27,7 @@ const RankingBoard = ({ quizRankingList }: RankingBoardProps) => {
     if (quizset_id && !quizRankingList) fetchRankingList();
   }, [router.isReady]);
 
+  if (rankingList?.length === 0 && !userRanking) return <Empty>아직 등록된 순위가 없습니다.</Empty>;
   return (
     <Wrapper>
       <Podium>
@@ -41,6 +42,13 @@ const RankingBoard = ({ quizRankingList }: RankingBoardProps) => {
 
 const Wrapper = styled.ul`
   position: relative;
+`;
+const Empty = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+  margin-bottom: 43px;
 `;
 const Podium = styled.div`
   padding: 0 8px;
