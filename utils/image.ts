@@ -1,5 +1,6 @@
 // 이미지 로더. 이미지의 가로세로 크기를 구하기 위함 File Object to Image Object
 import imageCompression from 'browser-image-compression';
+import { ChangeEvent } from 'react';
 
 export const loadImage = (url: string): Promise<HTMLImageElement> => {
   return new Promise((resolve) => {
@@ -13,9 +14,9 @@ export const loadImage = (url: string): Promise<HTMLImageElement> => {
 // 이미지 압축을 위한 옵션
 const options = {
   maxSizeMB: 1, // 원본 이미지 최대 용량
-  maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
+  maxWidthOrHeight: 600, // 리사이즈 이미지 최대 width를 300px로 설정
   // useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
-  fileType: 'images/*', // 파일 타입
+  fileType: 'images/png', // 파일 타입
 };
 
 // 오늘 날짜 date객체 -> yyyy/mm/dd 함수
@@ -59,4 +60,24 @@ export const FileListToImageObject = (_files: FileList) => {
     const _thumbnail = await ReturnFileByImageSize(_imgElement, file); // 이미지 파일 url 저장
     return _thumbnail;
   });
+};
+
+export const getComperssedImg = async (e: ChangeEvent<HTMLInputElement> | string) => {
+  let file = typeof e === 'string' ? e : e.target.files && (e.target.files[0] as File);
+  try {
+    // 이미지가 있을 경우
+    if (file) {
+      if (typeof file === 'string') file = await imageCompression.getFilefromDataUrl(file, '1234');
+      const _compressed = (await imageCompression(file, options)) as File;
+      const timestamp = new Date().toISOString().substring(0, 10);
+      const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
+        type: _compressed.type,
+      });
+      const _imgURL = await imageCompression.getDataUrlFromFile(_compressed);
+      return { _imgFile, _imgURL };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return null;
 };

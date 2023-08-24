@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 import { QuizRankingListApi } from 'pages/api/quiz';
 import { RankCard, Ranker } from '.';
 
-const RankingBoard = () => {
+interface RankingBoardProps {
+  quizRankingList?: RankingType[];
+}
+const RankingBoard = ({ quizRankingList }: RankingBoardProps) => {
   const router = useRouter();
   const { quizset_id, solver_id } = router.query;
-  const [rankingList, setRankingList] = useState<RankingType[] | null>(null);
+  const [rankingList, setRankingList] = useState<RankingType[] | null>(quizRankingList || null);
   const [userRanking, setUserRanking] = useState<RankingType>();
 
   const fetchRankingList = async () => {
@@ -21,9 +24,10 @@ const RankingBoard = () => {
   };
 
   useEffect(() => {
-    if (quizset_id) fetchRankingList();
+    if (quizset_id && !quizRankingList) fetchRankingList();
   }, [router.isReady]);
 
+  if (rankingList?.length === 0 && !userRanking) return <Empty>아직 등록된 순위가 없습니다.</Empty>;
   return (
     <Wrapper>
       <Podium>
@@ -38,6 +42,13 @@ const RankingBoard = () => {
 
 const Wrapper = styled.ul`
   position: relative;
+`;
+const Empty = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+  margin-bottom: 43px;
 `;
 const Podium = styled.div`
   padding: 0 8px;

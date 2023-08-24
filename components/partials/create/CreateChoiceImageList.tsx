@@ -91,9 +91,10 @@ const CreateChoiceImageLabel = styled.label`
     content: '';
     position: relative;
     display: block;
-    width: 27.5px;
-    height: 22px;
-    background: url(/assets/img/rebranding/icon/camera_secondary200.svg) no-repeat center;
+    width: 26px;
+    height: 24px;
+    background: url(/assets/img/rebranding/icon/camera_secondary100.svg) no-repeat center;
+    background-size: 100% 100%;
   }
 `;
 

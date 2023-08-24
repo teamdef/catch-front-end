@@ -11,17 +11,21 @@ export interface ShareInfo {
   profileImg: string | undefined;
   nickName: string | undefined;
 }
-
-const ShareBox = () => {
+interface ShareBoxProps {
+  quizSetThumb?: string;
+}
+const ShareBox = ({ quizSetThumb }: ShareBoxProps) => {
   const { quizSetId, setTitle, quizMaker, quizSetThumbnail } = useSelector((state: RootState) => state.solve);
+  const DEFAULT_IMG = '/assets/img/rebranding/icon/default_profile.svg';
 
   const shareInfo: ShareInfo = {
-    thumbnail: quizSetThumbnail,
+    thumbnail: quizSetThumbnail || quizSetThumb || DEFAULT_IMG,
     setTitle,
     id: quizSetId,
     profileImg: quizMaker.profileImg,
     nickName: quizMaker.nickname,
   };
+  console.log(shareInfo);
 
   useEffect(() => {
     if (window.Kakao) {

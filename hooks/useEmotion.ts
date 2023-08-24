@@ -18,7 +18,6 @@ const useEmotion = () => {
     if (isDiff) setCurrentEmotion(_newEmotion);
     else setCurrentEmotion(null);
   };
-
   const getCurrentEmotion = async () => {
     try {
       const res = await QuizSolverResultApi(quizset_id as string, solver_id as string);

@@ -15,6 +15,7 @@ import imageCompression from 'browser-image-compression'; /* 라이브러리 */
 import styled from 'styled-components';
 import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
 import HeaderContentWrapper from 'components/style/HeaderContentWrapper';
+import { getComperssedImg } from 'utils/image';
 
 const Profile: NextPageWithLayout = () => {
   const router = useRouter();
@@ -31,20 +32,6 @@ const Profile: NextPageWithLayout = () => {
   const moveHome = () => {
     router.push('/');
   };
-  // 이미지 압축을 위한 옵션
-  const options = {
-    maxSizeMB: 1, // 원본 이미지 최대 용량
-    maxWidthOrHeight: 300, // 리사이즈 이미지 최대 width를 300px로 설정
-    // useWebWorker: true, // 이미지 변환 작업 다중 스레드 사용 여부
-    fileType: 'images/*', // 파일 타입
-  };
-
-  const randomString = (len: number): string => {
-    let text = '';
-    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // 중복의 여지가 있긴 함.
-    for (let i = 0; i < len; i + 1) text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
-  };
 
   // 동일 파일이 재업로드 되지 않는 오류 해결을 위한 함수
   const onImgClick = (e: any) => {
@@ -54,8 +41,7 @@ const Profile: NextPageWithLayout = () => {
   // 이미지 onChange 이벤트 처리 함수
   const onImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList; // 입력 받은 파일 리스트
-    // 이미지가 있을 경우
-    if (files && files[0]) {
+    if (files[0]) {
       const _thumb = await imageCompression.getDataUrlFromFile(files[0]);
       setTempProfileImg(_thumb);
     }
@@ -67,13 +53,8 @@ const Profile: NextPageWithLayout = () => {
       const _obj: ProfileChangeProps = { id: userId };
       if (tempNickname !== nickName) _obj.nickname = tempNickname;
       if (tempProfileImg !== profileImg) {
-        const timestamp = new Date().toISOString().substring(0, 10);
-        const _file = await imageCompression.getFilefromDataUrl(tempProfileImg, '1234');
-        const _compressed: File = await imageCompression(_file, options);
-        const _imgFile = new File([_compressed], `${timestamp}_${randomString(20)}.${_compressed.type.split('/')[1]}`, {
-          type: _compressed.type,
-        }); // 압축 이미지 대입
-        _obj.imgBlob = _imgFile;
+        const res = await getComperssedImg(tempProfileImg);
+        _obj.imgBlob = res?._imgFile;
       }
       const res = await ProfileChangeApi(_obj);
       const { profile_img, nickname } = res.data;
@@ -101,9 +82,8 @@ const Profile: NextPageWithLayout = () => {
               onClick={onImgClick}
               onChange={onImgChange}
             />
-            <ImageSelectLabel htmlFor="select-image">
-              <ProfileImage src={tempProfileImg} size="56px" />
-            </ImageSelectLabel>
+            <ProfileImage src={tempProfileImg} size="56px" />
+            <ImageSelectLabel htmlFor="select-image" />
           </ImageSelectWrapper>
           <Nickname>{nickName}</Nickname>
           <NicknameInput
@@ -139,17 +119,28 @@ const Content = styled.div`
   margin-bottom: 52px;
   flex-grow: 1;
 `;
-const ImageSelectWrapper = styled.div``;
-const ImageSelectInput = styled.input`
-  display: none;
-`;
-const ImageSelectLabel = styled.label`
+const ImageSelectWrapper = styled.div`
   position: relative;
   display: block;
   width: 56px;
   height: 56px;
   cursor: pointer;
   margin-bottom: 16px;
+`;
+const ImageSelectInput = styled.input`
+  display: none;
+`;
+const ImageSelectLabel = styled.label`
+  position: absolute;
+  bottom: -4px;
+  right: -5px;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: url(/assets/img/rebranding/icon/camera_white.svg) no-repeat center;
+  background-color: ${({ theme }) => theme.colors.secondary_300};
+  border-radius: 50%;
+  border: 0.75px solid #fff;
 `;
 const Nickname = styled.span`
   color: ${({ theme }) => theme.colors.blackColors.grey_900};

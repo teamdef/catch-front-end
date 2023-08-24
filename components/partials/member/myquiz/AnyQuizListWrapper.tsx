@@ -24,7 +24,7 @@ const AnyQuizListWrapper = ({ userAnyQuiz }: AnyQuizListWrapperProps) => {
             nickname: nickName,
             solverCnt: quizSet.solver_cnt,
           };
-          return <QuizCard quizInfo={obj} key={`quiz-set-card-${idx}`} />;
+          return <QuizCard quizInfo={obj} key={`quiz-set-card-${idx}`} onMyPage />;
         })}
       </QuizCardList>
     </Wrapper>

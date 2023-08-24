@@ -142,3 +142,7 @@ interface CommentType {
   created_at: string;
   user?: UserType;
 }
+interface imgFileObj {
+  _imgFile: File;
+  _imgURL: string;
+}

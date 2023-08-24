@@ -15,9 +15,10 @@ interface QuizCardProps {
     nickname?: string;
     solverCnt: number;
   };
+  onMyPage?: boolean;
 }
 
-const QuizCard = ({ quizInfo }: QuizCardProps) => {
+const QuizCard = ({ quizInfo, onMyPage }: QuizCardProps) => {
   const { quizSetId, quizSetTitle, thumbnail, createdAt, profileImg, nickname, solverCnt } = quizInfo;
   const router = useRouter();
   const DEFAULT_IMG_URL = '/assets/img/rebranding/default_main_thumb.svg';
@@ -26,12 +27,13 @@ const QuizCard = ({ quizInfo }: QuizCardProps) => {
     e.currentTarget.src = DEFAULT_IMG_URL;
   };
 
-  const moveQuizStart = () => {
-    router.push(`/quiz/solve/${quizSetId}`);
+  const moveHandler = () => {
+    if (onMyPage) router.push(`/member/myquiz/${quizSetId}`);
+    else router.push(`/quiz/solve/${quizSetId}`);
   };
 
   return (
-    <Wrapper onClick={moveQuizStart}>
+    <Wrapper onClick={moveHandler}>
       <Img src={thumbnail || DEFAULT_IMG_URL} onError={onErrorHandler} alt="퀴즈썸네일이미지" />
       <Content>
         <Top>

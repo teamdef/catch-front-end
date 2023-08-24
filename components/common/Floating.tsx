@@ -1,6 +1,7 @@
 import { PortalWrapper } from 'components/modal';
 import useAnimation from 'hooks/useAnimation';
 import { Background } from 'hooks/useModal';
+import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,6 +10,9 @@ const Floating = () => {
   const [renderSideBar, handleTransitionEnd, triggerAnimation] = useAnimation(isActive);
   const activeHandler = () => {
     setIsActive((current) => !current);
+  };
+  const moveCreateQuiz = () => {
+    Router.push('/quiz/create');
   };
 
   useEffect(() => {
@@ -33,7 +37,7 @@ const Floating = () => {
       <Content>
         {renderSideBar && (
           <ButtonBox triggerAnimation={triggerAnimation}>
-            <AnyQuizBtn>
+            <AnyQuizBtn onClick={moveCreateQuiz}>
               <TextBox>모두의 퀴즈</TextBox>
             </AnyQuizBtn>
             <CatchMeBtn>
