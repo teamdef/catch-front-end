@@ -2,7 +2,7 @@ import ProfileImage from 'components/common/ProfileImage';
 import { SyntheticEvent } from 'react';
 import styled from 'styled-components';
 
-import { timeForToday } from 'utils/date';
+import timeForToday from 'utils/date';
 import { useRouter } from 'next/router';
 
 interface QuizCardProps {
