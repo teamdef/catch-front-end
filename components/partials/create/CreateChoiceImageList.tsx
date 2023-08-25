@@ -22,10 +22,7 @@ const CreateChoiceImageList = ({ props }: CreateChoiceImageListProps) => {
     // 이미지가 있을 경우
     if (files && files[0]) {
       // 기존에 업로드 된 이미지와 새로 업로드 할 이미지의 총 합이 4개 이하
-      if (files.length + quizList[quizIndex].choices.length > 4) {
-        alert('이미지는 최대 4장까지 업로드 가능합니다');
-        return;
-      }
+      if (files.length + quizList[quizIndex].choices.length > 4) return;
       const _imgFileTaskList = FileListToImageObject(files);
       // Promise.all 의 응답값은 filelist의 file객체를 모두 ChoiceImageTypes 타입으로 변경한 것
       Promise.all(_imgFileTaskList).then((res) => {

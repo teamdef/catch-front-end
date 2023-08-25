@@ -1,23 +1,21 @@
 import styled, { keyframes } from 'styled-components';
-import {MyQuizCard} from 'components/common'
 
 const SkeletonMyQuizCard = () => {
-    return (
-      <Wrapper>
-        <div id="quiz-title"></div>
-        <div id="quiz-info"></div>
-        <div id="quiz-detail-btn-wrapper">
-          <div id="quiz-detail-btn"></div>
-        </div>
-      </Wrapper>
-    );
-}
+  return (
+    <Wrapper>
+      <div id="quiz-title" />
+      <div id="quiz-info" />
+      <div id="quiz-detail-btn-wrapper">
+        <div id="quiz-detail-btn" />
+      </div>
+    </Wrapper>
+  );
+};
 const gradient = keyframes` 
   0% {background-color: rgba(165, 165, 165, 0.1);}
   50% {background-color: rgba(165, 165, 165, 0.3);}
   100% {background-color: rgba(165, 165, 165, 0.1);}
 `;
-
 
 const Wrapper = styled.div`
   background: none;

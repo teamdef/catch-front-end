@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import useAnimation from 'hooks/useAnimation';
 import Logo from './Logo';
-import Icon from './Icon';
 import SideMenuBar from '../profile/SideMenuBar';
 
 const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
@@ -12,11 +11,6 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
 
   const handleSideBar = () => {
     setIsSideBarOpen((current) => !current);
-  };
-
-  const handleSideBarIconSrc = () => {
-    if (isSideBarOpen) return '/assets/img/icon/close_24px.png';
-    return '/assets/img/icon/menu_24px.png';
   };
 
   useEffect(() => {
@@ -34,7 +28,7 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
     <>
       <Wrapper bgColor={bgColor}>
         <Logo width="100px" />
-        <Icon src={handleSideBarIconSrc()} onClick={handleSideBar} />
+        <SideMenuBtn onClick={handleSideBar} isSideBarOpen={isSideBarOpen} />
       </Wrapper>
       {renderSideBar && (
         <SideMenuBar bgColor={bgColor} triggerAnimation={triggerAnimation} handleSideBar={handleSideBar} />
@@ -56,5 +50,12 @@ const Wrapper = styled.div<{ bgColor: string | undefined }>`
   ${({ theme }) => theme.mixin.flex({ align: 'center', justify: 'space-between' })} /* mixin 사용 */
   padding:16px;
 `;
-
+const SideMenuBtn = styled.button<{ isSideBarOpen: boolean }>`
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-image: ${({ isSideBarOpen }) =>
+    isSideBarOpen ? 'url(/assets/img/icon/close_24px.png)' : 'url(/assets/img/icon/menu_24px.png)'};
+`;
 export default Header;

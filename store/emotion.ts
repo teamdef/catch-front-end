@@ -22,7 +22,6 @@ const emotionSlice = createSlice({
       state.EASY = quizSetEmotion.EASY;
       state.HARD = quizSetEmotion.HARD;
     },
-
   },
 });
 

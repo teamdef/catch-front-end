@@ -20,7 +20,7 @@ const quizSlice = createSlice({
       const { description } = action.payload;
       state.description = description;
     },
-    saveProblemsAction: (state: QuizSetType, action: PayloadAction<{ quizList: QuizType[] }>) => {
+    saveProblemsAction: (state: QuizSetType, action: PayloadAction<{ quizList: (TextQuiz | ImageQuiz)[] }>) => {
       const { quizList } = action.payload;
       state.quizList = quizList;
     },

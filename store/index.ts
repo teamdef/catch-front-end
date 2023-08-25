@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { combineReducers, Store, CombinedState, AnyAction } from 'redux';
 import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import { MakeStore, createWrapper, HYDRATE } from 'next-redux-wrapper';
@@ -34,7 +35,7 @@ const storage = typeof window !== 'undefined' ? createWebStorage('local') : crea
 const persistConfig = {
   key: 'root',
   version: 1,
-  storage: storage, // react-persist v6 이후에는 AsyncStorage를 써야된다던데..
+  storage, // react-persist v6 이후에는 AsyncStorage를 써야된다던데..
 };
 
 // state의 자료형을 뭘로 해야 하는가? RootState ... ?
