@@ -3,7 +3,7 @@ import { ModalProps } from 'hooks/useModal';
 import CloseBtn from 'components/style/button/CloseBtn';
 import { ShareBox } from '.';
 
-const ShareModal = ({ closeModal }: { closeModal: ModalProps['closeModal'] }) => {
+const ShareModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }) => {
   return (
     <Wrapper>
       <Title>

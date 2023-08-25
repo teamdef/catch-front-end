@@ -57,6 +57,7 @@
     "no-underscore-dangle": "off", // '_' 사용 금지
     "react/button-has-type": "off", // <button type={}> 필수
     "no-useless-concat": "off", // 쓸데없이 문자열 붙히기 금지
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-param-reassign": "off" // 매개변수 재할당 금지(사이드 이펙트 우려) = reducer 사용을 위해 off
   }
 }

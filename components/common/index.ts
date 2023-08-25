@@ -2,7 +2,6 @@ export { default as Emotion } from './Emotion';
 export { default as Floating } from './Floating';
 export { default as Header } from './Header';
 export { default as HeadMeta } from './HeadMeta';
-export { default as Icon } from './Icon';
 export { default as ImageSetter } from './ImageSetter';
 export { default as Loading } from './Loading';
 export { default as Logo } from './Logo';
