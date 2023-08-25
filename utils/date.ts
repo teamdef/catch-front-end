@@ -1,4 +1,4 @@
-export const timeForToday = (date: string) => {
+const timeForToday = (date: string) => {
   const today = new Date();
   const timeValue = new Date(date.substring(0, 19)); // ios safari yyyy-mm-ddThh:mm:ss Z를 빼면 타임존이 적용되지 않는다.
 
@@ -36,3 +36,4 @@ export const timeForToday = (date: string) => {
 
   return value;
 };
+export default timeForToday;

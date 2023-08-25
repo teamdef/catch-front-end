@@ -34,7 +34,7 @@ const CreateQuizSetBtn = () => {
       resetReduxProblemSet();
       router.push(`/quiz/create/${res.data.quizset_id}`);
     } catch (err) {
-      alert(`퀴즈 저장에 실패했습니다. 다시 확인해주세요.`);
+      console.log(err);
     } finally {
       setLoading(false); // 로딩 해제
     }

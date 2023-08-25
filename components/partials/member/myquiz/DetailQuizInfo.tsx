@@ -1,4 +1,6 @@
 import ImageSetter from 'components/common/ImageSetter';
+import Router from 'next/router';
+import { QuizDeleteApi } from 'pages/api/quiz';
 import styled from 'styled-components';
 
 interface DetailQuizInfoProps {
@@ -6,10 +8,18 @@ interface DetailQuizInfoProps {
 }
 const DetailQuizInfo = ({ detail }: DetailQuizInfoProps) => {
   const { setTitle, quizSetThumbnail, createdAt, quizSetId } = detail;
+  const DeleteQuizSet = async () => {
+    try {
+      await QuizDeleteApi(quizSetId as string);
+      Router.push('/member/myquiz/anyquiz/');
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Wrapper>
       <QuizTitle>{setTitle}</QuizTitle>
-      <DeleteQuizSetBtn>삭제</DeleteQuizSetBtn>
+      <DeleteQuizSetBtn onClick={DeleteQuizSet}>삭제</DeleteQuizSetBtn>
       <QuizDateBox>
         <span>생성 날짜</span>
         <span>{createdAt}</span>

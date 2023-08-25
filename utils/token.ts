@@ -8,9 +8,9 @@ const HTTP_ONLY = process.env.NODE_ENV !== 'development';
 // 보안 문제로 인해 httponly 설정 필요
 
 const saveToken = (accessToken: string): Promise<boolean> =>
-  new Promise<boolean>((resolve, reject) => {
-    authAxios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-    
+  new Promise<boolean>((resolve) => {
+    authAxios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
     const cookies = new Cookies(); // 쿠키 생성
 
     const expires_time = new Date();
@@ -30,7 +30,7 @@ const saveToken = (accessToken: string): Promise<boolean> =>
   });
 
 const saveRefreshToken = (refreshToken: string): Promise<boolean> =>
-  new Promise<boolean>((resolve, reject) => {
+  new Promise<boolean>((resolve) => {
     const cookies = new Cookies(); // 쿠키 생성
     const expires_time = new Date();
     expires_time.setDate(Date.now() + 1000 * 60 * 60 * 24 * 15); /* 만료 시간 15일 */
@@ -44,9 +44,9 @@ const saveRefreshToken = (refreshToken: string): Promise<boolean> =>
     resolve(true);
   });
 
-/* 로그아웃 액션에서 사용됨*/
+/* 로그아웃 액션에서 사용됨 */
 const deleteToken = () => {
-  delete authAxios.defaults.headers.common['Authorization']; // axios 요청 헤더에서 token정보 삭제
+  delete authAxios.defaults.headers.common.Authorization; // axios 요청 헤더에서 token정보 삭제
   const cookies = new Cookies(); // 쿠키 생성
   const delete_time = new Date();
   delete_time.setDate(Date.now() - 1); // 현재 이전의 날짜로 만료일자를 설정하면 쿠키가 바로 만료된다.
@@ -71,5 +71,4 @@ const getCookie = (name: string) => {
   return cookies.get(name);
 };
 
-
-export { saveToken, saveRefreshToken, deleteToken, getCookie};
+export { saveToken, saveRefreshToken, deleteToken, getCookie };

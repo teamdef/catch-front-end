@@ -10,13 +10,13 @@ const SkeletonQuizCard = ({ isthumb }: SkeletonProps) => {
       <div id="quiz-contents-container">
         <div id="profile-row">
           <ProfileImgWrapper />
-          <div id="user-name"></div>
-          <div id="quiz-date"></div>
+          <div id="user-name" />
+          <div id="quiz-date" />
         </div>
-        <div id="quiz-title"></div>
-        <div id="quiz-info"></div>
+        <div id="quiz-title" />
+        <div id="quiz-info" />
       </div>
-      <div id="quiz-solve-btn"></div>
+      <div id="quiz-solve-btn" />
     </QuizCardWrapper>
   );
 };
@@ -28,7 +28,7 @@ const gradient = keyframes`
 `;
 
 const QuizCardWrapper = styled.div`
-  border:solid 1px #eee;
+  border: solid 1px #eee;
   border-radius: 12px;
   position: relative;
   margin-bottom: 1rem;

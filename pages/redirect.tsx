@@ -30,7 +30,7 @@ const redirect: NextPageWithLayout = () => {
   };
 
   const getKakaoAuthorizationCode = (): string => {
-    const urlParams = new URL(location.href).searchParams;
+    const urlParams = new URL(window.location.href).searchParams;
     return urlParams.get('code') || '';
   };
 
@@ -66,7 +66,7 @@ const redirect: NextPageWithLayout = () => {
     dataFetch();
   }, []);
 
-  return <Loading ment={'로그인 중 입니다...'} />;
+  return <Loading text="로그인 진행중 입니다." />;
 };
 
 redirect.getLayout = function getLayout(page: ReactElement) {

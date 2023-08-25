@@ -29,11 +29,7 @@ const solveUserSlice = createSlice({
   },
 });
 
-export const {
-  saveSolveUserNameAction,
-  saveSolveUserIdAction,
-  saveSolveUserScoreAction,
-  resetUserDataAction,
-} = solveUserSlice.actions;
+export const { saveSolveUserNameAction, saveSolveUserIdAction, saveSolveUserScoreAction, resetUserDataAction } =
+  solveUserSlice.actions;
 
 export default solveUserSlice.reducer;
