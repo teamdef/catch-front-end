@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Ranker = ({ ranker }: { ranker: RankingType }) => {
-  if (!ranker) return <div />;
+  if (!ranker) return <Box />;
 
   return (
     <Box key={ranker.ranking} rank={ranker.ranking}>
@@ -25,7 +25,7 @@ const Tag = styled.span`
   text-align: center;
 `;
 
-const Box = styled.div<{ rank: number }>`
+const Box = styled.div<{ rank?: number }>`
   ${({ rank }) => rank === 2 && 'padding-top:20px;'}
   ${({ rank }) => rank === 3 && 'padding-top:40px;'}
   display: flex;

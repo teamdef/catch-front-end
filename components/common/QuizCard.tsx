@@ -53,6 +53,7 @@ const QuizCard = ({ quizInfo, onMyPage }: QuizCardProps) => {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   width: 100%;
   border-radius: 4px;
   border: solid 1px #b4a0ff;
@@ -65,6 +66,7 @@ const Img = styled.img`
   width: 33.24%;
   aspect-ratio: 57/50;
   object-fit: cover;
+  flex: none;
 `;
 const Content = styled.div`
   width: 100%;

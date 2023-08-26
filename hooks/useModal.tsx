@@ -23,13 +23,15 @@ export interface ModalProps {
 const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.Element | null] => {
   const [modalValue] = useState<ModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const body = document.querySelector('body') as HTMLBodyElement;
   const openModal = useCallback(() => {
     setIsOpen(true);
+    body.style.overflow = 'hidden';
   }, [isOpen]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
+    body.style.overflow = 'auto';
   }, [isOpen]);
 
   const close = (e: MouseEvent) => {
@@ -38,6 +40,7 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     }
     e.stopPropagation();
   };
+
   const renderModal = (): JSX.Element | null => {
     return isOpen ? (
       <ModalPortal wrapperId="react-portal-modal-container">
@@ -68,7 +71,8 @@ export const Background = styled.div<{ triggerAnimation?: boolean }>`
   justify-content: center;
   width: 100%;
   max-width: 480px;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+
   top: 0;
   left: 50%;
   transform: translateX(-50%);
