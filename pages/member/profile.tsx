@@ -50,12 +50,13 @@ const Profile: NextPageWithLayout = () => {
   const saveProfile = async () => {
     setIsLoading(true);
     try {
-      const _obj: ProfileChangeProps = { id: userId };
+      const _obj: ProfileChangeProps = { userId };
       if (tempNickname !== nickName) _obj.nickname = tempNickname;
       if (tempProfileImg !== profileImg) {
         const res = await getComperssedImg(tempProfileImg);
         _obj.imgBlob = res?._imgFile;
       }
+      console.log(_obj);
       const res = await ProfileChangeApi(_obj);
       const { profile_img, nickname } = res.data;
       dispatch(profileUploadAction({ profileImg: profile_img, nickName: nickname }));

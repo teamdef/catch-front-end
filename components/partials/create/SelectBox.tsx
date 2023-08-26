@@ -70,7 +70,7 @@ const AddImageQuizBtn = styled.button`
   background: url(/assets/img/rebranding/create/image_quiz_add.svg) no-repeat center;
   &:hover,
   &:active {
-    background: url(/assets/img/rebranding/create/Image_quiz_add_active.svg) no-repeat center;
+    background: url(/assets/img/rebranding/create/image_quiz_add_active.svg) no-repeat center;
   }
 `;
 export default SelectBox;
