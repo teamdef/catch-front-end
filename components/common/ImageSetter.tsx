@@ -31,7 +31,7 @@ const ImageSetter = ({ quizSetThumb, quizSetId }: ImageSetterProps) => {
   };
   return (
     <Wrapper>
-      {loading && <Loading text="이미지 저장중입니다." />}
+      {loading && <Loading text="이미지 저장 중 입니다." />}
       <Input type="file" accept="image/*" onChange={onImgChange} id="thumbnail-input" name="thumbnail-input" />
       <Label htmlFor="thumbnail-input">
         {thumbnailURL ? (

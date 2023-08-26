@@ -39,7 +39,7 @@ const CreateQuizSetBtn = () => {
       setLoading(false); // 로딩 해제
     }
   };
-  if (loading) return <Loading text="퀴즈 저장중입니다." />;
+  if (loading) return <Loading text="퀴즈 저장 중 입니다." />;
   return (
     <LargeContainedBtn onClick={publicationProblemSet} disabled={!createQuizValid()}>
       퀴즈 생성 완료

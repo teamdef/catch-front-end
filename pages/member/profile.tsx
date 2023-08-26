@@ -70,7 +70,7 @@ const Profile: NextPageWithLayout = () => {
 
   return (
     <>
-      {isLoading && <Loading text="정보 저장중 입니다." />}
+      {isLoading && <Loading text="정보 저장 중 입니다." />}
       <HeaderContentWrapper paddingTop="24px">
         <Title>프로필 수정</Title>
         <Content>

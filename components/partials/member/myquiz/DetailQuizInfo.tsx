@@ -1,25 +1,24 @@
 import ImageSetter from 'components/common/ImageSetter';
-import Router from 'next/router';
-import { QuizDeleteApi } from 'pages/api/quiz';
+import { useModal } from 'hooks';
 import styled from 'styled-components';
+import DeleteModal from './DeleteModal';
 
 interface DetailQuizInfoProps {
   detail: DetailQuizType;
 }
 const DetailQuizInfo = ({ detail }: DetailQuizInfoProps) => {
   const { setTitle, quizSetThumbnail, createdAt, quizSetId } = detail;
-  const DeleteQuizSet = async () => {
-    try {
-      await QuizDeleteApi(quizSetId as string);
-      Router.push('/member/myquiz/anyquiz/');
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [openModal, , RenderModal] = useModal({
+    escClickable: false,
+    backgroundClickable: false,
+    contents: <DeleteModal quizSetId={quizSetId} />,
+  });
+
   return (
     <Wrapper>
+      <RenderModal />
       <QuizTitle>{setTitle}</QuizTitle>
-      <DeleteQuizSetBtn onClick={DeleteQuizSet}>삭제</DeleteQuizSetBtn>
+      <DeleteQuizSetBtn onClick={openModal}>삭제</DeleteQuizSetBtn>
       <QuizDateBox>
         <span>생성 날짜</span>
         <span>{createdAt}</span>

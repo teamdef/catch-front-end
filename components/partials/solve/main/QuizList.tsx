@@ -55,7 +55,7 @@ const QuizList = () => {
     if (solveUserName) saveUserScore();
   }, [solveUserName]);
 
-  if (isLoading) return <Loading text="결과 출력중 입니다." />;
+  if (isLoading) return <Loading text="결과 출력 중 입니다." />;
   return (
     <Wrapper>
       {quizList.map((item: SolveQuizType, quiz_num: number) => (
