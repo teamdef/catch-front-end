@@ -32,7 +32,9 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
-
+  label {
+    cursor: pointer;
+  }
   * {
     box-sizing: border-box;
     outline-style: none;

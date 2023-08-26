@@ -17,14 +17,14 @@ export const kakaoLeaveApi = async (): Promise<AxiosResponse> => {
 
 // 프로필 정보 수정
 export interface ProfileChangeProps {
-  id: string;
+  userId: string;
   imgBlob?: File;
   nickname?: string;
 }
 
-export const ProfileChangeApi = async ({ id, imgBlob, nickname }: ProfileChangeProps): Promise<AxiosResponse> => {
+export const ProfileChangeApi = async ({ userId, imgBlob, nickname }: ProfileChangeProps): Promise<AxiosResponse> => {
   return new Promise(async (resolve) => {
-    const _obj = { id, profile_img: imgBlob?.name, nickname };
+    const _obj = { userId, profile_img: imgBlob?.name, nickname };
     const res: AxiosResponse = await authAxios.put('/user', _obj);
     if (imgBlob && res?.data?.uploadURL) {
       await notAuthAxios.put(res.data.uploadURL, imgBlob, {
