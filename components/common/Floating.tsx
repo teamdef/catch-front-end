@@ -4,6 +4,7 @@ import { Background } from 'hooks/useModal';
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { disableScroll, enableScroll } from 'utils/scroll';
 
 const Floating = () => {
   const [isActive, setIsActive] = useState(false);
@@ -16,13 +17,8 @@ const Floating = () => {
   };
 
   useEffect(() => {
-    const body = document.querySelector('body') as HTMLBodyElement;
-    if (isActive) {
-      body.style.overflow = 'hidden';
-    }
-    return () => {
-      body.style.overflow = 'auto';
-    };
+    if (isActive) disableScroll();
+    return () => enableScroll();
   }, [isActive]);
   useEffect(() => {
     if (!triggerAnimation) {
