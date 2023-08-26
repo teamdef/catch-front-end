@@ -66,7 +66,7 @@ const redirect: NextPageWithLayout = () => {
     dataFetch();
   }, []);
 
-  return <Loading text="로그인 진행중 입니다." />;
+  return <Loading text="로그인 진행 중 입니다." />;
 };
 
 redirect.getLayout = function getLayout(page: ReactElement) {

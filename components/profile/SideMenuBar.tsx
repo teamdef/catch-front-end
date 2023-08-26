@@ -14,9 +14,9 @@ const SideMenuBar = ({ bgColor, triggerAnimation, handleSideBar }: SideMenuBarPr
 
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
-    body.style.overflowY = 'hidden';
+    body.style.overflow = 'hidden';
     return () => {
-      body.style.overflowY = 'auto';
+      body.style.overflow = 'auto';
     };
   }, []);
 

@@ -59,6 +59,7 @@ const Title = styled.h2`
   position: relative;
   color: ${theme.colors.secondary_500};
   font-size: ${theme.fontSize.header_5};
+  font-weight: ${theme.fontWeight.bold};
 `;
 const Description = styled.p`
   margin-top: 8px;
