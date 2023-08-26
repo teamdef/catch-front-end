@@ -32,8 +32,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
   const router = useRouter();
   const dispatch = useDispatch();
+  const setScreenSize = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    console.log('vh : ', vh);
+  };
+
   useEffect(() => {
     TagManager.initialize({ gtmId: gtag.GTM_ID });
+    setScreenSize();
+    window.addEventListener('resize', () => {
+      setScreenSize();
+    });
   }, []);
   // Next.js에서는 document.referrer을 사용할 수 없다
   // 현재 코드를 세션에 저장해 두었다가 다른 코드로 이동하면 저장되어있던 path를 prevPath로 저장해주고 현재 path를 currentPath에 덮어쓰기 해준다.

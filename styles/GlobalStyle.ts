@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
-const GlobalStyle = createGlobalStyle` 
+const GlobalStyle = createGlobalStyle`
   ${reset}
   body {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
@@ -32,7 +32,9 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
-
+  label {
+    cursor: pointer;
+  }
   * {
     box-sizing: border-box;
     outline-style: none;
