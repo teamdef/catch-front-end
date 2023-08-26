@@ -1,4 +1,4 @@
-import { useState, useCallback, MouseEvent, useEffect } from 'react';
+import { useState, useCallback, MouseEvent } from 'react';
 import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
 import ModalPortal from 'components/modal/PortalWrapper';
 import styled, { keyframes } from 'styled-components';
@@ -23,13 +23,15 @@ export interface ModalProps {
 const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.Element | null] => {
   const [modalValue] = useState<ModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const body = document.querySelector('body') as HTMLBodyElement;
   const openModal = useCallback(() => {
     setIsOpen(true);
+    body.style.overflow = 'hidden';
   }, [isOpen]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
+    body.style.overflow = 'auto';
   }, [isOpen]);
 
   const close = (e: MouseEvent) => {
@@ -38,14 +40,6 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     }
     e.stopPropagation();
   };
-
-  useEffect(() => {
-    const body = document.querySelector('body') as HTMLBodyElement;
-    body.style.overflow = 'hidden';
-    return () => {
-      body.style.overflow = 'auto';
-    };
-  }, []);
 
   const renderModal = (): JSX.Element | null => {
     return isOpen ? (
