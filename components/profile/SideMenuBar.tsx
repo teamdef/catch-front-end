@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
@@ -11,14 +10,6 @@ interface SideMenuBarProps {
 }
 const SideMenuBar = ({ bgColor, triggerAnimation, handleSideBar }: SideMenuBarProps) => {
   const { isLoggedin } = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    const body = document.querySelector('body') as HTMLBodyElement;
-    body.style.overflow = 'hidden';
-    return () => {
-      body.style.overflow = 'auto';
-    };
-  }, []);
 
   return (
     <Wrapper bgColor={bgColor} triggerAnimation={triggerAnimation}>

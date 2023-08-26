@@ -1,3 +1,4 @@
+import { Loading } from 'components/common';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import AnyQuizListWrapper from 'components/partials/member/myquiz/AnyQuizListWrapper';
 import EmptyQuiz from 'components/partials/member/myquiz/EmptyQuiz';
@@ -11,16 +12,23 @@ import styled from 'styled-components';
 const Page = () => {
   const { userId } = useSelector((state: RootState) => state.user);
   const [userAnyQuiz, setUserAnyQuiz] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const getUserAnyQuiz = async (_userId: string) => {
-    const res = await UserQuizListApi(_userId);
-    setUserAnyQuiz(res.data);
+    setLoading(true);
+    try {
+      const res = await UserQuizListApi(_userId);
+      setUserAnyQuiz(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (userId) getUserAnyQuiz(userId);
   }, [userId]);
-
+  if (loading) return <Loading text="퀴즈를 불러오는 중 입니다." />;
   return (
     <HeaderContentWrapper>
       <Title>모두의 퀴즈</Title>
