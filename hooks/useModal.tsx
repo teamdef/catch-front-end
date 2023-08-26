@@ -2,6 +2,7 @@ import { useState, useCallback, MouseEvent } from 'react';
 import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
 import ModalPortal from 'components/modal/PortalWrapper';
 import styled, { keyframes } from 'styled-components';
+import { disableScroll, enableScroll } from 'utils/scroll';
 /* 특정 컴포넌트 이외를 클릭하였을 때 모달을 닫도록 함 */
 /* 
     clickRef : 현재 클릭한 컴포넌트
@@ -23,15 +24,15 @@ export interface ModalProps {
 const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.Element | null] => {
   const [modalValue] = useState<ModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const body = document.querySelector('body') as HTMLBodyElement;
+
   const openModal = useCallback(() => {
     setIsOpen(true);
-    body.style.overflow = 'hidden';
+    disableScroll();
   }, [isOpen]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
-    body.style.overflow = 'auto';
+    enableScroll();
   }, [isOpen]);
 
   const close = (e: MouseEvent) => {
