@@ -1,15 +1,8 @@
 import { ModalProps } from 'hooks/useModal';
-import { MouseEvent, cloneElement, useEffect } from 'react';
+import { MouseEvent, cloneElement } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 const BottomSheet = ({ contents, closeModal }: ModalProps) => {
-  useEffect(() => {
-    const body = document.querySelector('body') as HTMLBodyElement;
-    body.style.overflowY = 'hidden';
-    return () => {
-      body.style.overflowY = 'auto';
-    };
-  }, []);
   return (
     <ModalWrapper onClick={(e: MouseEvent) => e.stopPropagation()}>
       {cloneElement(contents, { closeModal })}

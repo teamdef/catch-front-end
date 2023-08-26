@@ -18,10 +18,10 @@ const Floating = () => {
   useEffect(() => {
     const body = document.querySelector('body') as HTMLBodyElement;
     if (isActive) {
-      body.style.overflowY = 'hidden';
+      body.style.overflow = 'hidden';
     }
     return () => {
-      body.style.overflowY = 'auto';
+      body.style.overflow = 'auto';
     };
   }, [isActive]);
   useEffect(() => {

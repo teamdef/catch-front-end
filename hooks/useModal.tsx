@@ -1,4 +1,4 @@
-import { useState, useCallback, MouseEvent } from 'react';
+import { useState, useCallback, MouseEvent, useEffect } from 'react';
 import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
 import ModalPortal from 'components/modal/PortalWrapper';
 import styled, { keyframes } from 'styled-components';
@@ -38,6 +38,15 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     }
     e.stopPropagation();
   };
+
+  useEffect(() => {
+    const body = document.querySelector('body') as HTMLBodyElement;
+    body.style.overflow = 'hidden';
+    return () => {
+      body.style.overflow = 'auto';
+    };
+  }, []);
+
   const renderModal = (): JSX.Element | null => {
     return isOpen ? (
       <ModalPortal wrapperId="react-portal-modal-container">
@@ -68,7 +77,8 @@ export const Background = styled.div<{ triggerAnimation?: boolean }>`
   justify-content: center;
   width: 100%;
   max-width: 480px;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+
   top: 0;
   left: 50%;
   transform: translateX(-50%);
