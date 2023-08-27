@@ -53,7 +53,7 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     ) : null;
   };
 
-  return [openModal, closeModal, renderModal]; // [T, (e: any)=>void]
+  return [openModal, closeModal, renderModal];
 };
 const BgColorAni = keyframes`
   0% {

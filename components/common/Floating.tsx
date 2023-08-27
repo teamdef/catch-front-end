@@ -20,6 +20,7 @@ const Floating = () => {
     if (isActive) disableScroll();
     return () => enableScroll();
   }, [isActive]);
+
   useEffect(() => {
     if (!triggerAnimation) {
       setTimeout(() => {
