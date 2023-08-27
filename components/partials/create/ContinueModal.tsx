@@ -1,33 +1,24 @@
 import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
 import { ModalProps } from 'hooks/useModal';
 import { Dispatch, SetStateAction } from 'react';
-import { useDispatch } from 'react-redux';
-import { saveProblemDescriptionAction, saveProblemSetTitleAction } from 'store/quiz';
 import styled from 'styled-components';
 
 interface ContinueModalProps {
   closeModal?: ModalProps['closeModal'];
-  setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
-  titleSetter: (value: string) => void;
-  descSetter: (value: string) => void;
+  setIsContinue: Dispatch<SetStateAction<boolean>>;
 }
-const ContinueModal = ({ closeModal, setQuizList, titleSetter, descSetter }: ContinueModalProps) => {
-  const dispatch = useDispatch();
-
-  const newCreate = () => {
-    dispatch(saveProblemDescriptionAction({ description: '' })); // 설명 저장
-    dispatch(saveProblemSetTitleAction({ setTitle: '' })); // 제목 저장
-    titleSetter('');
-    descSetter('');
-    setQuizList([]);
+const ContinueModal = ({ closeModal, setIsContinue }: ContinueModalProps) => {
+  const continueHandler = () => {
+    setIsContinue(true);
     if (closeModal) closeModal();
   };
+
   return (
     <Wrapper>
       <Title>앗, 이미 제작중인 퀴즈가 있습니다.</Title>
       <Description>이어서 퀴즈를 제작 하시겠습니까?</Description>
       <ButtonBox>
-        <SmallOutlinedBtn onClick={newCreate}>새로 만들기</SmallOutlinedBtn>
+        <SmallOutlinedBtn onClick={continueHandler}>새로 만들기</SmallOutlinedBtn>
         <SmallContainedBtn onClick={closeModal}>이어서 만들기</SmallContainedBtn>
       </ButtonBox>
     </Wrapper>

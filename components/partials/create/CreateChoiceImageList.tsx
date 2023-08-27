@@ -8,12 +8,12 @@ interface CreateChoiceImageListProps {
     quiz: ImageQuiz;
     quizIndex: number;
     quizList: (TextQuiz | ImageQuiz)[];
-    setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
+    _setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
   };
 }
 
 const CreateChoiceImageList = ({ props }: CreateChoiceImageListProps) => {
-  const { quiz, quizIndex, quizList, setQuizList } = props;
+  const { quiz, quizIndex, quizList, _setQuizList } = props;
 
   // 퀴즈 객관식 이미지 onChange 이벤트 처리 함수
   const onChoiceImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +30,7 @@ const CreateChoiceImageList = ({ props }: CreateChoiceImageListProps) => {
         const temp = JSON.parse(JSON.stringify(quizList));
         const _choices = [...temp[quizIndex].choices, ..._choicesImgThumbnail];
         temp[quizIndex].choices = _choices;
-        setQuizList(temp);
+        _setQuizList(temp);
         e.target.value = '';
       });
     }
@@ -39,7 +39,7 @@ const CreateChoiceImageList = ({ props }: CreateChoiceImageListProps) => {
   return (
     <Wrapper>
       {quiz.choices.map((imageObj: ChoiceImageType, choiceIndex: number) => (
-        <CreateChoiceImage props={{ quiz, quizIndex, choiceIndex, quizList, setQuizList, imageObj }} />
+        <CreateChoiceImage props={{ quiz, quizIndex, choiceIndex, quizList, _setQuizList, imageObj }} />
       ))}
       {quiz.choices.length < 4 && (
         <CreateChoiceImageInputBox>

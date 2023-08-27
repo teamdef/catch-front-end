@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
 import useAnimation from 'hooks/useAnimation';
+import { disableScroll, enableScroll } from 'utils/scroll';
 import Logo from './Logo';
 import SideMenuBar from '../profile/SideMenuBar';
 
@@ -20,7 +21,10 @@ const Header = ({ bgColor }: { bgColor?: string | undefined }) => {
       }, 300);
     }
   }, [triggerAnimation]);
-
+  useEffect(() => {
+    if (isSideBarOpen) disableScroll();
+    else enableScroll();
+  }, [isSideBarOpen]);
   useEffect(() => {
     setIsSideBarOpen(false); // url 이 변경되면 사이드메뉴바는 닫히도록 함.
   }, [currentUrl]);

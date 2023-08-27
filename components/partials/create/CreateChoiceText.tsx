@@ -7,12 +7,12 @@ interface CreateChoiceTextProps {
     quizIndex: number;
     choiceIndex: number;
     quizList: (TextQuiz | ImageQuiz)[];
-    setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
+    _setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
     text: string;
   };
 }
 const CreateChoiceText = ({ props }: CreateChoiceTextProps) => {
-  const { quiz, quizIndex, quizList, setQuizList, choiceIndex, text } = props;
+  const { quiz, quizIndex, quizList, _setQuizList, choiceIndex, text } = props;
   const isCorrect = quiz.correctIndex === choiceIndex;
   const key = `${quiz.choiceType} ${quizIndex + choiceIndex}`;
 
@@ -20,7 +20,7 @@ const CreateChoiceText = ({ props }: CreateChoiceTextProps) => {
   const setCorrectIndex = () => {
     const temp = JSON.parse(JSON.stringify(quizList));
     temp[quizIndex].correctIndex = choiceIndex;
-    setQuizList(temp);
+    _setQuizList(temp);
   };
 
   // 답안 항목 삭제
@@ -31,7 +31,7 @@ const CreateChoiceText = ({ props }: CreateChoiceTextProps) => {
     if (temp[quizIndex].correctIndex > temp[quizIndex].choices.length - 1) {
       temp[quizIndex].correctIndex = 0;
     }
-    setQuizList(temp);
+    _setQuizList(temp);
   };
 
   return (
