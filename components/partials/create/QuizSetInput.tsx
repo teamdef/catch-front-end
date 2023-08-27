@@ -1,20 +1,19 @@
-import { ChangeEvent, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useInput } from 'hooks';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from 'store';
 import { saveProblemDescriptionAction, saveProblemSetTitleAction } from 'store/quiz';
 import styled from 'styled-components';
 
 interface QuizSetInputProps {
-  props: {
-    title: string;
-    titleHandler: (e: ChangeEvent<HTMLInputElement>) => void;
-    desc: string;
-    descHandler: (e: ChangeEvent<HTMLInputElement>) => void;
-  };
+  isContinue: boolean;
 }
 
-const QuizSetInput = ({ props }: QuizSetInputProps) => {
-  const { title, titleHandler, desc, descHandler } = props;
+const QuizSetInput = ({ isContinue }: QuizSetInputProps) => {
   const dispatch = useDispatch();
+  const { setTitle, description } = useSelector((state: RootState) => state.quiz);
+  const [title, titleSetter, , titleHandler] = useInput<string>(setTitle || '');
+  const [desc, descSetter, , descHandler] = useInput<string>(description || '');
 
   useEffect(() => {
     dispatch(saveProblemSetTitleAction({ setTitle: title }));
@@ -22,6 +21,13 @@ const QuizSetInput = ({ props }: QuizSetInputProps) => {
   useEffect(() => {
     dispatch(saveProblemDescriptionAction({ description: desc }));
   }, [desc]);
+
+  useEffect(() => {
+    if (isContinue) {
+      titleSetter('');
+      descSetter('');
+    }
+  }, [isContinue]);
   return (
     <Wrapper>
       <InputBox>

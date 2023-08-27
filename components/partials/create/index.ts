@@ -6,6 +6,7 @@ export { default as CreateChoiceTextList } from './CreateChoiceTextList';
 export { default as CreateQuizBottom } from './CreateQuizBottom';
 export { default as CreateQuizList } from './CreateQuizList';
 export { default as CreateQuizSetBtn } from './CreateQuizSetBtn';
+export { default as ContinueModal } from './ContinueModal';
 export { default as QuizImageWrapper } from './QuizImageWrapper';
 export { default as QuizSetInput } from './QuizSetInput';
 export { default as SelectBox } from './SelectBox';

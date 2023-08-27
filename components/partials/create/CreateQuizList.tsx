@@ -1,37 +1,43 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { QuizTitle } from 'components/style';
-import { useDispatch } from 'react-redux';
-import { saveProblemsAction } from 'store/quiz';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveQuizListAction } from 'store/quiz';
+import { RootState } from 'store';
 import { QuizCount, QuizSolveCard } from '../solve/main/QuizItem';
-import { CreateChoiceTextList, CreateQuizBottom, QuizImageWrapper, CreateChoiceImageList } from '.';
+import { CreateChoiceTextList, CreateQuizBottom, QuizImageWrapper, CreateChoiceImageList, AddQuizBtn } from '.';
 
 interface CreateQuizListProps {
-  quizList: (TextQuiz | ImageQuiz)[];
-  setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
+  isContinue: boolean;
 }
-const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
+const CreateQuizList = ({ isContinue }: CreateQuizListProps) => {
   const dispatch = useDispatch();
+  const { quizList } = useSelector((state: RootState) => state.quiz);
+  const [_quizList, _setQuizList] = useState<(TextQuiz | ImageQuiz)[]>(quizList); // 문제 내부 저장 배열
+
   // 문제 정보를 변경하는 함수
   const onChangeProblem = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
-    const problem = { ...quizList[index], [name]: value };
-    const temp = [...quizList];
+    const problem = { ..._quizList[index], [name]: value };
+    const temp = [..._quizList];
     temp[index] = problem;
-    setQuizList(temp);
+    _setQuizList(temp);
   };
 
   // 퀴즈 세트 문항 변경 사항 바로 redux에 저장
   useEffect(() => {
-    dispatch(saveProblemsAction({ quizList }));
-  }, [quizList]);
+    dispatch(saveQuizListAction({ quizList: _quizList }));
+  }, [_quizList]);
 
+  useEffect(() => {
+    if (isContinue) _setQuizList([]);
+  }, [isContinue]);
   return (
     <>
-      {quizList.map((quiz: TextQuiz | ImageQuiz, quizIndex: number) => (
+      {_quizList.map((quiz: TextQuiz | ImageQuiz, quizIndex: number) => (
         <QuizSolveCard>
           <QuizTitle>
-            <QuizCount>Q {quizIndex + 1}.</QuizCount>
+            <QuizCount>Q {_quizList.length + 1}.</QuizCount>
             <QuizTitleInput
               placeholder="질문을 입력해주세요."
               value={quiz.quizTitle}
@@ -43,15 +49,16 @@ const CreateQuizList = ({ quizList, setQuizList }: CreateQuizListProps) => {
           </QuizTitle>
           <QuizImageWrapper
             quizList={quizList}
-            setQuizList={setQuizList}
+            setQuizList={_setQuizList}
             imgURL={quiz.quizThumbnail?.imgURL}
             quizIndex={quizIndex}
           />
-          {quiz.choiceType === 'text' && <CreateChoiceTextList props={{ quiz, quizIndex, quizList, setQuizList }} />}
-          {quiz.choiceType === 'img' && <CreateChoiceImageList props={{ quiz, quizIndex, quizList, setQuizList }} />}
-          <CreateQuizBottom quizList={quizList} setQuizList={setQuizList} quizIndex={quizIndex} />
+          {quiz.choiceType === 'text' && <CreateChoiceTextList props={{ quiz, quizIndex, quizList, _setQuizList }} />}
+          {quiz.choiceType === 'img' && <CreateChoiceImageList props={{ quiz, quizIndex, quizList, _setQuizList }} />}
+          <CreateQuizBottom quizList={quizList} setQuizList={_setQuizList} quizIndex={quizIndex} />
         </QuizSolveCard>
       ))}
+      <AddQuizBtn setQuizList={_setQuizList} />
     </>
   );
 };
