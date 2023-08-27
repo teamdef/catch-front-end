@@ -14,8 +14,8 @@ import { LargeContainedBtn } from 'components/style/button';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
-  const { quizset_id } = router.query;
   const dispatch = useDispatch();
+  const { quizset_id } = router.query;
   const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
 
   const fetchSolveQuizSet = async () => {
