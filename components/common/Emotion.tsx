@@ -71,7 +71,8 @@ const EmotionButton = styled.button<{ active: boolean }>`
 const EmotionImage = styled.img<{ active: boolean }>`
   width: 100%;
   border: 0.25px solid ${({ active, theme }) => (active ? theme.colors.secondary_300 : 'transparent')};
-  box-shadow: ${({ active, theme }) => active && `0px 0px 10px -3px ${theme.colors.secondary_300}`};
+  box-shadow: ${({ active, theme }) =>
+    active ? `0px 0px 10px -3px ${theme.colors.secondary_300}` : '0px 0px 1px 0px #B099FE'};
   border-radius: 50%;
 `;
 const EmotionName = styled.p`
