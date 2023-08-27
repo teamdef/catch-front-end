@@ -8,11 +8,11 @@ interface CreateChoiceTextListProps {
     quiz: TextQuiz;
     quizIndex: number;
     quizList: (TextQuiz | ImageQuiz)[];
-    setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
+    _setQuizList: Dispatch<SetStateAction<(TextQuiz | ImageQuiz)[]>>;
   };
 }
 const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
-  const { quiz, quizIndex, quizList, setQuizList } = props;
+  const { quiz, quizIndex, quizList, _setQuizList } = props;
   const [activeInput, setActiveInput] = useState<boolean>(false); // 퀴즈 정답 입력창 활성화 여부
   const [textChoiceInput, , textChoiceInputClear, textChoiceInputHandler] = useInput<string>(''); // 객관식 텍스트 답안 전용 input 핸들러
   const activeInputHandler = () => setActiveInput((prev) => !prev);
@@ -28,7 +28,7 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
     } else {
       const temp = JSON.parse(JSON.stringify(quizList));
       temp[quizIndex].choices.push(textChoiceInput);
-      setQuizList(temp);
+      _setQuizList(temp);
       textChoiceInputClear();
       activeInputHandler();
     }
@@ -37,7 +37,7 @@ const CreateChoiceTextList = ({ props }: CreateChoiceTextListProps) => {
   return (
     <Wrapper>
       {quiz.choices.map((text: string, choiceIndex: number) => (
-        <CreateChoiceText props={{ quiz, quizIndex, quizList, setQuizList, choiceIndex, text }} />
+        <CreateChoiceText props={{ quiz, quizIndex, quizList, _setQuizList, choiceIndex, text }} />
       ))}
       {quiz.choices.length < 4 && !activeInput && (
         <AddChoiceTextBtn onClick={activeInputHandler}>퀴즈 문항 추가하기</AddChoiceTextBtn>
