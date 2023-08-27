@@ -14,8 +14,8 @@ interface TabBarProps {
   };
 }
 const TabDataList: TabData[] = [
-  { name: '최신순', value: 1, checked: true },
-  { name: '인기순', value: 2, checked: false },
+  { name: '인기순', value: 1, checked: true },
+  { name: '최신순', value: 2, checked: false },
   // { name: '댓글순', value: 3, checked: false },
 ];
 
