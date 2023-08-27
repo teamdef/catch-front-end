@@ -1,6 +1,6 @@
 const timeForToday = (date: string) => {
   const today = new Date();
-  const timeValue = new Date(date.substring(0,19)); // ios safari yyyy-mm-ddThh:mm:ss Z를 빼면 타임존이 적용되지 않는다.
+  const timeValue = new Date(date.substring(0, 19)); // ios safari yyyy-mm-ddThh:mm:ss Z를 빼면 타임존이 적용되지 않는다.
 
   const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
   if (betweenTime < 1) return '방금 전';
@@ -36,5 +36,4 @@ const timeForToday = (date: string) => {
 
   return value;
 };
-
-export { timeForToday };
+export default timeForToday;

@@ -1,72 +1,86 @@
-import { useState, useCallback, ChangeEvent, useEffect, RefObject } from 'react';
-import { BaseModalType } from 'components/modal/BaseModal'; // 모달 타입
-import { BaseModal } from 'components/modal'; // 모달 컴포넌트
+import { useState, useCallback, MouseEvent } from 'react';
+import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
+import ModalPortal from 'components/modal/PortalWrapper';
+import styled, { keyframes } from 'styled-components';
+import { disableScroll, enableScroll } from 'utils/scroll';
 /* 특정 컴포넌트 이외를 클릭하였을 때 모달을 닫도록 함 */
 /* 
     clickRef : 현재 클릭한 컴포넌트
     exceptRefs : 현재 클릭한 컴포넌트 외에도 제외시킬 컴포넌트 배열
     callback : 위의 것들을 제외한 컴포넌트 클릭시 실행시킬 함수 
 */
-export const useOnOutsideClick = (
-  callback: () => void,
-  mainRef: RefObject<HTMLDivElement>, // 이벤트를 발생시키지 않을 메인 컴포넌트
-  exceptRefs: RefObject<HTMLDivElement>[], // 이벤트를 발생시키지 않을 추가 컴포넌트 배열
-) => {
-  /* 제외 할 컴포넌트에 Ref 를 걸어서 그 값을 배열로 담을 것.  */
-  useEffect(() => {
-    const body = document.querySelector('body') as HTMLBodyElement;
-    // click 이벤트가 등록한 ref가 아닐 경우 callback 을 실행하는 함수
+export interface ModalType {
+  escClickable?: boolean; // esc로 모달을 닫을 수 있는지에 대한 여부
+  backgroundClickable?: boolean; // 백그라운드 클릭으로 모달을 닫을 수 있는지에 대한 여부
+  contents: JSX.Element;
+  bottomSheet?: boolean; // 바텀시트 여부
+}
 
-    const closeOnOutsideClick = (e: MouseEvent): void => {
-      if (mainRef?.current && !mainRef.current.contains(e.target as Node)) {
-        // mainRef 컴포넌트가 등록되어 있으나 (활성화 되어 있으나) 클릭 이벤트가 발생한 영역이 mainRef 가 아닐 경우
-        if (exceptRefs.length !== 0) {
-          // exceptRefs 에 등록된 요소가 하나라도 있다면
-          const result: boolean = exceptRefs.reduce((acc: boolean, cur: RefObject<HTMLDivElement>) => {
-            const curIsContain: boolean = !cur.current?.contains(e.target as Node);
-            return acc && curIsContain; // 현재 값인 cur가 ref이외의 컴포넌트인지 체크하고, 그 결과 값을 acc 값과 연산하여 다시 acc에 저장
-          }, true); // 초기 값은 true로 시작함. && 연산이기 때문에.
-          result ? callback() : null;
-        }
-      }
-    };
-    body.addEventListener('mousedown', closeOnOutsideClick);
-    return () => {
-      body.removeEventListener('mousedown', closeOnOutsideClick);
-    };
-  }, [mainRef, exceptRefs]);
-};
+export interface ModalProps {
+  contents: ModalType['contents'];
+  closeModal: () => void;
+}
 
-/* ESC 클릭 시 모달을 닫도록 하는 커스텀 훅  */
-export const useOnEscapeClick = (callback: () => void) => {
-  const body = document.querySelector('body') as HTMLBodyElement;
-  useEffect(() => {
-    type Listener = (this: HTMLElement, ev: KeyboardEvent) => any; // 키보드 클릭 리스너
-    const closeOnEscapeKey: Listener = (e: KeyboardEvent) => (e.key === 'Escape' ? callback() : null);
-    body.addEventListener('keydown', closeOnEscapeKey);
-    return () => {
-      body.removeEventListener('keydown', closeOnEscapeKey);
-    };
-  }, [callback]);
-};
-
-const useModal = (initialState: BaseModalType): [() => void,()=>void, () => JSX.Element | null] => {
-  const [modalValue, setModalValue] = useState<BaseModalType>(initialState);
+const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.Element | null] => {
+  const [modalValue] = useState<ModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const openModal = useCallback(() => {
     setIsOpen(true);
+    disableScroll();
   }, [isOpen]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
+    enableScroll();
   }, [isOpen]);
 
-  const renderModal = (): JSX.Element | null => {
-    return isOpen ? <BaseModal props={modalValue} closeModal={closeModal}></BaseModal> : null;
+  const close = (e: MouseEvent) => {
+    if (modalValue.backgroundClickable) {
+      closeModal();
+    }
+    e.stopPropagation();
   };
 
-  return [openModal,closeModal, renderModal]; // [T, (e: any)=>void]
+  const renderModal = (): JSX.Element | null => {
+    return isOpen ? (
+      <ModalPortal wrapperId="react-portal-modal-container">
+        <Background onClick={close}>
+          {modalValue.bottomSheet && <BottomSheet contents={modalValue.contents} closeModal={closeModal} />}
+          {!modalValue.bottomSheet && <Dialog contents={modalValue.contents} closeModal={closeModal} />}
+        </Background>
+      </ModalPortal>
+    ) : null;
+  };
+
+  return [openModal, closeModal, renderModal]; // [T, (e: any)=>void]
 };
+const BgColorAni = keyframes`
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.47);
+  }
+`;
+
+export const Background = styled.div<{ triggerAnimation?: boolean }>`
+  z-index: 9999;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  height: calc(var(--vh, 1vh) * 100);
+
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.47);
+  ${({ triggerAnimation }) => triggerAnimation === false && 'background-color: transparent; transition: 0.2s ease;'}
+  overflow: hidden;
+  animation: ${BgColorAni} 0.2s ease;
+`;
 
 export default useModal;

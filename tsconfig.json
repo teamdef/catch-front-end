@@ -14,8 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": "./", // import경로를 상대경로에서 절대경로로 사용
+    "baseUrl": "./" // import경로를 상대경로에서 절대경로로 사용
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./types/**/*.d.ts",],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "./types/**/*.d.ts", "*/gtag.js", "next.config.js"],
   "exclude": ["node_modules"]
 }

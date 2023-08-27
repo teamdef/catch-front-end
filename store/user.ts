@@ -44,14 +44,11 @@ const userSlice = createSlice({
       state.nickName = '';
       state.kakaoUid = -1;
     },
-    profileUploadAction: (
-      state: UserTypes,
-      action: PayloadAction<{ profileImg: string;nickName:string }>,
-    ) => { 
+    profileUploadAction: (state: UserTypes, action: PayloadAction<{ profileImg: string; nickName: string }>) => {
       const { profileImg, nickName } = action.payload;
       state.profileImg = profileImg;
       state.nickName = nickName;
-    }
+    },
   },
 });
 

@@ -3,8 +3,8 @@ import { useState, useCallback, ChangeEvent } from 'react';
 // 제네릭을 사용하여 다양한 타입을 지원하는 input handler 구현
 const useInput = <T>(
   initialState: T,
-  callback?: (e: ChangeEvent<HTMLInputElement>) => T)
-  : [T, (value:T)=>void, ()=>void,(e: ChangeEvent<HTMLInputElement>) => void] => {
+  callback?: (e: ChangeEvent<HTMLInputElement>) => T,
+): [T, (value: T) => void, () => void, (e: ChangeEvent<HTMLInputElement>) => void] => {
   const [value, setValue] = useState<T>(initialState);
 
   const handler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -14,14 +14,15 @@ const useInput = <T>(
      */
     setValue(targetValue);
   }, []);
-  const Setter = useCallback((value: T) => {
-    setValue(value);
+  const Setter = useCallback((_value: T) => {
+    setValue(_value);
   }, []);
-  
-  const clearFunction = useCallback(() => { // 초기화 함수
+
+  const clearFunction = useCallback(() => {
+    // 초기화 함수
     setValue(initialState);
-  },[])
-  return [value, Setter,clearFunction, handler]; // [T, (e: any)=>void]
+  }, []);
+  return [value, Setter, clearFunction, handler]; // [T, (e: any)=>void]
 };
 
 export default useInput;

@@ -1,15 +1,10 @@
 import styled, { keyframes, css } from 'styled-components';
 
-export const Background = styled.div`
-  position: relative;
-  background-color: #fff6f7;
-`;
-
 export const RecentQuizList = styled.div`
   background-color: #fff;
   #section-title {
     /*padding: 1rem 0.5rem 1rem 0.5rem;*/
-    padding-top:4px; /* swiper slide 에서 생기는 padding-bottom 36px 에 4px를 더하여 패딩 40px를 만들어 냄 */
+    padding-top: 4px; /* swiper slide 에서 생기는 padding-bottom 36px 에 4px를 더하여 패딩 40px를 만들어 냄 */
     color: #595959;
     font-weight: bold;
     font-size: 1.2rem;
@@ -94,9 +89,8 @@ export const CreateCard = styled(CustomCard)`
     display: block;
     color: #595959;
     font-size: 16px;
-    margin-bottom:40px;
+    margin-bottom: 40px;
   }
-
 `;
 export const MyQuizCard = styled(CustomCard)<ImageCardProps>`
   ${(props) =>

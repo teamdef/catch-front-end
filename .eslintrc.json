@@ -1,0 +1,63 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "project": "./tsconfig.json",
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "react-hooks", "prettier"],
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    "react/prefer-stateless-function": 0,
+    "react/jsx-filename-extension": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "no-nested-ternary": 0,
+    "no-var": "error",
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/no-array-index-key": "off",
+    "react/function-component-definition": [2, { "namedComponents": ["arrow-function", "function-declaration"] }],
+    "react/jsx-props-no-spreading": "off", // props 확산 금지 비활성화
+    "@typescript-eslint/no-use-before-define": "off", // 초기화 전 사용 금지 옵션 해제
+    "@typescript-eslint/naming-convention": "off", // 네이밍 컨벤션
+    "react/destructuring-assignment": "off",
+    "react/require-default-props": "off",
+    "import/no-cycle": "off",
+    "no-console": "off",
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      { "components": ["Link"], "specialLink": ["hrefLeft", "hrefRight"], "aspects": ["invalidHref", "preferButton"] }
+    ], // a 태그 안에 하이퍼링크 필수
+    "no-underscore-dangle": "off", // '_' 사용 금지
+    "react/button-has-type": "off", // <button type={}> 필수
+    "no-useless-concat": "off", // 쓸데없이 문자열 붙히기 금지
+    "react/prop-types": "off",
+    "no-param-reassign": "off" // 매개변수 재할당 금지(사이드 이펙트 우려) = reducer 사용을 위해 off
+  }
+}
