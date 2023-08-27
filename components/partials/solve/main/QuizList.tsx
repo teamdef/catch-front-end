@@ -17,6 +17,7 @@ const QuizList = () => {
   const dispatch = useDispatch();
   const { quizset_id } = router.query;
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isNickname, setIsNickname] = useState<boolean>(false);
   const { quizList, answerList } = useSelector((state: RootState) => state.solve);
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
   const { userId } = useSelector((state: RootState) => state.user);
@@ -24,7 +25,7 @@ const QuizList = () => {
   const [openModal, , RenderModal] = useModal({
     escClickable: false,
     backgroundClickable: false,
-    contents: <NicknameModal />,
+    contents: <NicknameModal setIsNickname={setIsNickname} />,
   });
 
   const onClickResult = useCallback(() => {
@@ -52,8 +53,8 @@ const QuizList = () => {
   };
 
   useEffect(() => {
-    if (solveUserName) saveUserScore();
-  }, [solveUserName]);
+    if (isNickname) saveUserScore();
+  }, [isNickname]);
 
   if (isLoading) return <Loading text="결과 출력 중 입니다." />;
   return (
