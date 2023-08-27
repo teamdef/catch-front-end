@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,13 +7,18 @@ import { RootState } from 'store';
 import { ModalProps } from 'hooks/useModal';
 import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
 
-const NicknameModal = ({ closeModal }: { closeModal?: ModalProps['closeModal'] }) => {
+interface NicknameModalProps {
+  closeModal?: ModalProps['closeModal'];
+  setIsNickname: Dispatch<SetStateAction<boolean>>;
+}
+const NicknameModal = ({ closeModal, setIsNickname }: NicknameModalProps) => {
   const dispatch = useDispatch();
   const { isLoggedin, nickName } = useSelector((state: RootState) => state.user);
   const [_nickname, _nicknameSetter, , _nicknameHandler] = useInput<string>('');
 
   const savaSolveUserName = () => {
     dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
+    setIsNickname(true);
     if (closeModal) closeModal();
   };
 
