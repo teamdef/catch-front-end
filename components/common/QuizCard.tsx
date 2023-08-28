@@ -79,7 +79,7 @@ const Top = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: baseline;
 `;
 const QuizTitle = styled.h2`
   color: ${({ theme }) => theme.colors.blackColors.grey_800};
@@ -87,6 +87,7 @@ const QuizTitle = styled.h2`
   font-size: ${({ theme }) => theme.fontSize.body_2};
 `;
 const CreatedAt = styled.span`
+  flex: none;
   color: ${({ theme }) => theme.colors.blackColors.grey_500};
   font-size: ${({ theme }) => theme.fontSize.caption};
 `;
