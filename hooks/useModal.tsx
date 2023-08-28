@@ -1,14 +1,10 @@
-import { useState, useCallback, MouseEvent } from 'react';
+import { useState, useCallback, MouseEvent, useEffect } from 'react';
 import { BottomSheet, Dialog } from 'components/modal'; // 모달 컴포넌트
 import ModalPortal from 'components/modal/PortalWrapper';
-import styled, { keyframes } from 'styled-components';
 import { disableScroll, enableScroll } from 'utils/scroll';
-/* 특정 컴포넌트 이외를 클릭하였을 때 모달을 닫도록 함 */
-/* 
-    clickRef : 현재 클릭한 컴포넌트
-    exceptRefs : 현재 클릭한 컴포넌트 외에도 제외시킬 컴포넌트 배열
-    callback : 위의 것들을 제외한 컴포넌트 클릭시 실행시킬 함수 
-*/
+import { Background } from 'components/style';
+import useAnimation from './useAnimation';
+
 export interface ModalType {
   escClickable?: boolean; // esc로 모달을 닫을 수 있는지에 대한 여부
   backgroundClickable?: boolean; // 백그라운드 클릭으로 모달을 닫을 수 있는지에 대한 여부
@@ -19,11 +15,13 @@ export interface ModalType {
 export interface ModalProps {
   contents: ModalType['contents'];
   closeModal: () => void;
+  triggerAnimation: boolean;
 }
 
 const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.Element | null] => {
   const [modalValue] = useState<ModalType>(initialState);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isRenderModal, handleTransitionEnd, triggerAnimation] = useAnimation(isOpen);
 
   const openModal = useCallback(() => {
     setIsOpen(true);
@@ -42,45 +40,31 @@ const useModal = (initialState: ModalType): [() => void, () => void, () => JSX.E
     e.stopPropagation();
   };
 
+  useEffect(() => {
+    if (!triggerAnimation) {
+      setTimeout(() => {
+        handleTransitionEnd();
+      }, 300);
+    }
+  }, [triggerAnimation]);
   const renderModal = (): JSX.Element | null => {
-    return isOpen ? (
+    return isRenderModal ? (
       <ModalPortal wrapperId="react-portal-modal-container">
-        <Background onClick={close}>
-          {modalValue.bottomSheet && <BottomSheet contents={modalValue.contents} closeModal={closeModal} />}
-          {!modalValue.bottomSheet && <Dialog contents={modalValue.contents} closeModal={closeModal} />}
-        </Background>
+        {modalValue.bottomSheet && (
+          <Background onClick={close} triggerAnimation={isOpen}>
+            <BottomSheet contents={modalValue.contents} closeModal={closeModal} triggerAnimation={isOpen} />
+          </Background>
+        )}
+        {!modalValue.bottomSheet && (
+          <Background onClick={close} triggerAnimation={isOpen}>
+            <Dialog contents={modalValue.contents} closeModal={closeModal} triggerAnimation={isOpen} />
+          </Background>
+        )}
       </ModalPortal>
     ) : null;
   };
 
-  return [openModal, closeModal, renderModal]; // [T, (e: any)=>void]
+  return [openModal, closeModal, renderModal];
 };
-const BgColorAni = keyframes`
-  0% {
-    background-color: transparent;
-  }
-  100% {
-    background-color: rgba(0, 0, 0, 0.47);
-  }
-`;
-
-export const Background = styled.div<{ triggerAnimation?: boolean }>`
-  z-index: 9999;
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 480px;
-  height: calc(var(--vh, 1vh) * 100);
-
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.47);
-  ${({ triggerAnimation }) => triggerAnimation === false && 'background-color: transparent; transition: 0.2s ease;'}
-  overflow: hidden;
-  animation: ${BgColorAni} 0.2s ease;
-`;
 
 export default useModal;

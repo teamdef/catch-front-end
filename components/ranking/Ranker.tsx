@@ -16,8 +16,8 @@ const Ranker = ({ ranker }: { ranker: RankingType }) => {
 const Tag = styled.span`
   margin-top: 4px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 56px;
   height: 24px;
   border-radius: 18px;
@@ -32,6 +32,7 @@ const Box = styled.div<{ rank?: number }>`
   flex: 1;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   color: ${({ theme }) => theme.colors.blackColors.grey_800};
   font-size: ${({ theme }) => theme.fontSize.caption};
 `;
