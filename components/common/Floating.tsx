@@ -1,6 +1,6 @@
 import { PortalWrapper } from 'components/modal';
+import { Background } from 'components/style';
 import useAnimation from 'hooks/useAnimation';
-import { Background } from 'hooks/useModal';
 import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -30,7 +30,7 @@ const Floating = () => {
   }, [triggerAnimation]);
   return (
     <PortalWrapper wrapperId="react-portal-loading-container">
-      {renderSideBar && <Background onClick={activeHandler} triggerAnimation={triggerAnimation} />}
+      {renderSideBar && <Background onClick={activeHandler} triggerAnimation={isActive} />}
       <Content>
         {renderSideBar && (
           <ButtonBox triggerAnimation={triggerAnimation}>
