@@ -37,7 +37,7 @@ const CreateQuizList = ({ isContinue }: CreateQuizListProps) => {
       {_quizList.map((quiz: TextQuiz | ImageQuiz, quizIndex: number) => (
         <QuizSolveCard>
           <QuizTitle>
-            <QuizCount>Q {_quizList.length + 1}.</QuizCount>
+            <QuizCount>Q {quizIndex + 1}.</QuizCount>
             <QuizTitleInput
               placeholder="질문을 입력해주세요."
               value={quiz.quizTitle}
@@ -64,6 +64,7 @@ const CreateQuizList = ({ isContinue }: CreateQuizListProps) => {
 };
 
 const QuizTitleInput = styled.input`
+  flex-grow: 1;
   border: 0;
 `;
 

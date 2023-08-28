@@ -1,6 +1,5 @@
 import { PortalWrapper } from 'components/modal';
-import { ProgressCircle } from 'components/style';
-import { Background } from 'hooks/useModal';
+import { Background, ProgressCircle } from 'components/style';
 import styled from 'styled-components';
 
 interface LoadingProps {

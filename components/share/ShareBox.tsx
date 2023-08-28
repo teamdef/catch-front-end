@@ -25,7 +25,6 @@ const ShareBox = ({ quizSetThumb }: ShareBoxProps) => {
     profileImg: quizMaker.profileImg,
     nickName: quizMaker.nickname,
   };
-  console.log(shareInfo);
 
   useEffect(() => {
     if (window.Kakao) {

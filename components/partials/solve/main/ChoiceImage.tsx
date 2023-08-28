@@ -51,8 +51,8 @@ const ChoiceImgLabel = styled.label<{ imgSrc: string }>`
   padding: 0;
   border-radius: 8px;
   overflow: hidden;
-  object-fit: cover;
   background: center / contain no-repeat url(${({ imgSrc }) => imgSrc || ''});
+  background-size: cover;
 `;
 
 const ChoiceImgInput = styled.input`
