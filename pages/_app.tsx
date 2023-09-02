@@ -17,7 +17,9 @@ import * as gtag from 'lib/gtag';
 import { logoutAction } from 'store/user';
 import { useDispatch } from 'react-redux';
 import TagManager from 'react-gtm-module';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const queryClient = new QueryClient();
 // NextPageWithLayout으로 Page의 타입을 지정하면,
 // getLayout 속성함수를 사용할 수 있게된다. (사용해도 되고 안해도 되고 )
 export type NextPageWithLayout = NextPage & {
@@ -89,10 +91,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           `,
         }}
       />
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <PersistGate persistor={persistor}>{getLayout(<Component {...pageProps} />)}</PersistGate>
+        </ThemeProvider>
+      </QueryClientProvider>
     </>
   );
 }

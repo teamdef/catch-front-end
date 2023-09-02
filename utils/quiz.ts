@@ -11,7 +11,25 @@ export const parseDetailQuiz = (data: any) => {
   };
   return _detailQuiz;
 };
-
+export const parseSolveQuizSet = (data: any) => {
+  const solveQuizSet: SolveQuizSetType = {
+    quizSetId: data.id,
+    setTitle: data.set_title,
+    quizSetThumbnail: data.thumbnail,
+    description: data.description,
+    quizMaker: data.user,
+    quizList: data.quiz.map((q: SolveQuizType) => {
+      return {
+        quiz_thumbnail: q.quiz_thumbnail ?? null,
+        quiz_title: q.quiz_title,
+        choice_type: q.choice_type,
+        choices: q.choices,
+        correct_idx: q.correct_idx,
+      };
+    }),
+  };
+  return solveQuizSet;
+};
 export const parseBestCommentList = (data: any) => {
   const _bestCommentList = data.map((comment: CommentType) => {
     const _comment: CommentType = {

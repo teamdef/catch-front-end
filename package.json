@@ -17,6 +17,8 @@
     "@react-native-async-storage/async-storage": "^1.17.7",
     "@react-native-community/async-storage": "^1.12.1",
     "@reduxjs/toolkit": "^1.8.3",
+    "@tanstack/react-query": "^4.33.0",
+    "@tanstack/react-query-devtools": "^4.33.0",
     "@types/next-redux-wrapper": "^3.0.0",
     "@types/react-cookies": "^0.1.0",
     "@types/react-redux": "^7.1.24",
@@ -44,6 +46,7 @@
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.34.1",
     "@types/gtag.js": "^0.0.13",
     "@types/node": "18.0.0",
     "@types/react": "18.0.14",

@@ -11,43 +11,20 @@ import { theme } from 'styles/theme';
 import styled from 'styled-components';
 import Sketchbook from 'components/style/Sketchbook';
 import { LargeContainedBtn } from 'components/style/button';
+import { useQuery } from '@tanstack/react-query';
+import { parseSolveQuizSet } from 'utils/quiz';
+import { Loading } from 'components/common';
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { quizset_id } = router.query;
   const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
-
-  const fetchSolveQuizSet = async () => {
-    try {
-      const res = await QuizDataFetchApi(quizset_id as string);
-      parseSolveQuizSet(res.data);
-      dispatch(saveSolveAnswersAction({ answerList: Array(res.data.quiz.length).fill(5) }));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const parseSolveQuizSet = (data: QuizSetDtoType) => {
-    const { id, set_title, thumbnail, description, quiz, user } = data;
-    const solveQuizSet: SolveQuizSetType = {
-      quizSetId: id,
-      setTitle: set_title,
-      quizSetThumbnail: thumbnail,
-      description,
-      quizList: quiz.map((q: SolveQuizType) => {
-        return {
-          quiz_thumbnail: q.quiz_thumbnail ?? null,
-          quiz_title: q.quiz_title,
-          choice_type: q.choice_type,
-          choices: q.choices,
-          correct_idx: q.correct_idx,
-        };
-      }),
-      quizMaker: user,
-    };
-    dispatch(saveSolveProblemSetAction(solveQuizSet));
-  };
+  const { isLoading, data } = useQuery({
+    queryKey: ['fetchQuizSet'],
+    queryFn: () => QuizDataFetchApi(quizset_id as string),
+    select: (_data) => parseSolveQuizSet(_data.data),
+  });
 
   const moveMain = () => {
     router.push(`/quiz/solve/${quizset_id}/main`);
@@ -62,8 +39,13 @@ const Page: NextPageWithLayout = () => {
   }, []);
 
   useEffect(() => {
-    if (quizset_id) fetchSolveQuizSet();
-  }, [router.isReady]);
+    if (data) {
+      dispatch(saveSolveProblemSetAction(data));
+      dispatch(saveSolveAnswersAction({ answerList: Array(data.quizList.length).fill(5) }));
+    }
+  }, [data]);
+
+  if (isLoading) return <Loading text="퀴즈를 불러오는 중 입니다." />;
 
   return (
     <Sketchbook>
@@ -79,10 +61,6 @@ const Page: NextPageWithLayout = () => {
     </Sketchbook>
   );
 };
-
-interface QuizInfoProps {
-  thumbnail?: string;
-}
 
 const Wrapper = styled.div`
   display: flex;
@@ -101,7 +79,7 @@ const QuizTitle = styled.h1`
   font-weight: ${theme.fontWeight.bold};
 `;
 
-const QuizThumbnail = styled.img<QuizInfoProps>`
+const QuizThumbnail = styled.img`
   position: relative;
   display: block;
   margin-top: 42px;
