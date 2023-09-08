@@ -22,7 +22,7 @@ const Page: NextPageWithLayout = () => {
   const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
   const { isLoading, data } = useQuery({
     queryKey: ['fetchQuizSet'],
-    queryFn: () => QuizDataFetchApi(quizset_id as string),
+    queryFn: () => QuizDataFetchApi(),
     select: (_data) => parseSolveQuizSet(_data.data),
   });
 

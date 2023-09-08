@@ -1,6 +1,7 @@
 /* eslint-disable no-async-promise-executor */
 import { AxiosResponse } from 'axios';
 import imageCompression from 'browser-image-compression'; // 이미지 최적화용
+import Router from 'next/router';
 import { authAxios, notAuthAxios } from './customAxios';
 
 // 최근 생성된 퀴즈 목록
@@ -127,7 +128,8 @@ export const QuizThumbnailChangeApi = async (quizset_id: string, imgBlob: File):
 };
 
 // 풀이 - 특정 id의 퀴즈 정보 불러오기
-export const QuizDataFetchApi = async (quizset_id: string): Promise<AxiosResponse> => {
+export const QuizDataFetchApi = async (): Promise<AxiosResponse> => {
+  const { quizset_id } = Router.query;
   return notAuthAxios.get(`/loadprobset/${quizset_id}`);
 };
 
