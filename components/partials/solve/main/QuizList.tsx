@@ -5,18 +5,15 @@ import { saveSolveUserScoreAction } from 'store/user_solve';
 import { useModal } from 'hooks';
 import styled from 'styled-components';
 import { LargeContainedBtn } from 'components/style/button';
-import { useRouter } from 'next/router';
 import { saveEmotionCount } from 'store/emotion';
 import { SaveScoreApi } from 'pages/api/quiz';
 import { Loading } from 'components/common';
-import QuizItem from './QuizItem';
-import NicknameModal from './NicknameModal';
+import { useMutation } from '@tanstack/react-query';
+import { moveResult } from 'utils/move';
+import { QuizItem, NicknameModal } from '.';
 
 const QuizList = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
-  const { quizset_id } = router.query;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isNickname, setIsNickname] = useState<boolean>(false);
   const { quizList, answerList } = useSelector((state: RootState) => state.solve);
   const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
@@ -36,24 +33,19 @@ const QuizList = () => {
     openModal();
   }, [answerList]);
 
-  const moveResult = (_solver_id: string) => router.push(`/quiz/solve/${quizset_id}/result/${_solver_id}`);
-
-  const saveUserScore = async () => {
-    setIsLoading(true);
-    try {
-      const res = await SaveScoreApi(solveUserName, solveUserScore, quizset_id as string, userId, quizList.length);
-      const { quizset_emotion, solver_id } = res.data;
+  const { isLoading, mutate } = useMutation({
+    mutationFn: () => {
+      return SaveScoreApi(solveUserName, solveUserScore, userId, quizList.length);
+    },
+    onSuccess: (data) => {
+      const { quizset_emotion, solver_id } = data.data;
       dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
       moveResult(solver_id);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   useEffect(() => {
-    if (isNickname) saveUserScore();
+    if (isNickname) mutate();
   }, [isNickname]);
 
   if (isLoading) return <Loading text="결과 출력 중 입니다." />;

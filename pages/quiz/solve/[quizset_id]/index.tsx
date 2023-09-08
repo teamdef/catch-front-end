@@ -1,5 +1,4 @@
 import { AppLayout, HeaderLayout } from 'components/layout';
-import { useRouter } from 'next/router';
 import { useEffect, ReactElement, SyntheticEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { NextPageWithLayout } from 'pages/_app';
@@ -14,11 +13,10 @@ import { LargeContainedBtn } from 'components/style/button';
 import { useQuery } from '@tanstack/react-query';
 import { parseSolveQuizSet } from 'utils/quiz';
 import { Loading } from 'components/common';
+import { moveMain } from 'utils/move';
 
 const Page: NextPageWithLayout = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
-  const { quizset_id } = router.query;
   const { setTitle, quizList, quizSetThumbnail, desc } = useSelector((state: RootState) => state.solve);
   const { isLoading, data } = useQuery({
     queryKey: ['fetchQuizSet'],
@@ -26,9 +24,6 @@ const Page: NextPageWithLayout = () => {
     select: (_data) => parseSolveQuizSet(_data.data),
   });
 
-  const moveMain = () => {
-    router.push(`/quiz/solve/${quizset_id}/main`);
-  };
   const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/assets/img/rebranding/anyquiz/defaultThumb.svg';
   };

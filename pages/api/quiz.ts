@@ -148,13 +148,8 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const SaveScoreApi = async (
-  nickname: string,
-  score: number,
-  quizset_id: string,
-  user_id: string,
-  quiz_count: number,
-) => {
+export const SaveScoreApi = async (nickname: string, score: number, user_id: string, quiz_count: number) => {
+  const { quizset_id } = Router.query;
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id, quiz_count });
 };
 
