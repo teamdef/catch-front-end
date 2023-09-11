@@ -4,14 +4,15 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'store';
 import { saveEmotionCount } from 'store/emotion';
+import { EmotionProps } from 'components/common/Emotion';
 import useDebounce from './useDebounce';
 
-const useEmotion = () => {
+const useEmotion = ({ userEmotion }: EmotionProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const quizSetEmotion = useSelector((state: RootState) => state.emotion);
   const { quizset_id, solver_id } = router.query; // [quizset_id]/result/[solver_id] 형태의 src에서 사용 가능
-  const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(null);
+  const [currentEmotion, setCurrentEmotion] = useState<EmotionType | null>(userEmotion);
   const [emotionList, setEmmotionList] = useState<QuizSetEmotionType>(quizSetEmotion);
 
   const emotionHandler = (isDiff: boolean, _newEmotion: EmotionType) => {

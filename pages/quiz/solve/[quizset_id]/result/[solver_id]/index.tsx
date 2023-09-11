@@ -18,9 +18,9 @@ const Page: NextPageWithLayout = () => {
     queryFn: () => QuizSolverResultApi(),
     select: (_data) => _data.data,
   });
+  console.log(data);
   // 추후 data 값에 유저의 풀이결과에 대한 데이터가 추가될 예정
   // ex : data.user.score data.user.nickname data.user.answer
-  console.log(data);
   return (
     <>
       {isError && <NotFound text="잘못된 접근이에요!" />}
@@ -30,7 +30,7 @@ const Page: NextPageWithLayout = () => {
           <Wrapper>
             <UserScore name={data.nickname} score={data.score} total={data.submission.length} />
             <RankingBoard />
-            <Emotion />
+            <Emotion userEmotion={data.emotion || null} />
             <ShareModalBtn />
             <Comment />
           </Wrapper>

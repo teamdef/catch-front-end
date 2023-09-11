@@ -29,9 +29,11 @@ const EmotionList: EmotionComponentType[] = [
     src: '/assets/img/rebranding/emotion/off4.svg',
   },
 ];
-
-const Emotion = () => {
-  const { currentEmotion, emotionList, emotionObjHandler } = useEmotion();
+export interface EmotionProps {
+  userEmotion: EmotionType | null;
+}
+const Emotion = ({ userEmotion }: EmotionProps) => {
+  const { currentEmotion, emotionList, emotionObjHandler } = useEmotion({ userEmotion });
 
   return (
     <EmotionBox>
