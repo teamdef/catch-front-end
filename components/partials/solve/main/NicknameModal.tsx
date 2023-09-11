@@ -1,38 +1,50 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import { useMemo } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { useInput } from 'hooks';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveSolveUserNameAction } from 'store/user_solve';
 import { RootState } from 'store';
 import { ModalProps } from 'hooks/useModal';
 import { SmallContainedBtn, SmallOutlinedBtn } from 'components/style/button';
+import { SaveScoreApi } from 'pages/api/quiz';
+import { saveEmotionCount } from 'store/emotion';
+import { moveResult } from 'utils/move';
+import { Loading } from 'components/common';
 
 interface NicknameModalProps {
   closeModal?: ModalProps['closeModal'];
-  setIsNickname: Dispatch<SetStateAction<boolean>>;
 }
-const NicknameModal = ({ closeModal, setIsNickname }: NicknameModalProps) => {
+const NicknameModal = ({ closeModal }: NicknameModalProps) => {
   const dispatch = useDispatch();
-  const { isLoggedin, nickName } = useSelector((state: RootState) => state.user);
-  const [_nickname, _nicknameSetter, , _nicknameHandler] = useInput<string>('');
+  const { userId, isLoggedin, nickName } = useSelector((state: RootState) => state.user);
+  const { quizList, answerList } = useSelector((state: RootState) => state.solve);
+  const [_nickname, , , _nicknameHandler] = useInput<string>(isLoggedin ? (nickName as string) : '');
 
-  const savaSolveUserName = () => {
-    dispatch(saveSolveUserNameAction({ solveUserName: _nickname }));
-    setIsNickname(true);
-    if (closeModal) closeModal();
-  };
+  const userScore = useMemo(
+    () => quizList.filter((quiz: SolveQuizType, quiz_num: number) => quiz.correct_idx === answerList[quiz_num]).length,
+    [answerList],
+  );
 
-  useEffect(() => {
-    if (isLoggedin) _nicknameSetter(nickName);
-  }, []);
+  const { isLoading, mutate } = useMutation({
+    mutationFn: () => {
+      return SaveScoreApi(_nickname, userScore, userId, quizList.length);
+    },
+    onSuccess: (data) => {
+      const { quizset_emotion, solver_id } = data.data;
+      dispatch(saveEmotionCount({ quizSetEmotion: quizset_emotion }));
+      moveResult(solver_id);
+      if (closeModal) closeModal();
+    },
+  });
 
+  if (isLoading) return <Loading text="결과 출력 중 입니다." />;
   return (
     <Wrapper>
       <Title>닉네임을 입력해주세요</Title>
       <Input type="text" value={_nickname} onChange={_nicknameHandler} placeholder="최대 12자까지" maxLength={12} />
       <ButtonBox>
         <SmallOutlinedBtn onClick={closeModal}>취소</SmallOutlinedBtn>
-        <SmallContainedBtn disabled={!_nickname} onClick={savaSolveUserName}>
+        <SmallContainedBtn disabled={!_nickname} onClick={() => mutate()}>
           저장
         </SmallContainedBtn>
       </ButtonBox>

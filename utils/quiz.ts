@@ -1,3 +1,5 @@
+import { QuizSetCardType } from 'types/quiz';
+
 export const parseDetailQuiz = (data: any) => {
   const _detailQuiz: DetailQuizType = {
     solverCnt: data.solver_cnt,
@@ -55,4 +57,19 @@ export const parseBestRankingList = (data: RankingDtoType[]) => {
     return _ranking;
   });
   return _bestRankingList;
+};
+
+export const parseQuizSetList = (data: any) => {
+  const allQuizMap = data.map((quizSet: any) => {
+    const quizObj: QuizSetCardType = {
+      quizSetId: quizSet.id,
+      createdAt: quizSet.created_at,
+      quizSetTitle: quizSet.set_title,
+      solverCnt: quizSet.solver_cnt,
+      quizSetThumbnail: quizSet.thumbnail ?? null,
+      quizSetMaker: { nickname: quizSet.user.nickname, profile_img: quizSet.user.profile_img },
+    };
+    return quizObj;
+  });
+  return allQuizMap;
 };

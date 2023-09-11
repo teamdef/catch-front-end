@@ -23,7 +23,6 @@ const Page: NextPageWithLayout = () => {
     queryFn: () => QuizDataFetchApi(),
     select: (_data) => parseSolveQuizSet(_data.data),
   });
-
   const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = '/assets/img/rebranding/anyquiz/defaultThumb.svg';
   };

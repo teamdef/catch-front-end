@@ -1,8 +1,7 @@
 import { ReactElement } from 'react';
 import styled from 'styled-components';
-import { Emotion, NotFound } from 'components/common';
-import { useSelector } from 'react-redux';
-import { RootState } from 'store';
+import { Emotion, Loading, NotFound } from 'components/common';
+import { useQuery } from '@tanstack/react-query';
 import { NextPageWithLayout } from 'pages/_app';
 import { AppLayout, HeaderLayout } from 'components/layout';
 import { theme } from 'styles/theme';
@@ -11,19 +10,30 @@ import Sketchbook from 'components/style/Sketchbook';
 import Comment from 'components/comment/Comment';
 import { ShareModalBtn } from 'components/share';
 import { RankingBoard } from 'components/ranking';
+import { QuizSolverResultApi } from 'pages/api/quiz';
 
+const user = {
+  score: 5,
+  nickname: '혀누',
+  answer: [1, 4, 2, 3],
+};
 const Page: NextPageWithLayout = () => {
-  const { solveUserName, solveUserScore } = useSelector((state: RootState) => state.user_solve);
-  const { quizList } = useSelector((state: RootState) => state.solve);
-  const isValid = solveUserScore !== undefined;
-
+  const { isLoading, data, isError } = useQuery({
+    queryKey: ['fetchSolverResult'],
+    queryFn: () => QuizSolverResultApi(),
+    select: (_data) => _data.data,
+  });
+  // 추후 data 값에 유저의 풀이결과에 대한 데이터가 추가될 예정
+  // ex : data.user.score data.user.nickname data.user.answer
+  console.log(data);
   return (
     <>
-      {!isValid && <NotFound text="잘못된 접근이에요!" />}
-      {isValid && (
+      {isError && <NotFound text="잘못된 접근이에요!" />}
+      {isLoading && <Loading text="결과를 불러오는 중 입니다." />}
+      {!isLoading && (
         <Sketchbook>
           <Wrapper>
-            <UserScore name={solveUserName} score={solveUserScore} total={quizList.length} />
+            <UserScore name={user.nickname} score={user.score} total={user.answer.length} />
             <RankingBoard />
             <Emotion />
             <ShareModalBtn />

@@ -45,7 +45,8 @@ export const QuizRankingListApi = async (quizset_id: string) => {
 };
 
 // 풀이 결과 불러오기
-export const QuizSolverResultApi = (quizset_id: string, solver_id: string): Promise<AxiosResponse> => {
+export const QuizSolverResultApi = (): Promise<AxiosResponse> => {
+  const { quizset_id, solver_id } = Router.query;
   return notAuthAxios.get(`/solver`, { params: { quizset_id, solver_id } });
 };
 
