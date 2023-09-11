@@ -12,11 +12,6 @@ import { ShareModalBtn } from 'components/share';
 import { RankingBoard } from 'components/ranking';
 import { QuizSolverResultApi } from 'pages/api/quiz';
 
-const user = {
-  score: 5,
-  nickname: '혀누',
-  answer: [1, 4, 2, 3],
-};
 const Page: NextPageWithLayout = () => {
   const { isLoading, data, isError } = useQuery({
     queryKey: ['fetchSolverResult'],
@@ -33,7 +28,7 @@ const Page: NextPageWithLayout = () => {
       {!isLoading && (
         <Sketchbook>
           <Wrapper>
-            <UserScore name={user.nickname} score={user.score} total={user.answer.length} />
+            <UserScore name={data.nickname} score={data.score} total={data.submission.length} />
             <RankingBoard />
             <Emotion />
             <ShareModalBtn />
