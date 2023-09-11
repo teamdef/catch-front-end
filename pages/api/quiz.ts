@@ -30,7 +30,7 @@ export const QuizDeleteApi = (quizset_id: string): Promise<AxiosResponse> => {
  * @param quizset_id
  * 특정 퀴즈 id의 랭킹 조회 */
 export const QuizRankingListApi = async (quizset_id: string) => {
-  const res: AxiosResponse = await notAuthAxios.get(`/solver/ranking`, { params: { quizset_id } });
+  const res: AxiosResponse = await notAuthAxios.get(`/solver/ranking`, { params: { quizset_id, limit: 1000 } });
   const parseRankingList: RankingType[] = res.data.map((ranking: RankingDtoType) => {
     const _ranking: RankingType = {
       id: ranking.id,
@@ -149,9 +149,15 @@ export const NotLoginUserQuizSolveSaveApi = async (nickname: string, score: numb
   return notAuthAxios.post(`/solver`, { nickname, score, quizset_id });
 };
 
-export const SaveScoreApi = async (nickname: string, score: number, user_id: string, quiz_count: number) => {
+export const SaveScoreApi = async (
+  nickname: string,
+  score: number,
+  user_id: string,
+  quiz_count: number,
+  submission: number[],
+) => {
   const { quizset_id } = Router.query;
-  return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id, quiz_count });
+  return notAuthAxios.post(`/solver`, { nickname, score, quizset_id, user_id, quiz_count, submission });
 };
 
 // 한줄평 - 목록 불러오기

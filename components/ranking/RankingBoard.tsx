@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { QuizRankingListApi } from 'pages/api/quiz';
+import { useMutation } from '@tanstack/react-query';
 import { RankCard, Ranker } from '.';
 
 interface RankingBoardProps {
@@ -12,19 +13,15 @@ const RankingBoard = ({ quizRankingList }: RankingBoardProps) => {
   const { quizset_id, solver_id } = router.query;
   const [rankingList, setRankingList] = useState<RankingType[] | null>(quizRankingList || null);
   const [userRanking, setUserRanking] = useState<RankingType>();
-
-  const fetchRankingList = async () => {
-    try {
-      const response = await QuizRankingListApi(quizset_id as string);
-      setRankingList(response.slice(0, 3));
-      setUserRanking(response[response.findIndex((user: RankingType) => user.id === solver_id)]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { mutate } = useMutation(() => QuizRankingListApi(quizset_id as string), {
+    onSuccess: (_data) => {
+      setRankingList(_data.slice(0, 3));
+      setUserRanking(_data[_data.findIndex((user: RankingType) => user.id === solver_id)]);
+    },
+  });
 
   useEffect(() => {
-    if (quizset_id && !quizRankingList) fetchRankingList();
+    if (quizset_id && !quizRankingList) mutate();
   }, [router.isReady]);
 
   if (rankingList?.length === 0 && !userRanking) return <Empty>아직 등록된 순위가 없습니다.</Empty>;

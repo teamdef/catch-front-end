@@ -13,7 +13,6 @@ const QuizList = () => {
     backgroundClickable: false,
     contents: <NicknameModal />,
   });
-
   return (
     <Wrapper>
       {quizList.map((item: SolveQuizType, quiz_num: number) => (

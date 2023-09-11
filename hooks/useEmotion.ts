@@ -21,6 +21,7 @@ const useEmotion = () => {
   const getCurrentEmotion = async () => {
     try {
       const res = await QuizSolverResultApi();
+      console.log(res);
       if (res.data.emotion) setCurrentEmotion(res.data.emotion as EmotionType);
     } catch (e) {
       console.log('quizset_id 혹은 solver_id가 존재하지 않을 수 있습니다.', e);

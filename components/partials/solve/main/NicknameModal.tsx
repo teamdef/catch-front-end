@@ -27,7 +27,7 @@ const NicknameModal = ({ closeModal }: NicknameModalProps) => {
 
   const { isLoading, mutate } = useMutation({
     mutationFn: () => {
-      return SaveScoreApi(_nickname, userScore, userId, quizList.length);
+      return SaveScoreApi(_nickname, userScore, userId, quizList.length, answerList);
     },
     onSuccess: (data) => {
       const { quizset_emotion, solver_id } = data.data;

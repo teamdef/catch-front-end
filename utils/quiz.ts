@@ -20,6 +20,7 @@ export const parseSolveQuizSet = (data: any) => {
     quizSetThumbnail: data.thumbnail,
     description: data.description,
     quizMaker: data.user,
+    solverCnt: data.solver_cnt,
     quizList: data.quiz.map((q: SolveQuizType) => {
       return {
         quiz_thumbnail: q.quiz_thumbnail ?? null,

@@ -35,6 +35,7 @@ interface SolveQuizSetType {
   quizSetThumbnail: string;
   description: string;
   quizList: SolveQuizType[];
+  solverCnt: number;
   answerList?: number[];
 }
 interface QuizSetDtoType {
