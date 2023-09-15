@@ -2,20 +2,20 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 interface Props {
-  width?: string;
+  height?: string;
 }
-const Logo = ({ width }: Props) => {
+const Logo = ({ height }: Props) => {
   return (
     <Link href="/" passHref>
       <a>
-        <LogoImg width={width} src="/assets/img/rebranding/catchcatch_logo_rebranding.png" />
+        <LogoImg height={height} src="/assets/img/rebranding/catchcatch_logo_rebranding.png" />
       </a>
     </Link>
   );
 };
 
 const LogoImg = styled.img<Props>`
-  width: ${({ width }) => width ?? '127px'};
+  height: ${({ height }) => height ?? '24px'};
   display: block;
 `;
 export default Logo;
